@@ -9,6 +9,7 @@ import DscrGuide from './DscrGuide.jsx'
 import CashFlowGuide from './CashFlowGuide.jsx'
 import SeventyPercentGuide from './SeventyPercentGuide.jsx'
 import CapRateGuide from './CapRateGuide.jsx'
+import HowToAnalyzeGuide from './HowToAnalyzeGuide.jsx'
 
 const path = window.location.pathname
 
@@ -21,6 +22,7 @@ const getPage = () => {
   if (path.startsWith('/guides/rental-cash-flow-calculator')) return <CashFlowGuide />;
   if (path.startsWith('/guides/70-percent-rule-house-flipping')) return <SeventyPercentGuide />;
   if (path.startsWith('/guides/good-cap-rate-rental-property')) return <CapRateGuide />;
+  if (path.startsWith('/guides/how-to-analyze-rental-property')) return <HowToAnalyzeGuide />;
   return <Landing />;
 };
 
