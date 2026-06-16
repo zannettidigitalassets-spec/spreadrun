@@ -156,6 +156,7 @@ const SaveDealButton = ({ user, isStarter, onRequireAuth, toolType, inputs }) =>
     });
 
     if (error) {
+      console.error("Save failed:", error.message, error);
       setStatus("error");
     } else {
       setStatus("saved");
@@ -164,6 +165,25 @@ const SaveDealButton = ({ user, isStarter, onRequireAuth, toolType, inputs }) =>
       setTimeout(() => setStatus("idle"), 2000);
     }
   };
+
+  if (status === "error") {
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10, background: "#FDECEC",
+        border: "1px solid #F5B5B5", borderRadius: 10, padding: "8px 14px",
+      }}>
+        <span style={{ fontSize: 12.5, color: "#A12525", fontWeight: 600 }}>
+          Couldn't save this deal. Please try again.
+        </span>
+        <button
+          onClick={() => setStatus("idle")}
+          style={{ background: "none", border: "none", color: "#9BA8C0", fontSize: 12.5, cursor: "pointer" }}
+        >
+          ✕
+        </button>
+      </div>
+    );
+  }
 
   if (showLabelPrompt) {
     return (
