@@ -21,6 +21,44 @@ export function useAuth() {
   return { user, loading };
 }
 
+// Looks up the signed-in user's actual subscription_tier from the profiles table,
+// which is the table only the webhook (using the service key) is allowed to write to.
+// This is the real source of truth for "did this person actually pay," as opposed
+// to just checking whether someone happens to be logged in.
+export function useSubscription(user) {
+  const [tier, setTier] = useState(null); // null while loading, then 'free' | 'starter' | 'pro'
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      setTier(null);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    supabase
+      .from('profiles')
+      .select('subscription_tier')
+      .eq('email', user.email)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Failed to load subscription tier:', error.message);
+          setTier('free');
+        } else {
+          // No row yet (e.g. brand new signup, never paid) just means free tier.
+          setTier(data?.subscription_tier ?? 'free');
+        }
+        setLoading(false);
+      });
+  }, [user]);
+
+  const isStarter = tier === 'starter' || tier === 'pro';
+
+  return { tier, isStarter, loading };
+}
+
 export function AuthModal({ onClose }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
