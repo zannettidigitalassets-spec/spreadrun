@@ -172,6 +172,36 @@ export default function Landing() {
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E", background: "#fff", overflowX: "hidden" }}>
+      <style>{`
+        .sr-feature-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+        .sr-pricing-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        .sr-soon-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
+        @media (max-width: 760px) {
+          .sr-feature-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .sr-feature-grid > div {
+            order: unset !important;
+          }
+          .sr-pricing-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .sr-soon-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
 
       {/* NAV */}
       <nav style={{
@@ -297,8 +327,7 @@ export default function Landing() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           {FEATURES.map((f, i) => (
-            <div key={f.tag} style={{
-              display: "grid", gridTemplateColumns: "1fr 1fr",
+            <div key={f.tag} className="sr-feature-grid" style={{
               borderRadius: 16, overflow: "hidden", border: "1px solid #EBF0FF",
             }}>
               <div style={{
@@ -346,7 +375,7 @@ export default function Landing() {
               Start free. Upgrade when it pays off.
             </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+          <div className="sr-pricing-grid">
             {PRICING.map(p => (
               <div key={p.tier} style={{
                 background: p.highlight ? "#0D1B3E" : "#fff",
@@ -396,10 +425,10 @@ export default function Landing() {
             We're just getting started.
           </h2>
           <p style={{ fontSize: 15, color: "#6B7A99", maxWidth: 480, margin: "0 auto" }}>
-            Sign up free now and you'll be the first to know when these go live.
+            Sign up for free now and you'll be the first to know when these go live.
           </p>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+        <div className="sr-soon-grid">
           {COMING_SOON.map(item => (
             <div key={item.name} style={{
               background: "#fff", border: "1.5px solid #EBF0FF", borderRadius: 14,
