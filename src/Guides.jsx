@@ -32,7 +32,7 @@ const ARTICLES = [
     desc: "The full underwriting process investors use to evaluate a deal from first look to final offer.",
     href: "/guides/how-to-analyze-rental-property",
     tag: "Getting Started",
-    live: false,
+    live: true,
   },
 ];
 
