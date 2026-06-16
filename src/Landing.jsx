@@ -512,10 +512,12 @@ export default function Landing() {
         <div style={{ fontSize: 12, color: "#9BA8C0" }}>
           © 2026 SpreadRun · For informational purposes only. Not financial advice.
         </div>
-        <div style={{ display: "flex", gap: 20 }}>
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
           <a href="#faq" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>FAQ</a>
           <a href="#pricing" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Pricing</a>
           <a href="#features" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Features</a>
+          <a href="/privacy" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Privacy</a>
+          <a href="/terms" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Terms</a>
         </div>
       </footer>
     </div>
