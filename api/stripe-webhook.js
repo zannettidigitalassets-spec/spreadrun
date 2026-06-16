@@ -1,7 +1,3 @@
-// This file lives at /api/stripe-webhook.js and Vercel automatically turns it into
-// a live serverless endpoint at https://spreadrun.com/api/stripe-webhook
-// Stripe calls this URL automatically every time a payment event happens.
-
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
@@ -12,35 +8,12 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_KEY
 );
 
-// Vercel needs the raw, unparsed request body to verify this came from Stripe,
-// so we disable Vercel's automatic JSON parsing for this one endpoint.
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-function buffer(readable) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    readable.on('data', (chunk) => chunks.push(chunk));
-    readable.on('end', () => resolve(Buffer.concat(chunks)));
-    readable.on('error', reject);
-  });
-}
-
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).send('Method Not Allowed');
-  }
-
-  const rawBody = await buffer(req);
-  const signature = req.headers['stripe-signature'];
+export async function POST(request) {
+  const rawBody = await request.text();
+  const signature = request.headers.get('stripe-signature');
 
   let event;
   try {
-    // This line is the security check: it confirms the request really came from
-    // Stripe and wasn't faked by someone else hitting this URL directly.
     event = stripe.webhooks.constructEvent(
       rawBody,
       signature,
@@ -48,12 +21,11 @@ export default async function handler(req, res) {
     );
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
   try {
     switch (event.type) {
-      // Fires the moment someone completes checkout successfully.
       case 'checkout.session.completed': {
         const session = event.data.object;
         const customerEmail = session.customer_details?.email;
@@ -75,7 +47,6 @@ export default async function handler(req, res) {
         break;
       }
 
-      // Fires if a subscription is cancelled or a renewal payment fails outright.
       case 'customer.subscription.deleted': {
         const subscription = event.data.object;
         const stripeCustomerId = subscription.customer;
@@ -87,7 +58,6 @@ export default async function handler(req, res) {
         break;
       }
 
-      // Fires on failed recurring payments (e.g. card declined on renewal).
       case 'invoice.payment_failed': {
         const invoice = event.data.object;
         const stripeCustomerId = invoice.customer;
@@ -100,13 +70,12 @@ export default async function handler(req, res) {
       }
 
       default:
-        // Unhandled event types are fine to ignore; Stripe sends many we don't need.
         break;
     }
 
-    return res.status(200).json({ received: true });
+    return Response.json({ received: true });
   } catch (err) {
     console.error('Error processing webhook:', err);
-    return res.status(500).send('Internal error processing webhook');
+    return new Response('Internal error processing webhook', { status: 500 });
   }
 }
