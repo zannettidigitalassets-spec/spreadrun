@@ -105,6 +105,19 @@ const getInitialTab = () => {
   return 'rental';
 };
 
+// Reads a saved value out of the URL's query string (used when reopening a saved deal from My Deals).
+// The hash itself can carry a query string, e.g. /app#rental?purchasePrice=400000
+const getParam = (key, fallback) => {
+  const hash = window.location.hash; // "#rental?purchasePrice=400000&downPct=20"
+  const queryIndex = hash.indexOf('?');
+  if (queryIndex === -1) return fallback;
+  const params = new URLSearchParams(hash.slice(queryIndex + 1));
+  const raw = params.get(key);
+  if (raw === null || raw === "") return fallback;
+  const num = parseFloat(raw);
+  return isNaN(num) ? fallback : num;
+};
+
 const SaveDealButton = ({ user, onRequireAuth, toolType, inputs }) => {
   const [status, setStatus] = useState("idle"); // idle | saving | saved | error | limit
   const [showLabelPrompt, setShowLabelPrompt] = useState(false);
@@ -218,34 +231,34 @@ export default function DealAnalyzer() {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Rental state
-  const [purchasePrice, setPurchasePrice] = useState(350000);
-  const [downPct, setDownPct] = useState(25);
-  const [interestRate, setInterestRate] = useState(7.25);
-  const [loanTermYears, setLoanTermYears] = useState(30);
-  const [rent, setRent] = useState(2400);
-  const [vacancyPct, setVacancyPct] = useState(5);
-  const [taxes, setTaxes] = useState(350);
-  const [insurance, setInsurance] = useState(120);
-  const [maintenance, setMaintenance] = useState(150);
-  const [mgmtPct, setMgmtPct] = useState(8);
-  const [otherExpenses, setOtherExpenses] = useState(50);
+  const [purchasePrice, setPurchasePrice] = useState(() => getParam('purchasePrice', 350000));
+  const [downPct, setDownPct] = useState(() => getParam('downPct', 25));
+  const [interestRate, setInterestRate] = useState(() => getParam('interestRate', 7.25));
+  const [loanTermYears, setLoanTermYears] = useState(() => getParam('loanTermYears', 30));
+  const [rent, setRent] = useState(() => getParam('rent', 2400));
+  const [vacancyPct, setVacancyPct] = useState(() => getParam('vacancyPct', 5));
+  const [taxes, setTaxes] = useState(() => getParam('taxes', 350));
+  const [insurance, setInsurance] = useState(() => getParam('insurance', 120));
+  const [maintenance, setMaintenance] = useState(() => getParam('maintenance', 150));
+  const [mgmtPct, setMgmtPct] = useState(() => getParam('mgmtPct', 8));
+  const [otherExpenses, setOtherExpenses] = useState(() => getParam('otherExpenses', 50));
 
   // Flip state
-  const [flipPurchase, setFlipPurchase] = useState(200000);
-  const [rehabCost, setRehabCost] = useState(45000);
-  const [arv, setArv] = useState(320000);
-  const [holdingMonths, setHoldingMonths] = useState(4);
-  const [holdingCostPct, setHoldingCostPct] = useState(1);
-  const [agentPct, setAgentPct] = useState(6);
-  const [closingCostPct, setClosingCostPct] = useState(2);
+  const [flipPurchase, setFlipPurchase] = useState(() => getParam('flipPurchase', 200000));
+  const [rehabCost, setRehabCost] = useState(() => getParam('rehabCost', 45000));
+  const [arv, setArv] = useState(() => getParam('arv', 320000));
+  const [holdingMonths, setHoldingMonths] = useState(() => getParam('holdingMonths', 4));
+  const [holdingCostPct, setHoldingCostPct] = useState(() => getParam('holdingCostPct', 1));
+  const [agentPct, setAgentPct] = useState(() => getParam('agentPct', 6));
+  const [closingCostPct, setClosingCostPct] = useState(() => getParam('closingCostPct', 2));
 
   // DSCR state
-  const [dscrRent, setDscrRent] = useState(2400);
-  const [dscrLoanAmount, setDscrLoanAmount] = useState(262500);
-  const [dscrRate, setDscrRate] = useState(7.5);
-  const [dscrTerm, setDscrTerm] = useState(30);
-  const [dscrTaxes, setDscrTaxes] = useState(350);
-  const [dscrInsurance, setDscrInsurance] = useState(120);
+  const [dscrRent, setDscrRent] = useState(() => getParam('dscrRent', 2400));
+  const [dscrLoanAmount, setDscrLoanAmount] = useState(() => getParam('dscrLoanAmount', 262500));
+  const [dscrRate, setDscrRate] = useState(() => getParam('dscrRate', 7.5));
+  const [dscrTerm, setDscrTerm] = useState(() => getParam('dscrTerm', 30));
+  const [dscrTaxes, setDscrTaxes] = useState(() => getParam('dscrTaxes', 350));
+  const [dscrInsurance, setDscrInsurance] = useState(() => getParam('dscrInsurance', 120));
 
   // --- Rental Calculations ---
   const n_ = (v) => (v === "" || v === undefined || v === null || isNaN(v) ? 0 : Number(v));
