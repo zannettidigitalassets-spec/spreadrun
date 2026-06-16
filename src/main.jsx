@@ -2,11 +2,20 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import Landing from './Landing.jsx'
+import Privacy from './Privacy.jsx'
+import Terms from './Terms.jsx'
 
 const path = window.location.pathname
 
+const getPage = () => {
+  if (path.startsWith('/app')) return <App />;
+  if (path.startsWith('/privacy')) return <Privacy />;
+  if (path.startsWith('/terms')) return <Terms />;
+  return <Landing />;
+};
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {path.startsWith('/app') ? <App /> : <Landing />}
+    {getPage()}
   </React.StrictMode>
 )
