@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { supabase } from "./supabaseClient.js";
-import { useAuth, AuthModal, UserMenu } from "./Auth.jsx";
+import { useAuth, useSubscription, AuthModal, UserMenu } from "./Auth.jsx";
 
 const formatCurrency = (val) =>
   val === "" || val === undefined || val === null
@@ -118,7 +118,7 @@ const getParam = (key, fallback) => {
   return isNaN(num) ? fallback : num;
 };
 
-const SaveDealButton = ({ user, onRequireAuth, toolType, inputs }) => {
+const SaveDealButton = ({ user, isStarter, onRequireAuth, toolType, inputs }) => {
   const [status, setStatus] = useState("idle"); // idle | saving | saved | error | limit
   const [showLabelPrompt, setShowLabelPrompt] = useState(false);
   const [label, setLabel] = useState("");
@@ -126,6 +126,10 @@ const SaveDealButton = ({ user, onRequireAuth, toolType, inputs }) => {
   const handleClick = () => {
     if (!user) {
       onRequireAuth();
+      return;
+    }
+    if (!isStarter) {
+      setStatus("upgrade");
       return;
     }
     setShowLabelPrompt(true);
@@ -197,6 +201,34 @@ const SaveDealButton = ({ user, onRequireAuth, toolType, inputs }) => {
     );
   }
 
+  if (status === "upgrade") {
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10, background: "#FFF7E6",
+        border: "1px solid #FFE3A8", borderRadius: 10, padding: "8px 14px",
+      }}>
+        <span style={{ fontSize: 12.5, color: "#8A6300", fontWeight: 600 }}>
+          Saving deals is a Starter feature.
+        </span>
+        <a
+          href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400"
+          style={{
+            fontSize: 12.5, fontWeight: 800, color: "#0B5FFF", textDecoration: "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Upgrade for $19/mo →
+        </a>
+        <button
+          onClick={() => setStatus("idle")}
+          style={{ background: "none", border: "none", color: "#9BA8C0", fontSize: 12.5, cursor: "pointer" }}
+        >
+          ✕
+        </button>
+      </div>
+    );
+  }
+
   if (status === "limit") {
     return (
       <div style={{ fontSize: 12.5, color: "#D14343", fontWeight: 600 }}>
@@ -228,6 +260,7 @@ const SaveDealButton = ({ user, onRequireAuth, toolType, inputs }) => {
 export default function DealAnalyzer() {
   const [tab, setTab] = useState(getInitialTab);
   const { user, loading } = useAuth();
+  const { isStarter } = useSubscription(user);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showWelcome, setShowWelcome] = useState(() => {
     return new URLSearchParams(window.location.search).get('welcome') === 'starter';
@@ -385,6 +418,7 @@ export default function DealAnalyzer() {
         </div>
         <SaveDealButton
           user={user}
+          isStarter={isStarter}
           onRequireAuth={() => setShowAuthModal(true)}
           toolType={tab}
           inputs={currentInputs}
