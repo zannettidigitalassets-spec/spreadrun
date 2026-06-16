@@ -21,6 +21,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://spreadrun.com/guides/rental-cash-flow-calculator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://spreadrun.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
