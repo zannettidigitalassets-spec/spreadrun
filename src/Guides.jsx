@@ -25,7 +25,7 @@ const ARTICLES = [
     desc: "Cap rate benchmarks by market type, how cap rate differs from cash-on-cash return, and why a 'good' cap rate depends on your strategy.",
     href: "/guides/good-cap-rate-rental-property",
     tag: "Rental Analysis",
-    live: false,
+    live: true,
   },
   {
     title: "How to Analyze a Rental Property: A Step-by-Step Guide",
