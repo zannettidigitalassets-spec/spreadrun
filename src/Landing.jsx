@@ -62,21 +62,61 @@ const PRICING = [
     highlight: false,
   },
   {
-    tier: "Pro",
+    tier: "Starter",
     price: "$19",
     period: "per month",
-    desc: "For serious investors running multiple deals.",
+    desc: "For investors comparing multiple deals.",
     features: [
       "Everything in Free",
-      "Save unlimited deals",
-      "PDF deal reports",
-      "Portfolio tracker",
+      "Save up to 10 properties",
       "Deal comparison view",
+      "PDF deal reports",
+      "Email support",
+    ],
+    cta: "Get Starter — $19/mo",
+    href: "/app",
+    highlight: false,
+  },
+  {
+    tier: "Pro",
+    price: "$79",
+    period: "per month",
+    desc: "For serious investors building a portfolio.",
+    features: [
+      "Everything in Starter",
+      "Unlimited saved properties",
+      "Portfolio tracker & dashboard",
+      "Live market rent estimates",
+      "Upload OM/pro-forma — auto-fills calculators",
+      "AI deal analyzer",
       "Priority support",
     ],
-    cta: "Get Pro — $19/mo",
+    cta: "Get Pro — $79/mo",
     href: "/app",
     highlight: true,
+  },
+];
+
+const COMING_SOON = [
+  {
+    name: "Portfolio Tracker",
+    tier: "Pro",
+    desc: "Track every property you own in one dashboard — equity, cash flow, and performance over time.",
+  },
+  {
+    name: "Deal Comparison",
+    tier: "Starter",
+    desc: "Stack two or more deals side by side and see exactly which one wins on the numbers.",
+  },
+  {
+    name: "Market Rent Estimator",
+    tier: "Pro",
+    desc: "Pull live comparable rent data for any address before you even make an offer.",
+  },
+  {
+    name: "OM / Pro-Forma Upload",
+    tier: "Pro",
+    desc: "Drop in a PDF offering memorandum or spreadsheet — we extract the numbers and fill the calculator for you.",
   },
 ];
 
@@ -299,19 +339,19 @@ export default function Landing() {
 
       {/* PRICING */}
       <section id="pricing" style={{ background: "#F5F7FF", padding: "80px 24px" }}>
-        <div style={{ maxWidth: 760, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1040, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", color: "#0B5FFF", textTransform: "uppercase", marginBottom: 12 }}>Pricing</div>
             <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 900, letterSpacing: "-0.8px", margin: 0 }}>
               Start free. Upgrade when it pays off.
             </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
             {PRICING.map(p => (
               <div key={p.tier} style={{
                 background: p.highlight ? "#0D1B3E" : "#fff",
                 border: p.highlight ? "2px solid #0B5FFF" : "1.5px solid #EBF0FF",
-                borderRadius: 16, padding: "36px 32px", position: "relative",
+                borderRadius: 16, padding: "32px 26px", position: "relative",
               }}>
                 {p.highlight && (
                   <div style={{
@@ -323,13 +363,13 @@ export default function Landing() {
                 )}
                 <div style={{ fontSize: 13, fontWeight: 700, color: p.highlight ? "#4D8FFF" : "#0B5FFF", marginBottom: 8 }}>{p.tier}</div>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 6 }}>
-                  <span style={{ fontSize: 40, fontWeight: 900, color: p.highlight ? "#fff" : "#0D1B3E", fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "-1px" }}>{p.price}</span>
-                  <span style={{ fontSize: 13, color: p.highlight ? "#6B8AAA" : "#9BA8C0" }}>/{p.period}</span>
+                  <span style={{ fontSize: 36, fontWeight: 900, color: p.highlight ? "#fff" : "#0D1B3E", fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "-1px" }}>{p.price}</span>
+                  <span style={{ fontSize: 12, color: p.highlight ? "#6B8AAA" : "#9BA8C0" }}>/{p.period}</span>
                 </div>
-                <div style={{ fontSize: 13, color: p.highlight ? "#6B8AAA" : "#9BA8C0", marginBottom: 28 }}>{p.desc}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 32 }}>
+                <div style={{ fontSize: 13, color: p.highlight ? "#6B8AAA" : "#9BA8C0", marginBottom: 24, minHeight: 36 }}>{p.desc}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
                   {p.features.map(feat => (
-                    <div key={feat} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 14, color: p.highlight ? "#C8D8EE" : "#3D4F6E" }}>
+                    <div key={feat} style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: 13.5, color: p.highlight ? "#C8D8EE" : "#3D4F6E" }}>
                       <span style={{ color: "#0B5FFF", fontWeight: 800, marginTop: 1 }}>✓</span>
                       {feat}
                     </div>
@@ -340,11 +380,43 @@ export default function Landing() {
                   background: p.highlight ? "#0B5FFF" : "#EEF3FF",
                   color: p.highlight ? "#fff" : "#0B5FFF",
                   padding: "13px", borderRadius: 10,
-                  fontSize: 14, fontWeight: 700, textDecoration: "none",
+                  fontSize: 13.5, fontWeight: 700, textDecoration: "none",
                 }}>{p.cta}</a>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* COMING SOON */}
+      <section style={{ padding: "80px 24px", maxWidth: 1000, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", color: "#0B5FFF", textTransform: "uppercase", marginBottom: 12 }}>Coming Soon</div>
+          <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 900, letterSpacing: "-0.8px", margin: "0 0 14px" }}>
+            We're just getting started.
+          </h2>
+          <p style={{ fontSize: 15, color: "#6B7A99", maxWidth: 480, margin: "0 auto" }}>
+            Sign up free now and you'll be the first to know when these go live.
+          </p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+          {COMING_SOON.map(item => (
+            <div key={item.name} style={{
+              background: "#fff", border: "1.5px solid #EBF0FF", borderRadius: 14,
+              padding: "26px 28px", position: "relative",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                <h3 style={{ fontSize: 17, fontWeight: 800, margin: 0, letterSpacing: "-0.2px" }}>{item.name}</h3>
+                <span style={{
+                  fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase",
+                  color: item.tier === "Pro" ? "#0B5FFF" : "#00866B",
+                  background: item.tier === "Pro" ? "#EEF3FF" : "#E6F7F2",
+                  padding: "3px 10px", borderRadius: 99, whiteSpace: "nowrap", flexShrink: 0, marginLeft: 12,
+                }}>{item.tier}</span>
+              </div>
+              <p style={{ fontSize: 13.5, color: "#6B7A99", lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
