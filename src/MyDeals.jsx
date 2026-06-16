@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient.js";
-import { useAuth, AuthModal, UserMenu } from "./Auth.jsx";
+import { useAuth, useSubscription, AuthModal, UserMenu } from "./Auth.jsx";
 
 const formatCurrency = (val) =>
   val === "" || val === undefined || val === null || isNaN(val)
@@ -75,6 +75,7 @@ function buildDeepLink(toolType, inputs) {
 
 export default function MyDeals() {
   const { user, loading } = useAuth();
+  const { isStarter, loading: subLoading } = useSubscription(user);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [deals, setDeals] = useState([]);
   const [dealsLoading, setDealsLoading] = useState(true);
@@ -116,7 +117,7 @@ export default function MyDeals() {
 
   const compareSet = deals.filter((d) => selected.includes(d.id));
 
-  if (loading) return null;
+  if (loading || subLoading) return null;
 
   if (!user) {
     return (
@@ -136,6 +137,28 @@ export default function MyDeals() {
           Sign In
         </button>
         {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+      </div>
+    );
+  }
+
+  if (!isStarter) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#F5F7FF", fontFamily: "'Inter', system-ui, sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
+          <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2 }} />
+          <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E" }}>SpreadRun</span>
+        </div>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0D1B3E", margin: "0 0 10px" }}>My Deals is a Starter feature</h1>
+        <p style={{ fontSize: 14.5, color: "#6B7A99", marginBottom: 24, textAlign: "center", maxWidth: 380 }}>
+          Upgrade to save up to 10 properties, reopen them anytime, and compare deals side by side.
+        </p>
+        <a
+          href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400"
+          style={{ background: "#0B5FFF", color: "#fff", border: "none", borderRadius: 10, padding: "12px 24px", fontSize: 14.5, fontWeight: 700, textDecoration: "none" }}
+        >
+          Upgrade for $19/mo →
+        </a>
+        <a href="/app" style={{ marginTop: 16, fontSize: 13, color: "#6B7A99", textDecoration: "none" }}>← Back to Calculators</a>
       </div>
     );
   }
