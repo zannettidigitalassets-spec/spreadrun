@@ -47,10 +47,13 @@ export default function DscrGuide() {
           <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2 }} />
           <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E", letterSpacing: "-0.3px" }}>SpreadRun</span>
         </a>
-        <a href="/app#dscr" style={{
-          background: "#0B5FFF", color: "#fff", fontSize: 13, fontWeight: 700,
-          padding: "8px 18px", borderRadius: 8, textDecoration: "none",
-        }}>Try DSCR Calculator →</a>
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          <a href="/guides" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>All Guides</a>
+          <a href="/app#dscr" style={{
+            background: "#0B5FFF", color: "#fff", fontSize: 13, fontWeight: 700,
+            padding: "8px 18px", borderRadius: 8, textDecoration: "none",
+          }}>Try DSCR Calculator →</a>
+        </div>
       </nav>
 
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "60px 24px 40px" }}>
