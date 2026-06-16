@@ -11,7 +11,7 @@ const ARTICLES = [
     desc: "How to calculate true cash flow on a rental property, including the expenses most new investors forget to account for.",
     href: "/guides/rental-cash-flow-calculator",
     tag: "Rental Analysis",
-    live: false,
+    live: true,
   },
   {
     title: "The 70% Rule for House Flipping, Explained",
