@@ -229,6 +229,9 @@ export default function DealAnalyzer() {
   const [tab, setTab] = useState(getInitialTab);
   const { user, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(() => {
+    return new URLSearchParams(window.location.search).get('welcome') === 'starter';
+  });
 
   // Rental state
   const [purchasePrice, setPurchasePrice] = useState(() => getParam('purchasePrice', 350000));
@@ -346,6 +349,32 @@ export default function DealAnalyzer() {
       </div>
 
       {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+
+      {showWelcome && (
+        <div style={{
+          background: "#00B67A", color: "#fff", padding: "14px 28px",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexWrap: "wrap", gap: 10,
+        }}>
+          <div style={{ fontSize: 14, fontWeight: 700 }}>
+            🎉 You're a Starter member! Save up to 10 properties, compare deals side by side, and export PDF reports.
+          </div>
+          <button
+            onClick={() => {
+              setShowWelcome(false);
+              const url = new URL(window.location.href);
+              url.searchParams.delete('welcome');
+              window.history.replaceState({}, '', url.toString());
+            }}
+            style={{
+              background: "rgba(255,255,255,0.2)", border: "none", color: "#fff",
+              borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+            }}
+          >
+            Got it
+          </button>
+        </div>
+      )}
 
       {/* Tab Bar */}
       <div style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "8px 28px", display: "flex", gap: 4, justifyContent: "space-between", alignItems: "center" }}>
