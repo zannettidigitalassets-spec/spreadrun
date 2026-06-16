@@ -31,7 +31,10 @@ const Input = ({ label, prefix, value, onChange, hint }) => (
       <input
         type="number"
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => {
+          const v = e.target.value;
+          onChange(v === "" ? "" : parseFloat(v));
+        }}
         style={{
           width: "100%",
           padding: prefix ? "10px 12px 10px 28px" : "10px 12px",
@@ -80,7 +83,7 @@ const SectionTitle = ({ children }) => (
 const Divider = () => <div style={{ height: 1, background: "#EBF0FF", margin: "20px 0" }} />;
 
 const GaugeBar = ({ label, value, max, color }) => {
-  const pct = Math.min(100, Math.max(0, (value / max) * 100));
+  const pct = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
   return (
     <div style={{ marginBottom: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#6B7A99", marginBottom: 4 }}>
@@ -134,41 +137,42 @@ export default function DealAnalyzer() {
   const [dscrInsurance, setDscrInsurance] = useState(120);
 
   // --- Rental Calculations ---
-  const downAmount = (purchasePrice * downPct) / 100;
-  const loanAmount = purchasePrice - downAmount;
-  const monthlyRate = interestRate / 100 / 12;
-  const n = loanTermYears * 12;
-  const mortgage = monthlyRate > 0
+  const n_ = (v) => (v === "" || v === undefined || v === null || isNaN(v) ? 0 : Number(v));
+  const downAmount = (n_(purchasePrice) * n_(downPct)) / 100;
+  const loanAmount = n_(purchasePrice) - downAmount;
+  const monthlyRate = n_(interestRate) / 100 / 12;
+  const n = n_(loanTermYears) * 12;
+  const mortgage = monthlyRate > 0 && n > 0
     ? loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1)
-    : loanAmount / n;
-  const effectiveRent = rent * (1 - vacancyPct / 100);
-  const mgmtFee = effectiveRent * (mgmtPct / 100);
-  const totalExpenses = mortgage + taxes + insurance + maintenance + mgmtFee + otherExpenses;
-  const noi = effectiveRent - (taxes + insurance + maintenance + mgmtFee + otherExpenses);
+    : (n > 0 ? loanAmount / n : 0);
+  const effectiveRent = n_(rent) * (1 - n_(vacancyPct) / 100);
+  const mgmtFee = effectiveRent * (n_(mgmtPct) / 100);
+  const totalExpenses = mortgage + n_(taxes) + n_(insurance) + n_(maintenance) + mgmtFee + n_(otherExpenses);
+  const noi = effectiveRent - (n_(taxes) + n_(insurance) + n_(maintenance) + mgmtFee + n_(otherExpenses));
   const cashFlow = effectiveRent - totalExpenses;
   const cashOnCash = downAmount > 0 ? (cashFlow * 12 / downAmount) * 100 : 0;
-  const capRate = purchasePrice > 0 ? (noi * 12 / purchasePrice) * 100 : 0;
+  const capRate = n_(purchasePrice) > 0 ? (noi * 12 / n_(purchasePrice)) * 100 : 0;
   const dscr = mortgage > 0 ? noi / mortgage : 0;
-  const grossYield = purchasePrice > 0 ? (rent * 12 / purchasePrice) * 100 : 0;
+  const grossYield = n_(purchasePrice) > 0 ? (n_(rent) * 12 / n_(purchasePrice)) * 100 : 0;
 
   // --- Flip Calculations ---
-  const totalIn = flipPurchase + rehabCost;
-  const holdingCosts = (flipPurchase * holdingCostPct / 100) * holdingMonths;
-  const agentFees = arv * agentPct / 100;
-  const closingCosts = arv * closingCostPct / 100;
+  const totalIn = n_(flipPurchase) + n_(rehabCost);
+  const holdingCosts = (n_(flipPurchase) * n_(holdingCostPct) / 100) * n_(holdingMonths);
+  const agentFees = n_(arv) * n_(agentPct) / 100;
+  const closingCosts = n_(arv) * n_(closingCostPct) / 100;
   const totalCosts = totalIn + holdingCosts + agentFees + closingCosts;
-  const flipProfit = arv - totalCosts;
+  const flipProfit = n_(arv) - totalCosts;
   const flipROI = totalIn > 0 ? (flipProfit / totalIn) * 100 : 0;
-  const maxAllowable = arv * 0.7 - rehabCost;
+  const maxAllowable = n_(arv) * 0.7 - n_(rehabCost);
 
   // --- DSCR Calculations ---
-  const dscrMonthlyRate = dscrRate / 100 / 12;
-  const dscrN = dscrTerm * 12;
-  const dscrPayment = dscrMonthlyRate > 0
-    ? dscrLoanAmount * (dscrMonthlyRate * Math.pow(1 + dscrMonthlyRate, dscrN)) / (Math.pow(1 + dscrMonthlyRate, dscrN) - 1)
-    : dscrLoanAmount / dscrN;
-  const dscrPITI = dscrPayment + dscrTaxes + dscrInsurance;
-  const dscrRatio = dscrPITI > 0 ? dscrRent / dscrPITI : 0;
+  const dscrMonthlyRate = n_(dscrRate) / 100 / 12;
+  const dscrN = n_(dscrTerm) * 12;
+  const dscrPayment = dscrMonthlyRate > 0 && dscrN > 0
+    ? n_(dscrLoanAmount) * (dscrMonthlyRate * Math.pow(1 + dscrMonthlyRate, dscrN)) / (Math.pow(1 + dscrMonthlyRate, dscrN) - 1)
+    : (dscrN > 0 ? n_(dscrLoanAmount) / dscrN : 0);
+  const dscrPITI = dscrPayment + n_(dscrTaxes) + n_(dscrInsurance);
+  const dscrRatio = dscrPITI > 0 ? n_(dscrRent) / dscrPITI : 0;
   const dscrQualifies = dscrRatio >= 1.25;
   const minRentNeeded = dscrPITI * 1.25;
 
