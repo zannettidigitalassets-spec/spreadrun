@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const NAV_LINKS = ["Features", "Pricing", "Tools"];
+const FORMSPREE_URL = "https://formspree.io/f/mvznljer";
 
 const METRICS = [
   { value: "3", label: "Tools in one" },
@@ -102,12 +102,32 @@ const FAQS = [
 export default function Landing() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const [openFaq, setOpenFaq] = useState(null);
 
-  const handleSubmit = () => {
-    if (email.includes("@")) {
-      setSubmitted(true);
+  const handleSubmit = async () => {
+    if (!email.includes("@")) {
+      setError("Please enter a valid email address.");
+      return;
     }
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
+    }
+    setSubmitting(false);
   };
 
   return (
@@ -139,80 +159,68 @@ export default function Landing() {
 
       {/* HERO */}
       <section style={{
-        background: "#0D1B3E",
-        padding: "80px 24px 72px",
-        textAlign: "center",
-        position: "relative",
-        overflow: "hidden",
+        background: "#0D1B3E", padding: "80px 24px 72px",
+        textAlign: "center", position: "relative", overflow: "hidden",
       }}>
         <div style={{
           position: "absolute", inset: 0, opacity: 0.04,
           backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
           backgroundSize: "48px 48px",
         }} />
-
         <div style={{ position: "relative", maxWidth: 720, margin: "0 auto" }}>
           <div style={{
             display: "inline-block",
-            background: "rgba(11,95,255,0.18)",
-            border: "1px solid rgba(11,95,255,0.4)",
-            color: "#7EB3FF",
-            fontSize: 11, fontWeight: 800, letterSpacing: "0.14em",
-            padding: "5px 14px", borderRadius: 99, marginBottom: 28,
-            textTransform: "uppercase",
+            background: "rgba(11,95,255,0.18)", border: "1px solid rgba(11,95,255,0.4)",
+            color: "#7EB3FF", fontSize: 11, fontWeight: 800, letterSpacing: "0.14em",
+            padding: "5px 14px", borderRadius: 99, marginBottom: 28, textTransform: "uppercase",
           }}>
             Free Real Estate Deal Analyzer
           </div>
-
           <h1 style={{
-            fontSize: "clamp(36px, 6vw, 62px)",
-            fontWeight: 900,
-            color: "#fff",
-            lineHeight: 1.08,
-            letterSpacing: "-1.5px",
-            margin: "0 0 22px",
+            fontSize: "clamp(36px, 6vw, 62px)", fontWeight: 900, color: "#fff",
+            lineHeight: 1.08, letterSpacing: "-1.5px", margin: "0 0 22px",
           }}>
             Know if a deal works<br />
             <span style={{ color: "#4D8FFF" }}>before you make an offer.</span>
           </h1>
-
           <p style={{
-            fontSize: "clamp(16px, 2vw, 19px)",
-            color: "#8FA8CC",
-            maxWidth: 520, margin: "0 auto 40px",
-            lineHeight: 1.6, fontWeight: 400,
+            fontSize: "clamp(16px, 2vw, 19px)", color: "#8FA8CC",
+            maxWidth: 520, margin: "0 auto 40px", lineHeight: 1.6, fontWeight: 400,
           }}>
             Rental analyzer, fix & flip calculator, and DSCR qualifier — all in one tool. No spreadsheets. No guesswork.
           </p>
 
+          {/* Email capture */}
           {!submitted ? (
-            <div style={{ display: "flex", gap: 10, maxWidth: 440, margin: "0 auto", flexWrap: "wrap", justifyContent: "center" }}>
-              <input
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && handleSubmit()}
-                style={{
-                  flex: 1, minWidth: 220,
-                  padding: "13px 18px",
-                  border: "1.5px solid rgba(255,255,255,0.15)",
-                  borderRadius: 10, fontSize: 15,
-                  background: "rgba(255,255,255,0.08)",
-                  color: "#fff", outline: "none",
-                }}
-              />
-              <button
-                onClick={handleSubmit}
-                style={{
-                  background: "#0B5FFF", color: "#fff",
-                  border: "none", borderRadius: 10,
-                  padding: "13px 24px", fontSize: 15, fontWeight: 700,
-                  cursor: "pointer", whiteSpace: "nowrap",
-                }}
-              >
-                Get early access
-              </button>
+            <div style={{ maxWidth: 440, margin: "0 auto" }}>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={e => { setEmail(e.target.value); setError(""); }}
+                  onKeyDown={e => e.key === "Enter" && handleSubmit()}
+                  style={{
+                    flex: 1, minWidth: 220, padding: "13px 18px",
+                    border: error ? "1.5px solid #E53935" : "1.5px solid rgba(255,255,255,0.15)",
+                    borderRadius: 10, fontSize: 15,
+                    background: "rgba(255,255,255,0.08)", color: "#fff", outline: "none",
+                  }}
+                />
+                <button
+                  onClick={handleSubmit}
+                  disabled={submitting}
+                  style={{
+                    background: submitting ? "#3D6FCC" : "#0B5FFF", color: "#fff",
+                    border: "none", borderRadius: 10,
+                    padding: "13px 24px", fontSize: 15, fontWeight: 700,
+                    cursor: submitting ? "default" : "pointer", whiteSpace: "nowrap",
+                  }}
+                >
+                  {submitting ? "Sending..." : "Get early access"}
+                </button>
+              </div>
+              {error && <div style={{ color: "#FF6B6B", fontSize: 13, marginTop: 8 }}>{error}</div>}
             </div>
           ) : (
             <div style={{
@@ -228,10 +236,7 @@ export default function Landing() {
             Free forever · No credit card · No spam
           </div>
 
-          <div style={{
-            display: "flex", gap: 32, justifyContent: "center",
-            marginTop: 56, flexWrap: "wrap",
-          }}>
+          <div style={{ display: "flex", gap: 32, justifyContent: "center", marginTop: 56, flexWrap: "wrap" }}>
             {METRICS.map(m => (
               <div key={m.label} style={{ textAlign: "center" }}>
                 <div style={{ fontSize: 32, fontWeight: 900, color: "#fff", fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "-1px" }}>{m.value}</div>
@@ -250,17 +255,14 @@ export default function Landing() {
             Every number you need<br />to make a confident decision.
           </h2>
         </div>
-
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           {FEATURES.map((f, i) => (
             <div key={f.tag} style={{
               display: "grid", gridTemplateColumns: "1fr 1fr",
-              gap: 0, borderRadius: 16, overflow: "hidden",
-              border: "1px solid #EBF0FF",
+              borderRadius: 16, overflow: "hidden", border: "1px solid #EBF0FF",
             }}>
               <div style={{
-                padding: "44px",
-                background: i % 2 === 0 ? "#fff" : "#F5F7FF",
+                padding: "44px", background: i % 2 === 0 ? "#fff" : "#F5F7FF",
                 display: "flex", flexDirection: "column", justifyContent: "center",
                 order: i % 2 === 0 ? 0 : 1,
               }}>
@@ -272,15 +274,10 @@ export default function Landing() {
                 }}>{f.tag}</div>
                 <h3 style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.4px", margin: "0 0 14px", lineHeight: 1.2 }}>{f.headline}</h3>
                 <p style={{ fontSize: 15, color: "#6B7A99", lineHeight: 1.7, margin: "0 0 28px" }}>{f.body}</p>
-                <a href={f.href} style={{
-                  display: "inline-block", fontSize: 13, fontWeight: 700,
-                  color: "#0B5FFF", textDecoration: "none", letterSpacing: "0.02em",
-                }}>Try it free →</a>
+                <a href={f.href} style={{ display: "inline-block", fontSize: 13, fontWeight: 700, color: "#0B5FFF", textDecoration: "none" }}>Try it free →</a>
               </div>
-
               <div style={{
-                padding: "44px",
-                background: i % 2 === 0 ? "#0D1B3E" : "#0B1830",
+                padding: "44px", background: i % 2 === 0 ? "#0D1B3E" : "#0B1830",
                 display: "flex", flexDirection: "column", justifyContent: "center", gap: 20,
                 order: i % 2 === 0 ? 1 : 0,
               }}>
@@ -309,22 +306,19 @@ export default function Landing() {
               Start free. Upgrade when it pays off.
             </h2>
           </div>
-
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
             {PRICING.map(p => (
               <div key={p.tier} style={{
                 background: p.highlight ? "#0D1B3E" : "#fff",
                 border: p.highlight ? "2px solid #0B5FFF" : "1.5px solid #EBF0FF",
-                borderRadius: 16, padding: "36px 32px",
-                position: "relative",
+                borderRadius: 16, padding: "36px 32px", position: "relative",
               }}>
                 {p.highlight && (
                   <div style={{
                     position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)",
-                    background: "#0B5FFF", color: "#fff",
-                    fontSize: 11, fontWeight: 800, letterSpacing: "0.1em",
-                    padding: "4px 16px", borderRadius: 99, textTransform: "uppercase",
-                    whiteSpace: "nowrap",
+                    background: "#0B5FFF", color: "#fff", fontSize: 11, fontWeight: 800,
+                    letterSpacing: "0.1em", padding: "4px 16px", borderRadius: 99,
+                    textTransform: "uppercase", whiteSpace: "nowrap",
                   }}>Most Popular</div>
                 )}
                 <div style={{ fontSize: 13, fontWeight: 700, color: p.highlight ? "#4D8FFF" : "#0B5FFF", marginBottom: 8 }}>{p.tier}</div>
@@ -347,7 +341,6 @@ export default function Landing() {
                   color: p.highlight ? "#fff" : "#0B5FFF",
                   padding: "13px", borderRadius: 10,
                   fontSize: 14, fontWeight: 700, textDecoration: "none",
-                  letterSpacing: "0.02em",
                 }}>{p.cta}</a>
               </div>
             ))}
@@ -379,9 +372,7 @@ export default function Landing() {
                 </span>
               </button>
               {openFaq === i && (
-                <div style={{ fontSize: 14, color: "#6B7A99", lineHeight: 1.7, paddingBottom: 20 }}>
-                  {f.a}
-                </div>
+                <div style={{ fontSize: 14, color: "#6B7A99", lineHeight: 1.7, paddingBottom: 20 }}>{f.a}</div>
               )}
             </div>
           ))}
@@ -398,10 +389,9 @@ export default function Landing() {
             No account required. Open the tool and start running numbers in under a minute.
           </p>
           <a href="/app" style={{
-            display: "inline-block",
-            background: "#0B5FFF", color: "#fff",
+            display: "inline-block", background: "#0B5FFF", color: "#fff",
             fontSize: 16, fontWeight: 700, padding: "16px 36px",
-            borderRadius: 12, textDecoration: "none", letterSpacing: "0.02em",
+            borderRadius: 12, textDecoration: "none",
           }}>
             Open SpreadRun Free →
           </a>
@@ -422,9 +412,9 @@ export default function Landing() {
           © 2026 SpreadRun · For informational purposes only. Not financial advice.
         </div>
         <div style={{ display: "flex", gap: 20 }}>
-          <a href="mailto:hello@spreadrun.com" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Contact</a>
           <a href="#faq" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>FAQ</a>
           <a href="#pricing" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Pricing</a>
+          <a href="#features" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Features</a>
         </div>
       </footer>
     </div>
