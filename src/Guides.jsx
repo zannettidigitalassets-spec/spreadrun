@@ -18,7 +18,7 @@ const ARTICLES = [
     desc: "What the 70% rule actually means, how to calculate your max allowable offer, and when it makes sense to break the rule.",
     href: "/guides/70-percent-rule-house-flipping",
     tag: "Fix & Flip",
-    live: false,
+    live: true,
   },
   {
     title: "What Is a Good Cap Rate for a Rental Property?",
