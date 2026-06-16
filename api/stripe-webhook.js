@@ -32,7 +32,7 @@ export async function POST(request) {
         const stripeCustomerId = session.customer;
 
         if (customerEmail) {
-          await supabaseAdmin
+          const { data, error } = await supabaseAdmin
             .from('profiles')
             .upsert(
               {
@@ -43,6 +43,14 @@ export async function POST(request) {
               },
               { onConflict: 'email' }
             );
+
+          if (error) {
+            console.error('Supabase upsert failed:', JSON.stringify(error));
+          } else {
+            console.log('Supabase upsert succeeded:', JSON.stringify(data));
+          }
+        } else {
+          console.error('No customer email found on checkout session, skipping upsert.');
         }
         break;
       }
