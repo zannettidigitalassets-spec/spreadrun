@@ -516,6 +516,7 @@ export default function Landing() {
           <a href="#faq" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>FAQ</a>
           <a href="#pricing" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Pricing</a>
           <a href="#features" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Features</a>
+          <a href="/guides/dscr-loan-calculator" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>DSCR Guide</a>
           <a href="/privacy" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Privacy</a>
           <a href="/terms" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Terms</a>
         </div>
