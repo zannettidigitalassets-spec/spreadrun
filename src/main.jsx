@@ -7,6 +7,7 @@ import Terms from './Terms.jsx'
 import Guides from './Guides.jsx'
 import DscrGuide from './DscrGuide.jsx'
 import CashFlowGuide from './CashFlowGuide.jsx'
+import SeventyPercentGuide from './SeventyPercentGuide.jsx'
 
 const path = window.location.pathname
 
@@ -17,6 +18,7 @@ const getPage = () => {
   if (path === '/guides' || path === '/guides/') return <Guides />;
   if (path.startsWith('/guides/dscr-loan-calculator')) return <DscrGuide />;
   if (path.startsWith('/guides/rental-cash-flow-calculator')) return <CashFlowGuide />;
+  if (path.startsWith('/guides/70-percent-rule-house-flipping')) return <SeventyPercentGuide />;
   return <Landing />;
 };
 
