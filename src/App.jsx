@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { supabase } from "./supabaseClient.js";
+import { useAuth, AuthModal, UserMenu } from "./Auth.jsx";
 
 const formatCurrency = (val) =>
   val === "" || val === undefined || val === null
@@ -103,8 +105,117 @@ const getInitialTab = () => {
   return 'rental';
 };
 
+const SaveDealButton = ({ user, onRequireAuth, toolType, inputs }) => {
+  const [status, setStatus] = useState("idle"); // idle | saving | saved | error | limit
+  const [showLabelPrompt, setShowLabelPrompt] = useState(false);
+  const [label, setLabel] = useState("");
+
+  const handleClick = () => {
+    if (!user) {
+      onRequireAuth();
+      return;
+    }
+    setShowLabelPrompt(true);
+  };
+
+  const handleSave = async () => {
+    setStatus("saving");
+
+    const { count } = await supabase
+      .from("saved_properties")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id);
+
+    if ((count ?? 0) >= 10) {
+      setStatus("limit");
+      return;
+    }
+
+    const { error } = await supabase.from("saved_properties").insert({
+      user_id: user.id,
+      label: label || `${toolType} deal`,
+      tool_type: toolType,
+      inputs,
+    });
+
+    if (error) {
+      setStatus("error");
+    } else {
+      setStatus("saved");
+      setShowLabelPrompt(false);
+      setLabel("");
+      setTimeout(() => setStatus("idle"), 2000);
+    }
+  };
+
+  if (showLabelPrompt) {
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 8, background: "#F0F4FF",
+        borderRadius: 10, padding: "8px 10px",
+      }}>
+        <input
+          autoFocus
+          value={label}
+          onChange={(e) => setLabel(e.target.value)}
+          placeholder="Name this deal (optional)"
+          style={{
+            border: "1.5px solid #D6DFFF", borderRadius: 8, padding: "7px 10px",
+            fontSize: 13, outline: "none", width: 180,
+          }}
+        />
+        <button
+          onClick={handleSave}
+          disabled={status === "saving"}
+          style={{
+            background: "#0B5FFF", color: "#fff", border: "none", borderRadius: 8,
+            padding: "8px 14px", fontSize: 12.5, fontWeight: 700, cursor: "pointer",
+          }}
+        >
+          {status === "saving" ? "Saving..." : "Save"}
+        </button>
+        <button
+          onClick={() => setShowLabelPrompt(false)}
+          style={{ background: "none", border: "none", color: "#9BA8C0", fontSize: 12.5, cursor: "pointer" }}
+        >
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
+  if (status === "limit") {
+    return (
+      <div style={{ fontSize: 12.5, color: "#D14343", fontWeight: 600 }}>
+        You've hit the 10 saved deal limit. Delete one from My Deals to save another.
+      </div>
+    );
+  }
+
+  if (status === "saved") {
+    return (
+      <div style={{ fontSize: 13, color: "#00B67A", fontWeight: 700 }}>✓ Saved to My Deals</div>
+    );
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      style={{
+        background: "#fff", color: "#0B5FFF", border: "1.5px solid #0B5FFF",
+        borderRadius: 8, padding: "9px 16px", fontSize: 13, fontWeight: 700,
+        cursor: "pointer", letterSpacing: "0.02em",
+      }}
+    >
+      Save This Deal
+    </button>
+  );
+};
+
 export default function DealAnalyzer() {
   const [tab, setTab] = useState(getInitialTab);
+  const { user, loading } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Rental state
   const [purchasePrice, setPurchasePrice] = useState(350000);
@@ -179,6 +290,12 @@ export default function DealAnalyzer() {
   const cashFlowColor = cashFlow >= 0 ? "#00B67A" : "#E53935";
   const flipProfitColor = flipProfit >= 0 ? "#00B67A" : "#E53935";
 
+  const currentInputs = {
+    rental: { purchasePrice, downPct, interestRate, loanTermYears, rent, vacancyPct, taxes, insurance, maintenance, mgmtPct, otherExpenses },
+    flip: { flipPurchase, rehabCost, arv, holdingMonths, holdingCostPct, agentPct, closingCostPct },
+    dscr: { dscrRent, dscrLoanAmount, dscrRate, dscrTerm, dscrTaxes, dscrInsurance },
+  }[tab];
+
   return (
     <div style={{ minHeight: "100vh", background: "#F5F7FF", fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E" }}>
       {/* Header */}
@@ -190,16 +307,46 @@ export default function DealAnalyzer() {
           </div>
           <div style={{ fontSize: 11, color: "#6B7A99", marginLeft: 18, marginTop: 2, letterSpacing: "0.08em" }}>DEAL ANALYZER</div>
         </div>
-        <div style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em" }}>
-          Upgrade to Pro →
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          {!loading && (
+            user ? (
+              <>
+                <a href="/app/my-deals" style={{ fontSize: 13, fontWeight: 600, color: "#A8C4FF", textDecoration: "none" }}>My Deals</a>
+                <UserMenu user={user} />
+              </>
+            ) : (
+              <button
+                onClick={() => setShowAuthModal(true)}
+                style={{
+                  background: "transparent", color: "#fff", border: "1.5px solid #2A3F6E",
+                  borderRadius: 8, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                }}
+              >
+                Sign In
+              </button>
+            )
+          )}
+          <div style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em" }}>
+            Upgrade →
+          </div>
         </div>
       </div>
 
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+
       {/* Tab Bar */}
-      <div style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "8px 28px", display: "flex", gap: 4 }}>
-        <Tab label="Rental Analyzer" active={tab === "rental"} onClick={() => setTab("rental")} />
-        <Tab label="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
-        <Tab label="DSCR Qualifier" active={tab === "dscr"} onClick={() => setTab("dscr")} />
+      <div style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "8px 28px", display: "flex", gap: 4, justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 4 }}>
+          <Tab label="Rental Analyzer" active={tab === "rental"} onClick={() => setTab("rental")} />
+          <Tab label="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
+          <Tab label="DSCR Qualifier" active={tab === "dscr"} onClick={() => setTab("dscr")} />
+        </div>
+        <SaveDealButton
+          user={user}
+          onRequireAuth={() => setShowAuthModal(true)}
+          toolType={tab}
+          inputs={currentInputs}
+        />
       </div>
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px" }}>
@@ -442,7 +589,7 @@ export default function DealAnalyzer() {
 
         <div style={{ marginTop: 32, padding: "20px 0", borderTop: "1px solid #EBF0FF", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ fontSize: 11, color: "#9BA8C0" }}>SpreadRun · For informational purposes only. Not financial advice.</div>
-          <div style={{ fontSize: 12, color: "#0B5FFF", fontWeight: 700, cursor: "pointer" }}>Get Pro: Unlimited saves + PDF reports →</div>
+          <div style={{ fontSize: 12, color: "#0B5FFF", fontWeight: 700, cursor: "pointer" }}>Save 10 deals + compare side by side →</div>
         </div>
       </div>
     </div>
