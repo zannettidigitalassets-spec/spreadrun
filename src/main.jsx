@@ -10,10 +10,12 @@ import CashFlowGuide from './CashFlowGuide.jsx'
 import SeventyPercentGuide from './SeventyPercentGuide.jsx'
 import CapRateGuide from './CapRateGuide.jsx'
 import HowToAnalyzeGuide from './HowToAnalyzeGuide.jsx'
+import MyDeals from './MyDeals.jsx'
 
 const path = window.location.pathname
 
 const getPage = () => {
+  if (path.startsWith('/app/my-deals')) return <MyDeals />;
   if (path.startsWith('/app')) return <App />;
   if (path.startsWith('/privacy')) return <Privacy />;
   if (path.startsWith('/terms')) return <Terms />;
