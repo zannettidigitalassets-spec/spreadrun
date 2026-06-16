@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 
 const formatCurrency = (val) =>
   val === "" || val === undefined || val === null
@@ -94,8 +94,14 @@ const GaugeBar = ({ label, value, max, color }) => {
   );
 };
 
+const getInitialTab = () => {
+  const hash = window.location.hash.replace('#', '');
+  if (['rental', 'flip', 'dscr'].includes(hash)) return hash;
+  return 'rental';
+};
+
 export default function DealAnalyzer() {
-  const [tab, setTab] = useState("rental");
+  const [tab, setTab] = useState(getInitialTab);
 
   // Rental state
   const [purchasePrice, setPurchasePrice] = useState(350000);
@@ -170,37 +176,17 @@ export default function DealAnalyzer() {
   const flipProfitColor = flipProfit >= 0 ? "#00B67A" : "#E53935";
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "#F5F7FF",
-      fontFamily: "'Inter', system-ui, sans-serif",
-      color: "#0D1B3E",
-    }}>
+    <div style={{ minHeight: "100vh", background: "#F5F7FF", fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E" }}>
       {/* Header */}
-      <div style={{
-        background: "#0D1B3E",
-        padding: "20px 28px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}>
+      <div style={{ background: "#0D1B3E", padding: "20px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 8, height: 28, background: "#0B5FFF", borderRadius: 2 }} />
-            <span style={{ fontSize: 18, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px" }}>DealLens</span>
+            <a href="/" style={{ fontSize: 18, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", textDecoration: "none" }}>SpreadRun</a>
           </div>
-          <div style={{ fontSize: 11, color: "#6B7A99", marginLeft: 18, marginTop: 2, letterSpacing: "0.08em" }}>REAL ESTATE DEAL ANALYZER</div>
+          <div style={{ fontSize: 11, color: "#6B7A99", marginLeft: 18, marginTop: 2, letterSpacing: "0.08em" }}>DEAL ANALYZER</div>
         </div>
-        <div style={{
-          background: "#0B5FFF",
-          color: "#fff",
-          fontSize: 12,
-          fontWeight: 700,
-          padding: "8px 16px",
-          borderRadius: 8,
-          cursor: "pointer",
-          letterSpacing: "0.04em",
-        }}>
+        <div style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em" }}>
           Upgrade to Pro →
         </div>
       </div>
@@ -214,20 +200,16 @@ export default function DealAnalyzer() {
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px" }}>
 
-        {/* ===== RENTAL TAB ===== */}
+        {/* RENTAL TAB */}
         {tab === "rental" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-            {/* KPI Row */}
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Pill label="Monthly Cash Flow" value={<span style={{ color: cashFlowColor }}>{formatCurrency(cashFlow)}</span>} highlight />
               <Pill label="Cash-on-Cash" value={formatPct(cashOnCash)} />
               <Pill label="Cap Rate" value={formatPct(capRate)} />
               <Pill label="DSCR" value={dscr.toFixed(2)} />
             </div>
-
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              {/* Left: Inputs */}
               <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                 <SectionTitle>Property & Loan</SectionTitle>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -252,8 +234,6 @@ export default function DealAnalyzer() {
                   <Input label="Other" prefix="$" value={otherExpenses} onChange={setOtherExpenses} />
                 </div>
               </div>
-
-              {/* Right: Results */}
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                   <SectionTitle>Monthly Breakdown</SectionTitle>
@@ -272,7 +252,6 @@ export default function DealAnalyzer() {
                     <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: cashFlowColor }}>{formatCurrency(cashFlow)}/mo</span>
                   </div>
                 </div>
-
                 <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                   <SectionTitle>Return Metrics</SectionTitle>
                   {[
@@ -289,7 +268,6 @@ export default function DealAnalyzer() {
                     </div>
                   ))}
                 </div>
-
                 <div style={{ background: "#F0F4FF", borderRadius: 14, padding: 18, border: "1px solid #D6DFFF" }}>
                   <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", color: "#0B5FFF", marginBottom: 8 }}>DEAL SIGNAL</div>
                   <div style={{ fontSize: 13, color: "#0D1B3E", lineHeight: 1.6 }}>
@@ -297,9 +275,7 @@ export default function DealAnalyzer() {
                       ? "✅ Strong deal. Positive cash flow with a healthy cap rate above 6%."
                       : cashFlow >= 0 && cashFlow < 200
                       ? "⚠️ Marginally cash flowing. Thin margin — consider negotiating price or reducing expenses."
-                      : cashFlow < 0
-                      ? "❌ Negative cash flow. This deal loses money monthly at current inputs."
-                      : "Enter values to analyze this deal."}
+                      : "❌ Negative cash flow. This deal loses money monthly at current inputs."}
                     {dscr >= 1.25 ? " DSCR qualifies for most investor loans." : dscr > 0 ? ` DSCR of ${dscr.toFixed(2)} is below lender minimum of 1.25.` : ""}
                   </div>
                 </div>
@@ -308,7 +284,7 @@ export default function DealAnalyzer() {
           </div>
         )}
 
-        {/* ===== FLIP TAB ===== */}
+        {/* FLIP TAB */}
         {tab === "flip" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
@@ -317,7 +293,6 @@ export default function DealAnalyzer() {
               <Pill label="Max Allowable Offer" value={formatCurrency(maxAllowable)} />
               <Pill label="Total In" value={formatCurrency(totalIn)} />
             </div>
-
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                 <SectionTitle>Deal Inputs</SectionTitle>
@@ -335,7 +310,6 @@ export default function DealAnalyzer() {
                   <Input label="Closing Costs %" prefix="%" value={closingCostPct} onChange={setClosingCostPct} />
                 </div>
               </div>
-
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                   <SectionTitle>Cost Stack</SectionTitle>
@@ -360,7 +334,6 @@ export default function DealAnalyzer() {
                     <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: flipProfitColor }}>{formatCurrency(flipProfit)}</span>
                   </div>
                 </div>
-
                 <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                   <SectionTitle>70% Rule Check</SectionTitle>
                   <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 12, lineHeight: 1.6 }}>
@@ -375,7 +348,6 @@ export default function DealAnalyzer() {
                     <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, color: flipPurchase <= maxAllowable ? "#00B67A" : "#E53935" }}>{formatCurrency(flipPurchase)}</span>
                   </div>
                 </div>
-
                 <div style={{ background: "#F0F4FF", borderRadius: 14, padding: 18, border: "1px solid #D6DFFF" }}>
                   <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", color: "#0B5FFF", marginBottom: 8 }}>DEAL SIGNAL</div>
                   <div style={{ fontSize: 13, color: "#0D1B3E", lineHeight: 1.6 }}>
@@ -383,9 +355,7 @@ export default function DealAnalyzer() {
                       ? "✅ Strong flip. Profit and ROI both meet investor benchmarks."
                       : flipProfit >= 0 && flipProfit < 30000
                       ? "⚠️ Marginal. Profit exists but leaves little buffer for surprises."
-                      : flipProfit < 0
-                      ? "❌ Losing deal. Reduce purchase price or rehab costs."
-                      : "Enter values to analyze."}
+                      : "❌ Losing deal. Reduce purchase price or rehab costs."}
                     {flipPurchase <= maxAllowable ? " Purchase price passes the 70% rule." : " Purchase price exceeds the 70% rule — overpaying."}
                   </div>
                 </div>
@@ -394,20 +364,15 @@ export default function DealAnalyzer() {
           </div>
         )}
 
-        {/* ===== DSCR TAB ===== */}
+        {/* DSCR TAB */}
         {tab === "dscr" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Pill
-                label="DSCR Ratio"
-                value={<span style={{ color: dscrQualifies ? "#00B67A" : "#E53935" }}>{dscrRatio.toFixed(2)}</span>}
-                highlight
-              />
+              <Pill label="DSCR Ratio" value={<span style={{ color: dscrQualifies ? "#00B67A" : "#E53935" }}>{dscrRatio.toFixed(2)}</span>} highlight />
               <Pill label="Monthly PITI" value={formatCurrency(dscrPITI)} />
               <Pill label="Min Rent Needed" value={formatCurrency(minRentNeeded)} />
               <Pill label="Status" value={dscrQualifies ? "✅ Qualifies" : "❌ Does Not"} />
             </div>
-
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                 <SectionTitle>Loan Details</SectionTitle>
@@ -424,7 +389,6 @@ export default function DealAnalyzer() {
                   <Input label="Monthly Insurance" prefix="$" value={dscrInsurance} onChange={setDscrInsurance} />
                 </div>
               </div>
-
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                   <SectionTitle>DSCR Breakdown</SectionTitle>
@@ -442,7 +406,6 @@ export default function DealAnalyzer() {
                     </div>
                   ))}
                 </div>
-
                 <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                   <SectionTitle>Lender Benchmarks</SectionTitle>
                   {[
@@ -460,7 +423,6 @@ export default function DealAnalyzer() {
                     To hit 1.25 DSCR, you need at least <strong style={{ color: "#0D1B3E" }}>{formatCurrency(minRentNeeded)}/mo</strong> in rent.
                   </div>
                 </div>
-
                 <div style={{ background: "#F0F4FF", borderRadius: 14, padding: 18, border: "1px solid #D6DFFF" }}>
                   <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", color: "#0B5FFF", marginBottom: 8 }}>DEAL SIGNAL</div>
                   <div style={{ fontSize: 13, color: "#0D1B3E", lineHeight: 1.6 }}>
@@ -474,9 +436,8 @@ export default function DealAnalyzer() {
           </div>
         )}
 
-        {/* Footer */}
         <div style={{ marginTop: 32, padding: "20px 0", borderTop: "1px solid #EBF0FF", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ fontSize: 11, color: "#9BA8C0" }}>DealLens · For informational purposes only. Not financial advice.</div>
+          <div style={{ fontSize: 11, color: "#9BA8C0" }}>SpreadRun · For informational purposes only. Not financial advice.</div>
           <div style={{ fontSize: 12, color: "#0B5FFF", fontWeight: 700, cursor: "pointer" }}>Get Pro: Unlimited saves + PDF reports →</div>
         </div>
       </div>
