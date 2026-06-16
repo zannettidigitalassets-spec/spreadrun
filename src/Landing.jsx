@@ -13,6 +13,7 @@ const FEATURES = [
     tag: "Rental Analyzer",
     headline: "Know your cash flow before you close.",
     body: "Input any property and get instant cash-on-cash return, cap rate, DSCR, and monthly breakdown. No spreadsheet required.",
+    href: "/app#rental",
     stats: [
       { label: "Cap Rate", val: "6.2%" },
       { label: "Cash Flow", val: "$340/mo" },
@@ -23,6 +24,7 @@ const FEATURES = [
     tag: "Fix & Flip",
     headline: "Run the numbers on any flip in seconds.",
     body: "Purchase price, rehab costs, ARV, holding costs — see your profit, ROI, and whether the deal passes the 70% rule instantly.",
+    href: "/app#flip",
     stats: [
       { label: "Net Profit", val: "$42,800" },
       { label: "ROI", val: "24.1%" },
@@ -33,6 +35,7 @@ const FEATURES = [
     tag: "DSCR Qualifier",
     headline: "Find out if the bank will say yes.",
     body: "Enter your loan details and rent to see your DSCR ratio and exactly how much rent you need to qualify for investor financing.",
+    href: "/app#dscr",
     stats: [
       { label: "DSCR Ratio", val: "1.28" },
       { label: "Min Rent", val: "$2,190" },
@@ -55,6 +58,7 @@ const PRICING = [
       "Unlimited calculations",
     ],
     cta: "Start analyzing",
+    href: "/app",
     highlight: false,
   },
   {
@@ -71,6 +75,7 @@ const PRICING = [
       "Priority support",
     ],
     cta: "Get Pro — $19/mo",
+    href: "/app",
     highlight: true,
   },
 ];
@@ -98,7 +103,6 @@ export default function Landing() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleSubmit = () => {
     if (email.includes("@")) {
@@ -122,9 +126,9 @@ export default function Landing() {
           <span style={{ fontWeight: 800, fontSize: 17, letterSpacing: "-0.3px" }}>SpreadRun</span>
         </div>
         <div style={{ display: "flex", gap: 28, alignItems: "center" }}>
-          {NAV_LINKS.map(l => (
-            <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>{l}</a>
-          ))}
+          <a href="#features" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>Features</a>
+          <a href="#pricing" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>Pricing</a>
+          <a href="#faq" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>FAQ</a>
           <a href="/app" style={{
             background: "#0B5FFF", color: "#fff",
             fontSize: 13, fontWeight: 700, padding: "8px 18px",
@@ -141,7 +145,6 @@ export default function Landing() {
         position: "relative",
         overflow: "hidden",
       }}>
-        {/* Background grid lines */}
         <div style={{
           position: "absolute", inset: 0, opacity: 0.04,
           backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
@@ -182,7 +185,6 @@ export default function Landing() {
             Rental analyzer, fix & flip calculator, and DSCR qualifier — all in one tool. No spreadsheets. No guesswork.
           </p>
 
-          {/* Email capture */}
           {!submitted ? (
             <div style={{ display: "flex", gap: 10, maxWidth: 440, margin: "0 auto", flexWrap: "wrap", justifyContent: "center" }}>
               <input
@@ -226,7 +228,6 @@ export default function Landing() {
             Free forever · No credit card · No spam
           </div>
 
-          {/* Metric row */}
           <div style={{
             display: "flex", gap: 32, justifyContent: "center",
             marginTop: 56, flexWrap: "wrap",
@@ -256,11 +257,9 @@ export default function Landing() {
               display: "grid", gridTemplateColumns: "1fr 1fr",
               gap: 0, borderRadius: 16, overflow: "hidden",
               border: "1px solid #EBF0FF",
-              flexDirection: i % 2 === 0 ? "row" : "row-reverse",
             }}>
-              {/* Text side */}
               <div style={{
-                padding: "44px 44px",
+                padding: "44px",
                 background: i % 2 === 0 ? "#fff" : "#F5F7FF",
                 display: "flex", flexDirection: "column", justifyContent: "center",
                 order: i % 2 === 0 ? 0 : 1,
@@ -273,13 +272,12 @@ export default function Landing() {
                 }}>{f.tag}</div>
                 <h3 style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.4px", margin: "0 0 14px", lineHeight: 1.2 }}>{f.headline}</h3>
                 <p style={{ fontSize: 15, color: "#6B7A99", lineHeight: 1.7, margin: "0 0 28px" }}>{f.body}</p>
-                <a href="/app" style={{
+                <a href={f.href} style={{
                   display: "inline-block", fontSize: 13, fontWeight: 700,
                   color: "#0B5FFF", textDecoration: "none", letterSpacing: "0.02em",
                 }}>Try it free →</a>
               </div>
 
-              {/* Stats side */}
               <div style={{
                 padding: "44px",
                 background: i % 2 === 0 ? "#0D1B3E" : "#0B1830",
@@ -335,17 +333,15 @@ export default function Landing() {
                   <span style={{ fontSize: 13, color: p.highlight ? "#6B8AAA" : "#9BA8C0" }}>/{p.period}</span>
                 </div>
                 <div style={{ fontSize: 13, color: p.highlight ? "#6B8AAA" : "#9BA8C0", marginBottom: 28 }}>{p.desc}</div>
-
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 32 }}>
-                  {p.features.map(f => (
-                    <div key={f} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 14, color: p.highlight ? "#C8D8EE" : "#3D4F6E" }}>
+                  {p.features.map(feat => (
+                    <div key={feat} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 14, color: p.highlight ? "#C8D8EE" : "#3D4F6E" }}>
                       <span style={{ color: "#0B5FFF", fontWeight: 800, marginTop: 1 }}>✓</span>
-                      {f}
+                      {feat}
                     </div>
                   ))}
                 </div>
-
-                <a href="/app" style={{
+                <a href={p.href} style={{
                   display: "block", textAlign: "center",
                   background: p.highlight ? "#0B5FFF" : "#EEF3FF",
                   color: p.highlight ? "#fff" : "#0B5FFF",
@@ -360,12 +356,11 @@ export default function Landing() {
       </section>
 
       {/* FAQ */}
-      <section id="tools" style={{ padding: "80px 24px", maxWidth: 640, margin: "0 auto" }}>
+      <section id="faq" style={{ padding: "80px 24px", maxWidth: 640, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", color: "#0B5FFF", textTransform: "uppercase", marginBottom: 12 }}>FAQ</div>
           <h2 style={{ fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 900, letterSpacing: "-0.6px", margin: 0 }}>Common questions</h2>
         </div>
-
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {FAQS.map((f, i) => (
             <div key={i} style={{ borderBottom: "1px solid #EBF0FF" }}>
@@ -427,9 +422,9 @@ export default function Landing() {
           © 2026 SpreadRun · For informational purposes only. Not financial advice.
         </div>
         <div style={{ display: "flex", gap: 20 }}>
-          {["Privacy", "Terms", "Contact"].map(l => (
-            <a key={l} href="#" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>{l}</a>
-          ))}
+          <a href="mailto:hello@spreadrun.com" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Contact</a>
+          <a href="#faq" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>FAQ</a>
+          <a href="#pricing" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Pricing</a>
         </div>
       </footer>
     </div>
