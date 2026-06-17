@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-const FORMSPREE_URL = "https://formspree.io/f/mvznljer";
 const STARTER_CHECKOUT_URL = "https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400";
 
 const METRICS = [
@@ -144,36 +143,8 @@ const FAQS = [
 ];
 
 export default function Landing() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
   const [openFaq, setOpenFaq] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleSubmit = async () => {
-    if (!email.includes("@")) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-    setSubmitting(true);
-    setError("");
-    try {
-      const res = await fetch(FORMSPREE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
-        setSubmitted(true);
-      } else {
-        setError("Something went wrong. Please try again.");
-      }
-    } catch {
-      setError("Something went wrong. Please try again.");
-    }
-    setSubmitting(false);
-  };
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E", background: "#fff", overflowX: "hidden" }}>
@@ -350,50 +321,17 @@ export default function Landing() {
             Rental analyzer, fix & flip calculator, and DSCR qualifier — all in one tool. No spreadsheets. No guesswork.
           </p>
 
-          {/* Email capture */}
-          {!submitted ? (
-            <div style={{ maxWidth: 440, margin: "0 auto" }}>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={e => { setEmail(e.target.value); setError(""); }}
-                  onKeyDown={e => e.key === "Enter" && handleSubmit()}
-                  style={{
-                    flex: 1, minWidth: 220, padding: "13px 18px",
-                    border: error ? "1.5px solid #E53935" : "1.5px solid rgba(255,255,255,0.15)",
-                    borderRadius: 10, fontSize: 15,
-                    background: "rgba(255,255,255,0.08)", color: "#fff", outline: "none",
-                  }}
-                />
-                <button
-                  onClick={handleSubmit}
-                  disabled={submitting}
-                  style={{
-                    background: submitting ? "#3D6FCC" : "#0B5FFF", color: "#fff",
-                    border: "none", borderRadius: 10,
-                    padding: "13px 24px", fontSize: 15, fontWeight: 700,
-                    cursor: submitting ? "default" : "pointer", whiteSpace: "nowrap",
-                  }}
-                >
-                  {submitting ? "Sending..." : "Get early access"}
-                </button>
-              </div>
-              {error && <div style={{ color: "#FF6B6B", fontSize: 13, marginTop: 8 }}>{error}</div>}
-            </div>
-          ) : (
-            <div style={{
-              background: "rgba(0,182,122,0.15)", border: "1px solid rgba(0,182,122,0.3)",
-              color: "#00B67A", padding: "14px 28px", borderRadius: 10,
-              fontSize: 15, fontWeight: 600, display: "inline-block",
-            }}>
-              ✓ You're on the list — we'll be in touch soon.
-            </div>
-          )}
+          {/* Direct CTA — no email gate, since the real tool is already live and free */}
+          <a href="/app" style={{
+            display: "inline-block", background: "#0B5FFF", color: "#fff",
+            fontSize: 16, fontWeight: 700, padding: "16px 36px",
+            borderRadius: 12, textDecoration: "none",
+          }}>
+            Try SpreadRun Free →
+          </a>
 
           <div style={{ marginTop: 16, fontSize: 12, color: "#4A6080" }}>
-            Free forever · No credit card · No spam
+            Free forever · No credit card · No sign-up required
           </div>
 
           <div style={{ display: "flex", gap: 32, justifyContent: "center", marginTop: 56, flexWrap: "wrap" }}>
