@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 const FORMSPREE_URL = "https://formspree.io/f/mvznljer";
+const STARTER_CHECKOUT_URL = "https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400";
 
 const METRICS = [
   { value: "3", label: "Tools in one" },
@@ -60,6 +61,7 @@ const PRICING = [
     cta: "Start analyzing",
     href: "/app",
     highlight: false,
+    disabled: false,
   },
   {
     tier: "Starter",
@@ -74,8 +76,9 @@ const PRICING = [
       "Email support",
     ],
     cta: "Get Starter — $19/mo",
-    href: "/app",
+    href: STARTER_CHECKOUT_URL,
     highlight: false,
+    disabled: false,
   },
   {
     tier: "Pro",
@@ -91,9 +94,10 @@ const PRICING = [
       "AI deal analyzer",
       "Priority support",
     ],
-    cta: "Get Pro — $79/mo",
-    href: "/app",
+    cta: "Coming Soon",
+    href: null,
     highlight: true,
+    disabled: true,
   },
 ];
 
@@ -405,13 +409,23 @@ export default function Landing() {
                     </div>
                   ))}
                 </div>
-                <a href={p.href} style={{
-                  display: "block", textAlign: "center",
-                  background: p.highlight ? "#0B5FFF" : "#EEF3FF",
-                  color: p.highlight ? "#fff" : "#0B5FFF",
-                  padding: "13px", borderRadius: 10,
-                  fontSize: 13.5, fontWeight: 700, textDecoration: "none",
-                }}>{p.cta}</a>
+                {p.disabled ? (
+                  <div style={{
+                    display: "block", textAlign: "center",
+                    background: "rgba(255,255,255,0.08)",
+                    color: "#6B8AAA",
+                    padding: "13px", borderRadius: 10,
+                    fontSize: 13.5, fontWeight: 700, cursor: "default",
+                  }}>{p.cta}</div>
+                ) : (
+                  <a href={p.href} style={{
+                    display: "block", textAlign: "center",
+                    background: p.highlight ? "#0B5FFF" : "#EEF3FF",
+                    color: p.highlight ? "#fff" : "#0B5FFF",
+                    padding: "13px", borderRadius: 10,
+                    fontSize: 13.5, fontWeight: 700, textDecoration: "none",
+                  }}>{p.cta}</a>
+                )}
               </div>
             ))}
           </div>
