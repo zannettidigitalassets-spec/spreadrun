@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const SectionTitle = ({ children }) => (
   <h2 style={{ fontSize: 24, fontWeight: 800, margin: "40px 0 16px", letterSpacing: "-0.4px" }}>{children}</h2>
 );
@@ -26,26 +28,95 @@ const StepCard = ({ num, title, children, link }) => (
 );
 
 export default function HowToAnalyzeGuide() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E", background: "#fff" }}>
+      <style>{`
+        @media (max-width: 760px) {
+          .sr-howtoanalyzeguide-nav-links-desktop {
+            display: none !important;
+          }
+          .sr-howtoanalyzeguide-nav-hamburger {
+            display: block !important;
+          }
+        }
+      `}</style>
       <nav style={{
         position: "sticky", top: 0, zIndex: 100,
         background: "rgba(255,255,255,0.95)", backdropFilter: "blur(8px)",
         borderBottom: "1px solid #EBF0FF", padding: "0 24px", height: 60,
         display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
-        <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2 }} />
-          <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E", letterSpacing: "-0.3px" }}>SpreadRun</span>
+        <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
+          <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2, flexShrink: 0 }} />
+          <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E", letterSpacing: "-0.3px", whiteSpace: "nowrap" }}>SpreadRun</span>
         </a>
-        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+
+        <div className="sr-howtoanalyzeguide-nav-links-desktop" style={{ display: "flex", alignItems: "center", gap: 20 }}>
           <a href="/guides" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>All Guides</a>
           <a href="/app" style={{
             background: "#0B5FFF", color: "#fff", fontSize: 13, fontWeight: 700,
             padding: "8px 18px", borderRadius: 8, textDecoration: "none",
           }}>Try SpreadRun Free →</a>
         </div>
+
+        <button
+          className="sr-howtoanalyzeguide-nav-hamburger"
+          onClick={() => setMobileMenuOpen(true)}
+          aria-label="Open menu"
+          style={{ display: "none", background: "none", border: "none", cursor: "pointer", padding: 8, flexShrink: 0 }}
+        >
+          <div style={{ width: 22, height: 2, background: "#0D1B3E", marginBottom: 5, borderRadius: 1 }} />
+          <div style={{ width: 22, height: 2, background: "#0D1B3E", marginBottom: 5, borderRadius: 1 }} />
+          <div style={{ width: 22, height: 2, background: "#0D1B3E", borderRadius: 1 }} />
+        </button>
       </nav>
+
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(13,27,62,0.4)", zIndex: 200, display: "flex", justifyContent: "flex-end" }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#fff", width: "78%", maxWidth: 320, height: "100%",
+              padding: "24px 28px", display: "flex", flexDirection: "column", gap: 4,
+              boxShadow: "-4px 0 24px rgba(0,0,0,0.12)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+              <span style={{ fontWeight: 800, fontSize: 17 }}>Menu</span>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close menu"
+                style={{ background: "none", border: "none", fontSize: 22, color: "#6B7A99", cursor: "pointer", padding: 4 }}
+              >
+                ✕
+              </button>
+            </div>
+            <a
+              href="/guides"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ fontSize: 16, fontWeight: 600, color: "#0D1B3E", textDecoration: "none", padding: "14px 0", borderBottom: "1px solid #F0F4FF" }}
+            >
+              All Guides
+            </a>
+            <a
+              href="/app"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{
+                display: "block", textAlign: "center", marginTop: 20,
+                background: "#0B5FFF", color: "#fff", fontSize: 15, fontWeight: 700,
+                padding: "14px", borderRadius: 10, textDecoration: "none",
+              }}
+            >
+              Try SpreadRun Free →
+            </a>
+          </div>
+        </div>
+      )}
 
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "60px 24px 40px" }}>
         <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", color: "#0B5FFF", textTransform: "uppercase", marginBottom: 14 }}>Guide</div>
