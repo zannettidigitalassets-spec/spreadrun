@@ -367,16 +367,56 @@ export default function DealAnalyzer() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#F5F7FF", fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E" }}>
+      <style>{`
+        .sr-header-actions, .sr-tabbar-row {
+          flex-wrap: nowrap;
+        }
+        @media (max-width: 640px) {
+          .sr-header {
+            flex-wrap: nowrap !important;
+            gap: 10px;
+          }
+          .sr-header-actions {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            flex-shrink: 0;
+            scrollbar-width: none;
+          }
+          .sr-header-actions::-webkit-scrollbar {
+            display: none;
+          }
+          .sr-header-actions > * {
+            flex-shrink: 0;
+            white-space: nowrap;
+          }
+          .sr-tabbar-row {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            flex-wrap: nowrap !important;
+          }
+          .sr-tabbar-row::-webkit-scrollbar {
+            display: none;
+          }
+          .sr-tabbar-tabs {
+            flex-shrink: 0;
+          }
+          .sr-tabbar-tabs > * {
+            flex-shrink: 0;
+            white-space: nowrap;
+          }
+        }
+      `}</style>
       {/* Header */}
-      <div style={{ background: "#0D1B3E", padding: "20px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div>
+      <div className="sr-header" style={{ background: "#0D1B3E", padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", overflow: "hidden" }}>
+        <div style={{ flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 8, height: 28, background: "#0B5FFF", borderRadius: 2 }} />
-            <a href="/" style={{ fontSize: 18, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", textDecoration: "none" }}>SpreadRun</a>
+            <div style={{ width: 8, height: 28, background: "#0B5FFF", borderRadius: 2, flexShrink: 0 }} />
+            <a href="/" style={{ fontSize: 18, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", textDecoration: "none", whiteSpace: "nowrap" }}>SpreadRun</a>
           </div>
-          <div style={{ fontSize: 11, color: "#6B7A99", marginLeft: 18, marginTop: 2, letterSpacing: "0.08em" }}>DEAL ANALYZER</div>
+          <div style={{ fontSize: 11, color: "#6B7A99", marginLeft: 18, marginTop: 2, letterSpacing: "0.08em", whiteSpace: "nowrap" }}>DEAL ANALYZER</div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div className="sr-header-actions" style={{ display: "flex", alignItems: "center", gap: 14 }}>
           {!loading && (
             user ? (
               <>
@@ -430,8 +470,8 @@ export default function DealAnalyzer() {
       )}
 
       {/* Tab Bar */}
-      <div style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "8px 28px", display: "flex", gap: 4, justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ display: "flex", gap: 4 }}>
+      <div className="sr-tabbar-row" style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "8px 20px", display: "flex", gap: 4, justifyContent: "space-between", alignItems: "center" }}>
+        <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4 }}>
           <Tab label="Rental Analyzer" active={tab === "rental"} onClick={() => setTab("rental")} />
           <Tab label="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
           <Tab label="DSCR Qualifier" active={tab === "dscr"} onClick={() => setTab("dscr")} />
