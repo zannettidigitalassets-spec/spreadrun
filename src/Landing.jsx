@@ -204,30 +204,41 @@ export default function Landing() {
           .sr-soon-grid {
             grid-template-columns: 1fr !important;
           }
+          .sr-nav-links {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            flex-wrap: nowrap !important;
+          }
+          .sr-nav-links::-webkit-scrollbar {
+            display: none;
+          }
         }
       `}</style>
 
       {/* NAV */}
-      <nav style={{
+      <nav className="sr-nav" style={{
         position: "sticky", top: 0, zIndex: 100,
         background: "rgba(255,255,255,0.95)", backdropFilter: "blur(8px)",
         borderBottom: "1px solid #EBF0FF",
         padding: "0 24px", height: 60,
         display: "flex", alignItems: "center", justifyContent: "space-between",
+        overflow: "hidden",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2 }} />
-          <span style={{ fontWeight: 800, fontSize: 17, letterSpacing: "-0.3px" }}>SpreadRun</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+          <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2, flexShrink: 0 }} />
+          <span style={{ fontWeight: 800, fontSize: 17, letterSpacing: "-0.3px", whiteSpace: "nowrap" }}>SpreadRun</span>
         </div>
-        <div style={{ display: "flex", gap: 28, alignItems: "center" }}>
-          <a href="#features" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>Features</a>
-          <a href="#pricing" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>Pricing</a>
-          <a href="/guides" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>Guides</a>
-          <a href="#faq" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none" }}>FAQ</a>
+        <div className="sr-nav-links" style={{ display: "flex", gap: 28, alignItems: "center" }}>
+          <a href="#features" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none", whiteSpace: "nowrap" }}>Features</a>
+          <a href="#pricing" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none", whiteSpace: "nowrap" }}>Pricing</a>
+          <a href="/guides" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none", whiteSpace: "nowrap" }}>Guides</a>
+          <a href="#faq" style={{ fontSize: 14, fontWeight: 500, color: "#6B7A99", textDecoration: "none", whiteSpace: "nowrap" }}>FAQ</a>
           <a href="/app" style={{
             background: "#0B5FFF", color: "#fff",
             fontSize: 13, fontWeight: 700, padding: "8px 18px",
             borderRadius: 8, textDecoration: "none", letterSpacing: "0.02em",
+            whiteSpace: "nowrap", flexShrink: 0,
           }}>Try Free →</a>
         </div>
       </nav>
