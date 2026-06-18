@@ -121,6 +121,7 @@ const getParam = (key, fallback) => {
 
 const DownloadPdfButton = ({ user, isStarter, onRequireAuth, toolType, inputs, label }) => {
   const [generating, setGenerating] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   const handleClick = async () => {
     if (!user) {
@@ -128,7 +129,7 @@ const DownloadPdfButton = ({ user, isStarter, onRequireAuth, toolType, inputs, l
       return;
     }
     if (!isStarter) {
-      window.location.href = "https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400";
+      setShowUpgrade(true);
       return;
     }
     setGenerating(true);
@@ -139,6 +140,34 @@ const DownloadPdfButton = ({ user, isStarter, onRequireAuth, toolType, inputs, l
     }
     setGenerating(false);
   };
+
+  if (showUpgrade) {
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10, background: "#FFF7E6",
+        border: "1px solid #FFE3A8", borderRadius: 10, padding: "8px 14px",
+      }}>
+        <span style={{ fontSize: 12.5, color: "#8A6300", fontWeight: 600 }}>
+          PDF reports are a Starter feature.
+        </span>
+        <a
+          href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400"
+          style={{
+            fontSize: 12.5, fontWeight: 800, color: "#0B5FFF", textDecoration: "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Upgrade for $19/mo →
+        </a>
+        <button
+          onClick={() => setShowUpgrade(false)}
+          style={{ background: "none", border: "none", color: "#9BA8C0", fontSize: 12.5, cursor: "pointer" }}
+        >
+          ✕
+        </button>
+      </div>
+    );
+  }
 
   return (
     <button
@@ -446,7 +475,7 @@ export default function DealAnalyzer() {
         }
       `}</style>
       {/* Header */}
-      <div className="sr-header" style={{ background: "#0D1B3E", padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", overflow: "hidden" }}>
+      <div className="sr-header" style={{ background: "#0D1B3E", padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 8, height: 28, background: "#0B5FFF", borderRadius: 2, flexShrink: 0 }} />
