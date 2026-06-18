@@ -501,7 +501,7 @@ export default function DealAnalyzer() {
             user ? (
               <>
                 <a href="/app/my-deals" style={{ fontSize: 13, fontWeight: 600, color: "#A8C4FF", textDecoration: "none" }}>My Deals</a>
-                <UserMenu user={user} />
+                <UserMenu user={user} isStarter={isStarter} />
               </>
             ) : (
               <button
