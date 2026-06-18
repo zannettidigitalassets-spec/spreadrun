@@ -11,6 +11,7 @@ import SeventyPercentGuide from './SeventyPercentGuide.jsx'
 import CapRateGuide from './CapRateGuide.jsx'
 import HowToAnalyzeGuide from './HowToAnalyzeGuide.jsx'
 import MyDeals from './MyDeals.jsx'
+import Contact from './Contact.jsx'
 
 const path = window.location.pathname
 
@@ -19,6 +20,7 @@ const getPage = () => {
   if (path.startsWith('/app')) return <App />;
   if (path.startsWith('/privacy')) return <Privacy />;
   if (path.startsWith('/terms')) return <Terms />;
+  if (path.startsWith('/contact')) return <Contact />;
   if (path === '/guides' || path === '/guides/') return <Guides />;
   if (path.startsWith('/guides/dscr-loan-calculator')) return <DscrGuide />;
   if (path.startsWith('/guides/rental-cash-flow-calculator')) return <CashFlowGuide />;
