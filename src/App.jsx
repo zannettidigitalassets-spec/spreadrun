@@ -502,9 +502,11 @@ export default function DealAnalyzer() {
               </button>
             )
           )}
-          <div style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em" }}>
-            Upgrade →
-          </div>
+          {!isStarter && (
+            <a href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400" style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em", textDecoration: "none", display: "inline-block" }}>
+              Upgrade →
+            </a>
+          )}
         </div>
       </div>
 
