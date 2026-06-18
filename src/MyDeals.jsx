@@ -177,7 +177,30 @@ export default function MyDeals() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#F5F7FF", fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E" }}>
-      <div style={{ background: "#0D1B3E", padding: "20px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <style>{`
+        @media (max-width: 640px) {
+          .sr-mydeals-header {
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            padding: 14px 16px !important;
+          }
+          .sr-mydeals-header-actions {
+            width: 100%;
+            justify-content: space-between;
+          }
+          .sr-deal-card {
+            flex-wrap: wrap !important;
+          }
+          .sr-deal-card-actions {
+            width: 100%;
+            justify-content: flex-end;
+            border-top: 1px solid #EBF0FF;
+            padding-top: 10px;
+            margin-top: 6px;
+          }
+        }
+      `}</style>
+      <div className="sr-mydeals-header" style={{ background: "#0D1B3E", padding: "20px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 8, height: 28, background: "#0B5FFF", borderRadius: 2 }} />
@@ -185,7 +208,7 @@ export default function MyDeals() {
           </div>
           <div style={{ fontSize: 11, color: "#6B7A99", marginLeft: 18, marginTop: 2, letterSpacing: "0.08em" }}>MY DEALS</div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div className="sr-mydeals-header-actions" style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <a href="/app" style={{ fontSize: 13, fontWeight: 600, color: "#A8C4FF", textDecoration: "none" }}>← Back to Calculators</a>
           <UserMenu user={user} isStarter={true} />
         </div>
@@ -222,6 +245,7 @@ export default function MyDeals() {
               return (
                 <div
                   key={deal.id}
+                  className="sr-deal-card"
                   style={{
                     background: "#fff", borderRadius: 14, padding: "18px 20px",
                     border: isSelected ? "2px solid #0B5FFF" : "1px solid #EBF0FF",
@@ -232,23 +256,23 @@ export default function MyDeals() {
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => toggleSelect(deal.id)}
-                    style={{ width: 18, height: 18, cursor: "pointer", flexShrink: 0 }}
+                    style={{ width: 18, height: 18, cursor: "pointer", flexShrink: 0, alignSelf: "flex-start", marginTop: 2 }}
                   />
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
                       <span style={{ fontSize: 15, fontWeight: 700, color: "#0D1B3E" }}>{deal.label}</span>
                       <span style={{
                         fontSize: 10.5, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase",
-                        color: "#0B5FFF", background: "#EEF3FF", padding: "2px 8px", borderRadius: 99,
+                        color: "#0B5FFF", background: "#EEF3FF", padding: "2px 8px", borderRadius: 99, flexShrink: 0,
                       }}>{TOOL_LABELS[deal.tool_type]}</span>
                     </div>
-                    <div style={{ display: "flex", gap: 18, fontSize: 13, color: "#6B7A99" }}>
+                    <div style={{ display: "flex", gap: 18, fontSize: 13, color: "#6B7A99", flexWrap: "wrap" }}>
                       {stats.map((s) => (
                         <span key={s.label}><strong style={{ color: "#0D1B3E" }}>{s.value}</strong> {s.label}</span>
                       ))}
                     </div>
                   </div>
-                  <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                  <div className="sr-deal-card-actions" style={{ display: "flex", gap: 8, flexShrink: 0 }}>
                     <a
                       href={buildDeepLink(deal.tool_type, deal.inputs)}
                       style={{
