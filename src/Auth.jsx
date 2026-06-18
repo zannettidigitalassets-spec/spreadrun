@@ -71,7 +71,7 @@ export function AuthModal({ onClose }) {
     setStatus("sending");
     setErrorMsg("");
 
-    // signInWithOtp sends a 6-digit code by email when the template shows {{ .Token }}
+    // signInWithOtp sends a numeric code by email when the template shows {{ .Token }}
     // instead of a clickable link. No emailRedirectTo needed since there's no redirect step.
     const { error } = await supabase.auth.signInWithOtp({ email });
 
@@ -85,7 +85,7 @@ export function AuthModal({ onClose }) {
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
-    if (!code || code.length < 6) return;
+    if (!code || code.length < 8) return;
     setStatus("verifying");
     setErrorMsg("");
 
@@ -125,7 +125,7 @@ export function AuthModal({ onClose }) {
           <>
             <h2 style={{ fontSize: 20, fontWeight: 800, color: "#0D1B3E", margin: "0 0 8px" }}>Enter your code</h2>
             <p style={{ fontSize: 14.5, color: "#6B7A99", lineHeight: 1.6, margin: "0 0 20px" }}>
-              We sent a 6-digit code to <strong>{email}</strong>. Enter it below to sign in.
+              We sent a sign-in code to <strong>{email}</strong>. Enter it below to sign in.
             </p>
             <form onSubmit={handleVerifyCode}>
               <input
@@ -133,8 +133,8 @@ export function AuthModal({ onClose }) {
                 inputMode="numeric"
                 autoFocus
                 value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                placeholder="123456"
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 8))}
+                placeholder="12345678"
                 style={{
                   width: "100%", boxSizing: "border-box", padding: "12px 14px",
                   borderRadius: 10, border: "1.5px solid #EBF0FF", fontSize: 20,
@@ -147,12 +147,12 @@ export function AuthModal({ onClose }) {
               )}
               <button
                 type="submit"
-                disabled={status === "verifying" || code.length < 6}
+                disabled={status === "verifying" || code.length < 8}
                 style={{
                   width: "100%", background: "#0B5FFF", color: "#fff", border: "none",
                   borderRadius: 10, padding: "13px 0", fontSize: 14.5, fontWeight: 700,
                   cursor: status === "verifying" ? "default" : "pointer",
-                  opacity: status === "verifying" || code.length < 6 ? 0.6 : 1,
+                  opacity: status === "verifying" || code.length < 8 ? 0.6 : 1,
                   marginBottom: 10,
                 }}
               >
@@ -174,7 +174,7 @@ export function AuthModal({ onClose }) {
           <>
             <h2 style={{ fontSize: 20, fontWeight: 800, color: "#0D1B3E", margin: "0 0 8px" }}>Sign in to SpreadRun</h2>
             <p style={{ fontSize: 14.5, color: "#6B7A99", lineHeight: 1.6, margin: "0 0 20px" }}>
-              Enter your email and we'll send you a 6-digit code. No password required.
+              Enter your email and we'll send you a sign-in code. No password required.
             </p>
             <form onSubmit={handleSendCode}>
               <input
