@@ -497,30 +497,37 @@ export default function DealAnalyzer() {
           </div>
           <div style={{ fontSize: 11, color: "#6B7A99", marginLeft: 18, marginTop: 2, letterSpacing: "0.08em", whiteSpace: "nowrap" }}>DEAL ANALYZER</div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0, position: "relative", zIndex: 200 }}>
-          <div className="sr-header-actions" style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            {!loading && (
-              user ? (
-                <a href="/app/my-deals" style={{ fontSize: 13, fontWeight: 600, color: "#A8C4FF", textDecoration: "none" }}>My Deals</a>
-              ) : (
-                <button
-                  onClick={() => setShowAuthModal(true)}
-                  style={{
-                    background: "transparent", color: "#fff", border: "1.5px solid #2A3F6E",
-                    borderRadius: 8, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-                  }}
-                >
-                  Sign In
-                </button>
-              )
-            )}
-            {!isStarter && (
-              <a href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600" style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em", textDecoration: "none", display: "inline-block", whiteSpace: "nowrap", flexShrink: 0 }}>
-                Upgrade →
-              </a>
-            )}
-          </div>
-          {/* UserMenu lives outside the scrollable container so its dropdown is never clipped by overflow-x */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 1, minWidth: 0, position: "relative", zIndex: 200 }}>
+          {/* My Deals link scrolls on mobile if needed */}
+          {!loading && user && (
+            <div className="sr-header-actions" style={{ display: "flex", alignItems: "center" }}>
+              <a href="/app/my-deals" style={{ fontSize: 13, fontWeight: 600, color: "#A8C4FF", textDecoration: "none", whiteSpace: "nowrap" }}>My Deals</a>
+            </div>
+          )}
+          {/* Sign In button for logged-out users */}
+          {!loading && !user && (
+            <button
+              onClick={() => setShowAuthModal(true)}
+              style={{
+                background: "transparent", color: "#fff", border: "1.5px solid #2A3F6E",
+                borderRadius: 8, padding: "7px 14px", fontSize: 13, fontWeight: 700,
+                cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
+              }}
+            >
+              Sign In
+            </button>
+          )}
+          {/* Upgrade button — outside scroll container, always visible */}
+          {!isStarter && (
+            <a href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600" style={{
+              background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700,
+              padding: "8px 16px", borderRadius: 8, letterSpacing: "0.04em",
+              textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0,
+            }}>
+              Upgrade →
+            </a>
+          )}
+          {/* UserMenu outside scroll container so dropdown is never clipped */}
           {!loading && user && (
             <UserMenu user={user} isStarter={isStarter} />
           )}
