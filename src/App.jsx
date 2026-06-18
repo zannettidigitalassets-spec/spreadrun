@@ -435,8 +435,15 @@ export default function DealAnalyzer() {
   return (
     <div style={{ minHeight: "100vh", background: "#F5F7FF", fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E" }}>
       <style>{`
-        .sr-header-actions, .sr-tabbar-row {
+        .sr-header-actions {
           flex-wrap: nowrap;
+        }
+        .sr-tabbar-row {
+          flex-wrap: nowrap;
+          min-width: 0;
+        }
+        .sr-tabbar-tabs {
+          min-width: 0;
         }
         @media (max-width: 640px) {
           .sr-header {
@@ -457,20 +464,26 @@ export default function DealAnalyzer() {
             white-space: nowrap;
           }
           .sr-tabbar-row {
+            flex-wrap: nowrap !important;
+            gap: 8px;
+          }
+          .sr-tabbar-tabs {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             flex-wrap: nowrap !important;
+            flex-shrink: 1;
+            min-width: 0;
           }
-          .sr-tabbar-row::-webkit-scrollbar {
+          .sr-tabbar-tabs::-webkit-scrollbar {
             display: none;
-          }
-          .sr-tabbar-tabs {
-            flex-shrink: 0;
           }
           .sr-tabbar-tabs > * {
             flex-shrink: 0;
             white-space: nowrap;
+          }
+          .sr-tabbar-actions {
+            flex-shrink: 0;
           }
         }
       `}</style>
@@ -503,7 +516,7 @@ export default function DealAnalyzer() {
             )
           )}
           {!isStarter && (
-            <a href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400" style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em", textDecoration: "none", display: "inline-block" }}>
+            <a href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400" style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em", textDecoration: "none", display: "inline-block", whiteSpace: "nowrap", flexShrink: 0 }}>
               Upgrade →
             </a>
           )}
@@ -539,13 +552,13 @@ export default function DealAnalyzer() {
       )}
 
       {/* Tab Bar */}
-      <div className="sr-tabbar-row" style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "8px 20px", display: "flex", gap: 4, justifyContent: "space-between", alignItems: "center" }}>
+      <div className="sr-tabbar-row" style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "8px 20px", display: "flex", gap: 4, alignItems: "center" }}>
         <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4 }}>
           <Tab label="Rental Analyzer" active={tab === "rental"} onClick={() => setTab("rental")} />
           <Tab label="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
           <Tab label="DSCR Qualifier" active={tab === "dscr"} onClick={() => setTab("dscr")} />
         </div>
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <div className="sr-tabbar-actions" style={{ display: "flex", gap: 10, alignItems: "center", marginLeft: "auto" }}>
           <DownloadPdfButton
             user={user}
             isStarter={isStarter}
