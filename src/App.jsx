@@ -517,8 +517,8 @@ export default function DealAnalyzer() {
               Sign In
             </button>
           )}
-          {/* Upgrade button — outside scroll container, always visible */}
-          {!isStarter && (
+          {/* Upgrade button — only show to signed-out visitors to keep header uncluttered on mobile */}
+          {!user && !isStarter && (
             <a href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600" style={{
               background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700,
               padding: "8px 16px", borderRadius: 8, letterSpacing: "0.04em",
