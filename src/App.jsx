@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "./supabaseClient.js";
 import { useAuth, useSubscription, AuthModal, UserMenu } from "./Auth.jsx";
+import { generateDealReportPdf } from "./dealReportPdf.js";
 
 const formatCurrency = (val) =>
   val === "" || val === undefined || val === null
@@ -116,6 +117,43 @@ const getParam = (key, fallback) => {
   if (raw === null || raw === "") return fallback;
   const num = parseFloat(raw);
   return isNaN(num) ? fallback : num;
+};
+
+const DownloadPdfButton = ({ user, isStarter, onRequireAuth, toolType, inputs, label }) => {
+  const [generating, setGenerating] = useState(false);
+
+  const handleClick = async () => {
+    if (!user) {
+      onRequireAuth();
+      return;
+    }
+    if (!isStarter) {
+      window.location.href = "https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400";
+      return;
+    }
+    setGenerating(true);
+    try {
+      await generateDealReportPdf(toolType, inputs, label);
+    } catch (err) {
+      console.error("PDF generation failed:", err);
+    }
+    setGenerating(false);
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={generating}
+      style={{
+        background: "#fff", color: "#0B5FFF", border: "1.5px solid #0B5FFF",
+        borderRadius: 8, padding: "9px 16px", fontSize: 13, fontWeight: 700,
+        cursor: generating ? "default" : "pointer", letterSpacing: "0.02em",
+        opacity: generating ? 0.7 : 1,
+      }}
+    >
+      {generating ? "Generating..." : "Download PDF"}
+    </button>
+  );
 };
 
 const SaveDealButton = ({ user, isStarter, onRequireAuth, toolType, inputs }) => {
@@ -476,13 +514,22 @@ export default function DealAnalyzer() {
           <Tab label="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
           <Tab label="DSCR Qualifier" active={tab === "dscr"} onClick={() => setTab("dscr")} />
         </div>
-        <SaveDealButton
-          user={user}
-          isStarter={isStarter}
-          onRequireAuth={() => setShowAuthModal(true)}
-          toolType={tab}
-          inputs={currentInputs}
-        />
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <DownloadPdfButton
+            user={user}
+            isStarter={isStarter}
+            onRequireAuth={() => setShowAuthModal(true)}
+            toolType={tab}
+            inputs={currentInputs}
+          />
+          <SaveDealButton
+            user={user}
+            isStarter={isStarter}
+            onRequireAuth={() => setShowAuthModal(true)}
+            toolType={tab}
+            inputs={currentInputs}
+          />
+        </div>
       </div>
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px" }}>
