@@ -151,7 +151,7 @@ const DownloadPdfButton = ({ user, isStarter, onRequireAuth, toolType, inputs, l
           PDF reports are a Starter feature.
         </span>
         <a
-          href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400"
+          href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600"
           style={{
             fontSize: 12.5, fontWeight: 800, color: "#0B5FFF", textDecoration: "none",
             whiteSpace: "nowrap",
@@ -298,7 +298,7 @@ const SaveDealButton = ({ user, isStarter, onRequireAuth, toolType, inputs }) =>
           Saving deals is a Starter feature.
         </span>
         <a
-          href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400"
+          href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600"
           style={{
             fontSize: 12.5, fontWeight: 800, color: "#0B5FFF", textDecoration: "none",
             whiteSpace: "nowrap",
@@ -516,7 +516,7 @@ export default function DealAnalyzer() {
             )
           )}
           {!isStarter && (
-            <a href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400" style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em", textDecoration: "none", display: "inline-block", whiteSpace: "nowrap", flexShrink: 0 }}>
+            <a href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600" style={{ background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700, padding: "8px 16px", borderRadius: 8, cursor: "pointer", letterSpacing: "0.04em", textDecoration: "none", display: "inline-block", whiteSpace: "nowrap", flexShrink: 0 }}>
               Upgrade →
             </a>
           )}
