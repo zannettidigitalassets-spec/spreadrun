@@ -61,27 +61,45 @@ export function useSubscription(user) {
 
 export function AuthModal({ onClose }) {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [code, setCode] = useState("");
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | verifying | error
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSendLink = async (e) => {
+  const handleSendCode = async (e) => {
     e.preventDefault();
     if (!email || !email.includes("@")) return;
     setStatus("sending");
     setErrorMsg("");
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: window.location.origin + "/app",
-      },
-    });
+    // signInWithOtp sends a 6-digit code by email when the template shows {{ .Token }}
+    // instead of a clickable link. No emailRedirectTo needed since there's no redirect step.
+    const { error } = await supabase.auth.signInWithOtp({ email });
 
     if (error) {
       setStatus("error");
       setErrorMsg(error.message);
     } else {
       setStatus("sent");
+    }
+  };
+
+  const handleVerifyCode = async (e) => {
+    e.preventDefault();
+    if (!code || code.length < 6) return;
+    setStatus("verifying");
+    setErrorMsg("");
+
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token: code,
+      type: "email",
+    });
+
+    if (error) {
+      setStatus("error");
+      setErrorMsg("That code didn't work. Check it and try again, or request a new one.");
+    } else {
+      onClose();
     }
   };
 
@@ -103,24 +121,62 @@ export function AuthModal({ onClose }) {
           <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E" }}>SpreadRun</span>
         </div>
 
-        {status === "sent" ? (
+        {status === "sent" || status === "verifying" ? (
           <>
-            <h2 style={{ fontSize: 20, fontWeight: 800, color: "#0D1B3E", margin: "0 0 10px" }}>Check your email</h2>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: "#0D1B3E", margin: "0 0 8px" }}>Enter your code</h2>
             <p style={{ fontSize: 14.5, color: "#6B7A99", lineHeight: 1.6, margin: "0 0 20px" }}>
-              We sent a login link to <strong>{email}</strong>. Click it to sign in — no password needed.
+              We sent a 6-digit code to <strong>{email}</strong>. Enter it below to sign in.
             </p>
-            <button onClick={onClose} style={{
-              width: "100%", background: "#F0F4FF", color: "#0B5FFF", border: "none",
-              borderRadius: 10, padding: "12px 0", fontSize: 14.5, fontWeight: 700, cursor: "pointer",
-            }}>Close</button>
+            <form onSubmit={handleVerifyCode}>
+              <input
+                type="text"
+                inputMode="numeric"
+                autoFocus
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                placeholder="123456"
+                style={{
+                  width: "100%", boxSizing: "border-box", padding: "12px 14px",
+                  borderRadius: 10, border: "1.5px solid #EBF0FF", fontSize: 20,
+                  fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "0.2em", textAlign: "center",
+                  marginBottom: 14, outline: "none",
+                }}
+              />
+              {status === "error" && (
+                <p style={{ fontSize: 13, color: "#D14343", margin: "0 0 14px" }}>{errorMsg}</p>
+              )}
+              <button
+                type="submit"
+                disabled={status === "verifying" || code.length < 6}
+                style={{
+                  width: "100%", background: "#0B5FFF", color: "#fff", border: "none",
+                  borderRadius: 10, padding: "13px 0", fontSize: 14.5, fontWeight: 700,
+                  cursor: status === "verifying" ? "default" : "pointer",
+                  opacity: status === "verifying" || code.length < 6 ? 0.6 : 1,
+                  marginBottom: 10,
+                }}
+              >
+                {status === "verifying" ? "Verifying..." : "Sign In"}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setStatus("idle"); setCode(""); setErrorMsg(""); }}
+                style={{
+                  width: "100%", background: "none", color: "#6B7A99", border: "none",
+                  fontSize: 13, cursor: "pointer", padding: "4px 0",
+                }}
+              >
+                Use a different email
+              </button>
+            </form>
           </>
         ) : (
           <>
             <h2 style={{ fontSize: 20, fontWeight: 800, color: "#0D1B3E", margin: "0 0 8px" }}>Sign in to SpreadRun</h2>
             <p style={{ fontSize: 14.5, color: "#6B7A99", lineHeight: 1.6, margin: "0 0 20px" }}>
-              Enter your email and we'll send you a magic link. No password required.
+              Enter your email and we'll send you a 6-digit code. No password required.
             </p>
-            <form onSubmit={handleSendLink}>
+            <form onSubmit={handleSendCode}>
               <input
                 type="email"
                 value={email}
@@ -145,7 +201,7 @@ export function AuthModal({ onClose }) {
                   opacity: status === "sending" ? 0.7 : 1,
                 }}
               >
-                {status === "sending" ? "Sending..." : "Send Magic Link"}
+                {status === "sending" ? "Sending..." : "Send Code"}
               </button>
             </form>
           </>
