@@ -496,7 +496,7 @@ export default function DealAnalyzer() {
           </div>
           <div style={{ fontSize: 11, color: "#6B7A99", marginLeft: 18, marginTop: 2, letterSpacing: "0.08em", whiteSpace: "nowrap" }}>DEAL ANALYZER</div>
         </div>
-        <div className="sr-header-actions" style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div className="sr-header-actions" style={{ display: "flex", alignItems: "center", gap: 14, position: "relative", zIndex: 200 }}>
           {!loading && (
             user ? (
               <>
