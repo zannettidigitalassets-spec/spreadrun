@@ -455,6 +455,7 @@ export default function DealAnalyzer() {
             -webkit-overflow-scrolling: touch;
             flex-shrink: 0;
             scrollbar-width: none;
+            overflow-y: visible;
           }
           .sr-header-actions::-webkit-scrollbar {
             display: none;
