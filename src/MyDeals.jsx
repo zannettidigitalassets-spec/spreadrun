@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient.js";
 import { useAuth, useSubscription, AuthModal, UserMenu } from "./Auth.jsx";
+import { generateDealReportPdf } from "./dealReportPdf.js";
 
 const formatCurrency = (val) =>
   val === "" || val === undefined || val === null || isNaN(val)
@@ -81,6 +82,17 @@ export default function MyDeals() {
   const [dealsLoading, setDealsLoading] = useState(true);
   const [selected, setSelected] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
+  const [pdfGeneratingId, setPdfGeneratingId] = useState(null);
+
+  const handleDownloadPdf = async (deal) => {
+    setPdfGeneratingId(deal.id);
+    try {
+      await generateDealReportPdf(deal.tool_type, deal.inputs, deal.label);
+    } catch (err) {
+      console.error("PDF generation failed:", err);
+    }
+    setPdfGeneratingId(null);
+  };
 
   useEffect(() => {
     if (!user) {
@@ -246,6 +258,16 @@ export default function MyDeals() {
                     >
                       Reopen
                     </a>
+                    <button
+                      onClick={() => handleDownloadPdf(deal)}
+                      disabled={pdfGeneratingId === deal.id}
+                      style={{
+                        fontSize: 12.5, fontWeight: 700, color: "#0B5FFF", background: "none",
+                        border: "1.5px solid #0B5FFF", borderRadius: 8, padding: "7px 12px", cursor: "pointer",
+                      }}
+                    >
+                      {pdfGeneratingId === deal.id ? "..." : "PDF"}
+                    </button>
                     <button
                       onClick={() => handleDelete(deal.id)}
                       disabled={deletingId === deal.id}
