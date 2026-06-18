@@ -174,24 +174,38 @@ export async function generateDealReportPdf(toolType, inputs, label) {
   y -= 90;
 
   // Title
-  y -= 36;
+  y -= 40;
   page.drawText(data.title, { x: margin, y, size: 20, font: fontBold, color: NAVY });
 
-  // Headline metric box
-  y -= 50;
+  // Headline metric box — tall enough to hold the big number on top and three
+  // labeled secondary metrics in a row underneath, with no overlap with the title above.
+  y -= 30;
+  const boxTop = y;
+  const boxHeight = 110;
   const headlineColor = data.headline.positive ? GREEN : RED;
-  page.drawRectangle({ x: margin, y: y - 14, width: pageWidth - margin * 2, height: 64, color: rgb(0.961, 0.969, 1), borderColor: rgb(0.84, 0.878, 1), borderWidth: 1 });
-  page.drawText(data.headline.label.toUpperCase(), { x: margin + 20, y: y + 28, size: 9, font: fontBold, color: GRAY });
-  page.drawText(String(data.headline.value), { x: margin + 20, y: y + 8, size: 26, font: fontBold, color: headlineColor });
-
-  // Secondary metrics, three across
-  const metricColWidth = (pageWidth - margin * 2) / 3;
-  data.metrics.forEach((m, i) => {
-    const mx = margin + i * metricColWidth + 20;
-    page.drawText(m[0].toUpperCase(), { x: mx, y: y - 4, size: 7.5, font: fontBold, color: GRAY });
+  page.drawRectangle({
+    x: margin, y: boxTop - boxHeight, width: pageWidth - margin * 2, height: boxHeight,
+    color: rgb(0.961, 0.969, 1), borderColor: rgb(0.84, 0.878, 1), borderWidth: 1,
   });
 
-  y -= 50;
+  page.drawText(data.headline.label.toUpperCase(), { x: margin + 20, y: boxTop - 24, size: 9, font: fontBold, color: GRAY });
+  page.drawText(String(data.headline.value), { x: margin + 20, y: boxTop - 52, size: 26, font: fontBold, color: headlineColor });
+
+  // Divider line between the big headline and the row of secondary metrics
+  page.drawLine({
+    start: { x: margin + 20, y: boxTop - 68 }, end: { x: pageWidth - margin - 20, y: boxTop - 68 },
+    thickness: 1, color: rgb(0.84, 0.878, 1),
+  });
+
+  // Secondary metrics, three across, each with its label and actual value
+  const metricColWidth = (pageWidth - margin * 2 - 40) / 3;
+  data.metrics.forEach((m, i) => {
+    const mx = margin + 20 + i * metricColWidth;
+    page.drawText(m[0].toUpperCase(), { x: mx, y: boxTop - 84, size: 7.5, font: fontBold, color: GRAY });
+    page.drawText(String(m[1]), { x: mx, y: boxTop - 99, size: 13, font: fontBold, color: NAVY });
+  });
+
+  y = boxTop - boxHeight - 30;
 
   const drawSectionTable = (heading, rows) => {
     page.drawText(heading.toUpperCase(), { x: margin, y, size: 10, font: fontBold, color: BLUE });
