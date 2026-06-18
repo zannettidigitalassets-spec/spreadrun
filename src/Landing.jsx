@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "./supabaseClient.js";
+import { useAuth, useSubscription } from "./Auth.jsx";
 
 const STARTER_CHECKOUT_URL = "https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600";
 
@@ -145,6 +147,8 @@ const FAQS = [
 export default function Landing() {
   const [openFaq, setOpenFaq] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, loading } = useAuth();
+  const { isStarter } = useSubscription(user);
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E", background: "#fff", overflowX: "hidden" }}>
@@ -208,7 +212,7 @@ export default function Landing() {
             background: "#0B5FFF", color: "#fff",
             fontSize: 13, fontWeight: 700, padding: "8px 18px",
             borderRadius: 8, textDecoration: "none", letterSpacing: "0.02em",
-          }}>Try Free →</a>
+          }}>{user ? "Go to App →" : "Try Free →"}</a>
         </div>
 
         {/* Mobile hamburger button — hidden on desktop via CSS */}
@@ -282,7 +286,7 @@ export default function Landing() {
                 borderRadius: 10, textDecoration: "none",
               }}
             >
-              Try Free →
+              {user ? "Go to App →" : "Try Free →"}
             </a>
           </div>
         </div>
@@ -321,18 +325,25 @@ export default function Landing() {
             Rental analyzer, fix & flip calculator, and DSCR qualifier — all in one tool. No spreadsheets. No guesswork.
           </p>
 
-          {/* Direct CTA — no email gate, since the real tool is already live and free */}
-          <a href="/app" style={{
-            display: "inline-block", background: "#0B5FFF", color: "#fff",
-            fontSize: 16, fontWeight: 700, padding: "16px 36px",
-            borderRadius: 12, textDecoration: "none",
-          }}>
-            Try SpreadRun Free →
-          </a>
-
-          <div style={{ marginTop: 16, fontSize: 12, color: "#4A6080" }}>
-            Free forever · No credit card · No sign-up required
-          </div>
+          {/* CTA — personalized based on login/subscription state */}
+          {!loading && (
+            <>
+              <a href="/app" style={{
+                display: "inline-block", background: "#0B5FFF", color: "#fff",
+                fontSize: 16, fontWeight: 700, padding: "16px 36px",
+                borderRadius: 12, textDecoration: "none",
+              }}>
+                {user ? "Go to App →" : "Try SpreadRun Free →"}
+              </a>
+              <div style={{ marginTop: 16, fontSize: 12, color: "#4A6080" }}>
+                {user && isStarter
+                  ? "✓ You're a Starter member · Save deals, compare, and export PDFs"
+                  : user
+                  ? "You're signed in · Upgrade to save and compare deals"
+                  : "Free forever · No credit card · No sign-up required"}
+              </div>
+            </>
+          )}
 
           <div style={{ display: "flex", gap: 32, justifyContent: "center", marginTop: 56, flexWrap: "wrap" }}>
             {METRICS.map(m => (
