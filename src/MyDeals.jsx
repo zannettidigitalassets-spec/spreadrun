@@ -165,7 +165,7 @@ export default function MyDeals() {
           Upgrade to save up to 10 properties, reopen them anytime, and compare deals side by side.
         </p>
         <a
-          href="https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400"
+          href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600"
           style={{ background: "#0B5FFF", color: "#fff", border: "none", borderRadius: 10, padding: "12px 24px", fontSize: 14.5, fontWeight: 700, textDecoration: "none" }}
         >
           Upgrade for $19/mo →
