@@ -187,7 +187,7 @@ export default function MyDeals() {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <a href="/app" style={{ fontSize: 13, fontWeight: 600, color: "#A8C4FF", textDecoration: "none" }}>← Back to Calculators</a>
-          <UserMenu user={user} />
+          <UserMenu user={user} isStarter={true} />
         </div>
       </div>
 
