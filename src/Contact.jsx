@@ -8,8 +8,7 @@ export default function Contact() {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!name || !email || !message) return;
     setStatus("sending");
 
@@ -85,7 +84,7 @@ export default function Contact() {
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
               <label style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#6B7A99", display: "block", marginBottom: 6 }}>Name</label>
               <input
@@ -93,7 +92,6 @@ export default function Contact() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
-                required
                 style={{
                   width: "100%", boxSizing: "border-box", padding: "12px 14px",
                   borderRadius: 10, border: "1.5px solid #EBF0FF", fontSize: 14.5,
@@ -108,7 +106,6 @@ export default function Contact() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                required
                 style={{
                   width: "100%", boxSizing: "border-box", padding: "12px 14px",
                   borderRadius: 10, border: "1.5px solid #EBF0FF", fontSize: 14.5,
@@ -122,7 +119,6 @@ export default function Contact() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="What's on your mind?"
-                required
                 rows={6}
                 style={{
                   width: "100%", boxSizing: "border-box", padding: "12px 14px",
@@ -135,18 +131,18 @@ export default function Contact() {
               <p style={{ fontSize: 13, color: "#D14343", margin: 0 }}>Something went wrong. Please try again.</p>
             )}
             <button
-              type="submit"
-              disabled={status === "sending"}
+              onClick={handleSubmit}
+              disabled={status === "sending" || !name || !email || !message}
               style={{
                 background: "#0B5FFF", color: "#fff", border: "none", borderRadius: 10,
                 padding: "14px", fontSize: 15, fontWeight: 700,
-                cursor: status === "sending" ? "default" : "pointer",
-                opacity: status === "sending" ? 0.7 : 1,
+                cursor: status === "sending" || !name || !email || !message ? "default" : "pointer",
+                opacity: status === "sending" || !name || !email || !message ? 0.6 : 1,
               }}
             >
               {status === "sending" ? "Sending..." : "Send Message"}
             </button>
-          </form>
+          </div>
         )}
 
         <div style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid #EBF0FF" }}>
