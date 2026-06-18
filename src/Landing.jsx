@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const STARTER_CHECKOUT_URL = "https://buy.stripe.com/test_cNi9AU3QvaPg2jX3hd9k400";
+const STARTER_CHECKOUT_URL = "https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600";
 
 const METRICS = [
   { value: "3", label: "Tools in one" },
