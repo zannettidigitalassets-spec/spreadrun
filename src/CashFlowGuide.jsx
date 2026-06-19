@@ -31,6 +31,9 @@ const Table = ({ rows }) => (
 );
 
 export default function CashFlowGuide() {
+  useEffect(() => {
+    setPageMeta(PAGE_META.cashFlowGuide.title, PAGE_META.cashFlowGuide.description, PAGE_META.cashFlowGuide.faq);
+  }, []);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
