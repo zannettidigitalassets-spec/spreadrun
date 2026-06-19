@@ -490,6 +490,7 @@ export default function DealAnalyzer() {
             flex-wrap: nowrap !important;
             flex-shrink: 1;
             min-width: 0;
+            justify-content: center;
             -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
             mask-image: linear-gradient(to right, black 85%, transparent 100%);
           }
@@ -502,6 +503,10 @@ export default function DealAnalyzer() {
           }
           .sr-tabbar-actions {
             flex-shrink: 0;
+            width: 100%;
+            justify-content: center;
+            border-top: 1px solid #F0F4FF;
+            padding-top: 6px;
           }
         }
       `}</style>
