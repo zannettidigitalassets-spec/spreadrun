@@ -31,6 +31,9 @@ const Table = ({ rows }) => (
 );
 
 export default function SeventyPercentGuide() {
+  useEffect(() => {
+    setPageMeta(PAGE_META.seventyPercentGuide.title, PAGE_META.seventyPercentGuide.description, PAGE_META.seventyPercentGuide.faq);
+  }, []);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
