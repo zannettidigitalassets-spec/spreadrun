@@ -31,6 +31,9 @@ const Table = ({ rows }) => (
 );
 
 export default function CapRateGuide() {
+  useEffect(() => {
+    setPageMeta(PAGE_META.capRateGuide.title, PAGE_META.capRateGuide.description, PAGE_META.capRateGuide.faq);
+  }, []);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
