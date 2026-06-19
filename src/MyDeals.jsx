@@ -75,6 +75,9 @@ function buildDeepLink(toolType, inputs) {
 }
 
 export default function MyDeals() {
+  useEffect(() => {
+    setPageMeta(PAGE_META.myDeals.title, PAGE_META.myDeals.description);
+  }, []);
   const { user, loading } = useAuth();
   const { isStarter, loading: subLoading } = useSubscription(user);
   const [showAuthModal, setShowAuthModal] = useState(false);
