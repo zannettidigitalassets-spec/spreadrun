@@ -59,7 +59,7 @@ const Input = ({ label, prefix, value, onChange, hint }) => (
   </div>
 );
 
-const Tab = ({ label, active, onClick }) => (
+const Tab = ({ label, shortLabel, active, onClick }) => (
   <button
     onClick={onClick}
     style={{
@@ -73,9 +73,11 @@ const Tab = ({ label, active, onClick }) => (
       cursor: "pointer",
       transition: "all 0.15s",
       letterSpacing: "0.03em",
+      whiteSpace: "nowrap",
     }}
   >
-    {label}
+    <span className="sr-tab-label-full">{label}</span>
+    <span className="sr-tab-label-short">{shortLabel || label}</span>
   </button>
 );
 
@@ -445,7 +447,19 @@ export default function DealAnalyzer() {
         .sr-tabbar-tabs {
           min-width: 0;
         }
+        .sr-tab-label-short {
+          display: none;
+        }
+        .sr-tab-label-full {
+          display: inline;
+        }
         @media (max-width: 640px) {
+          .sr-tab-label-full {
+            display: none;
+          }
+          .sr-tab-label-short {
+            display: inline;
+          }
           .sr-header {
             flex-wrap: nowrap !important;
             gap: 10px;
@@ -567,9 +581,9 @@ export default function DealAnalyzer() {
       {/* Tab Bar */}
       <div className="sr-tabbar-row" style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "0 0 0 20px", display: "flex", alignItems: "stretch", gap: 0 }}>
         <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4, padding: "8px 0", flex: 1, minWidth: 0 }}>
-          <Tab label="Rental Analyzer" active={tab === "rental"} onClick={() => setTab("rental")} />
-          <Tab label="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
-          <Tab label="DSCR Qualifier" active={tab === "dscr"} onClick={() => setTab("dscr")} />
+          <Tab label="Rental Analyzer" shortLabel="Rental" active={tab === "rental"} onClick={() => setTab("rental")} />
+          <Tab label="Fix & Flip" shortLabel="Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
+          <Tab label="DSCR Qualifier" shortLabel="DSCR" active={tab === "dscr"} onClick={() => setTab("dscr")} />
         </div>
         {/* Divider + action buttons in their own visually distinct section */}
         <div className="sr-tabbar-actions" style={{
