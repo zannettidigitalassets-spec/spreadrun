@@ -578,20 +578,18 @@ export default function DealAnalyzer() {
         </div>
       )}
 
-      {/* Tab Bar */}
-      <div className="sr-tabbar-row" style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "0 0 0 20px", display: "flex", alignItems: "stretch", gap: 0 }}>
-        <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4, padding: "8px 0", flex: 1, minWidth: 0 }}>
-          <Tab label="Rental Analyzer" shortLabel="Rental" active={tab === "rental"} onClick={() => setTab("rental")} />
-          <Tab label="Fix & Flip" shortLabel="Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
-          <Tab label="DSCR Qualifier" shortLabel="DSCR" active={tab === "dscr"} onClick={() => setTab("dscr")} />
+      {/* Tab Bar — two rows: tabs on top, actions below */}
+      <div style={{ background: "#fff", borderBottom: "1px solid #EBF0FF" }}>
+        {/* Tab row — full width, scrollable on mobile */}
+        <div className="sr-tabbar-row" style={{ padding: "8px 20px 0", display: "flex", gap: 4 }}>
+          <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4, flex: 1, minWidth: 0 }}>
+            <Tab label="Rental Analyzer" shortLabel="Rental" active={tab === "rental"} onClick={() => setTab("rental")} />
+            <Tab label="Fix & Flip" shortLabel="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
+            <Tab label="DSCR Qualifier" shortLabel="DSCR" active={tab === "dscr"} onClick={() => setTab("dscr")} />
+          </div>
         </div>
-        {/* Divider + action buttons in their own visually distinct section */}
-        <div className="sr-tabbar-actions" style={{
-          display: "flex", gap: 8, alignItems: "center",
-          padding: "8px 16px", flexShrink: 0,
-          borderLeft: "1px solid #EBF0FF",
-          background: "#F5F7FF",
-        }}>
+        {/* Action row — Download PDF and Save, full width, always visible */}
+        <div style={{ padding: "6px 20px 8px", display: "flex", gap: 8, justifyContent: "flex-end", borderTop: "1px solid #F0F4FF" }}>
           <DownloadPdfButton
             user={user}
             isStarter={isStarter}
@@ -606,6 +604,8 @@ export default function DealAnalyzer() {
             toolType={tab}
             inputs={currentInputs}
           />
+        </div>
+      </div>
         </div>
       </div>
 
