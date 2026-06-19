@@ -34,30 +34,10 @@ export function setPageMeta(title, description, faqItems = null) {
   }
   ogDesc.setAttribute('content', description);
 
-  // Inject or update FAQ schema if provided
-  // Google uses this to show expandable Q&A in search results (featured snippets)
+  // Remove any previously injected FAQ schema since guide pages
+  // now handle schema inline in JSX for better crawler compatibility
   const existingSchema = document.getElementById('sr-faq-schema');
   if (existingSchema) existingSchema.remove();
-
-  if (faqItems && faqItems.length > 0) {
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqItems.map(({ q, a }) => ({
-        "@type": "Question",
-        "name": q,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": a,
-        },
-      })),
-    };
-    const script = document.createElement('script');
-    script.id = 'sr-faq-schema';
-    script.type = 'application/ld+json';
-    script.textContent = JSON.stringify(schema);
-    document.head.appendChild(script);
-  }
 }
 
 // Per-page SEO config — title and description optimized for each route's
