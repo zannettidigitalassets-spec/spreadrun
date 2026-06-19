@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { setPageMeta, PAGE_META } from "./seo.js";
 
 const CONTACT_FORMSPREE_URL = "https://formspree.io/f/mkoalqyg";
 
