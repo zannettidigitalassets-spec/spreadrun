@@ -29,6 +29,9 @@ const StepCard = ({ num, title, children, link }) => (
 );
 
 export default function HowToAnalyzeGuide() {
+  useEffect(() => {
+    setPageMeta(PAGE_META.howToAnalyzeGuide.title, PAGE_META.howToAnalyzeGuide.description, PAGE_META.howToAnalyzeGuide.faq);
+  }, []);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
