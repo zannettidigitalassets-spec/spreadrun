@@ -38,6 +38,9 @@ const Table = ({ rows }) => (
 );
 
 export default function DscrGuide() {
+  useEffect(() => {
+    setPageMeta(PAGE_META.dscrGuide.title, PAGE_META.dscrGuide.description, PAGE_META.dscrGuide.faq);
+  }, []);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
