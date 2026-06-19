@@ -478,11 +478,12 @@ export default function DealAnalyzer() {
             flex-shrink: 0;
             white-space: nowrap;
           }
-          .sr-tabbar-row {
-            flex-wrap: nowrap !important;
-            gap: 8px;
+          .sr-tabbar-outer {
+            flex-wrap: wrap !important;
+            padding: 8px 16px !important;
           }
           .sr-tabbar-tabs {
+            width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
@@ -578,32 +579,30 @@ export default function DealAnalyzer() {
         </div>
       )}
 
-      {/* Tab Bar — two rows: tabs on top, actions below */}
+      {/* Tab Bar */}
       <div style={{ background: "#fff", borderBottom: "1px solid #EBF0FF" }}>
-        {/* Tab row — full width, scrollable on mobile */}
-        <div className="sr-tabbar-row" style={{ padding: "8px 20px 0", display: "flex", gap: 4 }}>
-          <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4, flex: 1, minWidth: 0 }}>
+        <div className="sr-tabbar-outer" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 20px", gap: 8 }}>
+          <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4, minWidth: 0 }}>
             <Tab label="Rental Analyzer" shortLabel="Rental" active={tab === "rental"} onClick={() => setTab("rental")} />
             <Tab label="Fix & Flip" shortLabel="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
             <Tab label="DSCR Qualifier" shortLabel="DSCR" active={tab === "dscr"} onClick={() => setTab("dscr")} />
           </div>
-        </div>
-        {/* Action row — Download PDF and Save, full width, always visible */}
-        <div style={{ padding: "6px 20px 8px", display: "flex", gap: 8, justifyContent: "flex-end", borderTop: "1px solid #F0F4FF" }}>
-          <DownloadPdfButton
-            user={user}
-            isStarter={isStarter}
-            onRequireAuth={() => setShowAuthModal(true)}
-            toolType={tab}
-            inputs={currentInputs}
-          />
-          <SaveDealButton
-            user={user}
-            isStarter={isStarter}
-            onRequireAuth={() => setShowAuthModal(true)}
-            toolType={tab}
-            inputs={currentInputs}
-          />
+          <div className="sr-tabbar-actions" style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+            <DownloadPdfButton
+              user={user}
+              isStarter={isStarter}
+              onRequireAuth={() => setShowAuthModal(true)}
+              toolType={tab}
+              inputs={currentInputs}
+            />
+            <SaveDealButton
+              user={user}
+              isStarter={isStarter}
+              onRequireAuth={() => setShowAuthModal(true)}
+              toolType={tab}
+              inputs={currentInputs}
+            />
+          </div>
         </div>
       </div>
 
