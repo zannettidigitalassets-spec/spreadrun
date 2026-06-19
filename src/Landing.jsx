@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient.js";
 import { useAuth, useSubscription } from "./Auth.jsx";
+import { setPageMeta, PAGE_META } from "./seo.js";
 
 const STARTER_CHECKOUT_URL = "https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600";
 
@@ -149,6 +150,10 @@ export default function Landing() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, loading } = useAuth();
   const { isStarter } = useSubscription(user);
+
+  useEffect(() => {
+    setPageMeta(PAGE_META.home.title, PAGE_META.home.description);
+  }, []);
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E", background: "#fff", overflowX: "hidden" }}>
