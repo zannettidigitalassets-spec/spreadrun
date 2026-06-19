@@ -475,6 +475,8 @@ export default function DealAnalyzer() {
             flex-wrap: nowrap !important;
             flex-shrink: 1;
             min-width: 0;
+            -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+            mask-image: linear-gradient(to right, black 85%, transparent 100%);
           }
           .sr-tabbar-tabs::-webkit-scrollbar {
             display: none;
@@ -563,13 +565,19 @@ export default function DealAnalyzer() {
       )}
 
       {/* Tab Bar */}
-      <div className="sr-tabbar-row" style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "8px 20px", display: "flex", gap: 4, alignItems: "center" }}>
-        <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4 }}>
+      <div className="sr-tabbar-row" style={{ background: "#fff", borderBottom: "1px solid #EBF0FF", padding: "0 0 0 20px", display: "flex", alignItems: "stretch", gap: 0 }}>
+        <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4, padding: "8px 0", flex: 1, minWidth: 0 }}>
           <Tab label="Rental Analyzer" active={tab === "rental"} onClick={() => setTab("rental")} />
           <Tab label="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
           <Tab label="DSCR Qualifier" active={tab === "dscr"} onClick={() => setTab("dscr")} />
         </div>
-        <div className="sr-tabbar-actions" style={{ display: "flex", gap: 10, alignItems: "center", marginLeft: "auto" }}>
+        {/* Divider + action buttons in their own visually distinct section */}
+        <div className="sr-tabbar-actions" style={{
+          display: "flex", gap: 8, alignItems: "center",
+          padding: "8px 16px", flexShrink: 0,
+          borderLeft: "1px solid #EBF0FF",
+          background: "#F5F7FF",
+        }}>
           <DownloadPdfButton
             user={user}
             isStarter={isStarter}
