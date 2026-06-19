@@ -606,8 +606,6 @@ export default function DealAnalyzer() {
           />
         </div>
       </div>
-        </div>
-      </div>
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px" }}>
 
