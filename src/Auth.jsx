@@ -36,6 +36,13 @@ export function useSubscription(user) {
       return;
     }
 
+    // Safety timeout — if Supabase doesn't respond in 5 seconds, default to free tier
+    const timeout = setTimeout(() => {
+      console.warn('useSubscription timed out — defaulting to free tier');
+      setTier('free');
+      setLoading(false);
+    }, 5000);
+
     setLoading(true);
     supabase
       .from('profiles')
@@ -43,15 +50,17 @@ export function useSubscription(user) {
       .eq('email', user.email)
       .maybeSingle()
       .then(({ data, error }) => {
+        clearTimeout(timeout);
         if (error) {
           console.error('Failed to load subscription tier:', error.message);
           setTier('free');
         } else {
-          // No row yet (e.g. brand new signup, never paid) just means free tier.
           setTier(data?.subscription_tier ?? 'free');
         }
         setLoading(false);
       });
+
+    return () => clearTimeout(timeout);
   }, [user]);
 
   const isStarter = tier === 'starter' || tier === 'pro';
