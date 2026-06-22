@@ -566,13 +566,16 @@ export default function Landing() {
         <div style={{ fontSize: 12, color: "#9BA8C0" }}>
           © 2026 SpreadRun · For informational purposes only. Not financial advice.
         </div>
-        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap", alignItems: "center" }}>
           <a href="#faq" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>FAQ</a>
           <a href="#pricing" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Pricing</a>
           <a href="#features" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Features</a>
           <a href="/contact" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Contact</a>
           <a href="/privacy" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Privacy</a>
           <a href="/terms" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Terms</a>
+          <a href="https://www.producthunt.com/products/spreadrun?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-spreadrun" target="_blank" rel="noopener noreferrer">
+            <img alt="SpreadRun - Free real estate deal analyzer. No paywalls. No agenda. | Product Hunt" width="200" height="43" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1178377&theme=dark&t=1782154612629" />
+          </a>
         </div>
       </footer>
     </div>
