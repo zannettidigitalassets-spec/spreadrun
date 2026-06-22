@@ -148,6 +148,7 @@ const FAQS = [
 export default function Landing() {
   const [openFaq, setOpenFaq] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showPHBanner, setShowPHBanner] = useState(true);
   const { user, loading } = useAuth();
   const { isStarter } = useSubscription(user);
 
@@ -157,6 +158,33 @@ export default function Landing() {
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E", background: "#fff", overflowX: "hidden" }}>
+      {/* Product Hunt Launch Banner */}
+      {showPHBanner && (
+        <div style={{
+          background: "#FF6154", color: "#fff",
+          padding: "10px 20px",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          gap: 12, fontSize: 13, fontWeight: 600, position: "relative",
+        }}>
+          <span>🎉 We're live on Product Hunt today! Use code</span>
+          <code style={{
+            background: "rgba(255,255,255,0.2)", padding: "2px 8px",
+            borderRadius: 4, fontFamily: "'IBM Plex Mono', monospace", fontWeight: 800,
+          }}>PRODUCTHUNT</code>
+          <span>for 20% off Starter.</span>
+          <a href="https://www.producthunt.com/products/spreadrun" target="_blank" rel="noopener noreferrer" style={{
+            color: "#fff", fontWeight: 800, textDecoration: "underline",
+          }}>Upvote us →</a>
+          <button
+            onClick={() => setShowPHBanner(false)}
+            style={{
+              position: "absolute", right: 16,
+              background: "none", border: "none", color: "#fff",
+              fontSize: 16, cursor: "pointer", padding: 4, opacity: 0.8,
+            }}
+          >✕</button>
+        </div>
+      )}
       <style>{`
         .sr-feature-grid {
           display: grid;
