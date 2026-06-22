@@ -162,23 +162,24 @@ export default function Landing() {
       {showPHBanner && (
         <div style={{
           background: "#FF6154", color: "#fff",
-          padding: "10px 20px",
+          padding: "10px 40px 10px 20px",
           display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 12, fontSize: 13, fontWeight: 600, position: "relative",
+          flexWrap: "wrap", gap: 8, fontSize: 13, fontWeight: 600, position: "relative",
+          textAlign: "center",
         }}>
-          <span>🎉 We're live on Product Hunt today! Use code</span>
+          <span>🎉 Live on Product Hunt! Use code</span>
           <code style={{
             background: "rgba(255,255,255,0.2)", padding: "2px 8px",
             borderRadius: 4, fontFamily: "'IBM Plex Mono', monospace", fontWeight: 800,
           }}>PRODUCTHUNT</code>
           <span>for 20% off Starter.</span>
           <a href="https://www.producthunt.com/products/spreadrun" target="_blank" rel="noopener noreferrer" style={{
-            color: "#fff", fontWeight: 800, textDecoration: "underline",
+            color: "#fff", fontWeight: 800, textDecoration: "underline", whiteSpace: "nowrap",
           }}>Upvote us →</a>
           <button
             onClick={() => setShowPHBanner(false)}
             style={{
-              position: "absolute", right: 16,
+              position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
               background: "none", border: "none", color: "#fff",
               fontSize: 16, cursor: "pointer", padding: 4, opacity: 0.8,
             }}
