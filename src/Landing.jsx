@@ -110,11 +110,6 @@ const COMING_SOON = [
     desc: "Track every property you own in one dashboard — equity, cash flow, and performance over time.",
   },
   {
-    name: "Deal Comparison",
-    tier: "Starter",
-    desc: "Stack two or more deals side by side and see exactly which one wins on the numbers.",
-  },
-  {
     name: "Market Rent Estimator",
     tier: "Pro",
     desc: "Pull live comparable rent data for any address before you even make an offer.",
