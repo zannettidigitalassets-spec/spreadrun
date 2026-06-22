@@ -455,14 +455,7 @@ export default function Landing() {
                 border: p.highlight ? "2px solid #0B5FFF" : "1.5px solid #EBF0FF",
                 borderRadius: 16, padding: "32px 26px", position: "relative",
               }}>
-                {p.highlight && (
-                  <div style={{
-                    position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)",
-                    background: "#0B5FFF", color: "#fff", fontSize: 11, fontWeight: 800,
-                    letterSpacing: "0.1em", padding: "4px 16px", borderRadius: 99,
-                    textTransform: "uppercase", whiteSpace: "nowrap",
-                  }}>Most Popular</div>
-                )}
+              {p.highlight && null}
                 <div style={{ fontSize: 13, fontWeight: 700, color: p.highlight ? "#4D8FFF" : "#0B5FFF", marginBottom: 8 }}>{p.tier}</div>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 6 }}>
                   <span style={{ fontSize: 36, fontWeight: 900, color: p.highlight ? "#fff" : "#0D1B3E", fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "-1px" }}>{p.price}</span>
