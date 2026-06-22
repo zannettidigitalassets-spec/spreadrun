@@ -93,6 +93,7 @@ const PRICING = [
       "Portfolio tracker & dashboard",
       "Live market rent estimates",
       "Upload OM/pro-forma — auto-fills calculators",
+      "Amortization & equity tracker",
       "AI deal analyzer",
       "Priority support",
     ],
@@ -118,6 +119,11 @@ const COMING_SOON = [
     name: "OM / Pro-Forma Upload",
     tier: "Pro",
     desc: "Drop in a PDF offering memorandum or spreadsheet — we extract the numbers and fill the calculator for you.",
+  },
+  {
+    name: "Amortization & Equity Tracker",
+    tier: "Pro",
+    desc: "See your full loan payoff schedule, projected equity build over time, and break-even timeline for any rental property.",
   },
 ];
 
