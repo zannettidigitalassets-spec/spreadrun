@@ -132,7 +132,15 @@ export default function MyDeals() {
 
   const compareSet = deals.filter((d) => selected.includes(d.id));
 
-  if (loading || subLoading) return null;
+  if (loading || subLoading) return (
+    <div style={{ minHeight: "100vh", background: "#F5F7FF", fontFamily: "'Inter', system-ui, sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+        <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2 }} />
+        <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E" }}>SpreadRun</span>
+      </div>
+      <div style={{ fontSize: 14, color: "#6B7A99" }}>Loading your deals...</div>
+    </div>
+  );
 
   if (!user) {
     return (
