@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient.js";
 import { useAuth, useSubscription, AuthModal, UserMenu } from "./Auth.jsx";
 import { generateDealReportPdf } from "./dealReportPdf.js";
+import { setPageMeta, PAGE_META } from "./seo.js";
+import { setPageMeta, PAGE_META } from "./seo.js";
 
 const formatCurrency = (val) =>
   val === "" || val === undefined || val === null || isNaN(val)
