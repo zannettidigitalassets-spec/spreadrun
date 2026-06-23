@@ -767,6 +767,8 @@ export default function DealAnalyzer() {
                   <div style={{ fontSize: 13, color: "#0D1B3E", lineHeight: 1.6 }}>
                     {flipProfit >= 30000 && flipROI >= 20
                       ? "✅ Strong flip. Profit and ROI both meet investor benchmarks."
+                      : flipProfit >= 30000 && flipROI < 20
+                      ? "⚠️ Profit looks good but ROI is below the 20% benchmark. Consider reducing purchase price or rehab costs."
                       : flipProfit >= 0 && flipProfit < 30000
                       ? "⚠️ Marginal. Profit exists but leaves little buffer for surprises."
                       : "❌ Losing deal. Reduce purchase price or rehab costs."}
