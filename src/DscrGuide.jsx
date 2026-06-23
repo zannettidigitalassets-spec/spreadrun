@@ -202,6 +202,21 @@ export default function DscrGuide() {
         </div>
 
         <div style={{ marginTop: 32 }}>
+          <div style={{
+            background: "#F0F4FF", border: "1.5px solid #D6DFFF", borderRadius: 14,
+            padding: "24px 28px", marginBottom: 32, textAlign: "center",
+          }}>
+            <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 12, lineHeight: 1.6 }}>
+              Put these numbers to work — try our free DSCR calculator and see if your rental property qualifies for investor financing.
+            </div>
+            <a href="/dscr-calculator" style={{
+              display: "inline-block", background: "#0B5FFF", color: "#fff",
+              fontSize: 14, fontWeight: 700, padding: "12px 28px",
+              borderRadius: 10, textDecoration: "none",
+            }}>
+              👉 Free DSCR Calculator (No Sign-Up Required) →
+            </a>
+          </div>
           <a href="/" style={{ fontSize: 13, fontWeight: 700, color: "#0B5FFF", textDecoration: "none" }}>← Back to SpreadRun</a>
         </div>
       </div>
