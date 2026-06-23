@@ -178,6 +178,37 @@ export default function Guides() {
             </a>
           ))}
         </div>
+
+        {/* Free Calculator Tools Section */}
+        <div style={{ marginTop: 56, paddingTop: 48, borderTop: "1px solid #EBF0FF" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", color: "#0B5FFF", textTransform: "uppercase", marginBottom: 14 }}>Free Tools</div>
+          <h2 style={{ fontSize: 24, fontWeight: 900, letterSpacing: "-0.5px", margin: "0 0 8px" }}>Ready to run the numbers?</h2>
+          <p style={{ fontSize: 15, color: "#6B7A99", margin: "0 0 28px", lineHeight: 1.6 }}>
+            Free calculators for every deal type — no account required.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {[
+              { href: "/rental-calculator", title: "Rental Property Calculator", desc: "Cash flow, cap rate, cash-on-cash return, and DSCR — instantly." },
+              { href: "/flip-calculator", title: "Fix & Flip Calculator", desc: "Profit, ROI, maximum allowable offer, and 70% rule check." },
+              { href: "/dscr-calculator", title: "DSCR Calculator", desc: "See if your rental property qualifies for investor financing." },
+            ].map(tool => (
+              <a key={tool.href} href={tool.href} style={{
+                display: "block", textDecoration: "none",
+                border: "1.5px solid #EBF0FF", borderRadius: 14,
+                padding: "22px 28px", background: "#fff",
+                transition: "border-color 0.15s",
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
+                  <div>
+                    <h3 style={{ fontSize: 17, fontWeight: 800, color: "#0D1B3E", margin: "0 0 6px", letterSpacing: "-0.2px" }}>{tool.title}</h3>
+                    <p style={{ fontSize: 14, color: "#6B7A99", margin: 0, lineHeight: 1.5 }}>{tool.desc}</p>
+                  </div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#0B5FFF", whiteSpace: "nowrap" }}>Try free →</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
 
       <footer style={{
