@@ -42,6 +42,10 @@ const ARTICLES = [
 export default function Guides() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  useEffect(() => {
+    setPageMeta(PAGE_META.guides.title, PAGE_META.guides.description);
+  }, []);
+
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E", background: "#fff" }}>
       <style>{`
