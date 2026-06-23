@@ -210,7 +210,7 @@ export default function DscrCalculator() {
             <div style={{ fontSize: 16, fontWeight: 800, color: "#fff", marginBottom: 4 }}>Need the full deal analysis?</div>
             <div style={{ fontSize: 13, color: "#6B8AAA" }}>SpreadRun also includes a Rental Analyzer and Fix & Flip Calculator — all free.</div>
           </div>
-          <a href="/app" style={{ background: "#0B5FFF", color: "#fff", fontSize: 14, fontWeight: 700, padding: "12px 24px", borderRadius: 10, textDecoration: "none", whiteSpace: "nowrap" }}>
+          <a href="/app#dscr" style={{ background: "#0B5FFF", color: "#fff", fontSize: 14, fontWeight: 700, padding: "12px 24px", borderRadius: 10, textDecoration: "none", whiteSpace: "nowrap" }}>
             Try Full Analyzer →
           </a>
         </div>
