@@ -118,4 +118,16 @@ export const PAGE_META = {
       { q: "What vacancy rate should I use when analyzing a rental property?", a: "Most investors use a 5–10% vacancy rate as a conservative estimate. In strong rental markets, 5% is reasonable. In softer markets or if you're new to landlording, 8–10% provides a more conservative buffer." },
     ],
   },
+  dscrCalculator: {
+    title: "Free DSCR Calculator | Debt Service Coverage Ratio Tool",
+    description: "Calculate your DSCR ratio instantly. See if your rental property qualifies for investor financing and exactly how much rent you need to hit the 1.25 benchmark.",
+  },
+  flipCalculator: {
+    title: "Free Fix and Flip Calculator | 70% Rule & Profit Estimator",
+    description: "Calculate your fix and flip profit, ROI, and maximum allowable offer instantly. Includes the 70% rule check, holding costs, agent fees, and closing costs.",
+  },
+  rentalCalculator: {
+    title: "Free Rental Property Calculator | Cash Flow, Cap Rate & DSCR",
+    description: "Calculate rental property cash flow, cap rate, cash-on-cash return, and DSCR instantly. Free rental property analyzer — no account required.",
+  },
 };
