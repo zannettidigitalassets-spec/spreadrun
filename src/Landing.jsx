@@ -596,6 +596,10 @@ export default function Landing() {
           <a href="/contact" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Contact</a>
           <a href="/privacy" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Privacy</a>
           <a href="/terms" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Terms</a>
+          <span style={{ fontSize: 12, color: "#EBF0FF" }}>|</span>
+          <a href="/rental-calculator" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Rental Calculator</a>
+          <a href="/flip-calculator" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Flip Calculator</a>
+          <a href="/dscr-calculator" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>DSCR Calculator</a>
           <a href="https://www.producthunt.com/products/spreadrun?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-spreadrun" target="_blank" rel="noopener noreferrer">
             <img alt="SpreadRun - Free real estate deal analyzer. No paywalls. No agenda. | Product Hunt" width="200" height="43" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1178377&theme=dark&t=1782154612629" />
           </a>
