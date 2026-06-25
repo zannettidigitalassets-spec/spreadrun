@@ -95,7 +95,7 @@ const PRICING = [
     ],
     cta: "Get Starter — $19/mo",
     href: STARTER_CHECKOUT_URL,
-    highlight: true,
+    highlight: false,
     disabled: false,
   },
   {
@@ -113,7 +113,7 @@ const PRICING = [
     ],
     cta: "Coming Soon",
     href: null,
-    highlight: false,
+    highlight: true,
     disabled: true,
   },
 ];
@@ -469,6 +469,7 @@ export default function Landing() {
                 background: p.highlight ? "#0D1B3E" : "#fff",
                 border: p.highlight ? "2px solid #0B5FFF" : "1.5px solid #EBF0FF",
                 borderRadius: 16, padding: "32px 26px", position: "relative",
+                display: "flex", flexDirection: "column",
               }}>
               {p.highlight && null}
                 <div style={{ fontSize: 13, fontWeight: 700, color: p.highlight ? "#4D8FFF" : "#0B5FFF", marginBottom: 8 }}>{p.tier}</div>
@@ -477,7 +478,7 @@ export default function Landing() {
                   <span style={{ fontSize: 12, color: p.highlight ? "#6B8AAA" : "#9BA8C0" }}>/{p.period}</span>
                 </div>
                 <div style={{ fontSize: 13, color: p.highlight ? "#6B8AAA" : "#9BA8C0", marginBottom: 24, minHeight: 36 }}>{p.desc}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28, flex: 1 }}>
                   {p.features.map(feat => (
                     <div key={feat} style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: 13.5, color: p.highlight ? "#C8D8EE" : "#3D4F6E" }}>
                       <span style={{ color: "#0B5FFF", fontWeight: 800, marginTop: 1 }}>✓</span>
