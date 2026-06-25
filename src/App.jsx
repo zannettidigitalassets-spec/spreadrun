@@ -151,16 +151,16 @@ const DownloadPdfButton = ({ user, isStarter, onRequireAuth, toolType, inputs, l
         border: "1px solid #FFE3A8", borderRadius: 10, padding: "8px 14px",
       }}>
         <span style={{ fontSize: 12.5, color: "#8A6300", fontWeight: 600 }}>
-          PDF reports are a Starter feature.
+          PDF reports are a paid feature.
         </span>
         <a
-          href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600"
+          href="https://buy.stripe.com/eVq8wR6JcaZ8aSLguB5J601"
           style={{
             fontSize: 12.5, fontWeight: 800, color: "#0B5FFF", textDecoration: "none",
             whiteSpace: "nowrap",
           }}
         >
-          Upgrade for $19/mo →
+          Save deals from $9/mo →
         </a>
         <button
           onClick={() => setShowUpgrade(false)}
@@ -298,16 +298,16 @@ const SaveDealButton = ({ user, isStarter, onRequireAuth, toolType, inputs }) =>
         border: "1px solid #FFE3A8", borderRadius: 10, padding: "8px 14px",
       }}>
         <span style={{ fontSize: 12.5, color: "#8A6300", fontWeight: 600 }}>
-          Saving deals is a Starter feature.
+          Saving deals is a paid feature.
         </span>
         <a
-          href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600"
+          href="https://buy.stripe.com/eVq8wR6JcaZ8aSLguB5J601"
           style={{
             fontSize: 12.5, fontWeight: 800, color: "#0B5FFF", textDecoration: "none",
             whiteSpace: "nowrap",
           }}
         >
-          Upgrade for $19/mo →
+          Save deals from $9/mo →
         </a>
         <button
           onClick={() => setStatus("idle")}
@@ -542,7 +542,7 @@ export default function DealAnalyzer() {
           )}
           {/* Upgrade button — only show to signed-out visitors to keep header uncluttered on mobile */}
           {!user && !isStarter && (
-            <a href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600" style={{
+            <a href="https://buy.stripe.com/eVq8wR6JcaZ8aSLguB5J601" style={{
               background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700,
               padding: "8px 16px", borderRadius: 8, letterSpacing: "0.04em",
               textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0,
