@@ -3,6 +3,7 @@ import { supabase } from "./supabaseClient.js";
 import { useAuth, useSubscription } from "./Auth.jsx";
 import { setPageMeta, PAGE_META } from "./seo.js";
 
+const BASIC_CHECKOUT_URL = "https://buy.stripe.com/eVq8wR6JcaZ8aSLguB5J601";
 const STARTER_CHECKOUT_URL = "https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600";
 
 const METRICS = [
@@ -66,10 +67,10 @@ const PRICING = [
     disabled: false,
   },
   {
-    tier: "Starter",
-    price: "$19",
+    tier: "Basic",
+    price: "$9",
     period: "per month",
-    desc: "For investors comparing multiple deals.",
+    desc: "For investors ready to save and compare deals.",
     features: [
       "Everything in Free",
       "Save up to 10 properties",
@@ -77,29 +78,42 @@ const PRICING = [
       "PDF deal reports",
       "Email support",
     ],
+    cta: "Get Basic — $9/mo",
+    href: BASIC_CHECKOUT_URL,
+    highlight: false,
+    disabled: false,
+  },
+  {
+    tier: "Starter",
+    price: "$19",
+    period: "per month",
+    desc: "For serious investors managing multiple deals.",
+    features: [
+      "Everything in Basic",
+      "Unlimited saved properties",
+      "Priority email support",
+    ],
     cta: "Get Starter — $19/mo",
     href: STARTER_CHECKOUT_URL,
-    highlight: false,
+    highlight: true,
     disabled: false,
   },
   {
     tier: "Pro",
     price: "$79",
     period: "per month",
-    desc: "For serious investors building a portfolio.",
+    desc: "For investors building a portfolio.",
     features: [
       "Everything in Starter",
-      "Unlimited saved properties",
       "Portfolio tracker & dashboard",
       "Live market rent estimates",
       "Upload OM/pro-forma — auto-fills calculators",
       "Amortization & equity tracker",
       "AI deal analyzer",
-      "Priority support",
     ],
     cta: "Coming Soon",
     href: null,
-    highlight: true,
+    highlight: false,
     disabled: true,
   },
 ];
@@ -194,8 +208,8 @@ export default function Landing() {
         }
         .sr-pricing-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
         }
         .sr-soon-grid {
           display: grid;
@@ -372,10 +386,10 @@ export default function Landing() {
               </a>
               <div style={{ marginTop: 16, fontSize: 12, color: "#4A6080" }}>
                 {user && isStarter
-                  ? "✓ You're a Starter member · Save deals, compare, and export PDFs"
+                  ? "✓ You're a Starter member · Unlimited saves, comparison, and PDF exports"
                   : user
                   ? "You're signed in · Upgrade to save and compare deals"
-                  : "Free forever · No credit card · No sign-up required"}
+                  : "Free forever · No credit card · Save deals from $9/mo"}
               </div>
             </>
           )}
