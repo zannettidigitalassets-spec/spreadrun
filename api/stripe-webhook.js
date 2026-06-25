@@ -42,6 +42,12 @@ export async function POST(request) {
         const customerEmail = session.customer_details?.email;
         const stripeCustomerId = session.customer;
 
+        // Determine which tier was purchased based on Payment Link ID
+        const paymentLink = session.payment_link;
+        const BASIC_PAYMENT_LINK = 'plink_1Tm2nyPstGCqmCay1cCrKVO1';
+        const tier = paymentLink === BASIC_PAYMENT_LINK ? 'basic' : 'starter';
+        const isBasic = tier === 'basic';
+
         if (customerEmail) {
           const { data, error } = await supabaseAdmin
             .from('profiles')
@@ -50,7 +56,7 @@ export async function POST(request) {
                 email: customerEmail,
                 stripe_customer_id: stripeCustomerId,
                 subscription_status: 'active',
-                subscription_tier: 'starter',
+                subscription_tier: tier,
               },
               { onConflict: 'email' }
             );
@@ -65,7 +71,7 @@ export async function POST(request) {
               from: 'SpreadRun <hello@spreadrun.com>',
               to: customerEmail,
               replyTo: 'spreadrun@gmail.com',
-              subject: 'Welcome to SpreadRun Starter 🎉',
+              subject: isBasic ? 'Welcome to SpreadRun Basic 🎉' : 'Welcome to SpreadRun Starter 🎉',
               html: `
                 <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; color: #0D1B3E;">
                   <div style="margin-bottom: 28px;">
@@ -73,7 +79,7 @@ export async function POST(request) {
                   </div>
 
                   <h1 style="font-size: 24px; font-weight: 800; margin: 0 0 16px; letter-spacing: -0.5px;">
-                    You're in. Welcome to Starter. 🎉
+                    You're in. Welcome to ${isBasic ? 'Basic' : 'Starter'}. 🎉
                   </h1>
 
                   <p style="font-size: 15px; color: #3D4F6E; line-height: 1.7; margin: 0 0 20px;">
@@ -85,7 +91,7 @@ export async function POST(request) {
                   </p>
 
                   <div style="background: #F0F4FF; border-radius: 12px; padding: 20px 24px; margin-bottom: 28px;">
-                    <div style="margin-bottom: 10px; font-size: 14px; color: #0D1B3E;">✓ &nbsp;<strong>Save up to 10 properties</strong> — come back to any deal anytime</div>
+                    <div style="margin-bottom: 10px; font-size: 14px; color: #0D1B3E;">✓ &nbsp;<strong>${isBasic ? 'Save up to 10 properties' : 'Unlimited saved properties'}</strong> — come back to any deal anytime</div>
                     <div style="margin-bottom: 10px; font-size: 14px; color: #0D1B3E;">✓ &nbsp;<strong>Side-by-side deal comparison</strong> — stack your best options and see which wins on the numbers</div>
                     <div style="font-size: 14px; color: #0D1B3E;">✓ &nbsp;<strong>PDF deal reports</strong> — clean, branded exports you can share with partners or lenders</div>
                   </div>
