@@ -172,15 +172,15 @@ export default function MyDeals() {
           <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2 }} />
           <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E" }}>SpreadRun</span>
         </div>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0D1B3E", margin: "0 0 10px" }}>My Deals is a Starter feature</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0D1B3E", margin: "0 0 10px" }}>My Deals is a paid feature</h1>
         <p style={{ fontSize: 14.5, color: "#6B7A99", marginBottom: 24, textAlign: "center", maxWidth: 380 }}>
           Upgrade to save up to 10 properties, reopen them anytime, and compare deals side by side.
         </p>
         <a
-          href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600"
+          href="https://buy.stripe.com/eVq8wR6JcaZ8aSLguB5J601"
           style={{ background: "#0B5FFF", color: "#fff", border: "none", borderRadius: 10, padding: "12px 24px", fontSize: 14.5, fontWeight: 700, textDecoration: "none" }}
         >
-          Upgrade for $19/mo →
+          Save deals from $9/mo →
         </a>
         <a href="/app" style={{ marginTop: 16, fontSize: 13, color: "#6B7A99", textDecoration: "none" }}>← Back to Calculators</a>
       </div>
