@@ -353,8 +353,10 @@ export default function DealAnalyzer() {
   const { isStarter } = useSubscription(user);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showWelcome, setShowWelcome] = useState(() => {
-    return new URLSearchParams(window.location.search).get('welcome') === 'starter';
+    const welcome = new URLSearchParams(window.location.search).get('welcome');
+    return welcome === 'starter' || welcome === 'basic';
   });
+  const welcomeTier = new URLSearchParams(window.location.search).get('welcome');
 
   // Rental state
   const [purchasePrice, setPurchasePrice] = useState(() => getParam('purchasePrice', 350000));
@@ -566,7 +568,9 @@ export default function DealAnalyzer() {
           flexWrap: "wrap", gap: 10,
         }}>
           <div style={{ fontSize: 14, fontWeight: 700 }}>
-            🎉 You're a Starter member! Save up to 10 properties, compare deals side by side, and export PDF reports.
+            {welcomeTier === 'basic'
+              ? "🎉 You're a Basic member! Save up to 10 properties, compare deals side by side, and export PDF reports."
+              : "🎉 You're a Starter member! Save unlimited properties, compare deals side by side, and export PDF reports."}
           </div>
           <button
             onClick={() => {
