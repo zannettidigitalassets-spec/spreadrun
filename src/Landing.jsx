@@ -187,7 +187,7 @@ export default function Landing() {
             background: "rgba(255,255,255,0.2)", padding: "2px 8px",
             borderRadius: 4, fontFamily: "'IBM Plex Mono', monospace", fontWeight: 800,
           }}>PRODUCTHUNT</code>
-          <span>for 20% off Starter.</span>
+          <span>for 20% off your first month.</span>
           <a href="https://www.producthunt.com/products/spreadrun" target="_blank" rel="noopener noreferrer" style={{
             color: "#fff", fontWeight: 800, textDecoration: "underline", whiteSpace: "nowrap",
           }}>Upvote us →</a>
