@@ -63,7 +63,7 @@ export function useSubscription(user) {
     return () => clearTimeout(timeout);
   }, [user]);
 
-  const isStarter = tier === 'starter' || tier === 'pro';
+  const isStarter = tier === 'basic' || tier === 'starter' || tier === 'pro';
 
   return { tier, isStarter, loading };
 }
