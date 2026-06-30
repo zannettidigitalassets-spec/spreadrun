@@ -200,6 +200,34 @@ export default function DscrCalculator() {
                     : `❌ DSCR of ${dscrRatio.toFixed(2)} is below the 1.25 threshold. Increase rent, reduce loan amount, or find a better rate.`}
                 </div>
               </div>
+              {dscrQualifies && (
+                <div style={{
+                  background: "#fff", borderRadius: 12, padding: 18,
+                  border: "1.5px solid #D6E8DD", display: "flex", alignItems: "center",
+                  gap: 14, flexWrap: "wrap",
+                }}>
+                  <div style={{ flex: 1, minWidth: 200 }}>
+                    <div style={{ fontSize: 12.5, fontWeight: 700, color: "#0D1B3E", marginBottom: 3 }}>
+                      Ready to move forward?
+                    </div>
+                    <div style={{ fontSize: 12, color: "#6B7A99", lineHeight: 1.5 }}>
+                      This deal qualifies for DSCR financing. Get matched with investor-friendly lenders.
+                    </div>
+                  </div>
+                  <a
+                    href="https://www.offermarket.us/loans?ref=6fbr51lipme"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      background: "#0B5FFF", color: "#fff", fontSize: 12.5, fontWeight: 700,
+                      padding: "9px 16px", borderRadius: 8, textDecoration: "none",
+                      whiteSpace: "nowrap", flexShrink: 0,
+                    }}
+                  >
+                    See DSCR Lenders →
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
