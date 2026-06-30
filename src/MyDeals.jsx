@@ -210,6 +210,9 @@ export default function MyDeals() {
             padding-top: 10px;
             margin-top: 6px;
           }
+          .sr-compare-grid {
+            grid-template-columns: 1fr !important;
+          }
         }
       `}</style>
       <div className="sr-mydeals-header" style={{ background: "#0D1B3E", padding: "20px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -324,7 +327,7 @@ export default function MyDeals() {
         {compareSet.length >= 2 && (
           <div style={{ marginTop: 32 }}>
             <h2 style={{ fontSize: 17, fontWeight: 800, margin: "0 0 14px" }}>Side-by-Side Comparison</h2>
-            <div style={{ display: "grid", gridTemplateColumns: `repeat(${compareSet.length}, 1fr)`, gap: 14 }}>
+            <div className="sr-compare-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${compareSet.length}, 1fr)`, gap: 14 }}>
               {compareSet.map((deal) => (
                 <div key={deal.id} style={{ background: "#fff", borderRadius: 14, padding: 18, border: "1px solid #EBF0FF" }}>
                   <div style={{ fontSize: 13.5, fontWeight: 700, marginBottom: 10 }}>{deal.label}</div>
