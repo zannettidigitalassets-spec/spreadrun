@@ -457,6 +457,9 @@ export default function DealAnalyzer() {
           display: inline;
         }
         @media (max-width: 640px) {
+          .sr-tab-grid {
+            grid-template-columns: 1fr !important;
+          }
           .sr-tab-label-full {
             display: none;
           }
@@ -627,7 +630,7 @@ export default function DealAnalyzer() {
               <Pill label="Cap Rate" value={formatPct(capRate)} />
               <Pill label="DSCR" value={dscr.toFixed(2)} />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="sr-tab-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                 <SectionTitle>Property & Loan</SectionTitle>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -711,7 +714,7 @@ export default function DealAnalyzer() {
               <Pill label="Max Allowable Offer" value={formatCurrency(maxAllowable)} />
               <Pill label="Total In" value={formatCurrency(totalIn)} />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="sr-tab-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                 <SectionTitle>Deal Inputs</SectionTitle>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -793,7 +796,7 @@ export default function DealAnalyzer() {
               <Pill label="Min Rent Needed" value={formatCurrency(minRentNeeded)} />
               <Pill label="Status" value={dscrQualifies ? "✅ Qualifies" : "❌ Does Not"} />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="sr-tab-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div style={{ background: "#fff", borderRadius: 14, padding: 22, border: "1px solid #EBF0FF" }}>
                 <SectionTitle>Loan Details</SectionTitle>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
