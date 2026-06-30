@@ -104,6 +104,13 @@ export default function FlipCalculator() {
 
   return (
     <div style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E", background: "#F5F7FF", minHeight: "100vh" }}>
+      <style>{`
+        @media (max-width: 640px) {
+          .sr-flip-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
       {/* NAV */}
       <nav style={{
         background: "#0D1B3E", padding: "0 24px", height: 60,
@@ -141,7 +148,7 @@ export default function FlipCalculator() {
             <Pill label="Total All-In" value={formatCurrency(totalIn)} />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+          <div className="sr-flip-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
             {/* Inputs */}
             <div>
               <SectionTitle>Deal Inputs</SectionTitle>
