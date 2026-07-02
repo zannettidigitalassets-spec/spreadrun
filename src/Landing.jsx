@@ -174,10 +174,12 @@ export default function Landing() {
 
   const handleHomeRentLookup = async () => {
     if (!user) {
+      if (window.gtag) window.gtag('event', 'upgrade_prompt_shown', { source: 'homepage_rent_lookup' });
       setLookupStatus("upgrade");
       return;
     }
     if (!isStarter) {
+      if (window.gtag) window.gtag('event', 'upgrade_prompt_shown', { source: 'homepage_rent_lookup' });
       setLookupStatus("upgrade");
       return;
     }
@@ -185,6 +187,7 @@ export default function Landing() {
 
     setLookupStatus("loading");
     setLookupErrorMsg("");
+    if (window.gtag) window.gtag('event', 'rent_lookup_click', { source: 'homepage' });
 
     try {
       const res = await fetch("/api/rent-estimate", {
@@ -196,6 +199,7 @@ export default function Landing() {
 
       if (!res.ok) {
         if (data.error === "limit_reached") {
+          if (window.gtag) window.gtag('event', 'rent_lookup_limit_reached', { source: 'homepage' });
           setLookupStatus("limit");
         } else {
           setLookupErrorMsg(data.message || "Couldn't find rent data for that address.");
@@ -204,6 +208,7 @@ export default function Landing() {
         return;
       }
 
+      if (window.gtag) window.gtag('event', 'rent_lookup_success', { source: 'homepage' });
       setLookupResult(data);
       setLookupStatus("success");
     } catch (err) {
@@ -584,9 +589,12 @@ export default function Landing() {
               <span style={{ fontSize: 13, color: "#8FA8CC" }}>
                 {user ? "This is a Starter feature." : "Sign in and upgrade to Starter to use this."}
               </span>
-              <a href={user ? STARTER_CHECKOUT_URL : "/app"} style={{
-                fontSize: 13, fontWeight: 800, color: "#4D8FFF", textDecoration: "underline",
-              }}>
+              <a
+                href={user ? STARTER_CHECKOUT_URL : "/app"}
+                onClick={() => { if (window.gtag) window.gtag('event', 'upgrade_click', { source: 'homepage_rent_lookup', tier: 'starter' }); }}
+                style={{
+                  fontSize: 13, fontWeight: 800, color: "#4D8FFF", textDecoration: "underline",
+                }}>
                 {user ? "Upgrade for $19/mo →" : "Sign In →"}
               </a>
             </div>
@@ -635,13 +643,16 @@ export default function Landing() {
                     fontSize: 13.5, fontWeight: 700, cursor: "default",
                   }}>{p.cta}</div>
                 ) : (
-                  <a href={p.href} style={{
-                    display: "block", textAlign: "center",
-                    background: p.highlight ? "#0B5FFF" : "#EEF3FF",
-                    color: p.highlight ? "#fff" : "#0B5FFF",
-                    padding: "13px", borderRadius: 10,
-                    fontSize: 13.5, fontWeight: 700, textDecoration: "none",
-                  }}>{p.cta}</a>
+                  <a
+                    href={p.href}
+                    onClick={() => { if (window.gtag) window.gtag('event', 'upgrade_click', { source: 'pricing_section', tier: p.tier.toLowerCase() }); }}
+                    style={{
+                      display: "block", textAlign: "center",
+                      background: p.highlight ? "#0B5FFF" : "#EEF3FF",
+                      color: p.highlight ? "#fff" : "#0B5FFF",
+                      padding: "13px", borderRadius: 10,
+                      fontSize: 13.5, fontWeight: 700, textDecoration: "none",
+                    }}>{p.cta}</a>
                 )}
               </div>
             ))}
