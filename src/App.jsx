@@ -347,6 +347,141 @@ const SaveDealButton = ({ user, isStarter, onRequireAuth, toolType, inputs }) =>
   );
 };
 
+// Address auto-fill lookup — Starter-tier feature, capped at 3 lookups/month per user.
+// Calls /api/rent-estimate which proxies RentCast and enforces the monthly cap server-side.
+const AddressLookup = ({ user, isStarter, onRequireAuth, onRentFound }) => {
+  const [address, setAddress] = useState("");
+  const [status, setStatus] = useState("idle"); // idle | loading | error | limit | upgrade
+  const [errorMsg, setErrorMsg] = useState("");
+  const [lookupsRemaining, setLookupsRemaining] = useState(null);
+
+  const handleLookup = async () => {
+    if (!user) {
+      onRequireAuth();
+      return;
+    }
+    if (!isStarter) {
+      setStatus("upgrade");
+      return;
+    }
+    if (!address.trim()) return;
+
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/rent-estimate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ address: address.trim(), userId: user.id }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.error === "limit_reached") {
+          setStatus("limit");
+        } else {
+          setErrorMsg(data.message || "Couldn't find rent data for that address.");
+          setStatus("error");
+        }
+        return;
+      }
+
+      onRentFound(Math.round(data.rent));
+      setLookupsRemaining(data.lookupsRemaining);
+      setStatus("idle");
+      setAddress("");
+    } catch (err) {
+      console.error("Rent lookup failed:", err);
+      setErrorMsg("Something went wrong. Please try again.");
+      setStatus("error");
+    }
+  };
+
+  if (status === "upgrade") {
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10, background: "#FFF7E6",
+        border: "1px solid #FFE3A8", borderRadius: 10, padding: "10px 14px", marginBottom: 14,
+      }}>
+        <span style={{ fontSize: 12.5, color: "#8A6300", fontWeight: 600 }}>
+          Address auto-fill is a Starter feature.
+        </span>
+        <a
+          href="https://buy.stripe.com/00w28t3x0ffo7Gzfqx5J600"
+          style={{ fontSize: 12.5, fontWeight: 800, color: "#0B5FFF", textDecoration: "none", whiteSpace: "nowrap" }}
+        >
+          Upgrade for $19/mo →
+        </a>
+        <button
+          onClick={() => setStatus("idle")}
+          style={{ background: "none", border: "none", color: "#9BA8C0", fontSize: 12.5, cursor: "pointer" }}
+        >
+          ✕
+        </button>
+      </div>
+    );
+  }
+
+  if (status === "limit") {
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10, background: "#F0F4FF",
+        border: "1px solid #D6DFFF", borderRadius: 10, padding: "10px 14px", marginBottom: 14,
+      }}>
+        <span style={{ fontSize: 12.5, color: "#0D1B3E", fontWeight: 600 }}>
+          You've used your 3 free rent lookups this month. More coming soon.
+        </span>
+        <button
+          onClick={() => setStatus("idle")}
+          style={{ background: "none", border: "none", color: "#9BA8C0", fontSize: 12.5, cursor: "pointer" }}
+        >
+          ✕
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <input
+          type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="123 Main St, City, ST"
+          onKeyDown={(e) => e.key === "Enter" && handleLookup()}
+          style={{
+            flex: 1, minWidth: 180, padding: "10px 12px",
+            border: "1.5px solid #D6DFFF", borderRadius: 8, fontSize: 13,
+            outline: "none", boxSizing: "border-box",
+          }}
+        />
+        <button
+          onClick={handleLookup}
+          disabled={status === "loading" || !address.trim()}
+          style={{
+            background: "#0B5FFF", color: "#fff", border: "none", borderRadius: 8,
+            padding: "10px 16px", fontSize: 12.5, fontWeight: 700,
+            cursor: status === "loading" ? "default" : "pointer",
+            opacity: status === "loading" || !address.trim() ? 0.6 : 1, whiteSpace: "nowrap",
+          }}
+        >
+          {status === "loading" ? "Looking up..." : "Auto-Fill Rent"}
+        </button>
+      </div>
+      {status === "error" && (
+        <div style={{ fontSize: 12, color: "#D14343", marginTop: 6 }}>{errorMsg}</div>
+      )}
+      {lookupsRemaining !== null && status === "idle" && (
+        <div style={{ fontSize: 11, color: "#9BA8C0", marginTop: 6 }}>
+          {lookupsRemaining} lookup{lookupsRemaining === 1 ? "" : "s"} remaining this month
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function DealAnalyzer() {
   const [tab, setTab] = useState(getInitialTab);
   const { user, loading } = useAuth();
@@ -641,6 +776,12 @@ export default function DealAnalyzer() {
                 </div>
                 <Divider />
                 <SectionTitle>Income</SectionTitle>
+                <AddressLookup
+                  user={user}
+                  isStarter={isStarter}
+                  onRequireAuth={() => setShowAuthModal(true)}
+                  onRentFound={(rentValue) => setRent(rentValue)}
+                />
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   <Input label="Monthly Rent" prefix="$" value={rent} onChange={setRent} />
                   <Input label="Vacancy Rate %" prefix="%" value={vacancyPct} onChange={setVacancyPct} hint={`Effective rent: ${formatCurrency(effectiveRent)}/mo`} />
@@ -806,6 +947,12 @@ export default function DealAnalyzer() {
                 </div>
                 <Divider />
                 <SectionTitle>Monthly Income & Costs</SectionTitle>
+                <AddressLookup
+                  user={user}
+                  isStarter={isStarter}
+                  onRequireAuth={() => setShowAuthModal(true)}
+                  onRentFound={(rentValue) => setDscrRent(rentValue)}
+                />
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   <Input label="Monthly Gross Rent" prefix="$" value={dscrRent} onChange={setDscrRent} />
                   <Input label="Monthly Property Taxes" prefix="$" value={dscrTaxes} onChange={setDscrTaxes} />
