@@ -584,7 +584,7 @@ export default function Landing() {
               <span style={{ fontSize: 13, color: "#8FA8CC" }}>
                 {user ? "This is a Starter feature." : "Sign in and upgrade to Starter to use this."}
               </span>
-              <a href="/app" style={{
+              <a href={user ? STARTER_CHECKOUT_URL : "/app"} style={{
                 fontSize: 13, fontWeight: 800, color: "#4D8FFF", textDecoration: "underline",
               }}>
                 {user ? "Upgrade for $19/mo →" : "Sign In →"}
