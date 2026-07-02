@@ -91,6 +91,7 @@ const PRICING = [
     features: [
       "Everything in Basic",
       "Unlimited saved properties",
+      "3 rent lookups/month by address",
       "Priority email support",
     ],
     cta: "Get Starter — $19/mo",
@@ -166,6 +167,51 @@ export default function Landing() {
   const [showPHBanner, setShowPHBanner] = useState(true);
   const { user, loading } = useAuth();
   const { isStarter } = useSubscription(user);
+  const [lookupAddress, setLookupAddress] = useState("");
+  const [lookupStatus, setLookupStatus] = useState("idle"); // idle | loading | success | error | limit | upgrade
+  const [lookupResult, setLookupResult] = useState(null);
+  const [lookupErrorMsg, setLookupErrorMsg] = useState("");
+
+  const handleHomeRentLookup = async () => {
+    if (!user) {
+      setLookupStatus("upgrade");
+      return;
+    }
+    if (!isStarter) {
+      setLookupStatus("upgrade");
+      return;
+    }
+    if (!lookupAddress.trim()) return;
+
+    setLookupStatus("loading");
+    setLookupErrorMsg("");
+
+    try {
+      const res = await fetch("/api/rent-estimate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ address: lookupAddress.trim(), userId: user.id }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.error === "limit_reached") {
+          setLookupStatus("limit");
+        } else {
+          setLookupErrorMsg(data.message || "Couldn't find rent data for that address.");
+          setLookupStatus("error");
+        }
+        return;
+      }
+
+      setLookupResult(data);
+      setLookupStatus("success");
+    } catch (err) {
+      console.error("Home rent lookup failed:", err);
+      setLookupErrorMsg("Something went wrong. Please try again.");
+      setLookupStatus("error");
+    }
+  };
 
   useEffect(() => {
     setPageMeta(PAGE_META.home.title, PAGE_META.home.description);
@@ -451,6 +497,100 @@ export default function Landing() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* RENT LOOKUP */}
+      <section style={{ padding: "0 24px 80px", maxWidth: 720, margin: "0 auto" }}>
+        <div style={{
+          background: "#0D1B3E", borderRadius: 20, padding: "44px 36px",
+          textAlign: "center", position: "relative", overflow: "hidden",
+        }}>
+          <div style={{
+            display: "inline-block", fontSize: 11, fontWeight: 800,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+            color: "#4D8FFF", background: "rgba(11,95,255,0.15)",
+            padding: "4px 12px", borderRadius: 99, marginBottom: 18,
+          }}>Starter Feature</div>
+          <h2 style={{ fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 900, color: "#fff", letterSpacing: "-0.5px", margin: "0 0 12px" }}>
+            Just need a quick rent estimate?
+          </h2>
+          <p style={{ fontSize: 14.5, color: "#8FA8CC", maxWidth: 460, margin: "0 auto 28px", lineHeight: 1.6 }}>
+            Type any US address and get an instant rent estimate — no manual research required. Starter members get 3 lookups per month.
+          </p>
+
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", maxWidth: 460, margin: "0 auto" }}>
+            <input
+              type="text"
+              value={lookupAddress}
+              onChange={(e) => setLookupAddress(e.target.value)}
+              placeholder="123 Main St, City, ST"
+              onKeyDown={(e) => e.key === "Enter" && handleHomeRentLookup()}
+              style={{
+                flex: 1, minWidth: 200, padding: "12px 14px",
+                border: "1.5px solid #2A3F6E", borderRadius: 10, fontSize: 14,
+                outline: "none", boxSizing: "border-box", background: "#122349", color: "#fff",
+              }}
+            />
+            <button
+              onClick={handleHomeRentLookup}
+              disabled={lookupStatus === "loading" || !lookupAddress.trim()}
+              style={{
+                background: "#0B5FFF", color: "#fff", border: "none", borderRadius: 10,
+                padding: "12px 20px", fontSize: 14, fontWeight: 700,
+                cursor: lookupStatus === "loading" ? "default" : "pointer",
+                opacity: lookupStatus === "loading" || !lookupAddress.trim() ? 0.6 : 1, whiteSpace: "nowrap",
+              }}
+            >
+              {lookupStatus === "loading" ? "Looking up..." : "Get Rent Estimate →"}
+            </button>
+          </div>
+
+          {lookupStatus === "success" && lookupResult && (
+            <div style={{
+              marginTop: 20, background: "rgba(0,182,122,0.12)", border: "1px solid rgba(0,182,122,0.3)",
+              borderRadius: 12, padding: "16px 20px", maxWidth: 460, margin: "20px auto 0",
+            }}>
+              <div style={{ fontSize: 12, color: "#7EDCB8", fontWeight: 700, marginBottom: 4 }}>ESTIMATED MONTHLY RENT</div>
+              <div style={{ fontSize: 28, fontWeight: 900, color: "#fff", fontFamily: "'IBM Plex Mono', monospace" }}>
+                ${Math.round(lookupResult.rent).toLocaleString()}
+              </div>
+              {lookupResult.rentRangeLow && lookupResult.rentRangeHigh && (
+                <div style={{ fontSize: 12.5, color: "#8FA8CC", marginTop: 4 }}>
+                  Range: ${Math.round(lookupResult.rentRangeLow).toLocaleString()} – ${Math.round(lookupResult.rentRangeHigh).toLocaleString()}
+                </div>
+              )}
+              <div style={{ fontSize: 11.5, color: "#6B8AAA", marginTop: 8 }}>
+                {lookupResult.lookupsRemaining} lookup{lookupResult.lookupsRemaining === 1 ? "" : "s"} remaining this month
+              </div>
+            </div>
+          )}
+
+          {lookupStatus === "error" && (
+            <div style={{ marginTop: 14, fontSize: 13, color: "#FF9B9B" }}>{lookupErrorMsg}</div>
+          )}
+
+          {lookupStatus === "limit" && (
+            <div style={{ marginTop: 14, fontSize: 13, color: "#8FA8CC" }}>
+              You've used your 3 free rent lookups this month. More coming soon.
+            </div>
+          )}
+
+          {lookupStatus === "upgrade" && (
+            <div style={{
+              marginTop: 20, display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+              flexWrap: "wrap",
+            }}>
+              <span style={{ fontSize: 13, color: "#8FA8CC" }}>
+                {user ? "This is a Starter feature." : "Sign in and upgrade to Starter to use this."}
+              </span>
+              <a href="/app" style={{
+                fontSize: 13, fontWeight: 800, color: "#4D8FFF", textDecoration: "underline",
+              }}>
+                {user ? "Upgrade for $19/mo →" : "Sign In →"}
+              </a>
+            </div>
+          )}
         </div>
       </section>
 
