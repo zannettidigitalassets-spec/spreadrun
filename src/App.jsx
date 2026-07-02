@@ -128,14 +128,17 @@ const DownloadPdfButton = ({ user, isStarter, onRequireAuth, toolType, inputs, l
 
   const handleClick = async () => {
     if (!user) {
+      if (window.gtag) window.gtag('event', 'auth_modal_opened', { source: 'pdf_download' });
       onRequireAuth();
       return;
     }
     if (!isStarter) {
+      if (window.gtag) window.gtag('event', 'upgrade_prompt_shown', { source: 'pdf_download', tool_type: toolType });
       setShowUpgrade(true);
       return;
     }
     setGenerating(true);
+    if (window.gtag) window.gtag('event', 'pdf_download_click', { tool_type: toolType });
     try {
       await generateDealReportPdf(toolType, inputs, label);
     } catch (err) {
@@ -195,10 +198,12 @@ const SaveDealButton = ({ user, isStarter, onRequireAuth, toolType, inputs }) =>
 
   const handleClick = () => {
     if (!user) {
+      if (window.gtag) window.gtag('event', 'auth_modal_opened', { source: 'save_deal' });
       onRequireAuth();
       return;
     }
     if (!isStarter) {
+      if (window.gtag) window.gtag('event', 'upgrade_prompt_shown', { source: 'save_deal', tool_type: toolType });
       setStatus("upgrade");
       return;
     }
@@ -229,6 +234,7 @@ const SaveDealButton = ({ user, isStarter, onRequireAuth, toolType, inputs }) =>
       console.error("Save failed:", error.message, error);
       setStatus("error");
     } else {
+      if (window.gtag) window.gtag('event', 'save_deal_click', { tool_type: toolType });
       setStatus("saved");
       setShowLabelPrompt(false);
       setLabel("");
@@ -357,10 +363,12 @@ const AddressLookup = ({ user, isStarter, onRequireAuth, onRentFound }) => {
 
   const handleLookup = async () => {
     if (!user) {
+      if (window.gtag) window.gtag('event', 'auth_modal_opened', { source: 'rent_lookup' });
       onRequireAuth();
       return;
     }
     if (!isStarter) {
+      if (window.gtag) window.gtag('event', 'upgrade_prompt_shown', { source: 'rent_lookup' });
       setStatus("upgrade");
       return;
     }
@@ -368,6 +376,7 @@ const AddressLookup = ({ user, isStarter, onRequireAuth, onRentFound }) => {
 
     setStatus("loading");
     setErrorMsg("");
+    if (window.gtag) window.gtag('event', 'rent_lookup_click');
 
     try {
       const res = await fetch("/api/rent-estimate", {
@@ -379,6 +388,7 @@ const AddressLookup = ({ user, isStarter, onRequireAuth, onRentFound }) => {
 
       if (!res.ok) {
         if (data.error === "limit_reached") {
+          if (window.gtag) window.gtag('event', 'rent_lookup_limit_reached');
           setStatus("limit");
         } else {
           setErrorMsg(data.message || "Couldn't find rent data for that address.");
@@ -387,6 +397,7 @@ const AddressLookup = ({ user, isStarter, onRequireAuth, onRentFound }) => {
         return;
       }
 
+      if (window.gtag) window.gtag('event', 'rent_lookup_success');
       onRentFound(Math.round(data.rent));
       setLookupsRemaining(data.lookupsRemaining);
       setStatus("idle");
@@ -682,11 +693,14 @@ export default function DealAnalyzer() {
           )}
           {/* Upgrade button — only show to signed-out visitors to keep header uncluttered on mobile */}
           {!user && !isStarter && (
-            <a href="https://buy.stripe.com/eVq8wR6JcaZ8aSLguB5J601" style={{
-              background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700,
-              padding: "8px 16px", borderRadius: 8, letterSpacing: "0.04em",
-              textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0,
-            }}>
+            <a
+              href="https://buy.stripe.com/eVq8wR6JcaZ8aSLguB5J601"
+              onClick={() => { if (window.gtag) window.gtag('event', 'upgrade_click', { source: 'header', tier: 'basic' }); }}
+              style={{
+                background: "#0B5FFF", color: "#fff", fontSize: 12, fontWeight: 700,
+                padding: "8px 16px", borderRadius: 8, letterSpacing: "0.04em",
+                textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0,
+              }}>
               Upgrade →
             </a>
           )}
@@ -731,9 +745,9 @@ export default function DealAnalyzer() {
       <div style={{ background: "#fff", borderBottom: "1px solid #EBF0FF" }}>
         <div className="sr-tabbar-outer" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 20px", gap: 8 }}>
           <div className="sr-tabbar-tabs" style={{ display: "flex", gap: 4, minWidth: 0 }}>
-            <Tab label="Rental Analyzer" shortLabel="Rental" active={tab === "rental"} onClick={() => setTab("rental")} />
-            <Tab label="Fix & Flip" shortLabel="Fix & Flip" active={tab === "flip"} onClick={() => setTab("flip")} />
-            <Tab label="DSCR Qualifier" shortLabel="DSCR" active={tab === "dscr"} onClick={() => setTab("dscr")} />
+            <Tab label="Rental Analyzer" shortLabel="Rental" active={tab === "rental"} onClick={() => { setTab("rental"); if (window.gtag) window.gtag('event', 'calculator_tab_switch', { tool_type: 'rental' }); }} />
+            <Tab label="Fix & Flip" shortLabel="Fix & Flip" active={tab === "flip"} onClick={() => { setTab("flip"); if (window.gtag) window.gtag('event', 'calculator_tab_switch', { tool_type: 'flip' }); }} />
+            <Tab label="DSCR Qualifier" shortLabel="DSCR" active={tab === "dscr"} onClick={() => { setTab("dscr"); if (window.gtag) window.gtag('event', 'calculator_tab_switch', { tool_type: 'dscr' }); }} />
           </div>
           <div className="sr-tabbar-actions" style={{ display: "flex", gap: 8, flexShrink: 0 }}>
             <DownloadPdfButton
@@ -1019,6 +1033,7 @@ export default function DealAnalyzer() {
                       href="https://www.offermarket.us/loans?ref=6fbr51lipme"
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => { if (window.gtag) window.gtag('event', 'offermarket_click', { dscr_ratio: dscrRatio.toFixed(2) }); }}
                       style={{
                         background: "#0B5FFF", color: "#fff", fontSize: 12.5, fontWeight: 700,
                         padding: "9px 16px", borderRadius: 8, textDecoration: "none",
