@@ -106,8 +106,8 @@ const PRICING = [
     desc: "For investors building a portfolio.",
     features: [
       "Everything in Starter",
+      "Unlimited rent lookups",
       "Portfolio tracker & dashboard",
-      "Live market rent estimates",
       "Upload OM/pro-forma — auto-fills calculators",
       "Amortization & equity tracker",
       "AI deal analyzer",
@@ -126,9 +126,9 @@ const COMING_SOON = [
     desc: "Track every property you own in one dashboard — equity, cash flow, and performance over time.",
   },
   {
-    name: "Market Rent Estimator",
+    name: "Unlimited Rent Lookups",
     tier: "Pro",
-    desc: "Pull live comparable rent data for any address before you even make an offer.",
+    desc: "Starter includes 3 rent lookups per month. Pro removes the cap entirely for high-volume searching.",
   },
   {
     name: "OM / Pro-Forma Upload",
