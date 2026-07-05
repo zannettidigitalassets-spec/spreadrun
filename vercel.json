@@ -1,5 +1,13 @@
 {
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "spreadrun.com" }],
+      "destination": "https://www.spreadrun.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/:path*", "destination": "/index.html" }
