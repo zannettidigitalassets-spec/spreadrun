@@ -663,6 +663,12 @@ export default function DealAnalyzer() {
         }
       `}</style>
       {/* Header */}
+      <h1 style={{
+        position: "absolute", width: 1, height: 1, padding: 0, margin: -1,
+        overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0,
+      }}>
+        Free Real Estate Deal Analyzer — Rental, Fix & Flip, and DSCR Calculator
+      </h1>
       <div className="sr-header" style={{ background: "#0D1B3E", padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
