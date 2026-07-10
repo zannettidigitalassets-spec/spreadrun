@@ -37,6 +37,13 @@ const ARTICLES = [
     tag: "Getting Started",
     live: true,
   },
+  {
+    title: "Cleveland Rental Property Investing: A Real Numbers Guide",
+    desc: "Why Cleveland ranks as a top cash-flow market, real rent-to-price ratios, and why neighborhood selection matters more here than almost anywhere else.",
+    href: "/guides/cleveland-rental-property-investing",
+    tag: "Market Guide",
+    live: true,
+  },
 ];
 
 export default function Guides() {
