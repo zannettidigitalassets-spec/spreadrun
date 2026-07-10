@@ -10,6 +10,7 @@ import CashFlowGuide from './CashFlowGuide.jsx'
 import SeventyPercentGuide from './SeventyPercentGuide.jsx'
 import CapRateGuide from './CapRateGuide.jsx'
 import HowToAnalyzeGuide from './HowToAnalyzeGuide.jsx'
+import ClevelandGuide from './ClevelandGuide.jsx'
 import MyDeals from './MyDeals.jsx'
 import Contact from './Contact.jsx'
 import DscrCalculator from './DscrCalculator.jsx'
@@ -27,6 +28,7 @@ const KNOWN_PATHS = [
   '/guides', '/guides/dscr-loan-calculator', '/guides/rental-cash-flow-calculator',
   '/guides/70-percent-rule-house-flipping', '/guides/good-cap-rate-rental-property',
   '/guides/how-to-analyze-rental-property',
+  '/guides/cleveland-rental-property-investing',
 ];
 
 const isKnownPath = () => {
@@ -51,6 +53,7 @@ const getPage = () => {
   if (path.startsWith('/guides/70-percent-rule-house-flipping')) return <SeventyPercentGuide />;
   if (path.startsWith('/guides/good-cap-rate-rental-property')) return <CapRateGuide />;
   if (path.startsWith('/guides/how-to-analyze-rental-property')) return <HowToAnalyzeGuide />;
+  if (path.startsWith('/guides/cleveland-rental-property-investing')) return <ClevelandGuide />;
   return <Landing />;
 };
 
