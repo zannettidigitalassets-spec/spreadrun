@@ -41,7 +41,7 @@ export default function IndianapolisGuide() {
   useEffect(() => {
     setPageMeta(
       "Indianapolis Rental Property Investing: DSCR Loans & Cash Flow Guide | SpreadRun",
-      "A real numbers breakdown of investing in Indianapolis rental properties — rent-to-price ratios, DSCR loan qualification, and why it's rated the #1 most buyer-friendly market.",
+      "A real numbers breakdown of investing in Indianapolis rental properties: rent-to-price ratios, DSCR loan qualification, and why it's rated the #1 most buyer-friendly market.",
       "/guides/indianapolis-rental-property-investing"
     );
   }, []);
@@ -57,7 +57,7 @@ export default function IndianapolisGuide() {
           { "@type": "Question", "name": "What is the average rent in Indianapolis?", "acceptedAnswer": { "@type": "Answer", "text": "Average rents in the Indianapolis metro are around $1,490-2,350 depending on property type and neighborhood, with turnkey single-family rentals often renting 10-15% above the national average relative to purchase price." } },
           { "@type": "Question", "name": "Can I get a DSCR loan for an Indianapolis rental property?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Indianapolis's rent-to-price ratios make it a strong fit for DSCR loans, which qualify based on the property's rental income rather than personal income. Most lenders want to see a DSCR of at least 1.25 at purchase for the best rate tiers." } },
           { "@type": "Question", "name": "Which Indianapolis neighborhoods are best for rental investing?", "acceptedAnswer": { "@type": "Answer", "text": "Class B single-family homes and small multifamily properties near revitalizing areas like Broad Ripple, Fountain Square, and downtown Indianapolis tend to perform well for cash flow investors. Outlying cities like Muncie, Anderson, and Elwood also offer turnkey opportunities below the metro median price." } },
-          { "@type": "Question", "name": "How does Indianapolis compare to other Midwest cash-flow markets?", "acceptedAnswer": { "@type": "Answer", "text": "Indianapolis offers a slightly more balanced profile than pure cash-flow markets like Cleveland — combining solid rental yields with more consistent appreciation, thanks to stronger population growth and a more diversified regional economy." } },
+          { "@type": "Question", "name": "How does Indianapolis compare to other Midwest cash-flow markets?", "acceptedAnswer": { "@type": "Answer", "text": "Indianapolis offers a slightly more balanced profile than pure cash-flow markets like Cleveland, combining solid rental yields with more consistent appreciation, thanks to stronger population growth and a more diversified regional economy." } },
         ],
       }) }} />
       <style>{`
@@ -159,10 +159,10 @@ export default function IndianapolisGuide() {
 
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px 100px" }}>
 
-        <P>Indianapolis shows up near the top of nearly every "best markets for investors" list for 2026 — and unlike some Midwest cities that win purely on cash flow, Indianapolis earns its reputation with a more balanced mix: solid yields, real population growth, and a diversified economy that holds up across economic cycles.</P>
+        <P>Indianapolis shows up near the top of nearly every "best markets for investors" list for 2026. Unlike some Midwest cities that win purely on cash flow, Indianapolis earns its reputation with a more balanced mix: solid yields, real population growth, and a diversified economy that holds up across economic cycles.</P>
 
         <SectionTitle>Why Indianapolis Keeps Ranking #1</SectionTitle>
-        <P>The city has earned the title of most buyer-friendly market in national rankings — meaning investors can get in at reasonable prices relative to rents, without the bidding-war dynamics of hotter Sun Belt metros. The economy spans healthcare, logistics, manufacturing, and state government, which means Indianapolis isn't dependent on a single industry the way some smaller Midwest markets are.</P>
+        <P>The city has earned the title of most buyer-friendly market in national rankings, meaning investors can get in at reasonable prices relative to rents, without the bidding-war dynamics of hotter Sun Belt metros. The economy spans healthcare, logistics, manufacturing, and state government, which means Indianapolis isn't dependent on a single industry the way some smaller Midwest markets are.</P>
         <Table rows={[
           ["Metric", "Approximate Value"],
           ["Median single-family sale price (2025)", "$284,099"],
@@ -171,20 +171,20 @@ export default function IndianapolisGuide() {
           ["Average rent", "$1,492"],
           ["10-year rent growth", "45.79%"],
         ]} />
-        <P>That combination — meaningful appreciation alongside steady rent growth — is what separates Indianapolis from pure cash-flow markets. You're not just collecting rent and waiting; the underlying asset is also building real equity at a healthy clip.</P>
+        <P>That combination, meaningful appreciation alongside steady rent growth, is what separates Indianapolis from pure cash-flow markets. You're not just collecting rent and waiting; the underlying asset is also building real equity at a healthy clip.</P>
 
         <SectionTitle>Turnkey Opportunities Beyond the Core Metro</SectionTitle>
-        <P>Investors looking for even lower entry points often look to outlying cities in the Indianapolis metro area — places like Muncie, Anderson, Elwood, and Rockport. Turnkey providers in this network typically price single-family and duplex properties around $329,500 on average, roughly 8% below the national average, with rents around $2,350 — about 15% above the national average relative to price.</P>
+        <P>Investors looking for even lower entry points often look to outlying cities in the Indianapolis metro area, places like Muncie, Anderson, Elwood, and Rockport. Turnkey providers in this network typically price single-family and duplex properties around $329,500 on average, roughly 8% below the national average, with rents around $2,350, about 15% above the national average relative to price.</P>
         <Callout>
           <strong>Why this matters:</strong> a lower purchase price with above-average rent is exactly the combination that produces a strong rent-to-price ratio, which is the single best predictor of whether a deal will actually cash flow once real expenses are factored in.
         </Callout>
 
         <SectionTitle>Best Neighborhoods for Cash Flow</SectionTitle>
         <P>Within the core city, Class B single-family homes and small multifamily properties (2-4 units) near revitalizing areas tend to perform best for investors. Neighborhoods like Broad Ripple, Fountain Square, and downtown Indianapolis attract young renters and professionals, supporting both occupancy and rent growth.</P>
-        <P>Unlike some Midwest markets where block-by-block variation is extreme, Indianapolis's more diversified economic base means the gap between B-class and C-class neighborhoods tends to be less dramatic — though due diligence on specific submarkets is still worthwhile before committing capital.</P>
+        <P>Unlike some Midwest markets where block-by-block variation is extreme, Indianapolis's more diversified economic base means the gap between B-class and C-class neighborhoods tends to be less dramatic, though due diligence on specific submarkets is still worthwhile before committing capital.</P>
 
         <SectionTitle>Financing an Indianapolis Rental With a DSCR Loan</SectionTitle>
-        <P>Indianapolis's rent-to-price profile makes it a strong candidate for DSCR financing — loans that qualify based on the property's rental income rather than your personal income or tax returns. This is especially useful for out-of-state investors or anyone scaling past the conventional lending limits tied to personal debt-to-income ratios.</P>
+        <P>Indianapolis's rent-to-price profile makes it a strong candidate for DSCR financing, loans that qualify based on the property's rental income rather than your personal income or tax returns. This is especially useful for out-of-state investors or anyone scaling past the conventional lending limits tied to personal debt-to-income ratios.</P>
         <P>Here's what a representative Indianapolis deal might look like:</P>
         <Table rows={[
           ["Input", "Example Value"],
@@ -194,14 +194,14 @@ export default function IndianapolisGuide() {
           ["Est. monthly PITI", "$1,520"],
           ["DSCR", "1.25"],
         ]} />
-        <P>That 1.25 ratio sits right at the strong-qualifying threshold most DSCR lenders target for their best rate tiers — a healthy starting point before accounting for vacancy or unexpected repairs.</P>
+        <P>That 1.25 ratio sits right at the strong-qualifying threshold most DSCR lenders target for their best rate tiers, a healthy starting point before accounting for vacancy or unexpected repairs.</P>
 
         <SectionTitle>Indianapolis vs. Pure Cash-Flow Markets</SectionTitle>
-        <P>If you're comparing Indianapolis to a market like Cleveland, the tradeoff is straightforward: Cleveland typically offers a slightly higher immediate yield, while Indianapolis offers steadier long-term appreciation alongside solid (if not quite as extreme) cash flow. Neither approach is objectively better — it depends on whether you're prioritizing monthly income today or total return including equity growth over a longer hold.</P>
-        <P>Many investors build portfolios that include both types of markets specifically for this reason — pairing pure cash-flow cities with more balanced growth markets like Indianapolis.</P>
+        <P>If you're comparing Indianapolis to a market like Cleveland, the tradeoff is straightforward: Cleveland typically offers a slightly higher immediate yield, while Indianapolis offers steadier long-term appreciation alongside solid (if not quite as extreme) cash flow. Neither approach is objectively better, it depends on whether you're prioritizing monthly income today or total return including equity growth over a longer hold.</P>
+        <P>Many investors build portfolios that include both types of markets specifically for this reason, pairing pure cash-flow cities with more balanced growth markets like Indianapolis.</P>
 
         <SectionTitle>Run the Numbers on Your Indianapolis Deal</SectionTitle>
-        <P>Whether you're looking at a turnkey property in the outlying metro or a Class B home near downtown, the same core numbers determine whether a deal works — rent, financing terms, and DSCR. SpreadRun's calculators let you plug in your actual numbers and see cash flow, cap rate, and DSCR instantly.</P>
+        <P>Whether you're looking at a turnkey property in the outlying metro or a Class B home near downtown, the same core numbers determine whether a deal works: rent, financing terms, and DSCR. SpreadRun's calculators let you plug in your actual numbers and see cash flow, cap rate, and DSCR instantly.</P>
 
         <div style={{ textAlign: "center", margin: "36px 0" }}>
           <a href="/app#dscr" style={{
@@ -214,7 +214,7 @@ export default function IndianapolisGuide() {
         </div>
 
         <div style={{ marginTop: 50, paddingTop: 24, borderTop: "1px solid #EBF0FF", fontSize: 13, color: "#9BA8C0" }}>
-          This article is for informational purposes only and is not financial or investment advice. Market conditions, rents, and lending terms change — verify current figures with local property managers and lenders before making an investment decision.
+          This article is for informational purposes only and is not financial or investment advice. Market conditions, rents, and lending terms change, verify current figures with local property managers and lenders before making an investment decision.
         </div>
 
         <div style={{ marginTop: 32 }}>
@@ -223,7 +223,7 @@ export default function IndianapolisGuide() {
             padding: "24px 28px", marginBottom: 32, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 12, lineHeight: 1.6 }}>
-              Put these numbers to work — try our free rental and DSCR calculators, no account required.
+              Put these numbers to work. Try our free rental and DSCR calculators, no account required.
             </div>
             <a href="/dscr-calculator" style={{
               display: "inline-block", background: "#0B5FFF", color: "#fff",
