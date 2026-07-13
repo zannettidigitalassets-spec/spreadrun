@@ -27,7 +27,7 @@ const FEATURES = [
   {
     tag: "Fix & Flip",
     headline: "Run the numbers on any flip in seconds.",
-    body: "Purchase price, rehab costs, ARV, holding costs — see your profit, ROI, and whether the deal passes the 70% rule instantly.",
+    body: "Purchase price, rehab costs, ARV, holding costs, see your profit, ROI, and whether the deal passes the 70% rule instantly.",
     href: "/app#flip",
     stats: [
       { label: "Net Profit", val: "$42,800" },
@@ -108,7 +108,7 @@ const PRICING = [
       "Everything in Starter",
       "Unlimited rent lookups",
       "Portfolio tracker & dashboard",
-      "Upload OM/pro-forma — auto-fills calculators",
+      "Upload OM/pro-forma, auto-fills calculators",
       "Amortization & equity tracker",
       "AI deal analyzer",
     ],
@@ -123,7 +123,7 @@ const COMING_SOON = [
   {
     name: "Portfolio Tracker",
     tier: "Pro",
-    desc: "Track every property you own in one dashboard — equity, cash flow, and performance over time.",
+    desc: "Track every property you own in one dashboard: equity, cash flow, and performance over time.",
   },
   {
     name: "Unlimited Rent Lookups",
@@ -133,7 +133,7 @@ const COMING_SOON = [
   {
     name: "OM / Pro-Forma Upload",
     tier: "Pro",
-    desc: "Drop in a PDF offering memorandum or spreadsheet — we extract the numbers and fill the calculator for you.",
+    desc: "Drop in a PDF offering memorandum or spreadsheet, we extract the numbers and fill the calculator for you.",
   },
   {
     name: "Amortization & Equity Tracker",
@@ -157,7 +157,7 @@ const FAQS = [
   },
   {
     q: "Can I use this on mobile?",
-    a: "Yes — SpreadRun works on any device. Analyze deals from the road, at a showing, or anywhere else.",
+    a: "Yes, SpreadRun works on any device. Analyze deals from the road, at a showing, or anywhere else.",
   },
 ];
 
@@ -422,7 +422,7 @@ export default function Landing() {
             fontSize: "clamp(16px, 2vw, 19px)", color: "#8FA8CC",
             maxWidth: 520, margin: "0 auto 40px", lineHeight: 1.6, fontWeight: 400,
           }}>
-            Rental analyzer, fix & flip calculator, and DSCR qualifier — all in one tool. No spreadsheets. No guesswork.
+            Rental analyzer, fix & flip calculator, and DSCR qualifier, all in one tool. No spreadsheets. No guesswork.
           </p>
 
           {/* CTA — personalized based on login/subscription state */}
@@ -521,7 +521,7 @@ export default function Landing() {
             Just need a quick rent estimate?
           </h2>
           <p style={{ fontSize: 14.5, color: "#8FA8CC", maxWidth: 460, margin: "0 auto 28px", lineHeight: 1.6 }}>
-            Type any US address and get an instant rent estimate — no manual research required. Starter members get 3 lookups per month.
+            Type any US address and get an instant rent estimate, no manual research required. Starter members get 3 lookups per month.
           </p>
 
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", maxWidth: 460, margin: "0 auto" }}>
