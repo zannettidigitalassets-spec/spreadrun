@@ -44,6 +44,20 @@ const ARTICLES = [
     tag: "Market Guide",
     live: true,
   },
+  {
+    title: "Indianapolis Rental Property Investing: A Real Numbers Guide",
+    desc: "Why Indianapolis is rated the most buyer-friendly market in the country, and how it compares to pure cash-flow plays like Cleveland.",
+    href: "/guides/indianapolis-rental-property-investing",
+    tag: "Market Guide",
+    live: true,
+  },
+  {
+    title: "Columbus Rental Property Investing: A Real Numbers Guide",
+    desc: "Why Columbus combines strong cash flow with genuine population growth, and how Intel's semiconductor investment is reshaping the region.",
+    href: "/guides/columbus-rental-property-investing",
+    tag: "Market Guide",
+    live: true,
+  },
 ];
 
 export default function Guides() {
