@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { setPageMeta, PAGE_META } from "./seo.js";
 
-const ARTICLES = [
+const EDUCATIONAL_GUIDES = [
   {
     title: "DSCR Loan Calculator: How It Works and What Counts as a Good Ratio",
     desc: "A plain-English breakdown of the DSCR formula, what lenders require, and how to know if a property qualifies before you make an offer.",
@@ -37,6 +37,9 @@ const ARTICLES = [
     tag: "Getting Started",
     live: true,
   },
+];
+
+const MARKET_GUIDES = [
   {
     title: "Cleveland Rental Property Investing: A Real Numbers Guide",
     desc: "Why Cleveland ranks as a top cash-flow market, real rent-to-price ratios, and why neighborhood selection matters more here than almost anywhere else.",
@@ -174,9 +177,10 @@ export default function Guides() {
         </p>
       </section>
 
-      <div style={{ maxWidth: 760, margin: "0 auto", padding: "56px 24px 100px" }}>
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "56px 24px 0" }}>
+        <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", color: "#0B5FFF", textTransform: "uppercase", marginBottom: 14 }}>How-To Guides</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {ARTICLES.map(a => (
+          {EDUCATIONAL_GUIDES.map(a => (
             <a key={a.href} href={a.live ? a.href : undefined} style={{
               display: "block", textDecoration: "none",
               border: "1.5px solid #EBF0FF", borderRadius: 14,
@@ -202,6 +206,42 @@ export default function Guides() {
               )}
             </a>
           ))}
+        </div>
+
+        {/* Market Guides Section */}
+        <div style={{ marginTop: 56, paddingTop: 48, borderTop: "1px solid #EBF0FF" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", color: "#0B5FFF", textTransform: "uppercase", marginBottom: 14 }}>Market Guides</div>
+          <p style={{ fontSize: 14, color: "#6B7A99", margin: "0 0 24px", lineHeight: 1.6 }}>
+            Real numbers on specific rental markets, rent-to-price ratios, DSCR financing fit, and what to watch before you buy.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {MARKET_GUIDES.map(a => (
+              <a key={a.href} href={a.live ? a.href : undefined} style={{
+                display: "block", textDecoration: "none",
+                border: "1.5px solid #EBF0FF", borderRadius: 14,
+                padding: "26px 28px",
+                opacity: a.live ? 1 : 0.55,
+                cursor: a.live ? "pointer" : "default",
+                transition: "border-color 0.15s",
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 10 }}>
+                  <h2 style={{ fontSize: 18, fontWeight: 800, color: "#0D1B3E", margin: 0, letterSpacing: "-0.2px", lineHeight: 1.3 }}>{a.title}</h2>
+                  <span style={{
+                    fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase",
+                    color: "#00866B", background: "#E6F7F2",
+                    padding: "3px 10px", borderRadius: 99, whiteSpace: "nowrap", flexShrink: 0,
+                  }}>{a.tag}</span>
+                </div>
+                <p style={{ fontSize: 14, color: "#6B7A99", lineHeight: 1.6, margin: 0 }}>{a.desc}</p>
+                {!a.live && (
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#9BA8C0", marginTop: 12 }}>Coming soon</div>
+                )}
+                {a.live && (
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#00866B", marginTop: 12 }}>Read guide →</div>
+                )}
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Free Calculator Tools Section */}
