@@ -41,7 +41,7 @@ export default function ColumbusGuide() {
   useEffect(() => {
     setPageMeta(
       "Columbus Rental Property Investing: DSCR Loans & Cash Flow Guide | SpreadRun",
-      "A real numbers breakdown of investing in Columbus, Ohio rental properties — rent-to-price ratios, DSCR loan qualification, and why population growth sets it apart.",
+      "A real numbers breakdown of investing in Columbus, Ohio rental properties: rent-to-price ratios, DSCR loan qualification, and why population growth sets it apart.",
       "/guides/columbus-rental-property-investing"
     );
   }, []);
@@ -174,12 +174,12 @@ export default function ColumbusGuide() {
         <SectionTitle>Why Columbus Is Different: The Intel Effect</SectionTitle>
         <P>What sets Columbus apart from most Midwest cash-flow markets is a single, massive catalyst: Intel's semiconductor manufacturing investment in nearby New Albany. This is one of the largest single private investments in Ohio history, and it's projected to bring tens of thousands of direct and indirect jobs to the region over the next decade as the fabs ramp up production and the surrounding supply chain builds out.</P>
         <Callout>
-          <strong>Why this matters for investors:</strong> most Midwest cash-flow markets are stable but not growing dramatically. Columbus has both — strong current yields plus a real, identifiable growth catalyst that's already visibly reshaping demand in the New Albany and Licking County corridor.
+          <strong>Why this matters for investors:</strong> most Midwest cash-flow markets are stable but not growing dramatically. Columbus has both: strong current yields plus a real, identifiable growth catalyst that's already visibly reshaping demand in the New Albany and Licking County corridor.
         </Callout>
         <P>This kind of catalyst-driven growth is rare in Midwest secondary markets, and it's part of why Columbus increasingly shows up alongside faster-growing Sun Belt metros in national investor rankings, despite having a fundamentally different (and more affordable) cost basis.</P>
 
         <SectionTitle>Best Areas for Rental Investing</SectionTitle>
-        <P>Neighborhoods near Ohio State University support consistently strong rental demand from students and young professionals — a stable, renewable tenant pool that many college markets envy. For investors looking at the Intel growth story specifically, the New Albany and broader Licking County corridor is drawing early investor interest, though it's worth noting this is still an emerging thesis rather than a proven track record the way OSU-adjacent rentals are.</P>
+        <P>Neighborhoods near Ohio State University support consistently strong rental demand from students and young professionals, a stable, renewable tenant pool that many college markets envy. For investors looking at the Intel growth story specifically, the New Albany and broader Licking County corridor is drawing early investor interest, though it's worth noting this is still an emerging thesis rather than a proven track record the way OSU-adjacent rentals are.</P>
         <P>More established, lower-risk cash flow tends to concentrate in solid working-class and middle-income neighborhoods throughout the broader metro, similar in character to Indianapolis's Class B areas.</P>
 
         <SectionTitle>Financing a Columbus Rental With a DSCR Loan</SectionTitle>
@@ -195,9 +195,9 @@ export default function ColumbusGuide() {
         <P>A 1.25 DSCR here sits at the strong-qualifying threshold most lenders target for their best rate tiers, giving reasonable cushion for vacancy and unexpected repairs.</P>
 
         <SectionTitle>What to Watch Before You Buy</SectionTitle>
-        <P><strong>Distinguish between the established base and the growth story.</strong> OSU-adjacent rentals and established metro neighborhoods have a long, proven track record. The Intel-driven growth corridor is real but newer — treat it as a genuine upside catalyst, not a guaranteed near-term windfall.</P>
+        <P><strong>Distinguish between the established base and the growth story.</strong> OSU-adjacent rentals and established metro neighborhoods have a long, proven track record. The Intel-driven growth corridor is real but newer, treat it as a genuine upside catalyst, not a guaranteed near-term windfall.</P>
         <P><strong>Verify rent estimates against actual local comps</strong>, not metro-wide averages, since Columbus spans a wide range of submarkets with meaningfully different rent profiles.</P>
-        <P><strong>Budget realistically for maintenance</strong> on older housing stock in established neighborhoods, similar to other Midwest markets — 8-10% of rent is a reasonable conservative baseline.</P>
+        <P><strong>Budget realistically for maintenance</strong> on older housing stock in established neighborhoods, similar to other Midwest markets. 8-10% of rent is a reasonable conservative baseline.</P>
 
         <SectionTitle>Run the Numbers on Your Columbus Deal</SectionTitle>
         <P>Whether you're looking at an established rental near OSU or an early-stage opportunity in the Intel growth corridor, the same core numbers determine whether a deal works. SpreadRun's calculators let you plug in your actual purchase price, financing terms, and rent estimate to see cash flow, cap rate, and DSCR instantly.</P>
@@ -213,7 +213,7 @@ export default function ColumbusGuide() {
         </div>
 
         <div style={{ marginTop: 50, paddingTop: 24, borderTop: "1px solid #EBF0FF", fontSize: 13, color: "#9BA8C0" }}>
-          This article is for informational purposes only and is not financial or investment advice. Market conditions, rents, and lending terms change — verify current figures with local property managers and lenders before making an investment decision.
+          This article is for informational purposes only and is not financial or investment advice. Market conditions, rents, and lending terms change, verify current figures with local property managers and lenders before making an investment decision.
         </div>
 
         <div style={{ marginTop: 32 }}>
@@ -222,7 +222,7 @@ export default function ColumbusGuide() {
             padding: "24px 28px", marginBottom: 32, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 12, lineHeight: 1.6 }}>
-              Put these numbers to work — try our free rental and DSCR calculators, no account required.
+              Put these numbers to work. Try our free rental and DSCR calculators, no account required.
             </div>
             <a href="/dscr-calculator" style={{
               display: "inline-block", background: "#0B5FFF", color: "#fff",
