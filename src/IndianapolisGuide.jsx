@@ -213,6 +213,26 @@ export default function IndianapolisGuide() {
           </a>
         </div>
 
+        <SectionTitle>Other Midwest Markets Worth Comparing</SectionTitle>
+        <P>Indianapolis's balanced profile is a great starting point, but it's worth seeing how it stacks up against neighboring markets:</P>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+          <a href="/guides/cleveland-rental-property-investing" style={{
+            display: "block", border: "1.5px solid #EBF0FF", borderRadius: 12,
+            padding: "16px 20px", textDecoration: "none",
+          }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#0D1B3E", marginBottom: 4 }}>Cleveland Rental Property Investing →</div>
+            <div style={{ fontSize: 13, color: "#6B7A99" }}>Higher immediate yield than Indianapolis, but with more neighborhood-by-neighborhood risk.</div>
+          </a>
+          <a href="/guides/columbus-rental-property-investing" style={{
+            display: "block", border: "1.5px solid #EBF0FF", borderRadius: 12,
+            padding: "16px 20px", textDecoration: "none",
+          }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#0D1B3E", marginBottom: 4 }}>Columbus Rental Property Investing →</div>
+            <div style={{ fontSize: 13, color: "#6B7A99" }}>A similar blend of solid cash flow and real growth, driven by Intel's semiconductor investment.</div>
+          </a>
+        </div>
+        <P>New to DSCR entirely? Our <a href="/guides/dscr-loan-calculator" style={{ color: "#0B5FFF", fontWeight: 700, textDecoration: "none" }}>DSCR loan guide</a> breaks down the formula and what lenders require before you run the numbers on a specific market.</P>
+
         <div style={{ marginTop: 50, paddingTop: 24, borderTop: "1px solid #EBF0FF", fontSize: 13, color: "#9BA8C0" }}>
           This article is for informational purposes only and is not financial or investment advice. Market conditions, rents, and lending terms change, verify current figures with local property managers and lenders before making an investment decision.
         </div>
