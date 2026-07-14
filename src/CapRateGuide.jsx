@@ -142,10 +142,10 @@ export default function CapRateGuide() {
         <SectionTitle>What Is Cap Rate?</SectionTitle>
         <P>Cap rate, short for capitalization rate, measures a property's annual return based purely on its income, completely independent of how it's financed. It answers the question: if I bought this property in all cash, what percentage return would the income alone generate?</P>
         <Callout><strong>Cap Rate = (Net Operating Income ÷ Property Value) × 100</strong></Callout>
-        <P>Net Operating Income (NOI) is the property's annual income after operating expenses, but before mortgage payments. That's the key distinction that trips people up — cap rate deliberately excludes financing costs, which is what makes it useful for comparing properties on an apples-to-apples basis regardless of how each buyer plans to finance the deal.</P>
+        <P>Net Operating Income (NOI) is the property's annual income after operating expenses, but before mortgage payments. That's the key distinction that trips people up, cap rate deliberately excludes financing costs, which is what makes it useful for comparing properties on an apples-to-apples basis regardless of how each buyer plans to finance the deal.</P>
 
         <SectionTitle>A Worked Example</SectionTitle>
-        <P>Take a property valued at $350,000 that generates $2,400 per month in rent, with $1,182 per month in operating expenses (taxes, insurance, maintenance, management — everything except the mortgage):</P>
+        <P>Take a property valued at $350,000 that generates $2,400 per month in rent, with $1,182 per month in operating expenses (taxes, insurance, maintenance, management, everything except the mortgage):</P>
         <Table rows={[
           ["Variable", "Amount"],
           ["Monthly Rent", "$2,400"],
@@ -155,7 +155,7 @@ export default function CapRateGuide() {
           ["Property Value", "$350,000"],
           ["Cap Rate", "4.18%"],
         ]} />
-        <P>This property has roughly a 4.2% cap rate. Whether that's good or not depends entirely on context — which is the part most explanations skip.</P>
+        <P>This property has roughly a 4.2% cap rate. Whether that's good or not depends entirely on context, which is the part most explanations skip.</P>
 
         <SectionTitle>Cap Rate Benchmarks by Market Type</SectionTitle>
         <P>There's no single "good" cap rate across the country, because cap rates are inversely tied to perceived risk and growth potential. Here's roughly how they trend:</P>
@@ -166,10 +166,10 @@ export default function CapRateGuide() {
           ["Midwest & smaller metro markets", "6% – 9%"],
           ["Rural or high-risk markets", "9%+"],
         ]} />
-        <P>Lower cap rates generally mean the market is considered safer, has stronger appreciation potential, or both — investors accept a lower current income return because they expect the property's value to grow over time. Higher cap rates usually signal either higher risk, slower appreciation, or both, with the higher current income compensating for that risk.</P>
+        <P>Lower cap rates generally mean the market is considered safer, has stronger appreciation potential, or both, investors accept a lower current income return because they expect the property's value to grow over time. Higher cap rates usually signal either higher risk, slower appreciation, or both, with the higher current income compensating for that risk.</P>
 
         <SectionTitle>Why a Low Cap Rate Isn't Automatically Bad</SectionTitle>
-        <P>A common mistake is treating cap rate as the only metric that matters and dismissing anything under 6% as a bad deal. But cap rate only measures current income — it says nothing about appreciation, which is often the larger driver of total return in expensive, high-growth markets. An investor buying in a major city at a 3% cap rate may be underwriting the deal based on expected appreciation, not just current cash flow.</P>
+        <P>A common mistake is treating cap rate as the only metric that matters and dismissing anything under 6% as a bad deal. But cap rate only measures current income, it says nothing about appreciation, which is often the larger driver of total return in expensive, high-growth markets. An investor buying in a major city at a 3% cap rate may be underwriting the deal based on expected appreciation, not just current cash flow.</P>
 
         <SectionTitle>Cap Rate vs. Cash-on-Cash Return</SectionTitle>
         <P>These two metrics get confused constantly, but they measure different things. Cap rate ignores financing entirely and measures the property's return as if bought in cash. Cash-on-cash return specifically measures the return on the actual cash you invested, factoring in your mortgage payment and down payment.</P>
@@ -179,7 +179,7 @@ export default function CapRateGuide() {
         <P>The most reliable use of cap rate is comparing similar properties within the same market, not comparing across different markets or property types. If two fourplexes in the same neighborhood are listed at different prices, cap rate is one of the fastest ways to see which one is priced more attractively relative to its income.</P>
 
         <SectionTitle>Calculate Cap Rate Instantly</SectionTitle>
-        <P>SpreadRun's Rental Analyzer calculates cap rate automatically alongside cash-on-cash return, DSCR, and full monthly cash flow — so you can see all the angles on a deal at once rather than calculating each metric separately.</P>
+        <P>SpreadRun's Rental Analyzer calculates cap rate automatically alongside cash-on-cash return, DSCR, and full monthly cash flow, so you can see all the angles on a deal at once rather than calculating each metric separately.</P>
 
         <div style={{ textAlign: "center", margin: "36px 0" }}>
           <a href="/app#rental" style={{
@@ -200,7 +200,7 @@ export default function CapRateGuide() {
             padding: "24px 28px", marginBottom: 32, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 12, lineHeight: 1.6 }}>
-              Put these numbers to work — try our free rental property calculator and calculate cap rate, cash flow, and DSCR on any deal.
+              Put these numbers to work. Try our free rental property calculator and calculate cap rate, cash flow, and DSCR on any deal.
             </div>
             <a href="/rental-calculator" style={{
               display: "inline-block", background: "#0B5FFF", color: "#fff",
