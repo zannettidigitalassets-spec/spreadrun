@@ -137,10 +137,10 @@ export default function CashFlowGuide() {
       </div>
 
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px 100px" }}>
-        <P>Cash flow is the number that determines whether a rental property actually puts money in your pocket every month, or quietly drains it. It sounds simple — rent minus expenses — but most new investors underestimate their expenses badly enough that a property they thought would cash flow $300 a month actually breaks even or loses money. This guide walks through the full calculation so nothing gets missed.</P>
+        <P>Cash flow is the number that determines whether a rental property actually puts money in your pocket every month, or quietly drains it. It sounds simple, rent minus expenses, but most new investors underestimate their expenses badly enough that a property they thought would cash flow $300 a month actually breaks even or loses money. This guide walks through the full calculation so nothing gets missed.</P>
 
         <SectionTitle>What Is Cash Flow?</SectionTitle>
-        <P>Cash flow is the money left over each month after collecting rent and paying every single expense tied to owning the property — not just the mortgage. The formula looks simple on paper:</P>
+        <P>Cash flow is the money left over each month after collecting rent and paying every single expense tied to owning the property, not just the mortgage. The formula looks simple on paper:</P>
         <Callout><strong>Cash Flow = Monthly Rental Income − Monthly Operating Expenses − Mortgage Payment</strong></Callout>
         <P>The catch is in that middle term. "Operating expenses" includes far more than most first-time investors initially budget for, and underestimating it is the single most common reason a deal that looked profitable on a napkin turns out to lose money in reality.</P>
 
@@ -157,7 +157,7 @@ export default function CashFlowGuide() {
           ["Capital Expenditures (CapEx)", "5% – 10% of rent"],
           ["HOA Dues (if applicable)", "Varies by property"],
         ]} />
-        <P>The two most commonly skipped line items are vacancy reserve and CapEx. Vacancy reserve accounts for the months between tenants when the unit sits empty and generates zero income. CapEx accounts for big, infrequent costs like a new roof, HVAC system, or water heater — expenses that don't happen every month but absolutely will happen eventually, and need to be saved for monthly rather than treated as a surprise.</P>
+        <P>The two most commonly skipped line items are vacancy reserve and CapEx. Vacancy reserve accounts for the months between tenants when the unit sits empty and generates zero income. CapEx accounts for big, infrequent costs like a new roof, HVAC system, or water heater, expenses that don't happen every month but absolutely will happen eventually, and need to be saved for monthly rather than treated as a surprise.</P>
 
         <SectionTitle>A Worked Example</SectionTitle>
         <P>Take a property renting for $2,400 per month with a $1,791 monthly mortgage payment (principal and interest). Here's how the full picture looks once every expense is included:</P>
@@ -176,7 +176,7 @@ export default function CashFlowGuide() {
         <P>Notice this property is actually losing $313 a month once every real expense is accounted for, even though the rent of $2,400 sounds healthy against a $1,791 mortgage payment on the surface. This is exactly the trap that catches new investors who only check "does rent cover the mortgage" without going further.</P>
 
         <SectionTitle>Cash Flow vs. Cash-on-Cash Return</SectionTitle>
-        <P>Cash flow tells you the dollar amount left over each month. Cash-on-cash return tells you that same number as a percentage of the cash you actually invested — your down payment plus closing costs. A property might only cash flow $150 a month, but if you only put $20,000 down, that's still a meaningful annual return relative to your investment.</P>
+        <P>Cash flow tells you the dollar amount left over each month. Cash-on-cash return tells you that same number as a percentage of the cash you actually invested, your down payment plus closing costs. A property might only cash flow $150 a month, but if you only put $20,000 down, that's still a meaningful annual return relative to your investment.</P>
         <Callout><strong>Cash-on-Cash Return = (Annual Cash Flow ÷ Total Cash Invested) × 100</strong></Callout>
         <P>Both numbers matter. Cash flow tells you whether the property is sustainable month to month. Cash-on-cash return tells you whether it's a good use of your capital compared to other places you could put that same money.</P>
 
@@ -205,7 +205,7 @@ export default function CashFlowGuide() {
             padding: "24px 28px", marginBottom: 32, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 12, lineHeight: 1.6 }}>
-              Put these numbers to work — try our free rental property calculator and get instant cash flow, cap rate, and DSCR results.
+              Put these numbers to work. Try our free rental property calculator and get instant cash flow, cap rate, and DSCR results.
             </div>
             <a href="/rental-calculator" style={{
               display: "inline-block", background: "#0B5FFF", color: "#fff",
