@@ -13,6 +13,7 @@ import HowToAnalyzeGuide from './HowToAnalyzeGuide.jsx'
 import ClevelandGuide from './ClevelandGuide.jsx'
 import IndianapolisGuide from './IndianapolisGuide.jsx'
 import ColumbusGuide from './ColumbusGuide.jsx'
+import TermsGlossary from './TermsGlossary.jsx'
 import MyDeals from './MyDeals.jsx'
 import Contact from './Contact.jsx'
 import DscrCalculator from './DscrCalculator.jsx'
@@ -33,6 +34,7 @@ const KNOWN_PATHS = [
   '/guides/cleveland-rental-property-investing',
   '/guides/indianapolis-rental-property-investing',
   '/guides/columbus-rental-property-investing',
+  '/guides/real-estate-terms-glossary',
 ];
 
 const isKnownPath = () => {
@@ -60,6 +62,7 @@ const getPage = () => {
   if (path.startsWith('/guides/cleveland-rental-property-investing')) return <ClevelandGuide />;
   if (path.startsWith('/guides/indianapolis-rental-property-investing')) return <IndianapolisGuide />;
   if (path.startsWith('/guides/columbus-rental-property-investing')) return <ColumbusGuide />;
+  if (path.startsWith('/guides/real-estate-terms-glossary')) return <TermsGlossary />;
   return <Landing />;
 };
 
