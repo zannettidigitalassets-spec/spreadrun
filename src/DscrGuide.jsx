@@ -151,17 +151,17 @@ export default function DscrGuide() {
         <P>DSCR measures how much income a property produces relative to its debt obligations. In simple terms, it answers one question: does the rent cover the mortgage payment, with room to spare?</P>
         <P>The formula is straightforward:</P>
         <Callout><strong>DSCR = Monthly Gross Rent ÷ Monthly PITI</strong> (Principal, Interest, Taxes, and Insurance)</Callout>
-        <P>A DSCR of 1.0 means the rent exactly covers the mortgage payment, taxes, and insurance — breakeven, with zero cushion. A DSCR above 1.0 means the property generates more income than its debt obligations require. Below 1.0 means the rental income alone isn't enough to cover the property's costs, which is a red flag for lenders.</P>
+        <P>A DSCR of 1.0 means the rent exactly covers the mortgage payment, taxes, and insurance, breakeven, with zero cushion. A DSCR above 1.0 means the property generates more income than its debt obligations require. Below 1.0 means the rental income alone isn't enough to cover the property's costs, which is a red flag for lenders.</P>
 
         <SectionTitle>What Counts as a Good DSCR?</SectionTitle>
         <P>Lender requirements vary, but here's how the ranges generally break down across the DSCR loan market:</P>
         <Table rows={[
           ["DSCR Ratio", "What It Means"],
-          ["Below 1.00", "Rent doesn't cover the mortgage — most lenders will decline"],
-          ["1.00 – 1.19", "Breakeven to thin margin — may qualify with some lenders, often at a higher rate"],
+          ["Below 1.00", "Rent doesn't cover the mortgage, most lenders will decline"],
+          ["1.00 – 1.19", "Breakeven to thin margin, may qualify with some lenders, often at a higher rate"],
           ["1.20 – 1.24", "Standard qualifying range for many DSCR loan programs"],
-          ["1.25 – 1.49", "Strong — typically qualifies for the best available rates"],
-          ["1.50+", "Excellent — significant cash flow cushion above debt obligations"],
+          ["1.25 – 1.49", "Strong, typically qualifies for the best available rates"],
+          ["1.50+", "Excellent, significant cash flow cushion above debt obligations"],
         ]} />
         <P>Most DSCR loan programs use 1.25 as the benchmark for their best pricing tier, though some lenders will go as low as 1.0 or even allow no-ratio loans for borrowers with strong credit and larger down payments, usually at a tradeoff of a higher interest rate.</P>
 
@@ -171,7 +171,7 @@ export default function DscrGuide() {
         <SubTitle>2. Calculate monthly PITI</SubTitle>
         <P>Add together the projected principal and interest payment on the loan, monthly property tax (annual tax bill divided by 12), and monthly homeowners insurance premium (annual premium divided by 12). Some lenders also factor in HOA dues if applicable.</P>
         <SubTitle>3. Divide rent by PITI</SubTitle>
-        <P>Monthly Gross Rent ÷ Monthly PITI = your DSCR. For example, if a property rents for $2,400 per month and the total PITI is $1,920, the DSCR is 1.25 — right at the strong qualifying threshold.</P>
+        <P>Monthly Gross Rent ÷ Monthly PITI = your DSCR. For example, if a property rents for $2,400 per month and the total PITI is $1,920, the DSCR is 1.25, right at the strong qualifying threshold.</P>
 
         <SectionTitle>Why DSCR Loans Are Popular With Investors</SectionTitle>
         <P>Unlike a conventional mortgage, DSCR loans don't require personal income verification, tax returns, or W-2s. The property qualifies based on its own cash flow, not the borrower's personal debt-to-income ratio. This makes DSCR loans especially useful for self-employed investors, those who own several properties already, or anyone whose personal income doesn't reflect their actual ability to manage a rental investment profitably.</P>
@@ -180,12 +180,12 @@ export default function DscrGuide() {
         <SectionTitle>What If Your DSCR Is Too Low?</SectionTitle>
         <P>If your numbers come in under the lender's minimum, there are a few practical levers to pull before walking away from a deal:</P>
         <P><strong>Increase the down payment.</strong> A larger down payment reduces the loan amount, which lowers the monthly principal and interest, raising the DSCR.</P>
-        <P><strong>Negotiate the purchase price.</strong> A lower purchase price has the same effect — smaller loan, smaller payment, better ratio.</P>
+        <P><strong>Negotiate the purchase price.</strong> A lower purchase price has the same effect, smaller loan, smaller payment, better ratio.</P>
         <P><strong>Shop for a better rate.</strong> A lower interest rate directly reduces the monthly PITI.</P>
         <P><strong>Re-examine the rent estimate.</strong> If you're underestimating achievable rent, getting a proper market rent analysis might show the deal qualifies after all.</P>
 
         <SectionTitle>Calculate Your DSCR Instantly</SectionTitle>
-        <P>Running these numbers by hand works, but it's slow if you're evaluating several properties or want to quickly test different down payment and rate scenarios. SpreadRun's DSCR Qualifier does the math instantly — enter your loan terms and expected rent, and it tells you your exact ratio, whether you'd qualify, and exactly how much rent you'd need to hit the 1.25 benchmark.</P>
+        <P>Running these numbers by hand works, but it's slow if you're evaluating several properties or want to quickly test different down payment and rate scenarios. SpreadRun's DSCR Qualifier does the math instantly. Enter your loan terms and expected rent, and it tells you your exact ratio, whether you'd qualify, and exactly how much rent you'd need to hit the 1.25 benchmark.</P>
 
         <div style={{ textAlign: "center", margin: "36px 0" }}>
           <a href="/app#dscr" style={{
@@ -197,8 +197,34 @@ export default function DscrGuide() {
           </a>
         </div>
 
+        <SectionTitle>See DSCR Applied to Real Markets</SectionTitle>
+        <P>Want to see what DSCR-friendly numbers actually look like in specific markets? These guides walk through real purchase price, PITI, and DSCR examples for some of the strongest cash-flow markets in the country:</P>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+          <a href="/guides/cleveland-rental-property-investing" style={{
+            display: "block", border: "1.5px solid #EBF0FF", borderRadius: 12,
+            padding: "16px 20px", textDecoration: "none",
+          }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#0D1B3E", marginBottom: 4 }}>Cleveland Rental Property Investing →</div>
+            <div style={{ fontSize: 13, color: "#6B7A99" }}>A top cash-flow market with a representative DSCR example at 1.25.</div>
+          </a>
+          <a href="/guides/indianapolis-rental-property-investing" style={{
+            display: "block", border: "1.5px solid #EBF0FF", borderRadius: 12,
+            padding: "16px 20px", textDecoration: "none",
+          }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#0D1B3E", marginBottom: 4 }}>Indianapolis Rental Property Investing →</div>
+            <div style={{ fontSize: 13, color: "#6B7A99" }}>Rated the most buyer-friendly market in the country for DSCR financing.</div>
+          </a>
+          <a href="/guides/columbus-rental-property-investing" style={{
+            display: "block", border: "1.5px solid #EBF0FF", borderRadius: 12,
+            padding: "16px 20px", textDecoration: "none",
+          }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#0D1B3E", marginBottom: 4 }}>Columbus Rental Property Investing →</div>
+            <div style={{ fontSize: 13, color: "#6B7A99" }}>Strong rent-to-price ratios plus real population growth from Intel's investment.</div>
+          </a>
+        </div>
+
         <div style={{ marginTop: 50, paddingTop: 24, borderTop: "1px solid #EBF0FF", fontSize: 13, color: "#9BA8C0" }}>
-          This article is for informational purposes only and is not financial or lending advice. DSCR requirements vary by lender and loan program — confirm specific qualification criteria with a mortgage professional.
+          This article is for informational purposes only and is not financial or lending advice. DSCR requirements vary by lender and loan program, confirm specific qualification criteria with a mortgage professional.
         </div>
 
         <div style={{ marginTop: 32 }}>
@@ -207,7 +233,7 @@ export default function DscrGuide() {
             padding: "24px 28px", marginBottom: 32, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 12, lineHeight: 1.6 }}>
-              Put these numbers to work — try our free DSCR calculator and see if your rental property qualifies for investor financing.
+              Put these numbers to work. Try our free DSCR calculator and see if your rental property qualifies for investor financing.
             </div>
             <a href="/dscr-calculator" style={{
               display: "inline-block", background: "#0B5FFF", color: "#fff",
