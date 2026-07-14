@@ -37,6 +37,13 @@ const EDUCATIONAL_GUIDES = [
     tag: "Getting Started",
     live: true,
   },
+  {
+    title: "Real Estate Investing Terms Glossary",
+    desc: "Plain-English definitions for every term you'll run into, from DSCR and ARV to cap rate, PITI, and the 70% rule.",
+    href: "/guides/real-estate-terms-glossary",
+    tag: "Reference",
+    live: true,
+  },
 ];
 
 const MARKET_GUIDES = [
