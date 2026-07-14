@@ -135,7 +135,7 @@ export default function HowToAnalyzeGuide() {
       </div>
 
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px 100px" }}>
-        <P>Every experienced real estate investor follows roughly the same process when evaluating a new property, even if they've never written it down. This guide walks through that process step by step — the order most investors actually work through a deal, from the first glance at a listing to deciding whether to make an offer.</P>
+        <P>Every experienced real estate investor follows roughly the same process when evaluating a new property, even if they've never written it down. This guide walks through that process step by step, the order most investors actually work through a deal, from the first glance at a listing to deciding whether to make an offer.</P>
 
         <SectionTitle>The Five-Step Underwriting Process</SectionTitle>
 
@@ -152,25 +152,25 @@ export default function HowToAnalyzeGuide() {
         </StepCard>
 
         <StepCard num="4" title="Stress-test the assumptions">
-          Run the numbers again with slightly worse assumptions — a higher vacancy rate, a lower rent estimate, a higher interest rate. If the deal still works under a moderately pessimistic scenario, that's a strong signal. If it only works under best-case assumptions, the margin for error is too thin.
+          Run the numbers again with slightly worse assumptions, a higher vacancy rate, a lower rent estimate, a higher interest rate. If the deal still works under a moderately pessimistic scenario, that's a strong signal. If it only works under best-case assumptions, the margin for error is too thin.
         </StepCard>
 
         <StepCard num="5" title="Decide and make your offer">
-          If you're rehabbing or flipping rather than holding as a rental, apply the 70% rule to set your maximum offer price. If you're holding long-term, compare the cash-on-cash return against what else you could do with that same capital — including just leaving it in an index fund — to confirm the deal is genuinely worth the time and risk of property ownership.
+          If you're rehabbing or flipping rather than holding as a rental, apply the 70% rule to set your maximum offer price. If you're holding long-term, compare the cash-on-cash return against what else you could do with that same capital, including just leaving it in an index fund, to confirm the deal is genuinely worth the time and risk of property ownership.
         </StepCard>
         <div style={{ margin: "20px 0" }}>
           <a href="/guides/70-percent-rule-house-flipping" style={{ fontSize: 13.5, fontWeight: 700, color: "#0B5FFF", textDecoration: "none" }}>Read the 70% rule guide →</a>
         </div>
 
         <SectionTitle>The Mistake Most New Investors Make</SectionTitle>
-        <P>The most common error isn't a math mistake — it's skipping straight from step one to step five. A property looks good based on the listing price and a quick mental estimate of rent, an offer gets made, and only later, sometimes after the offer is accepted, does the real underwriting happen. By then, there's pressure to make the deal work rather than honestly evaluating whether it does.</P>
-        <Callout>The fix is simple: do the full underwriting before you fall in love with a property, not after. A property that doesn't pencil out at the listing price either needs a lower offer or isn't the right deal — and it's much easier to walk away from a spreadsheet than from a property you've already pictured yourself owning.</Callout>
+        <P>The most common error isn't a math mistake, it's skipping straight from step one to step five. A property looks good based on the listing price and a quick mental estimate of rent, an offer gets made, and only later, sometimes after the offer is accepted, does the real underwriting happen. By then, there's pressure to make the deal work rather than honestly evaluating whether it does.</P>
+        <Callout>The fix is simple: do the full underwriting before you fall in love with a property, not after. A property that doesn't pencil out at the listing price either needs a lower offer or isn't the right deal, and it's much easier to walk away from a spreadsheet than from a property you've already pictured yourself owning.</Callout>
 
         <SectionTitle>Putting It All Together</SectionTitle>
         <P>None of these five steps are individually complicated. The challenge is doing all of them consistently, for every property, especially when you're evaluating several deals a week and the temptation is to shortcut the process on the ones that "feel" promising. The investors who build successful portfolios are usually the ones who run the same disciplined process on every single deal, including the ones that seem obviously good.</P>
 
         <SectionTitle>Do All Five Steps in One Place</SectionTitle>
-        <P>SpreadRun was built around this exact workflow. The Rental Analyzer handles steps one and two, the DSCR Qualifier handles step three, and the Fix & Flip calculator applies the 70% rule for step five — all free, with no spreadsheet required.</P>
+        <P>SpreadRun was built around this exact workflow. The Rental Analyzer handles steps one and two, the DSCR Qualifier handles step three, and the Fix & Flip calculator applies the 70% rule for step five, all free, with no spreadsheet required.</P>
 
         <div style={{ textAlign: "center", margin: "36px 0" }}>
           <a href="/app" style={{
@@ -191,7 +191,7 @@ export default function HowToAnalyzeGuide() {
             padding: "24px 28px", marginBottom: 32, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 12, lineHeight: 1.6 }}>
-              Ready to analyze a real deal? Try our free rental property calculator — no account required, instant results.
+              Ready to analyze a real deal? Try our free rental property calculator, no account required, instant results.
             </div>
             <a href="/rental-calculator" style={{
               display: "inline-block", background: "#0B5FFF", color: "#fff",
