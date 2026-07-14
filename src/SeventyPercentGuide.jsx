@@ -137,12 +137,12 @@ export default function SeventyPercentGuide() {
       </div>
 
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px 100px" }}>
-        <P>Every house flipper eventually runs into the 70% rule. It's the most widely used quick-screen formula in the flipping world, and for good reason — it gives you a fast way to know whether a deal is even worth digging into further, before you spend hours building out a full budget. This guide breaks down exactly how it works, where it comes from, and when it's smart to deviate from it.</P>
+        <P>Every house flipper eventually runs into the 70% rule. It's the most widely used quick-screen formula in the flipping world, and for good reason, it gives you a fast way to know whether a deal is even worth digging into further, before you spend hours building out a full budget. This guide breaks down exactly how it works, where it comes from, and when it's smart to deviate from it.</P>
 
         <SectionTitle>What Is the 70% Rule?</SectionTitle>
         <P>The 70% rule states that an investor should pay no more than 70% of a property's after-repair value (ARV), minus the estimated cost of repairs. The formula is:</P>
         <Callout><strong>Maximum Allowable Offer = (ARV × 0.70) − Estimated Rehab Costs</strong></Callout>
-        <P>The remaining 30% of ARV is built-in margin that covers your buying and selling costs, holding costs while the property is being renovated, financing costs, and your actual profit. It's not 30% pure profit — it's a buffer for everything that isn't the purchase price or the rehab budget.</P>
+        <P>The remaining 30% of ARV is built-in margin that covers your buying and selling costs, holding costs while the property is being renovated, financing costs, and your actual profit. It's not 30% pure profit, it's a buffer for everything that isn't the purchase price or the rehab budget.</P>
 
         <SectionTitle>A Worked Example</SectionTitle>
         <P>Say you've found a property with an after-repair value of $400,000, and you estimate the rehab will cost $45,000. Here's how the math works out:</P>
@@ -153,11 +153,11 @@ export default function SeventyPercentGuide() {
           ["Estimated Rehab Cost", "-$45,000"],
           ["Maximum Allowable Offer", "$235,000"],
         ]} />
-        <P>According to the rule, you shouldn't pay more than $235,000 for this property if you want a comfortable margin once all the buying, holding, and selling costs are factored in. If the seller wants $260,000, the rule says walk away or negotiate — at that price, your margin shrinks to a point where any cost overrun could turn the deal into a loss.</P>
+        <P>According to the rule, you shouldn't pay more than $235,000 for this property if you want a comfortable margin once all the buying, holding, and selling costs are factored in. If the seller wants $260,000, the rule says walk away or negotiate. At that price, your margin shrinks to a point where any cost overrun could turn the deal into a loss.</P>
 
         <SectionTitle>Why 30% as the Buffer?</SectionTitle>
         <P>The 30% margin needs to cover several real costs that are easy to forget when you're focused on the purchase price:</P>
-        <P><strong>Holding costs.</strong> Loan interest, property taxes, insurance, and utilities while the property sits unsold during renovation — typically 1% of the purchase price per month it's held.</P>
+        <P><strong>Holding costs.</strong> Loan interest, property taxes, insurance, and utilities while the property sits unsold during renovation, typically 1% of the purchase price per month it's held.</P>
         <P><strong>Selling costs.</strong> Real estate agent commissions (usually 5-6% of sale price) and closing costs (around 1-2% of sale price).</P>
         <P><strong>Rehab budget overruns.</strong> Almost every renovation costs more than the original estimate. The 30% buffer absorbs some of that risk.</P>
         <P><strong>Actual profit.</strong> After all of the above, whatever's left is the money you actually walk away with.</P>
@@ -165,17 +165,17 @@ export default function SeventyPercentGuide() {
         <SectionTitle>When to Break the 70% Rule</SectionTitle>
         <P>The 70% rule is a screening tool, not a law of physics. Experienced flippers regularly adjust it based on market conditions and deal specifics:</P>
         <SubTitle>In hot markets with low inventory</SubTitle>
-        <P>When good deals are scarce and competition is high, some investors will go to 75% or even 80% of ARV on properties with lower risk — for example, a light cosmetic rehab with a very confident ARV estimate, where the chance of cost overruns is low.</P>
+        <P>When good deals are scarce and competition is high, some investors will go to 75% or even 80% of ARV on properties with lower risk, for example, a light cosmetic rehab with a very confident ARV estimate, where the chance of cost overruns is low.</P>
         <SubTitle>On larger, more expensive deals</SubTitle>
         <P>The 70% rule tends to work best on properties in the $150,000 to $400,000 range. On much more expensive properties, the dollar amount of that 30% buffer can be far larger than what's actually needed to cover holding and selling costs, so some investors adjust the percentage upward on high-value flips.</P>
         <SubTitle>On smaller, lower-margin deals</SubTitle>
         <P>On cheaper properties, some investors tighten the rule to 65% or lower, since fixed costs like permits and minimum contractor charges eat up a larger percentage of a smaller deal.</P>
 
         <SectionTitle>The 70% Rule Has Limits</SectionTitle>
-        <P>The biggest weakness of the rule is that it leans entirely on your ARV and rehab cost estimates being accurate. If you overestimate the ARV or underestimate the rehab budget, even a deal that "passes" the 70% rule on paper can still lose money. The rule is a fast filter for deciding which deals deserve a closer look — it's not a substitute for getting real contractor quotes and a solid comparable sales analysis before you commit.</P>
+        <P>The biggest weakness of the rule is that it leans entirely on your ARV and rehab cost estimates being accurate. If you overestimate the ARV or underestimate the rehab budget, even a deal that "passes" the 70% rule on paper can still lose money. The rule is a fast filter for deciding which deals deserve a closer look, it's not a substitute for getting real contractor quotes and a solid comparable sales analysis before you commit.</P>
 
         <SectionTitle>Run the Numbers Instantly</SectionTitle>
-        <P>SpreadRun's Fix & Flip calculator applies the 70% rule automatically alongside a full profit and ROI breakdown, including holding costs, agent fees, and closing costs — so you can see in seconds whether a deal clears the bar, and by how much.</P>
+        <P>SpreadRun's Fix & Flip calculator applies the 70% rule automatically alongside a full profit and ROI breakdown, including holding costs, agent fees, and closing costs, so you can see in seconds whether a deal clears the bar, and by how much.</P>
 
         <div style={{ textAlign: "center", margin: "36px 0" }}>
           <a href="/app#flip" style={{
@@ -188,7 +188,7 @@ export default function SeventyPercentGuide() {
         </div>
 
         <div style={{ marginTop: 50, paddingTop: 24, borderTop: "1px solid #EBF0FF", fontSize: 13, color: "#9BA8C0" }}>
-          This article is for informational purposes only and is not financial advice. The 70% rule is a general guideline — actual deal economics vary by market, property condition, and financing terms.
+          This article is for informational purposes only and is not financial advice. The 70% rule is a general guideline, actual deal economics vary by market, property condition, and financing terms.
         </div>
         <div style={{ marginTop: 32 }}>
           <div style={{
@@ -196,7 +196,7 @@ export default function SeventyPercentGuide() {
             padding: "24px 28px", marginBottom: 32, textAlign: "center",
           }}>
             <div style={{ fontSize: 13, color: "#6B7A99", marginBottom: 12, lineHeight: 1.6 }}>
-              Put these numbers to work — try our free fix and flip calculator and see your profit, ROI, and 70% rule check instantly.
+              Put these numbers to work. Try our free fix and flip calculator and see your profit, ROI, and 70% rule check instantly.
             </div>
             <a href="/flip-calculator" style={{
               display: "inline-block", background: "#0B5FFF", color: "#fff",
