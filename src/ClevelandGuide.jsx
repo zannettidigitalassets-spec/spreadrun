@@ -216,6 +216,26 @@ export default function ClevelandGuide() {
           </a>
         </div>
 
+        <SectionTitle>Other Midwest Cash-Flow Markets</SectionTitle>
+        <P>Cleveland isn't the only Midwest market worth a look. If you're comparing options, these two guides cover markets with a similar cash-flow profile but different growth stories:</P>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+          <a href="/guides/indianapolis-rental-property-investing" style={{
+            display: "block", border: "1.5px solid #EBF0FF", borderRadius: 12,
+            padding: "16px 20px", textDecoration: "none",
+          }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#0D1B3E", marginBottom: 4 }}>Indianapolis Rental Property Investing →</div>
+            <div style={{ fontSize: 13, color: "#6B7A99" }}>Rated the most buyer-friendly market in the country, with stronger appreciation than Cleveland.</div>
+          </a>
+          <a href="/guides/columbus-rental-property-investing" style={{
+            display: "block", border: "1.5px solid #EBF0FF", borderRadius: 12,
+            padding: "16px 20px", textDecoration: "none",
+          }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#0D1B3E", marginBottom: 4 }}>Columbus Rental Property Investing →</div>
+            <div style={{ fontSize: 13, color: "#6B7A99" }}>Same Ohio tax advantages as Cleveland, plus Intel's semiconductor investment driving population growth.</div>
+          </a>
+        </div>
+        <P>New to DSCR entirely? Our <a href="/guides/dscr-loan-calculator" style={{ color: "#0B5FFF", fontWeight: 700, textDecoration: "none" }}>DSCR loan guide</a> breaks down the formula and what lenders require before you run the numbers on a specific market.</P>
+
         <div style={{ marginTop: 50, paddingTop: 24, borderTop: "1px solid #EBF0FF", fontSize: 13, color: "#9BA8C0" }}>
           This article is for informational purposes only and is not financial or investment advice. Market conditions, rents, and lending terms change, verify current figures with local property managers and lenders before making an investment decision.
         </div>
