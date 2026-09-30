@@ -5,6 +5,10 @@ import Privacy from './Privacy.jsx'
 import Terms from './Terms.jsx'
 import Contact from './Contact.jsx'
 import NotFound from './NotFound.jsx'
+import Inbox from './app/Inbox.jsx'
+import Settings from './app/Settings.jsx'
+import Account from './app/Account.jsx'
+import Onboarding from './app/Onboarding.jsx'
 
 // SecondRing retool (2026-09-30): the real-estate analyzer, calculators, guides and My Deals
 // routes are hidden, not deleted. Their components still live in src/ as dormant code and
@@ -21,6 +25,10 @@ const getPage = () => {
   if (p === '/privacy') return <Privacy />
   if (p === '/terms') return <Terms />
   if (p === '/contact') return <Contact />
+  if (p === '/inbox') return <Inbox />
+  if (p === '/settings') return <Settings />
+  if (p === '/account') return <Account />
+  if (p === '/onboarding') return <Onboarding />
   return <NotFound />
 }
 
