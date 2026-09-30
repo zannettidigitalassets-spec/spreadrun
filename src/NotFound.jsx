@@ -4,8 +4,8 @@ import { setPageMeta } from "./seo.js";
 export default function NotFound() {
   useEffect(() => {
     setPageMeta(
-      "Page Not Found | SpreadRun",
-      "The page you're looking for doesn't exist. Head back to SpreadRun's free real estate deal analyzer."
+      "Page Not Found | SecondRing",
+      "The page you're looking for doesn't exist. Head back to SecondRing."
     );
   }, []);
 
@@ -17,7 +17,7 @@ export default function NotFound() {
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28 }}>
         <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2 }} />
-        <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E" }}>SpreadRun</span>
+        <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E" }}>SecondRing</span>
       </div>
       <div style={{ fontSize: 64, fontWeight: 900, color: "#0B5FFF", fontFamily: "'IBM Plex Mono', monospace", marginBottom: 8 }}>
         404
@@ -35,7 +35,7 @@ export default function NotFound() {
           padding: "12px 24px", fontSize: 14.5, fontWeight: 700, textDecoration: "none",
         }}
       >
-        ← Back to SpreadRun
+        ← Back to SecondRing
       </a>
     </div>
   );
