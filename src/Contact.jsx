@@ -44,12 +44,12 @@ export default function Contact() {
       }}>
         <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
           <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2 }} />
-          <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E", letterSpacing: "-0.3px" }}>SpreadRun</span>
+          <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E", letterSpacing: "-0.3px" }}>SecondRing</span>
         </a>
-        <a href="/app" style={{
+        <a href="/#pricing" style={{
           background: "#0B5FFF", color: "#fff", fontSize: 13, fontWeight: 700,
           padding: "8px 18px", borderRadius: 8, textDecoration: "none",
-        }}>Try Free →</a>
+        }}>Start free trial</a>
       </nav>
 
       {/* CONTENT */}
@@ -165,14 +165,13 @@ export default function Contact() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 5, height: 18, background: "#0B5FFF", borderRadius: 2 }} />
-          <span style={{ fontWeight: 800, fontSize: 14 }}>SpreadRun</span>
+          <span style={{ fontWeight: 800, fontSize: 14 }}>SecondRing</span>
         </div>
         <div style={{ fontSize: 12, color: "#9BA8C0" }}>
-          © 2026 SpreadRun · For informational purposes only. Not financial advice.
+          © 2026 SecondRing · Zannetti Digital Assets LLC
         </div>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
           <a href="/" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Home</a>
-          <a href="/app" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>App</a>
           <a href="/privacy" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Privacy</a>
           <a href="/terms" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Terms</a>
         </div>
