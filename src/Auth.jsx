@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient.js'
+import { openBillingPortal } from './billing.js'
 
 export function useAuth() {
   const [user, setUser] = useState(null);
@@ -232,15 +233,7 @@ export function UserMenu({ user, isStarter }) {
   const handleManageSubscription = async () => {
     setLoadingPortal(true);
     try {
-      const res = await fetch('/api/customer-portal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.email }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
+      await openBillingPortal();
     } catch (err) {
       console.error('Failed to open customer portal:', err);
     }
