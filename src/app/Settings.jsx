@@ -5,7 +5,7 @@ import { DEFAULT_AUTO_REPLY } from './mockData.js';
 import { CARRIERS, FORWARD_TO_PLACEHOLDER, GUIDE_FOOTER } from './forwardingGuide.js';
 
 export const SETTINGS_KEY = 'sr.settings';
-export const DEFAULT_SETTINGS = { businessName: '', autoReply: DEFAULT_AUTO_REPLY, openTime: '07:00', closeTime: '18:00', businessNumber: '' };
+export const DEFAULT_SETTINGS = { businessName: '', autoReply: DEFAULT_AUTO_REPLY, openTime: '07:00', closeTime: '18:00', businessNumber: '', voicemailConfirmed: false };
 
 function ForwardingGuide() {
   const [carrier, setCarrier] = useState(CARRIERS[0].id);

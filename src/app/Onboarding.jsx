@@ -16,20 +16,55 @@ function Step({ done, title, detail, href, disabled }) {
   );
 }
 
+export const voicemailScript = (name) =>
+  `Thank you for calling ${name && name.trim() ? name.trim() : '[Business Name]'}. Sorry we missed your call. We'll follow up with a brief text so we don't lose track of your request. If you'd rather not get texts from us, just reply STOP to the message.`;
+
+function VoicemailStep({ s, setS }) {
+  const script = voicemailScript(s.businessName);
+  return (
+    <div style={{ padding: '14px 0', borderBottom: `1px solid ${C.tint}` }}>
+      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+        <div style={{ width: 26, height: 26, borderRadius: 99, background: s.voicemailConfirmed ? C.ok : '#fff', border: `2px solid ${s.voicemailConfirmed ? C.ok : C.line}`, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, flexShrink: 0 }}>{s.voicemailConfirmed ? '✓' : ''}</div>
+        <div style={{ flex: 1 }}>
+          <div style={{ color: C.ink, fontWeight: 700 }}>Update your voicemail greeting <span style={{ fontSize: 12, fontWeight: 800, color: C.accent, marginLeft: 6 }}>REQUIRED</span></div>
+          <div style={{ fontSize: 14, margin: '4px 0 10px' }}>
+            Phone carriers require that callers are told they may get a text before we send one. Your voicemail greeting is that notice, so this step is required for SMS compliance. SecondRing will not text your callers until you confirm it.
+          </div>
+          <div style={{ background: C.tint, border: `1px solid ${C.line}`, borderRadius: 10, padding: '12px 14px', fontSize: 15, color: C.ink, lineHeight: 1.55 }}>
+            {script}
+          </div>
+          <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginTop: 12, fontSize: 14, cursor: 'pointer', color: C.ink }}>
+            <input
+              type="checkbox"
+              checked={Boolean(s.voicemailConfirmed)}
+              onChange={(e) => setS({ ...s, voicemailConfirmed: e.target.checked })}
+              style={{ marginTop: 3, width: 18, height: 18 }}
+            />
+            <span>I have set my business voicemail greeting to this script.</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function OnboardingBody() {
-  const [s] = useStored(SETTINGS_KEY, DEFAULT_SETTINGS);
+  const [s, setS] = useStored(SETTINGS_KEY, DEFAULT_SETTINGS);
   const steps = [
     { title: 'Connect your number', detail: 'Coming soon. We will set up your SecondRing number and text registration for you.', done: false, disabled: true },
     { title: 'Set your business name', detail: s.businessName || 'Not set yet.', done: Boolean(s.businessName.trim()), href: '/settings' },
     { title: 'Write your auto-reply text', detail: s.autoReply, done: s.autoReply.trim() !== '' && s.autoReply !== DEFAULT_AUTO_REPLY, href: '/settings' },
     { title: 'Set your hours', detail: `${s.openTime} to ${s.closeTime}`, done: s.openTime !== DEFAULT_SETTINGS.openTime || s.closeTime !== DEFAULT_SETTINGS.closeTime, href: '/settings' },
   ];
-  const doneCount = steps.filter((x) => x.done).length;
+  const doneCount = steps.filter((x) => x.done).length + (s.voicemailConfirmed ? 1 : 0);
+  const total = steps.length + 1;
   return (
     <div style={{ ...card, maxWidth: 680 }}>
       <h2 style={{ color: C.ink, margin: '0 0 4px' }}>Get set up</h2>
-      <p style={{ margin: '0 0 12px', color: C.muted }}>{doneCount} of {steps.length} done</p>
-      {steps.map((x) => <Step key={x.title} {...x} />)}
+      <p style={{ margin: '0 0 12px', color: C.muted }}>{doneCount} of {total} done</p>
+      {steps.slice(0, 2).map((x) => <Step key={x.title} {...x} />)}
+      <VoicemailStep s={s} setS={setS} />
+      {steps.slice(2).map((x) => <Step key={x.title} {...x} />)}
       <p style={{ marginBottom: 0, fontSize: 14 }}>Then <a href="/settings" style={{ color: C.accent, fontWeight: 700 }}>follow the forwarding guide</a> for your carrier.</p>
     </div>
   );

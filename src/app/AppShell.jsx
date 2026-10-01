@@ -23,8 +23,8 @@ function Paywall({ ent }) {
         </p>
       )}
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-        <Button disabled={!!busy} onClick={() => go('solo')}>{busy === 'solo' ? 'Loading…' : 'Solo — $19/mo'}</Button>
-        <Button disabled={!!busy} kind="ghost" onClick={() => go('shop')}>{busy === 'shop' ? 'Loading…' : 'Shop — $29/mo'}</Button>
+        <Button disabled={!!busy} onClick={() => go('solo')}>{busy === 'solo' ? 'Loading…' : 'Solo: $19/mo'}</Button>
+        <Button disabled={!!busy} kind="ghost" onClick={() => go('shop')}>{busy === 'shop' ? 'Loading…' : 'Shop: $29/mo'}</Button>
       </div>
     </div>
   );
