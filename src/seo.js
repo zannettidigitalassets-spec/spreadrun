@@ -77,8 +77,8 @@ export const PAGE_META = {
     description: "View, compare, and export your saved real estate deals. Side-by-side deal comparison and PDF reports for Starter members.",
   },
   contact: {
-    title: "Contact SpreadRun | Real Estate Calculator Support",
-    description: "Have a question or found an issue? Get in touch with the SpreadRun team. We respond personally to every message.",
+    title: "Contact SecondRing | Support",
+    description: "Questions about SecondRing? Get in touch. We respond personally to every message.",
   },
   guides: {
     title: "Real Estate Investing Guides & Calculators | SpreadRun",

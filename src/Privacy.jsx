@@ -1,73 +1,78 @@
-const SectionTitle = ({ children }) => (
-  <h2 style={{ fontSize: 20, fontWeight: 800, margin: "32px 0 12px", letterSpacing: "-0.3px" }}>{children}</h2>
-);
-
-const P = ({ children }) => (
-  <p style={{ fontSize: 15, color: "#3D4F6E", lineHeight: 1.7, margin: "0 0 16px" }}>{children}</p>
-);
+import { useEffect } from "react";
+import { setPageMeta } from "./seo.js";
+import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL } from "./LegalLayout.jsx";
 
 export default function Privacy() {
+  useEffect(() => {
+    setPageMeta("Privacy Policy | SecondRing", "How SecondRing collects, uses, and protects information, including SMS opt-in data.", "/privacy");
+  }, []);
   return (
-    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", color: "#0D1B3E", background: "#fff" }}>
-      <nav style={{
-        position: "sticky", top: 0, zIndex: 100,
-        background: "rgba(255,255,255,0.95)", backdropFilter: "blur(8px)",
-        borderBottom: "1px solid #EBF0FF", padding: "0 24px", height: 60,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-      }}>
-        <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <div style={{ width: 6, height: 22, background: "#0B5FFF", borderRadius: 2 }} />
-          <span style={{ fontWeight: 800, fontSize: 17, color: "#0D1B3E", letterSpacing: "-0.3px" }}>SpreadRun</span>
-        </a>
-        <a href="/app" style={{
-          background: "#0B5FFF", color: "#fff", fontSize: 13, fontWeight: 700,
-          padding: "8px 18px", borderRadius: 8, textDecoration: "none",
-        }}>Try Free →</a>
-      </nav>
+    <LegalLayout title="Privacy Policy" updated="September 30, 2026">
+      <P>This Privacy Policy explains what SecondRing ("we," "us," "our") collects, how we use it, and the choices you have. It covers our website, the SecondRing app, and the text messages the Service sends and receives.</P>
 
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "60px 24px 100px" }}>
-        <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", color: "#0B5FFF", textTransform: "uppercase", marginBottom: 12 }}>Legal</div>
-        <h1 style={{ fontSize: 36, fontWeight: 900, letterSpacing: "-0.8px", margin: "0 0 8px" }}>Privacy Policy</h1>
-        <p style={{ fontSize: 13, color: "#9BA8C0", marginBottom: 40 }}>Last updated: June 2026</p>
+      <SectionTitle>Who this covers</SectionTitle>
+      <UL>
+        <li><strong>Our customers:</strong> the contractors and businesses that sign up for SecondRing.</li>
+        <li><strong>Callers and texters:</strong> people who call one of our customers' businesses and receive or reply to a SecondRing text.</li>
+        <li><strong>Website visitors.</strong></li>
+      </UL>
 
-        <P>SpreadRun ("we," "our," or "us") operates spreadrun.com (the "Service"). This Privacy Policy explains how we collect, use, and protect information when you use our Service.</P>
+      <SectionTitle>Information we collect</SectionTitle>
+      <P><strong>From customers:</strong> email address (used to sign in), business name and details, the phone numbers you connect or we provision for you, your message templates and after-hours settings, and billing information. Payment card details are collected and stored by Stripe; we do not see or store full card numbers. We keep your Stripe customer and subscription identifiers, plan, and billing status.</P>
+      <P><strong>From early-access signups:</strong> the name and email you enter on our early-access form. We use it only to tell you when SecondRing launches, and you can ask us to remove it at any time.</P>
+      <P><strong>From callers and texters:</strong> the phone number that called, the time of the call, the text messages sent to and received from that number, and any tags or notes the business adds. We collect this on behalf of the business the person called.</P>
+      <P><strong>From website visitors:</strong> basic usage data such as pages viewed, browser and device type, and approximate location, collected through Google Analytics and similar technologies.</P>
 
-        <SectionTitle>Information We Collect</SectionTitle>
-        <P>We collect information in the following ways:</P>
-        <P><strong>Information you provide:</strong> When you sign up for early access or a paid plan, we collect your email address and any other information you voluntarily submit through our forms.</P>
-        <P><strong>Usage data:</strong> We use Google Analytics to understand how visitors use our Service, including pages viewed, time spent, and general location (city/country level, not precise location). We do not collect or store the specific property addresses or financial figures you enter into our calculators — those calculations happen in your browser and are not transmitted to or stored on our servers unless you explicitly save a deal using a paid feature.</P>
-        <P><strong>Cookies:</strong> We use cookies and similar technologies through Google Analytics and Google AdSense to understand site usage and serve relevant advertising.</P>
+      <SectionTitle>How we use information</SectionTitle>
+      <UL>
+        <li>To provide the Service: detect missed calls, send and receive texts, and show conversations in the inbox.</li>
+        <li>To manage your account, free trial, subscription, and billing, and to send service and account messages.</li>
+        <li>To register your business and phone numbers with carriers and messaging providers, as required to send texts.</li>
+        <li>To keep the Service secure, prevent abuse and spam, and comply with legal and carrier requirements.</li>
+        <li>To understand how the site is used and improve the Service.</li>
+      </UL>
+      <P>We do not sell personal information.</P>
 
-        <SectionTitle>How We Use Your Information</SectionTitle>
-        <P>We use the information we collect to operate and improve the Service, respond to your inquiries, send updates about new features (only if you've signed up for early access), and display relevant advertising through Google AdSense.</P>
+      <SectionTitle>Text messaging (SMS) terms</SectionTitle>
+      <P><strong>Texts sent to callers.</strong> When someone calls a SecondRing customer's business and the call goes unanswered, SecondRing sends one or more text messages on that business's behalf, in response to the call. These messages are conversational and relate to the person's inquiry (for example, asking what they need help with and arranging a callback or quote). They are not marketing messages. By calling a business and continuing the text conversation, the person is contacting that business and expects a reply.</P>
+      <UL>
+        <li><strong>Message frequency varies</strong> and depends on the conversation.</li>
+        <li><strong>Standard message and data rates may apply.</strong></li>
+        <li><strong>To stop</strong> receiving texts, reply <strong>STOP</strong>. You will receive a confirmation and no further messages from that number. Reply <strong>START</strong> to resume.</li>
+        <li><strong>For help</strong>, reply <strong>HELP</strong> or contact us at <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a>.</li>
+        <li>Carriers are not liable for delayed or undelivered messages.</li>
+      </UL>
+      <P><strong>Texts sent to our customers.</strong> If you give us your mobile number, you agree to receive account, billing, and service texts from SecondRing, with the same frequency, rate, STOP, and HELP terms above.</P>
+      <P><strong>No sharing of mobile information.</strong> We do not sell or share your SMS opt-in data or personal information with third parties for marketing purposes. Phone numbers, text message content, and opt-in information are shared only with the service providers that help us deliver messages and run SecondRing, as described below, and with the business the person contacted.</P>
 
-        <SectionTitle>Third-Party Services</SectionTitle>
-        <P>We use the following third-party services, each with their own privacy practices:</P>
-        <P><strong>Google Analytics:</strong> to understand site traffic and usage patterns.</P>
-        <P><strong>Google AdSense:</strong> to display advertising. Google may use cookies to serve ads based on your visits to this and other websites. You can learn more and opt out of personalized advertising at <a href="https://adssettings.google.com" style={{ color: "#0B5FFF" }}>Google's Ads Settings</a>.</P>
-        <P><strong>Formspree:</strong> to process email signups submitted through our forms.</P>
-        <P><strong>Vercel:</strong> our hosting provider, which may collect standard server logs (IP address, browser type) for security and performance purposes.</P>
-        <P>We may also participate in affiliate marketing programs. If you click a link to a third-party lender or financial service from our Service, that company's own privacy policy will govern any information you provide to them directly.</P>
+      <SectionTitle>Who we share information with</SectionTitle>
+      <P>We share information only as needed to run the Service:</P>
+      <UL>
+        <li><strong>The business</strong> a caller contacted, which owns and can see its own conversations.</li>
+        <li><strong>Service providers</strong> that process data for us: Twilio (phone numbers and text delivery), Stripe (payments and billing), Supabase (database and sign-in), Resend (email), Vercel (hosting), and Google Analytics (site analytics). They may use the data only to provide their services to us.</li>
+        <li><strong>Authorities and others</strong> when required by law or to protect rights, safety, or the security of the Service, or in connection with a business transfer such as a merger or sale.</li>
+      </UL>
 
-        <SectionTitle>Data Retention</SectionTitle>
-        <P>We retain email addresses collected for early access until you ask us to delete them. Saved deal data for paid accounts is retained for as long as your account is active.</P>
+      <SectionTitle>Retention</SectionTitle>
+      <P>We keep account and conversation data while your account is active. We may delete your data after your trial or subscription ends. You can ask us to delete your data sooner. We may keep limited records longer where needed for billing, tax, security, carrier compliance, or legal reasons.</P>
 
-        <SectionTitle>Your Rights</SectionTitle>
-        <P>You may request access to, correction of, or deletion of your personal information at any time by contacting us using the information below.</P>
+      <SectionTitle>Security</SectionTitle>
+      <P>We use reasonable technical and organizational measures to protect your information, including encryption in transit and access controls on our database. No system is perfectly secure, and we cannot guarantee absolute security.</P>
 
-        <SectionTitle>Children's Privacy</SectionTitle>
-        <P>Our Service is not directed to individuals under 18. We do not knowingly collect personal information from children.</P>
+      <SectionTitle>Your choices and rights</SectionTitle>
+      <P>You can access, correct, export, or delete your information by contacting us. Callers and texters can opt out of texts by replying STOP, and can ask us or the business they contacted to delete their conversation. Depending on where you live, you may have additional rights under local privacy laws; we will honor valid requests as required.</P>
 
-        <SectionTitle>Changes to This Policy</SectionTitle>
-        <P>We may update this Privacy Policy from time to time. We will post any changes on this page with an updated revision date.</P>
+      <SectionTitle>Cookies and analytics</SectionTitle>
+      <P>We use cookies and similar technologies for sign-in and to measure site usage with Google Analytics. You can block or delete cookies in your browser settings, though some features may not work.</P>
 
-        <SectionTitle>Contact Us</SectionTitle>
-        <P>If you have questions about this Privacy Policy, please reach out through our site.</P>
+      <SectionTitle>Children</SectionTitle>
+      <P>The Service is for businesses and is not directed to children under 13. We do not knowingly collect information from children.</P>
 
-        <div style={{ marginTop: 40, paddingTop: 24, borderTop: "1px solid #EBF0FF" }}>
-          <a href="/" style={{ fontSize: 13, fontWeight: 700, color: "#0B5FFF", textDecoration: "none" }}>← Back to SpreadRun</a>
-        </div>
-      </div>
-    </div>
+      <SectionTitle>Changes to this policy</SectionTitle>
+      <P>We may update this policy. If a change is material we will notify customers by email or in the Service. The date at the top shows when it was last updated.</P>
+
+      <SectionTitle>Contact us</SectionTitle>
+      <P>SecondRing. Questions or requests: <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a> or our <a href="/contact" style={{ color: "#0B5FFF" }}>contact page</a>.</P>
+    </LegalLayout>
   );
 }
