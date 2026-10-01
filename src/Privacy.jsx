@@ -14,6 +14,7 @@ export default function Privacy() {
 
       <SectionTitle>Information we collect</SectionTitle>
       <P><strong>From customers:</strong> email address (used to sign in), business name and details, the phone numbers you connect or we provision for you, your message templates and after-hours settings, and billing information. Payment card details are collected and stored by Stripe; we do not see or store full card numbers. We keep your Stripe customer and subscription identifiers, plan, and billing status.</P>
+      <P><strong>From early-access signups:</strong> the name and email you enter on our early-access form. We use it only to tell you when SecondRing launches, and you can ask us to remove it at any time.</P>
       <P><strong>From callers and texters:</strong> the phone number that called, the time of the call, the text messages sent to and received from that number, and any tags or notes the business adds. We collect this on behalf of the business the person called.</P>
       <P><strong>From website visitors:</strong> basic usage data such as pages viewed, browser and device type, and approximate location, collected through Google Analytics and similar technologies.</P>
 
