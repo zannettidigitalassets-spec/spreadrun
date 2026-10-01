@@ -1,14 +1,19 @@
+import { useEffect } from "react";
+import { setPageMeta } from "./seo.js";
 import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL, OPERATOR } from "./LegalLayout.jsx";
 
 export default function Privacy() {
+  useEffect(() => {
+    setPageMeta("Privacy Policy | SecondRing", "How SecondRing collects, uses, and protects information, including SMS opt-in data.", "/privacy");
+  }, []);
   return (
     <LegalLayout title="Privacy Policy" updated="September 30, 2026">
       <P>This Privacy Policy explains what {OPERATOR} ("SecondRing," "we," "us") collects, how we use it, and the choices you have. It covers our website, the SecondRing app, and the text messages the Service sends and receives.</P>
 
       <SectionTitle>Who this covers</SectionTitle>
       <UL>
-        <li><strong>Our customers</strong> — the contractors and businesses that sign up for SecondRing.</li>
-        <li><strong>Callers and texters</strong> — people who call one of our customers' businesses and receive or reply to a SecondRing text.</li>
+        <li><strong>Our customers:</strong> the contractors and businesses that sign up for SecondRing.</li>
+        <li><strong>Callers and texters:</strong> people who call one of our customers' businesses and receive or reply to a SecondRing text.</li>
         <li><strong>Website visitors.</strong></li>
       </UL>
 
@@ -32,13 +37,13 @@ export default function Privacy() {
       <P><strong>Texts sent to callers.</strong> When someone calls a SecondRing customer's business and the call goes unanswered, SecondRing sends one or more text messages on that business's behalf, in response to the call. These messages are conversational and relate to the person's inquiry (for example, asking what they need help with and arranging a callback or quote). They are not marketing messages. By calling a business and continuing the text conversation, the person is contacting that business and expects a reply.</P>
       <UL>
         <li><strong>Message frequency varies</strong> and depends on the conversation.</li>
-        <li><strong>Message and data rates may apply.</strong></li>
+        <li><strong>Standard message and data rates may apply.</strong></li>
         <li><strong>To stop</strong> receiving texts, reply <strong>STOP</strong>. You will receive a confirmation and no further messages from that number. Reply <strong>START</strong> to resume.</li>
         <li><strong>For help</strong>, reply <strong>HELP</strong> or contact us at <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a>.</li>
         <li>Carriers are not liable for delayed or undelivered messages.</li>
       </UL>
       <P><strong>Texts sent to our customers.</strong> If you give us your mobile number, you agree to receive account, billing, and service texts from SecondRing, with the same frequency, rate, STOP, and HELP terms above.</P>
-      <P><strong>No sharing of mobile information.</strong> We do not share, sell, or rent phone numbers, text message content, or opt-in/consent information to third parties or affiliates for their marketing or promotional purposes. Mobile information is shared only with the service providers that help us deliver messages and run the Service, as described below, and with the business the person contacted.</P>
+      <P><strong>No sharing of mobile information.</strong> We do not sell or share your SMS opt-in data or personal information with third parties for marketing purposes. Phone numbers, text message content, and opt-in information are shared only with the service providers that help us deliver messages and run SecondRing, as described below, and with the business the person contacted.</P>
 
       <SectionTitle>Who we share information with</SectionTitle>
       <P>We share information only as needed to run the Service:</P>

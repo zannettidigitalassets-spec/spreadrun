@@ -1,6 +1,11 @@
+import { useEffect } from "react";
+import { setPageMeta } from "./seo.js";
 import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL, OPERATOR } from "./LegalLayout.jsx";
 
 export default function Terms() {
+  useEffect(() => {
+    setPageMeta("Terms of Service | SecondRing", "The terms for using SecondRing, including SMS terms, billing, and cancellation.", "/terms");
+  }, []);
   return (
     <LegalLayout title="Terms of Service" updated="September 30, 2026">
       <P>These Terms of Service ("Terms") are an agreement between you and {OPERATOR} ("SecondRing," "we," "us"). They govern your use of SecondRing, a service that automatically sends a text message to people who call your business and are not answered, and gives you an inbox to continue those conversations (the "Service"). By creating an account or using the Service you agree to these Terms. If you do not agree, do not use the Service.</P>
@@ -12,20 +17,21 @@ export default function Terms() {
       <P>You connect a business phone number to SecondRing (for example, by forwarding missed calls to a number we provide). When a call to your business goes unanswered, SecondRing sends a text message to the caller from your business's SecondRing number, using wording you control. Replies from the caller appear in your SecondRing inbox, where you can answer them. You can also set after-hours messages and tag conversations.</P>
       <P>We work to deliver messages quickly and reliably, but delivery depends on phone carriers and other third parties we do not control. We do not guarantee that any call will trigger a text, that any text will be delivered, or that delivery will happen within any particular time.</P>
 
-      <SectionTitle>Text messaging: consent, compliance and your responsibilities</SectionTitle>
+      <SectionTitle>SMS Terms</SectionTitle>
       <P>When SecondRing sends a text to someone who called your business, that text is sent on your behalf, to respond to the call they placed to you. You are the sender of those messages and are responsible for using the Service in compliance with applicable law, including the Telephone Consumer Protection Act (TCPA), CTIA messaging guidelines, carrier rules, and state laws on texting. You agree that you will:</P>
       <UL>
         <li>Use the Service only to respond to people who contacted your business, and only about their inquiry, such as scheduling, quoting, or following up on the job they called about.</li>
         <li>Not use the Service to send marketing or promotional messages, to message people who have not contacted you, or to send unlawful, deceptive, harassing, or prohibited content.</li>
         <li>Honor opt-outs. If a person replies STOP (or a similar opt-out word), SecondRing stops texting them from your number, and you must not try to message them another way through the Service.</li>
+        <li>Set your business voicemail greeting to the script SecondRing recommends, which tells callers that they may get a follow-up text and can reply STOP to opt out. SecondRing requires this step during onboarding because the greeting is the caller's notice before we text them.</li>
         <li>Accurately identify your business in your messages and in any information you provide for carrier registration.</li>
         <li>Give us truthful registration information. Carriers and messaging providers require every business number to be registered, and they may reject, suspend, or block a registration or number. We are not responsible for carrier decisions.</li>
       </UL>
       <P>We may suspend or limit messaging, or your account, if we believe messages violate these Terms, the law, or carrier requirements, or if we receive complaints.</P>
-      <P>For the texts SecondRing sends to you (such as account, billing, and service notices), you consent to receive them by providing your mobile number. See the SMS terms in our <a href="/privacy" style={{ color: "#0B5FFF" }}>Privacy Policy</a> for message frequency, opt-out, and help instructions.</P>
+      <P>For the texts SecondRing sends to you (such as account, billing, and service notices), you consent to receive them by providing your mobile number. Message frequency varies. Standard message and data rates may apply. Reply STOP to opt out or HELP for help at any time. See our <a href="/privacy" style={{ color: "#0B5FFF" }}>Privacy Policy</a> for how we handle SMS opt-in data.</P>
 
       <SectionTitle>Free trial</SectionTitle>
-      <P>New accounts get a 14-day free trial. The trial does not require a payment method. When the trial ends, you will need to choose a paid plan to keep using the Service. If you do not, your account becomes read-only or locked and messaging stops. We may delete your data after your trial ends. Each business is limited to one free trial, and we may decline a trial if we suspect abuse.</P>
+      <P>We may offer a free trial. If we do, its length and any conditions are shown when you sign up. When a trial ends, you will need to choose a paid plan to keep using the Service. If you do not, your account becomes read-only or locked and messaging stops. We may delete your data after your trial ends. Each business is limited to one free trial, and we may decline a trial if we suspect abuse.</P>
 
       <SectionTitle>Plans, billing and renewal</SectionTitle>
       <P>SecondRing is offered as a monthly subscription. Current plans and prices are shown on our pricing page and at checkout (currently Solo at $19 per month and Shop at $29 per month, in U.S. dollars). Each plan includes the phone numbers and monthly text volume described on the pricing page. Prices exclude any taxes we are required to collect.</P>
