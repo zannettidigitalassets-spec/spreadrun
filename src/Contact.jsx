@@ -168,7 +168,7 @@ export default function Contact() {
           <span style={{ fontWeight: 800, fontSize: 14 }}>SecondRing</span>
         </div>
         <div style={{ fontSize: 12, color: "#9BA8C0" }}>
-          © 2026 SecondRing · Zannetti Digital Assets LLC
+          © 2026 SecondRing
         </div>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
           <a href="/" style={{ fontSize: 12, color: "#9BA8C0", textDecoration: "none" }}>Home</a>

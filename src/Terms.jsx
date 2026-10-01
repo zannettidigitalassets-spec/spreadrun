@@ -1,9 +1,9 @@
-import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL, COMPANY } from "./LegalLayout.jsx";
+import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL, OPERATOR } from "./LegalLayout.jsx";
 
 export default function Terms() {
   return (
     <LegalLayout title="Terms of Service" updated="September 30, 2026">
-      <P>These Terms of Service ("Terms") are an agreement between you and {COMPANY} ("SecondRing," "we," "us"). They govern your use of SecondRing, a service that automatically sends a text message to people who call your business and are not answered, and gives you an inbox to continue those conversations (the "Service"). By creating an account or using the Service you agree to these Terms. If you do not agree, do not use the Service.</P>
+      <P>These Terms of Service ("Terms") are an agreement between you and {OPERATOR} ("SecondRing," "we," "us"). They govern your use of SecondRing, a service that automatically sends a text message to people who call your business and are not answered, and gives you an inbox to continue those conversations (the "Service"). By creating an account or using the Service you agree to these Terms. If you do not agree, do not use the Service.</P>
 
       <SectionTitle>Who can use SecondRing</SectionTitle>
       <P>SecondRing is for businesses. You must be at least 18, able to form a binding contract, and using the Service for a business you own or are authorized to act for. You are responsible for everything done under your account.</P>
@@ -25,7 +25,7 @@ export default function Terms() {
       <P>For the texts SecondRing sends to you (such as account, billing, and service notices), you consent to receive them by providing your mobile number. See the SMS terms in our <a href="/privacy" style={{ color: "#0B5FFF" }}>Privacy Policy</a> for message frequency, opt-out, and help instructions.</P>
 
       <SectionTitle>Free trial</SectionTitle>
-      <P>New accounts get a 14-day free trial. The trial does not require a payment method. When the trial ends, you will need to choose a paid plan to keep using the Service. If you do not, your account becomes read-only or locked and messaging stops. We keep your data for 30 days after the trial ends so you can subscribe and pick up where you left off, after which it may be deleted. Each business is limited to one free trial, and we may decline a trial if we suspect abuse.</P>
+      <P>New accounts get a 14-day free trial. The trial does not require a payment method. When the trial ends, you will need to choose a paid plan to keep using the Service. If you do not, your account becomes read-only or locked and messaging stops. We may delete your data after your trial ends. Each business is limited to one free trial, and we may decline a trial if we suspect abuse.</P>
 
       <SectionTitle>Plans, billing and renewal</SectionTitle>
       <P>SecondRing is offered as a monthly subscription. Current plans and prices are shown on our pricing page and at checkout (currently Solo at $19 per month and Shop at $29 per month, in U.S. dollars). Each plan includes the phone numbers and monthly text volume described on the pricing page. Prices exclude any taxes we are required to collect.</P>
@@ -33,7 +33,7 @@ export default function Terms() {
       <P>We may change prices or plan features. We will give you notice before a change affects your subscription, and you may cancel before the change takes effect.</P>
 
       <SectionTitle>Cancellation and refunds</SectionTitle>
-      <P>You can cancel at any time from your Account page (which opens the Stripe billing portal) or by contacting us. Cancellation takes effect at the end of your current paid month; you keep access and messaging until then, and you will not be charged again. We do not provide refunds or credits for partial months, unused time, or unused messages, except where required by law or where we made a billing error. After cancellation we keep your data for 30 days so you can reactivate, then we may delete it.</P>
+      <P>You can cancel at any time from your Account page (which opens the Stripe billing portal) or by contacting us. Cancellation takes effect at the end of your current paid month; you keep access and messaging until then, and you will not be charged again. We do not provide refunds or credits for partial months, unused time, or unused messages, except where required by law or where we made a billing error. We may delete your data after your subscription ends.</P>
 
       <SectionTitle>Your data</SectionTitle>
       <P>You keep ownership of your business information and of the conversations in your inbox. You give us permission to process that data to operate the Service, as described in our <a href="/privacy" style={{ color: "#0B5FFF" }}>Privacy Policy</a>. You are responsible for having any rights and permissions needed for the information you put into the Service.</P>
@@ -48,13 +48,13 @@ export default function Terms() {
       <P>SecondRing is a tool. It does not guarantee that you will win any job, recover any lead, or reduce any advertising charge.</P>
 
       <SectionTitle>Intellectual property</SectionTitle>
-      <P>The Service, including its software, design, and content (excluding your data), belongs to {COMPANY} and its licensors. We give you a limited, non-exclusive, non-transferable right to use it for your business while you are subscribed or on trial.</P>
+      <P>The Service, including its software, design, and content (excluding your data), belongs to {OPERATOR} and its licensors. We give you a limited, non-exclusive, non-transferable right to use it for your business while you are subscribed or on trial.</P>
 
       <SectionTitle>Disclaimers</SectionTitle>
       <P>The Service is provided "as is" and "as available," without warranties of any kind, express or implied, including warranties of merchantability, fitness for a particular purpose, and non-infringement, to the fullest extent permitted by law. We do not warrant that the Service will be uninterrupted, error-free, or that messages will always be delivered.</P>
 
       <SectionTitle>Limitation of liability</SectionTitle>
-      <P>To the fullest extent permitted by law, {COMPANY} will not be liable for indirect, incidental, special, consequential, or punitive damages, or for lost profits, lost jobs, or lost revenue, arising from your use of the Service. Our total liability for any claim relating to the Service is limited to the amount you paid us in the three months before the event giving rise to the claim. You agree to indemnify us against claims arising from messages you send through the Service in violation of these Terms or applicable law.</P>
+      <P>To the fullest extent permitted by law, {OPERATOR} will not be liable for indirect, incidental, special, consequential, or punitive damages, or for lost profits, lost jobs, or lost revenue, arising from your use of the Service. Our total liability for any claim relating to the Service is limited to the amount you paid us in the three months before the event giving rise to the claim. You agree to indemnify us against claims arising from messages you send through the Service in violation of these Terms or applicable law.</P>
 
       <SectionTitle>Termination</SectionTitle>
       <P>You may stop using the Service at any time. We may suspend or end your access if you breach these Terms, if required by law or a carrier, or if we discontinue the Service, in which case we will refund any prepaid, unused time.</P>
@@ -63,7 +63,7 @@ export default function Terms() {
       <P>We may update these Terms. If a change is material, we will notify you by email or in the Service before it takes effect. Continuing to use the Service after a change means you accept the updated Terms.</P>
 
       <SectionTitle>Governing law</SectionTitle>
-      <P>These Terms are governed by the laws of the United States and the state in which {COMPANY} is organized, without regard to conflict-of-law rules. Disputes will be resolved in the courts located in that state, unless applicable law requires otherwise.</P>
+      <P>These Terms are governed by the laws of the Commonwealth of Pennsylvania and applicable United States federal law, without regard to conflict-of-law rules. Disputes will be resolved in the state or federal courts located in Pennsylvania, unless applicable law requires otherwise.</P>
 
       <SectionTitle>Contact us</SectionTitle>
       <P>Questions about these Terms? Use our <a href="/contact" style={{ color: "#0B5FFF" }}>contact page</a> or email <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a>.</P>

@@ -1,9 +1,9 @@
-import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL, COMPANY } from "./LegalLayout.jsx";
+import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL, OPERATOR } from "./LegalLayout.jsx";
 
 export default function Privacy() {
   return (
     <LegalLayout title="Privacy Policy" updated="September 30, 2026">
-      <P>This Privacy Policy explains what {COMPANY} ("SecondRing," "we," "us") collects, how we use it, and the choices you have. It covers our website, the SecondRing app, and the text messages the Service sends and receives.</P>
+      <P>This Privacy Policy explains what {OPERATOR} ("SecondRing," "we," "us") collects, how we use it, and the choices you have. It covers our website, the SecondRing app, and the text messages the Service sends and receives.</P>
 
       <SectionTitle>Who this covers</SectionTitle>
       <UL>
@@ -48,7 +48,7 @@ export default function Privacy() {
       </UL>
 
       <SectionTitle>Retention</SectionTitle>
-      <P>We keep account and conversation data while your account is active. If your trial ends without a subscription, or you cancel, we keep your data for 30 days so you can come back, then we may delete it. You can ask us to delete your data sooner. We may keep limited records longer where needed for billing, tax, security, carrier compliance, or legal reasons.</P>
+      <P>We keep account and conversation data while your account is active. We may delete your data after your trial or subscription ends. You can ask us to delete your data sooner. We may keep limited records longer where needed for billing, tax, security, carrier compliance, or legal reasons.</P>
 
       <SectionTitle>Security</SectionTitle>
       <P>We use reasonable technical and organizational measures to protect your information, including encryption in transit and access controls on our database. No system is perfectly secure, and we cannot guarantee absolute security.</P>
@@ -66,7 +66,7 @@ export default function Privacy() {
       <P>We may update this policy. If a change is material we will notify customers by email or in the Service. The date at the top shows when it was last updated.</P>
 
       <SectionTitle>Contact us</SectionTitle>
-      <P>{COMPANY}. Questions or requests: <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a> or our <a href="/contact" style={{ color: "#0B5FFF" }}>contact page</a>.</P>
+      <P>{OPERATOR}. Questions or requests: <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a> or our <a href="/contact" style={{ color: "#0B5FFF" }}>contact page</a>.</P>
     </LegalLayout>
   );
 }

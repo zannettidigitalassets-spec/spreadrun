@@ -1,5 +1,5 @@
 export const SUPPORT_EMAIL = "spreadrun@gmail.com";
-export const COMPANY = "Zannetti Digital Assets LLC";
+export const OPERATOR = "Chris Zannetti, an individual based in Pennsylvania, doing business as SecondRing";
 
 export const SectionTitle = ({ children }) => (
   <h2 style={{ fontSize: 20, fontWeight: 800, margin: "32px 0 12px", letterSpacing: "-0.3px" }}>{children}</h2>
