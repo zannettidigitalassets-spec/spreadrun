@@ -31,7 +31,7 @@ export default function Terms() {
       <P>For the texts SecondRing sends to you (such as account, billing, and service notices), you consent to receive them by providing your mobile number. Message frequency varies. Standard message and data rates may apply. Reply STOP to opt out or HELP for help at any time. See our <a href="/privacy" style={{ color: "#0B5FFF" }}>Privacy Policy</a> for how we handle SMS opt-in data.</P>
 
       <SectionTitle>Free trial</SectionTitle>
-      <P>We may offer a free trial. If we do, its length and any conditions are shown when you sign up. When a trial ends, you will need to choose a paid plan to keep using the Service. If you do not, your account becomes read-only or locked and messaging stops. We may delete your data after your trial ends. Each business is limited to one free trial, and we may decline a trial if we suspect abuse.</P>
+      <P>New accounts get a 14-day free trial. The trial does not require a credit card or any other payment method. When the trial ends, you will need to choose a paid plan to keep using the Service. If you do not, your account becomes read-only or locked and messaging stops. We may delete your data after your trial ends. Each business is limited to one free trial, and we may decline a trial if we suspect abuse.</P>
 
       <SectionTitle>Plans, billing and renewal</SectionTitle>
       <P>SecondRing is offered as a monthly subscription. Current plans and prices are shown on our pricing page and at checkout (currently Solo at $19 per month and Shop at $29 per month, in U.S. dollars). Each plan includes the phone numbers and monthly text volume described on the pricing page. Prices exclude any taxes we are required to collect.</P>
