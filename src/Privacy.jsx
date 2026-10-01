@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { setPageMeta } from "./seo.js";
-import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL, OPERATOR } from "./LegalLayout.jsx";
+import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL } from "./LegalLayout.jsx";
 
 export default function Privacy() {
   useEffect(() => {
@@ -8,7 +8,7 @@ export default function Privacy() {
   }, []);
   return (
     <LegalLayout title="Privacy Policy" updated="September 30, 2026">
-      <P>This Privacy Policy explains what {OPERATOR} ("SecondRing," "we," "us") collects, how we use it, and the choices you have. It covers our website, the SecondRing app, and the text messages the Service sends and receives.</P>
+      <P>This Privacy Policy explains what SecondRing ("we," "us," "our") collects, how we use it, and the choices you have. It covers our website, the SecondRing app, and the text messages the Service sends and receives.</P>
 
       <SectionTitle>Who this covers</SectionTitle>
       <UL>
@@ -72,7 +72,7 @@ export default function Privacy() {
       <P>We may update this policy. If a change is material we will notify customers by email or in the Service. The date at the top shows when it was last updated.</P>
 
       <SectionTitle>Contact us</SectionTitle>
-      <P>{OPERATOR}. Questions or requests: <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a> or our <a href="/contact" style={{ color: "#0B5FFF" }}>contact page</a>.</P>
+      <P>SecondRing. Questions or requests: <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a> or our <a href="/contact" style={{ color: "#0B5FFF" }}>contact page</a>.</P>
     </LegalLayout>
   );
 }
