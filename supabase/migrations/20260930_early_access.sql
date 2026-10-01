@@ -9,3 +9,7 @@ create table if not exists public.early_access (
 );
 create unique index if not exists early_access_email_key on public.early_access (lower(email));
 alter table public.early_access enable row level security;
+
+-- This project does not auto-grant new tables to the API roles, so grant explicitly.
+-- anon and authenticated get nothing: only the server (service key) writes this table.
+grant select, insert on public.early_access to service_role;
