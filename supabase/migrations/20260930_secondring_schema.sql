@@ -76,3 +76,8 @@ begin
     execute format('create policy "own rows" on public.%I for all using (user_id = auth.uid()) with check (user_id = auth.uid())', t);
   end loop;
 end $$;
+
+-- This project does not auto-grant new tables to the API roles, so grant explicitly.
+-- Row level security above still limits each signed-in user to their own rows. anon gets nothing.
+grant select, insert, update, delete on public.phone_numbers, public.conversations, public.messages,
+  public.after_hours_rules, public.business_settings to authenticated, service_role;
