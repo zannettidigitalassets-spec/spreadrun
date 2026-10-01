@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { setPageMeta } from "./seo.js";
 import { useAuth, AuthModal, UserMenu } from "./Auth.jsx";
 import EarlyAccessModal from "./EarlyAccessModal.jsx";
+import { TRIAL_LIVE, SITE_TITLE, META_DESCRIPTION } from "./launchConfig.js";
 
 // Landing page copy is taken verbatim from SECONDRING_LANDING_COPY.md (draft v1).
 
@@ -14,9 +15,8 @@ const C = {
   line: "#D6DFFF",
 };
 
-// Flip to true at launch: CTAs go back to "Start free trial" and open sign-in (until A4 ships the real trial flow).
-// While false, every CTA is "Get early access": name + email is stored and no trial or account starts.
-const TRIAL_LIVE = false;
+// TRIAL_LIVE lives in launchConfig.js. While false: every CTA is "Get early access" (name + email is stored,
+// no trial or account starts), the pricing line and meta description use early-access wording, and Sign in is hidden.
 
 const GUIDE_PATH = "/guides/lsa-missed-call-charges-october-2026";
 
@@ -28,7 +28,7 @@ const STATS = [
 
 const STEPS = [
   { n: "1", title: "You miss a call.", text: "You're on a job, on a ladder, under a sink. It happens." },
-  { n: "2", title: "They get a text in seconds.", text: "“Sorry we missed you — what do you need help with?” Sent automatically, from your business number." },
+  { n: "2", title: "They get a text in seconds.", text: "“Sorry we missed you, what do you need help with?” Sent automatically, from your business number." },
   { n: "3", title: "You reply when you're free.", text: "Everything lands in one simple inbox. Tag the lead, book the job, move on." },
 ];
 
@@ -42,9 +42,9 @@ const FEATURES = [
 ];
 
 const FAQ = [
-  ["Does this replace my phone number?", "No. Your number stays. Missed calls forward to SecondRing only when you don't pick up — conditional forwarding, set up in minutes."],
+  ["Does this replace my phone number?", "No. Your number stays. Missed calls forward to SecondRing only when you don't pick up. It's conditional forwarding, set up in minutes."],
   ["Do I need to install anything on my phone?", "No. The inbox lives in your browser. Texts go out automatically whether your phone is on or off."],
-  ["What about spam rules (10DLC)?", "Handled. Every number is registered compliantly — it's part of onboarding, not your problem."],
+  ["What about spam rules (10DLC)?", "Handled. Every number is registered compliantly as part of onboarding, so you don't have to deal with it."],
   ["What if I already use Jobber / HighLevel / Housecall Pro?", "Keep them. SecondRing does one thing those platforms charge $49–197/mo for, at $19. It sits alongside whatever you run."],
   ["Can I cancel?", "Anytime, in two clicks, from your account page. Your number and data stay yours."],
 ];
@@ -78,11 +78,7 @@ export default function SecondRingLanding() {
   const [open, setOpen] = useState(null);
 
   useEffect(() => {
-    setPageMeta(
-      "SecondRing — Missed-Call Text-Back for Contractors",
-      "SecondRing texts every missed caller back in under 60 seconds from your own business number, so the job stays yours. 14-day free trial.",
-      "/"
-    );
+    setPageMeta(SITE_TITLE, META_DESCRIPTION, "/");
   }, []);
 
   const start = () => {
@@ -107,7 +103,7 @@ export default function SecondRingLanding() {
     <div style={{ fontFamily: "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif", color: C.body, background: "#fff", lineHeight: 1.6 }}>
       {/* News bar */}
       <div style={{ background: C.ink, color: "#DCE6FF", fontSize: 14, padding: "10px 20px", textAlign: "center" }}>
-        As of October 1, 2026, Google charges Local Services advertisers for missed calls over 20 seconds — even the ones that never connected. You're now paying for silence. SecondRing makes sure silence never happens.{" "}
+        As of October 1, 2026, Google charges Local Services advertisers for missed calls over 20 seconds, even the ones that never connected. You can end up paying for calls nobody answered. SecondRing texts every one of those callers back.{" "}
         <a href={GUIDE_PATH} style={{ color: "#fff", fontWeight: 700 }}>Learn more</a>
       </div>
 
@@ -119,7 +115,7 @@ export default function SecondRingLanding() {
             <a href="#product" onClick={scrollTo("product")} style={{ color: C.body, textDecoration: "none" }}>Product</a>
             <a href="#pricing" onClick={scrollTo("pricing")} style={{ color: C.body, textDecoration: "none" }}>Pricing</a>
             <a href="#faq" onClick={scrollTo("faq")} style={{ color: C.body, textDecoration: "none" }}>FAQ</a>
-            {!loading && !user && (
+            {TRIAL_LIVE && !loading && !user && (
               <button onClick={() => setShowAuth(true)} style={{ background: "none", border: `1.5px solid ${C.line}`, borderRadius: 8, padding: "7px 14px", fontWeight: 700, color: C.ink, cursor: "pointer", fontFamily: "inherit", fontSize: 14 }}>Sign in</button>
             )}
             {!loading && user && <UserMenu user={user} isStarter={false} />}
@@ -135,7 +131,7 @@ export default function SecondRingLanding() {
           Every missed call is a job that went to your competitor.
         </h1>
         <p style={{ fontSize: 20, maxWidth: 680, margin: "0 auto 32px", color: C.body }}>
-          SecondRing texts every missed caller back in under 60 seconds — from your own business number — so the job stays yours.
+          SecondRing texts every missed caller back in under 60 seconds, from your own business number, so the job stays yours.
         </p>
         <Cta large onClick={start}>{ctaLabel}</Cta>
         <p style={{ fontSize: 14, color: C.muted, marginTop: 14 }}>No hardware. No new number to hand out. Cancel anytime.</p>
@@ -154,7 +150,7 @@ export default function SecondRingLanding() {
             ))}
           </div>
           <p style={{ maxWidth: 720, margin: "32px auto 0", textAlign: "center", fontSize: 18 }}>
-            You can't answer from under a sink. Your competitor can answer from their couch. The difference isn't effort — it's what happens in the 60 seconds after the call you missed.
+            You can't answer from under a sink. Your competitor can answer from their couch. What matters is what happens in the 60 seconds after the call you missed.
           </p>
         </div>
       </section>
@@ -189,7 +185,7 @@ export default function SecondRingLanding() {
       <section id="pricing" style={{ background: C.tint, padding: "64px 0" }}>
         <div style={{ ...wrap, textAlign: "center" }}>
           <h2 style={{ color: C.ink, fontSize: 32, letterSpacing: "-0.6px", margin: "0 0 8px" }}>Pricing</h2>
-          <p style={{ fontWeight: 700, color: C.ink, margin: "0 0 28px" }}>14-day free trial. Full product. No credit card.</p>
+          <p style={{ fontWeight: 700, color: C.ink, margin: "0 0 28px" }}>{TRIAL_LIVE ? "14-day free trial. Full product. No credit card." : "Launching soon. Join the early access list."}</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 680, margin: "0 auto" }}>
             {PLANS.map((p) => (
               <div key={p.id} style={{ background: "#fff", border: `1px solid ${C.line}`, borderRadius: 14, padding: 28 }}>
@@ -224,7 +220,7 @@ export default function SecondRingLanding() {
       {/* Final CTA */}
       <section style={{ background: C.ink, color: "#fff", padding: "64px 20px", textAlign: "center" }}>
         <h2 style={{ fontSize: 30, letterSpacing: "-0.5px", margin: "0 auto 24px", maxWidth: 640 }}>
-          Your next missed call is coming. Decide now what happens after it.
+          You're going to miss another call. Make sure they hear back.
         </h2>
         <Cta large onClick={start}>{ctaLabel}</Cta>
       </section>
