@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { setPageMeta } from "./seo.js";
 import { useAuth, AuthModal, UserMenu } from "./Auth.jsx";
+import EarlyAccessModal from "./EarlyAccessModal.jsx";
 
 // Landing page copy is taken verbatim from SECONDRING_LANDING_COPY.md (draft v1).
 
@@ -12,6 +13,10 @@ const C = {
   tint: "#F0F4FF",
   line: "#D6DFFF",
 };
+
+// Flip to true at launch: CTAs go back to "Start free trial" and open sign-in (until A4 ships the real trial flow).
+// While false, every CTA is "Get early access": name + email is stored and no trial or account starts.
+const TRIAL_LIVE = false;
 
 const GUIDE_PATH = "/guides/lsa-missed-call-charges-october-2026";
 
@@ -69,6 +74,7 @@ function Cta({ children, onClick, large }) {
 export default function SecondRingLanding() {
   const { user, loading } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
+  const [showEarly, setShowEarly] = useState(false);
   const [open, setOpen] = useState(null);
 
   useEffect(() => {
@@ -80,10 +86,17 @@ export default function SecondRingLanding() {
   }, []);
 
   const start = () => {
+    if (!TRIAL_LIVE) {
+      if (window.gtag) window.gtag("event", "early_access_cta_click", { source: "landing" });
+      setShowEarly(true);
+      return;
+    }
     if (window.gtag) window.gtag("event", "trial_cta_click", { source: "landing" });
     // Trial signup flow (A4) is not built yet: for now this opens sign-in.
     setShowAuth(true);
   };
+  const ctaLabel = TRIAL_LIVE ? "Start your 14-day free trial" : "Get early access";
+  const ctaLabelShort = TRIAL_LIVE ? "Start free trial" : "Get early access";
 
   const scrollTo = (id) => (e) => {
     e.preventDefault();
@@ -114,6 +127,7 @@ export default function SecondRingLanding() {
         </div>
       </header>
       {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+      {showEarly && <EarlyAccessModal onClose={() => setShowEarly(false)} />}
 
       {/* Hero */}
       <section style={{ ...wrap, padding: "72px 20px 56px", textAlign: "center" }}>
@@ -123,7 +137,7 @@ export default function SecondRingLanding() {
         <p style={{ fontSize: 20, maxWidth: 680, margin: "0 auto 32px", color: C.body }}>
           SecondRing texts every missed caller back in under 60 seconds — from your own business number — so the job stays yours.
         </p>
-        <Cta large onClick={start}>Start your 14-day free trial</Cta>
+        <Cta large onClick={start}>{ctaLabel}</Cta>
         <p style={{ fontSize: 14, color: C.muted, marginTop: 14 }}>No hardware. No new number to hand out. Cancel anytime.</p>
       </section>
 
@@ -182,7 +196,7 @@ export default function SecondRingLanding() {
                 <div style={{ color: C.ink, fontWeight: 800, fontSize: 20 }}>{p.name}</div>
                 <div style={{ fontSize: 40, fontWeight: 800, color: C.ink, letterSpacing: "-1px" }}>{p.price}<span style={{ fontSize: 16, color: C.muted, fontWeight: 600 }}>/mo</span></div>
                 <div style={{ margin: "8px 0 20px" }}>{p.blurb}</div>
-                <Cta onClick={start}>Start free trial</Cta>
+                <Cta onClick={start}>{ctaLabelShort}</Cta>
               </div>
             ))}
           </div>
@@ -212,7 +226,7 @@ export default function SecondRingLanding() {
         <h2 style={{ fontSize: 30, letterSpacing: "-0.5px", margin: "0 auto 24px", maxWidth: 640 }}>
           Your next missed call is coming. Decide now what happens after it.
         </h2>
-        <Cta large onClick={start}>Start your 14-day free trial</Cta>
+        <Cta large onClick={start}>{ctaLabel}</Cta>
       </section>
 
       <footer style={{ ...wrap, padding: "24px 20px 40px", fontSize: 13, color: C.muted, display: "flex", gap: 16, flexWrap: "wrap" }}>
