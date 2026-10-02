@@ -107,7 +107,7 @@ export default function ClinicalApi() {
 
       <section className="section wrap" id="demo" aria-labelledby="demo-h">
         <h2 id="demo-h">Try it now</h2>
-        <ClinicalDemo sample={example.body.report} maxBytes={API.demoMaxBodyBytes} />
+        <ClinicalDemo api={API} sample={example.body.report} />
       </section>
 
       <section className="section wrap" aria-labelledby="price-h">

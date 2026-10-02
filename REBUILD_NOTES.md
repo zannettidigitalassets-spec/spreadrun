@@ -110,14 +110,22 @@ DataForge, copy it here, update the hash, run the tests.
 
 ## Function limit (Hobby plan)
 
-Vercel Hobby allows at most 12 serverless functions per deployment. V1 uses 11: four validator routes (paid and demo for each
-API), account, keys, credits checkout, customer portal, Stripe webhook, admin metrics and one 410 handler for retired endpoints. `npm run build` fails
-if the count goes over 12. To get here from 13: `/api/rent-estimate` lost its own function (a `vercel.json` rewrite sends it
-to `api/retired.js`, which answers the same 410; plain `vercel.json` rules can't return a 410 by themselves) and the weekly
-verdict email cron was dropped.
+Vercel Hobby allows at most 12 serverless functions per deployment. The project uses 8:
 
-Scaling constraint, not fixed now: every new API costs 2 functions (paid and demo), so the cap bites again at about 5 APIs.
-The answers are one dispatcher function that serves every validator, or the Pro plan. Decide only if the 30-day verdict is PASS.
+| Function | Serves |
+|---|---|
+| `api/[mode]/[slug].py` | every validator, both `/api/v1/<api>` (paid) and `/api/demo/<api>` (free demo) |
+| `api/account.js`, `api/keys.js`, `api/credits/checkout.js`, `api/customer-portal.js`, `api/stripe-webhook.js` | accounts and billing |
+| `api/admin/metrics.js` | the launch verdict |
+| `api/retired.js` | 410 Gone for `/api/rent-estimate` and `/api/early-access` (via `vercel.json` rewrites) |
+
+Adding a validator means adding it to `pylib/spreadrun_api/catalog.py` and a runner; it adds no function. Static functions win
+over the dynamic route because Vercel checks the filesystem first. The route file receives either the public path or the route
+destination (`/api/[mode]/[slug]?mode=v1&slug=<api>`); `handler.resolve_route` accepts both. Verified on 2026-10-02 with
+`vercel build` and by running the built bundle through Vercel's own Python runtime. `npm run build` fails above 12 functions.
+
+History: 13 functions failed the first preview; dropping the rent-estimate function and the weekly verdict cron got to 11;
+the dispatcher got to 8.
 
 ## Known limitations
 
