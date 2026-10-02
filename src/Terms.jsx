@@ -1,4 +1,5 @@
 import LegalPage, { SectionTitle, P, UL } from './legal/LegalPage.jsx';
+import { PriceTable } from './pages/Catalog.jsx';
 
 // Approved 2026-10-02 from docs/legal-drafts/terms-DRAFT.md with the owner's decisions applied:
 // brand-only operator wording, 30-day refunds on unused credits, and no PHI or personal data in submissions.
@@ -21,12 +22,15 @@ export default function Terms() {
 
       <SectionTitle>Prepaid credits and charges</SectionTitle>
       <UL>
-        <li>You buy credits in advance through Stripe. Packs are currently $5 (20 calls), $20 (80 calls) and $50 (200 calls), and each completed report costs $0.25. Current packs and prices are always shown on the <a href="/apis#pricing">pricing page</a> and your account page.</li>
+        <li>You buy credits in advance through Stripe. Packs are currently $5, $20 and $50. A pack buys that many cents of credit, and credit works on every SpreadRun API: $5 covers 20 standard runs at $0.25, for example. Each API has its own price per completed report, shown in the table below, on the <a href="/apis#pricing">pricing page</a> and on your account page.</li>
         <li>A call is charged when it completes and returns a report, whatever the report's result (for example PASS, WARN or FAIL). Requests rejected before a report is produced (such as invalid input) are not charged. The documentation describes which requests count as completed for each API.</li>
         <li>If your balance is too low for a call, the report is not returned and nothing is charged.</li>
         <li>Credits never expire. Credits cannot be transferred between accounts or exchanged for cash, except through a refund as described below.</li>
         <li>Prices exclude any taxes we are required to collect. We may change prices or packs; changes do not reduce credits you already bought, and a change to the price per call applies to calls made after the change is posted.</li>
       </UL>
+
+      <SectionTitle>Price per completed report</SectionTitle>
+      <PriceTable />
 
       <SectionTitle>Refunds</SectionTitle>
       <P>If you change your mind, ask us within 30 days of a purchase and we will refund the unused credits from that purchase to your original payment method. Credits you have already spent are not refundable. After 30 days, purchases are non-refundable, except where we made a billing error or where applicable law requires a refund. To ask for a refund, use our <a href="/contact">contact page</a> or email <a href="mailto:spreadrun@gmail.com">spreadrun@gmail.com</a> from the address on your account.</P>

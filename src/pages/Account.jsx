@@ -98,7 +98,8 @@ function SignIn() {
         <h2>What you get</h2>
         <ul>
           <li>API keys for every SpreadRun API.</li>
-          <li>Prepaid credits: $0.25 per completed run, packs from $5. Credits never expire.</li>
+          <li>Prepaid credits that work on every API, packs from $5. Each API has its own price per run, from $0.25. Credits never expire.</li>
+          <li>Full validations from the test form on each product page, paid from your credits.</li>
           <li>Usage for the last 30 days, per API.</li>
         </ul>
         <p className="small muted">Just trying things out? The test form on each <a href="/apis">product page</a> works without an account.</p>
@@ -173,12 +174,13 @@ function Dashboard({ session }) {
 
       <section className="section" aria-labelledby="bal">
         <h2 id="bal">Credits</h2>
-        <p style={{ fontSize: 22, color: 'var(--ink)' }}><b>{dollars(data.balanceCents)}</b> <span className="muted" style={{ fontSize: 16 }}>enough for {data.callsRemaining} runs at {dollars(data.pricePerCallCents)}</span></p>
+        <p style={{ fontSize: 22, color: 'var(--ink)', marginBottom: 8 }}><b>{dollars(data.balanceCents)}</b> <span className="muted" style={{ fontSize: 16 }}>of credit, usable on every API</span></p>
+        <p className="small muted">Enough for {APIS.map((a) => `${Math.floor(data.balanceCents / a.priceCents)} ${a.name} runs at ${dollars(a.priceCents)}`).join(', or ')}.</p>
         <div className="packs">
           {data.packs.map((p) => (
             <div className="pack" key={p.id}>
               <div className="amt">{dollars(p.priceCents)}</div>
-              <div style={{ margin: '0 0 12px' }}>{Math.floor(p.creditCents / data.pricePerCallCents)} runs</div>
+              <div style={{ margin: '0 0 12px' }}>{Math.floor(p.creditCents / data.pricePerCallCents)} standard runs</div>
               <button className="btn small" type="button" disabled={!!busy} onClick={() => buy(p.id)}>Buy {dollars(p.priceCents)} pack</button>
             </div>
           ))}

@@ -20,12 +20,15 @@ export const supabaseAdmin = createClient(SUPABASE_URL, process.env.SUPABASE_SER
 });
 
 // Prepaid credit packs. Prices are set here, server side, never taken from the browser.
-// Credits are held in cents. Every API currently costs 25 cents per completed run.
-export const PRICE_PER_CALL_CENTS = 25;
+// Credits are held in cents and work on every API. Each API has its own price per completed run
+// (pylib/spreadrun_api/catalog.py): standard validators 25 cents, high-stakes validators 100 cents.
+export const STANDARD_RUN_CENTS = 25;
+export const RUN_PRICES_CENTS = [25, 100];
+export const PRICE_PER_CALL_CENTS = STANDARD_RUN_CENTS; // kept for older callers
 export const PACKS = {
-  pack_5: { priceCents: 500, creditCents: 500, label: '$5 credit pack (20 calls)' },
-  pack_20: { priceCents: 2000, creditCents: 2000, label: '$20 credit pack (80 calls)' },
-  pack_50: { priceCents: 5000, creditCents: 5000, label: '$50 credit pack (200 calls)' },
+  pack_5: { priceCents: 500, creditCents: 500, label: '$5 credit pack (20 standard runs)' },
+  pack_20: { priceCents: 2000, creditCents: 2000, label: '$20 credit pack (80 standard runs)' },
+  pack_50: { priceCents: 5000, creditCents: 5000, label: '$50 credit pack (200 standard runs)' },
 };
 
 export const json = (body, status = 200) =>

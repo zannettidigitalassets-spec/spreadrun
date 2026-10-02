@@ -1,6 +1,6 @@
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import { Json } from '../site/CodeSample.jsx';
-import { APIS, dollars, PRICE_PER_CALL_CENTS } from '../catalog.js';
+import { APIS, dollars } from '../catalog.js';
 import unauthorized from '../content/examples/error-unauthorized.json';
 import insufficient from '../content/examples/error-insufficient-credits.json';
 
@@ -55,10 +55,11 @@ export default function Docs() {
 
         <h2 id="billing">Credits and billing</h2>
         <ul>
-          <li>Every API costs {dollars(PRICE_PER_CALL_CENTS)} per completed run, taken from prepaid credits. Packs: $5 (20 runs), $20 (80 runs), $50 (200 runs). Credits never expire.</li>
+          <li>Each API has its own price per completed run (see the table above), taken from prepaid credits. Credits are held in cents and work on every API. Packs: $5, $20 and $50 of credit, which is 20, 80 or 200 standard runs at $0.25. Credits never expire.</li>
           <li>A run is charged once, when it returns a report (PASS, WARN or FAIL). Each response carries a <code>requestId</code>; the same request is never charged twice.</li>
           <li>Input errors, internal errors and billing outages are never charged, and in those cases no report is returned.</li>
-          <li>Successful responses include <code>balanceCents</code>, your remaining credit after the charge.</li>
+          <li>Successful responses include <code>priceCents</code>, what this run cost, and <code>balanceCents</code>, your remaining credit after the charge.</li>
+          <li>Signed in on the website, the test form on each product page can run full validations paid from the same balance, with no API key.</li>
         </ul>
 
         <h2 id="response">Response envelope</h2>

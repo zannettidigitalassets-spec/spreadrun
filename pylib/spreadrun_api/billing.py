@@ -19,7 +19,7 @@ def hash_key(raw: str) -> str:
 @dataclass
 class Caller:
     user_id: str
-    key_id: str
+    key_id: str | None  # None for a signed-in website user paying from a test form
     balance_cents: int
 
 
@@ -30,15 +30,23 @@ class ChargeResult:
     reason: str = ''
 
 
+def extract_credential(headers):
+    """Returns ('key', sr_...) for an API key, ('session', jwt) for a signed-in website user, or (None, None).
+
+    API keys come as "Authorization: Bearer sr_..." or "X-API-Key: sr_...". The website's test forms send the
+    user's Supabase access token as "Authorization: Bearer <jwt>" so a signed-in user can pay from the page."""
+    auth = (headers.get('Authorization') or '').strip()
+    token = auth[7:].strip() if auth.lower().startswith('bearer ') else (headers.get('X-API-Key') or '').strip()
+    if token.startswith(KEY_PREFIX) and len(token) <= 200:
+        return 'key', token
+    if auth.lower().startswith('bearer ') and token.count('.') == 2 and len(token) <= 4096:
+        return 'session', token
+    return None, None
+
+
 def extract_key(headers) -> str | None:
-    auth = headers.get('Authorization') or ''
-    if auth.lower().startswith('bearer '):
-        token = auth[7:].strip()
-    else:
-        token = (headers.get('X-API-Key') or '').strip()
-    if not token.startswith(KEY_PREFIX) or len(token) > 200:
-        return None
-    return token
+    kind, token = extract_credential(headers)
+    return token if kind == 'key' else None
 
 
 def authenticate(raw_key: str) -> Caller | None:
@@ -48,6 +56,15 @@ def authenticate(raw_key: str) -> Caller | None:
         return None
     row = rows[0] if isinstance(rows, list) else rows
     return Caller(user_id=row['user_id'], key_id=row['key_id'], balance_cents=int(row['balance_cents']))
+
+
+def authenticate_session(access_token: str) -> Caller | None:
+    """A signed-in website user. Same credits, same charge path, no API key."""
+    user = store.auth_user(access_token)
+    if not user:
+        return None
+    acc = store.rpc('ensure_account', {'p_user_id': user['id'], 'p_email': user['email']})
+    return Caller(user_id=acc['user_id'], key_id=None, balance_cents=int(acc['balance_cents']))
 
 
 def charge_request(caller: Caller, *, api: str, price_cents: int, request_id: str,

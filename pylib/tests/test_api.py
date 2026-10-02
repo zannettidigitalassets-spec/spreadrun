@@ -34,6 +34,7 @@ class FakeStore:
         self.ledger = []
         self.calls = []
         self.demo = {}
+        self.sessions = {}   # jwt -> (user_id, email)
 
     def add_user(self, cents):
         user, key_id, raw = str(uuid.uuid4()), str(uuid.uuid4()), 'sr_' + uuid.uuid4().hex
@@ -41,7 +42,19 @@ class FakeStore:
         self.balance[user] = cents
         return raw, user
 
+    def add_session(self, cents):
+        user, jwt = str(uuid.uuid4()), 'eyJhbGciOiJIUzI1NiJ9.' + uuid.uuid4().hex + '.sig'
+        self.sessions[jwt] = (user, f'{user[:8]}@example.com')
+        self.balance[user] = cents
+        return jwt, user
+
+    def auth_user(self, token, timeout=6):
+        hit = self.sessions.get(token)
+        return {'id': hit[0], 'email': hit[1]} if hit else None
+
     def rpc(self, fn, args, timeout=6):
+        if fn == 'ensure_account':
+            return {'user_id': args['p_user_id'], 'balance_cents': self.balance.setdefault(args['p_user_id'], 0)}
         if fn == 'auth_api_key':
             hit = self.keys.get(args['p_key_hash'])
             return [{'user_id': hit[0], 'key_id': hit[1], 'balance_cents': self.balance[hit[0]]}] if hit else []
@@ -133,6 +146,7 @@ class PaidFlow(unittest.TestCase):
     def setUp(self):
         self.fake = FakeStore()
         self.p = [mock.patch.object(store, 'rpc', self.fake.rpc),
+                  mock.patch.object(store, 'auth_user', self.fake.auth_user),
                   mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'test'})]
         for p in self.p:
             p.start()
@@ -203,6 +217,26 @@ class PaidFlow(unittest.TestCase):
         self.assertEqual(status, 503)
         self.assertNotIn('report', out)
 
+    def test_signed_in_web_user_pays_from_credits(self):
+        jwt, user = self.fake.add_session(500)
+        status, out = call(CLIN, 'paid', (FIX / 'clinical-pass.json').read_bytes(), {'Authorization': f'Bearer {jwt}'})
+        self.assertEqual(status, 200, out)
+        self.assertTrue(out['charged'])
+        self.assertEqual(self.fake.balance[user], 475)
+
+    def test_expired_session_is_401_and_free(self):
+        jwt, user = self.fake.add_session(500)
+        status, out = call(CLIN, 'paid', (FIX / 'clinical-pass.json').read_bytes(), {'Authorization': 'Bearer aaa.bbb.ccc'})
+        self.assertEqual(status, 401)
+        self.assertIn('session', out['error']['message'])
+        self.assertEqual(self.fake.balance[user], 500)
+
+    def test_session_with_low_balance_is_402(self):
+        jwt, user = self.fake.add_session(0)
+        status, out = call(CLIN, 'paid', (FIX / 'clinical-pass.json').read_bytes(), {'Authorization': f'Bearer {jwt}'})
+        self.assertEqual(status, 402)
+        self.assertNotIn('report', out)
+
     def test_paid_without_store_config_is_503(self):
         with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': ''}):
             self.assertEqual(call(CLIN, 'paid', b'{}', {'Authorization': 'Bearer sr_x'})[0], 503)
@@ -247,15 +281,26 @@ class DemoFlow(unittest.TestCase):
         self.assertEqual(status, 200)
 
 
+class Routing(unittest.TestCase):
+    def test_resolve_public_and_destination_paths(self):
+        for path in ['/api/v1/hospital-mrf-validator?maxRecords=5',
+                     '/api/[mode]/[slug]?mode=v1&slug=hospital-mrf-validator&maxRecords=5']:
+            self.assertEqual(handler.resolve_route(path), (MRF, 'paid'))
+        self.assertEqual(handler.resolve_route('/api/demo/clinical-trial-table-validator'), (CLIN, 'demo'))
+        for bad in ['/api/v2/hospital-mrf-validator', '/api/v1/nope', '/api/v1', '/api/admin/metrics', '/x/v1/hospital-mrf-validator']:
+            self.assertEqual(handler.resolve_route(bad), (None, None), bad)
+
+
 class OverHttp(unittest.TestCase):
     """The real BaseHTTPRequestHandler class, served on localhost, as Vercel would invoke it."""
 
     def test_handler_class_end_to_end(self):
-        srv = HTTPServer(('127.0.0.1', 0), handler.make_handler(MRF, 'demo'))
+        srv = HTTPServer(('127.0.0.1', 0), handler.Dispatcher)
         Thread(target=srv.serve_forever, daemon=True).start()
         try:
             with mock.patch.object(store, 'rpc', FakeStore().rpc):
-                url = f'http://127.0.0.1:{srv.server_port}/api/demo/hospital-mrf-validator'
+                base = f'http://127.0.0.1:{srv.server_port}'
+                url = f'{base}/api/demo/hospital-mrf-validator'
                 res = urlopen(Request(url, data=(FIX / 'valid-wide.csv').read_bytes(), method='POST',
                                       headers={'Content-Type': 'text/csv'}))
                 out = json.loads(res.read())
@@ -264,6 +309,9 @@ class OverHttp(unittest.TestCase):
                 with self.assertRaises(HTTPError) as ctx:
                     urlopen(url)
                 self.assertEqual(ctx.exception.code, 405)
+                with self.assertRaises(HTTPError) as ctx:
+                    urlopen(Request(f'{base}/api/v1/not-an-api', data=b'x', method='POST'))
+                self.assertEqual(ctx.exception.code, 404)
         finally:
             srv.shutdown()
 

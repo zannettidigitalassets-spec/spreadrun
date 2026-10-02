@@ -1,4 +1,4 @@
-import { requireUser, ensureAccount, supabaseAdmin, json, fail, PRICE_PER_CALL_CENTS, PACKS } from './_lib/clients.js';
+import { requireUser, ensureAccount, supabaseAdmin, json, fail, STANDARD_RUN_CENTS, RUN_PRICES_CENTS, PACKS } from './_lib/clients.js';
 
 // GET /api/account  (signed-in user)
 // Creates the account on first visit (logged once as a signup), then returns balance, keys and usage.
@@ -34,8 +34,9 @@ export async function GET(request) {
     return json({
       email: account.email,
       balanceCents: account.balance_cents,
-      callsRemaining: Math.floor(account.balance_cents / PRICE_PER_CALL_CENTS),
-      pricePerCallCents: PRICE_PER_CALL_CENTS,
+      callsRemaining: Math.floor(account.balance_cents / STANDARD_RUN_CENTS), // standard runs
+      pricePerCallCents: STANDARD_RUN_CENTS,
+      runPricesCents: RUN_PRICES_CENTS,
       hasBillingHistory: Boolean(account.stripe_customer_id),
       packs: Object.entries(PACKS).map(([id, p]) => ({ id, ...p })),
       keys: keys.data,

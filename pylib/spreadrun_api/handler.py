@@ -94,16 +94,17 @@ def process(api, mode, headers, read_body, path='/'):
     else:
         if not store.configured():
             return _err(503, 'billing_unavailable', 'Paid calls are temporarily unavailable.', requestId=request_id)
-        raw_key = billing.extract_key(headers)
-        if not raw_key:
+        kind, credential = billing.extract_credential(headers)
+        if not kind:
             return _err(401, 'unauthorized', 'Send your API key as "Authorization: Bearer sr_...".', requestId=request_id)
         try:
-            caller = billing.authenticate(raw_key)
+            caller = billing.authenticate(credential) if kind == 'key' else billing.authenticate_session(credential)
         except store.StoreUnavailable as exc:
             print(f'[spreadrun] auth failed: {exc}', file=sys.stderr)
             return _err(503, 'billing_unavailable', 'Paid calls are temporarily unavailable.', requestId=request_id)
         if caller is None:
-            return _err(401, 'unauthorized', 'Unknown or revoked API key.', requestId=request_id)
+            msg = 'Unknown or revoked API key.' if kind == 'key' else 'Your session expired. Sign in again.'
+            return _err(401, 'unauthorized', msg, requestId=request_id)
         if caller.balance_cents < cfg['price_cents']:
             _log(api, mode, 'insufficient_credits', request_id=request_id, caller=caller)
             return _err(402, 'insufficient_credits', 'Not enough credits for this call. Buy credits on your account page.',
@@ -142,30 +143,76 @@ def process(api, mode, headers, read_body, path='/'):
                  'priceCents': cfg['price_cents'], 'balanceCents': result.balance_cents, 'report': report}
 
 
-def make_handler(api, mode):
-    class Handler(BaseHTTPRequestHandler):
-        def _send(self, status, payload):
-            raw = json.dumps(payload, separators=(',', ':')).encode('utf-8')
-            self.send_response(status)
-            self.send_header('Content-Type', 'application/json; charset=utf-8')
-            self.send_header('Cache-Control', 'no-store')
-            if isinstance(payload, dict):
-                rid = payload.get('requestId') or payload.get('error', {}).get('requestId')
-                if rid:
-                    self.send_header('X-Request-Id', rid)
-            self.send_header('Content-Length', str(len(raw)))
-            self.end_headers()
-            self.wfile.write(raw)
+MODES = {'v1': 'paid', 'demo': 'demo'}
 
+
+def resolve_route(path):
+    """Work out (api, mode) for the single dynamic route api/[mode]/[slug].py.
+
+    Vercel may hand the function either the public path (/api/v1/<api>?...) or the
+    route destination (/api/[mode]/[slug]?mode=v1&slug=<api>&...). Both are accepted.
+    Returns (None, None) when the path names no known API or mode."""
+    parts = urlsplit(path)
+    query = parse_qs(parts.query)
+    seg = [p for p in parts.path.split('/') if p]
+    if 'mode' in query and 'slug' in query:
+        mode_key, slug = query['mode'][0], query['slug'][0]
+    elif len(seg) == 3 and seg[0] == 'api':
+        mode_key, slug = seg[1], seg[2]
+    else:
+        return None, None
+    if mode_key not in MODES or slug not in APIS:
+        return None, None
+    return slug, MODES[mode_key]
+
+
+class _JsonHandler(BaseHTTPRequestHandler):
+    def _send(self, status, payload):
+        raw = json.dumps(payload, separators=(',', ':')).encode('utf-8')
+        self.send_response(status)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Cache-Control', 'no-store')
+        if isinstance(payload, dict):
+            rid = payload.get('requestId') or payload.get('error', {}).get('requestId')
+            if rid:
+                self.send_header('X-Request-Id', rid)
+        self.send_header('Content-Length', str(len(raw)))
+        self.end_headers()
+        self.wfile.write(raw)
+
+    def log_message(self, *args):  # do not log request paths or query values
+        pass
+
+
+class Dispatcher(_JsonHandler):
+    """One function for every validator in both modes: /api/v1/<api> and /api/demo/<api>.
+    Adding a validator to catalog.py adds no serverless function."""
+
+    def _route(self):
+        api, mode = resolve_route(self.path)
+        if api is None:
+            self._send(404, {'error': {'code': 'not_found', 'message': f'No such API. Catalog: {DOCS}'}})
+        return api, mode
+
+    def do_POST(self):
+        api, mode = self._route()
+        if api:
+            self._send(*process(api, mode, self.headers, self.rfile.read, self.path))
+
+    def do_GET(self):
+        api, _ = self._route()
+        if api:
+            self._send(405, {'error': {'code': 'method_not_allowed', 'message': f'Use POST. Docs: {DOCS}{api}'}})
+
+
+def make_handler(api, mode):
+    """A handler fixed to one API and mode. Used by tests and local tools."""
+    class Handler(_JsonHandler):
         def do_POST(self):
-            status, payload = process(api, mode, self.headers, self.rfile.read, self.path)
-            self._send(status, payload)
+            self._send(*process(api, mode, self.headers, self.rfile.read, self.path))
 
         def do_GET(self):
             self._send(405, {'error': {'code': 'method_not_allowed',
                                        'message': f'Use POST. Docs: {DOCS}{api}'}})
-
-        def log_message(self, *args):  # do not log request paths or query values
-            pass
 
     return Handler

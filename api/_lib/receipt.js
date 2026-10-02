@@ -1,20 +1,21 @@
 // Credit-purchase receipt email (replaces the old real-estate welcome email).
-import { money } from './clients.js';
+import { money, RUN_PRICES_CENTS } from './clients.js';
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-export function receiptEmail({ packLabel, amountPaidCents, creditCents, balanceCents, pricePerCallCents, sessionId }) {
-  const calls = Math.floor(balanceCents / pricePerCallCents);
+export function receiptEmail({ packLabel, amountPaidCents, creditCents, balanceCents, sessionId }) {
+  // For example "39 runs at $0.25 or 9 runs at $1.00": credits work on every API at that API's price.
+  const runs = RUN_PRICES_CENTS.map((p) => `${Math.floor(balanceCents / p)} runs at ${money(p)}`).join(' or ');
   const text = [
     'Thanks for your purchase.',
     '',
     `Pack: ${packLabel}`,
     `Paid: ${money(amountPaidCents)}`,
     `Credit added: ${money(creditCents)}`,
-    `Balance now: ${money(balanceCents)} (${calls} calls at ${money(pricePerCallCents)} each)`,
+    `Balance now: ${money(balanceCents)} (${runs})`,
     `Reference: ${sessionId}`,
     '',
-    'Credits never expire. You are only charged for completed runs. Requests rejected as invalid input are free.',
+    'Credits never expire and work on every SpreadRun API at that API\'s price per completed run. Requests rejected as invalid input are free. Unused credits are refundable on request within 30 days of purchase.',
     '',
     'Manage keys and see usage: https://www.spreadrun.com/account',
     'API docs: https://www.spreadrun.com/docs',
@@ -33,10 +34,10 @@ export function receiptEmail({ packLabel, amountPaidCents, creditCents, balanceC
     ${row('Pack', packLabel)}
     ${row('Paid', money(amountPaidCents))}
     ${row('Credit added', money(creditCents))}
-    ${row('Balance now', `${money(balanceCents)} (${calls} calls)`)}
+    ${row('Balance now', `${money(balanceCents)} (${runs})`)}
     ${row('Reference', sessionId)}
   </table>
-  <p style="font-size:14px;line-height:1.6;color:#3A4657;margin:0 0 12px">Credits never expire. You are only charged for completed runs. Requests rejected as invalid input are free.</p>
+  <p style="font-size:14px;line-height:1.6;color:#3A4657;margin:0 0 12px">Credits never expire and work on every SpreadRun API. You are only charged for completed runs. Requests rejected as invalid input are free. Unused credits are refundable on request within 30 days of purchase.</p>
   <p style="font-size:14px;line-height:1.6;margin:0 0 24px">
     <a href="https://www.spreadrun.com/account" style="color:#0B5C5C">Manage keys and usage</a> &nbsp;|&nbsp;
     <a href="https://www.spreadrun.com/docs" style="color:#0B5C5C">API docs</a>

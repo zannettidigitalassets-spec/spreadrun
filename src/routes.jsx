@@ -14,11 +14,10 @@ import Contact from './Contact.jsx';
 import NotFound from './NotFound.jsx';
 import Privacy from './Privacy.jsx';
 import Terms from './Terms.jsx';
-import { APIS, PRICE_PER_CALL_CENTS } from './catalog.js';
+import { APIS } from './catalog.js';
 
 export const ORIGIN = 'https://www.spreadrun.com';
 const ORG = { '@type': 'Organization', name: 'SpreadRun', url: ORIGIN };
-const price = (PRICE_PER_CALL_CENTS / 100).toFixed(2);
 
 const faqLd = (items) => ({
   '@context': 'https://schema.org',
@@ -43,7 +42,7 @@ const appLd = (slug, description) => {
     operatingSystem: 'Any',
     url: `${ORIGIN}/apis/${slug}`,
     description,
-    offers: { '@type': 'Offer', price, priceCurrency: 'USD' },
+    offers: { '@type': 'Offer', price: (a.priceCents / 100).toFixed(2), priceCurrency: 'USD' },
     publisher: ORG,
   };
 };
@@ -72,7 +71,7 @@ export const ROUTES = {
   '/apis': {
     Component: Catalog,
     title: 'Data Validation API Catalog and Pricing | SpreadRun',
-    description: 'Every SpreadRun API in one place: clinical trial table QA and hospital price transparency file validation. $0.25 per completed run from prepaid credits.',
+    description: 'Every SpreadRun data-validation API with its price per completed run, from $0.25, paid from prepaid credits that work on every API.',
     priority: '0.9',
     jsonLd: () => [
       {

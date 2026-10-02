@@ -3,7 +3,7 @@
 // Removed 2026-10-02: the real-estate Payment Link (plink_) tier mapping and its welcome email.
 
 import { Resend } from 'resend';
-import { stripe, supabaseAdmin, PACKS, PRICE_PER_CALL_CENTS } from './_lib/clients.js';
+import { stripe, supabaseAdmin, PACKS } from './_lib/clients.js';
 import { receiptEmail } from './_lib/receipt.js';
 
 // Created lazily: the Resend constructor throws when the key is missing (e.g. a preview without email).
@@ -35,7 +35,7 @@ async function grantCredits(session) {
   if (data.granted && email && process.env.RESEND_API_KEY) {
     const mail = receiptEmail({
       packLabel: pack.label, amountPaidCents: session.amount_total, creditCents: pack.creditCents,
-      balanceCents: data.balance_cents, pricePerCallCents: PRICE_PER_CALL_CENTS, sessionId: session.id,
+      balanceCents: data.balance_cents, sessionId: session.id,
     });
     const { error: mailError } = await resendClient().emails.send({
       from: 'SpreadRun <hello@spreadrun.com>', to: email, replyTo: 'spreadrun@gmail.com', ...mail,

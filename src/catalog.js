@@ -2,8 +2,12 @@
 // Server-side facts (price, size limits) are enforced in pylib/spreadrun_api/catalog.py;
 // scripts/check-site.mjs fails the build if the two disagree.
 
-export const PRICE_PER_CALL_CENTS = 25;
+// Two price tiers per completed run. Each API's own price is its priceCents below.
+export const STANDARD_RUN_CENTS = 25;
+export const HIGH_STAKES_RUN_CENTS = 100;
+export const PRICE_PER_CALL_CENTS = STANDARD_RUN_CENTS; // kept for older callers
 
+// Packs buy cents of credit that work on every API. calls = standard runs.
 export const CREDIT_PACKS = [
   { id: 'pack_5', priceCents: 500, calls: 20 },
   { id: 'pack_20', priceCents: 2000, calls: 80 },

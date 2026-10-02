@@ -97,22 +97,6 @@
   ],
   "rewrites": [
     {
-      "source": "/api/v1/clinical-trial-table-validator",
-      "destination": "/api/v1/clinical_trial_table_validator"
-    },
-    {
-      "source": "/api/v1/hospital-mrf-validator",
-      "destination": "/api/v1/hospital_mrf_validator"
-    },
-    {
-      "source": "/api/demo/clinical-trial-table-validator",
-      "destination": "/api/demo/clinical_trial_table_validator"
-    },
-    {
-      "source": "/api/demo/hospital-mrf-validator",
-      "destination": "/api/demo/hospital_mrf_validator"
-    },
-    {
       "source": "/api/rent-estimate",
       "destination": "/api/retired"
     },
