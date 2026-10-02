@@ -161,8 +161,12 @@ dispatcher function, so still 8 functions. Body: a UAD 3.6 URAR XML file or the 
   and `public/samples/`. They are dated 2019, so they are checked with `asOf=2019-09-20`.
 - **Not supported:** Appraisal Update (H-2) and Completion (H-3) reports are rejected as input errors (no samples to
   test them against). Invalid input is never charged.
-- **Owner decision pending:** the Terms and Privacy policy forbid personal data in submissions; real UAD files name the
-  borrower, owner and seller. The product page tells users to replace those names. Legal text is unchanged.
+- **Personal data (owner approved 2026-10-02):** real UAD files name the borrower, owner and seller. The Terms and
+  Privacy policy each gained one paragraph allowing that personal data for this validator only (processed in memory, not
+  stored; the PHI prohibition still applies). Nothing else in the legal pages changed.
+- **No value echo:** findings carry only severity, ruleId, path, message and specReference. Report metadata is limited
+  to the six use types and the spec's own label and version patterns. `UadNoValueEcho` in `test_uad.py` overwrites every
+  value and attribute in a report with markers and fails if any marker appears in the report or an error message.
 
 ## Known limitations
 

@@ -226,6 +226,61 @@ class UadRuleFamilies(unittest.TestCase):
         self.assertEqual(next(f for f in r['findings'] if f['ruleId'] == 'A1-UNKNOWN')['severity'], 'warning')
 
 
+class UadNoValueEcho(unittest.TestCase):
+    """The site promises reports never repeat values from the file. Every value and attribute in a full report is
+    replaced with a unique marker; no marker may appear anywhere in the report or in any error message."""
+
+    MARK = 'ZQXMARK'
+
+    def marked_root(self):
+        root = pass_root()
+        n = 0
+        for e in root.iter():
+            if len(e) == 0:
+                n += 1
+                if e.tag.endswith('}ValuationReportContentIdentifier'):
+                    e.text = (e.text or '') + f' {self.MARK}{n}'     # still a URAR id by prefix
+                else:
+                    e.text = f'{self.MARK}{n}'                        # names, addresses, amounts, dates, codes
+            for k in list(e.attrib):
+                if k == 'MISMOReferenceModelIdentifier':
+                    e.set(k, f'3.6.0366{self.MARK}')
+                elif not k.startswith('{'):
+                    e.set(k, f'{self.MARK}a{n}')                     # @ValuationUseType and friends
+        return root, n
+
+    def test_no_value_from_the_file_reaches_the_report(self):
+        root, n = self.marked_root()
+        r = run(root)
+        self.assertEqual(r['status'], 'FAIL')
+        self.assertGreater(r['findingCount'], 100)   # thousands of bad values were flagged...
+        blob = json.dumps(r)
+        self.assertNotIn(self.MARK, blob)              # ...and none of them is repeated
+        self.assertEqual(r['properties'], {'unsupported': sum(r['properties'].values())})
+        self.assertEqual(r['reportContentIdentifier'], 'URAR Delivery Specification v1.4')
+        self.assertEqual(r['mismoReferenceModelIdentifier'], '3.6.0366')
+        for f in r['findings']:
+            self.assertEqual(set(f) - {'specReference'}, {'severity', 'ruleId', 'path', 'message'})
+
+    def test_paid_response_and_errors_do_not_echo(self):
+        root, _ = self.marked_root()
+        body = ET.tostring(root)
+        status, out = call(UAD, 'demo', body, {'X-Forwarded-For': '203.0.113.50'}, f'/?asOf={AS_OF}')
+        self.assertEqual(status, 200)
+        self.assertNotIn(self.MARK, json.dumps(out))
+        raw = (FIX / 'uad-pass.xml').read_text('utf-8')
+        bad_type = re.sub(r'(<ValuationReportContentIdentifier>)[^<]+', r'\g<1>Mystery ' + self.MARK, raw).encode()
+        bad_ver = raw.replace('MISMOReferenceModelIdentifier="3.6.0366"', f'MISMOReferenceModelIdentifier="2.6{self.MARK}"').encode()
+        import io, zipfile
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, 'w') as z:
+            z.writestr(f'{self.MARK}.xml', b'not xml')
+        for b in (bad_type, bad_ver, buf.getvalue(), f'<MESSAGE>{self.MARK}'.encode()):
+            with self.assertRaises(runners.InputError) as cm:
+                runners.run_uad(b)
+            self.assertNotIn(self.MARK, str(cm.exception))
+
+
 class UadInputErrors(unittest.TestCase):
     def assertInputError(self, body, fragment, **kw):
         with self.assertRaises(runners.InputError) as cm:

@@ -10,7 +10,7 @@ const API = apiBySlug('uad-36-appraisal-validator');
 
 const SPEC_RULES = [
   ['A1-UNKNOWN', 'warning', 'An element at a location the URAR Delivery Specification does not define. Reported once per path, at the outermost unknown element.'],
-  ['A1-ENUM', 'error', 'An enumerated or boolean data point, or an attribute such as @ValuationUseType, holds a value that is not in its supported list. The value is shown, up to 40 characters.'],
+  ['A1-ENUM', 'error', 'An enumerated or boolean data point, or an attribute such as @ValuationUseType, holds a value that is not in its supported list. The message lists the supported values; the value sent is never repeated.'],
   ['A1-FORMAT', 'error', 'A date, datetime, number or text value does not match the format the specification gives for it (date pattern, sign, digits before and after the decimal point, maximum length).'],
   ['A1-EMPTY', 'error', 'A data point element is present with no value.'],
   ['A1-REQUIRED', 'error', 'A data point the specification always requires (R) is missing from a container that is present. Only checked where the path has one meaning for that property type.'],

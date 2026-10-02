@@ -285,7 +285,7 @@ export function UadDemo({ api, sample }) {
         <div className="field">
           <label htmlFor="uad-file">Appraisal file</label>
           <input id="uad-file" type="file" accept=".xml,.zip,application/xml,text/xml,application/zip" onChange={pick} />
-          <span className="hint">Processed in memory and not stored. Replace borrower, owner and seller names first (see the Terms).</span>
+          <span className="hint">Processed in memory and not stored. Reports never repeat values from your file.</span>
         </div>
         <div className="btn-row" style={{ margin: '0 0 16px' }}>
           {UAD_SAMPLES.map((s) => (

@@ -40,14 +40,14 @@
           "severity": "error",
           "ruleId": "A1-ENUM",
           "path": "/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[1]/PROPERTY_DETAIL/NativeAmericanLandsIndicator",
-          "message": "NativeAmericanLandsIndicator = \"True\" is not a supported UAD value. Supported: false, true.",
+          "message": "NativeAmericanLandsIndicator is not a supported UAD value. Supported: false, true.",
           "specReference": "0100.0054"
         },
         {
           "severity": "error",
           "ruleId": "A1-ENUM",
           "path": "/MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS/PROPERTIES/PROPERTY[1]/PROPERTY_DETAIL/OverallConditionRatingCode",
-          "message": "OverallConditionRatingCode = \"C7\" is not a supported UAD value. Supported: C1, C2, C3, C4, C5, C6.",
+          "message": "OverallConditionRatingCode is not a supported UAD value. Supported: C1, C2, C3, C4, C5, C6.",
           "specReference": "1600.0006"
         },
         {

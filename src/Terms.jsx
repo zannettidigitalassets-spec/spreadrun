@@ -43,6 +43,7 @@ export default function Terms() {
 
       <SectionTitle>No protected health information or personal data</SectionTitle>
       <P>SpreadRun is not intended for protected health information (PHI), and SpreadRun is not a HIPAA business associate. Your submissions must not contain PHI, data that identifies patients, or any other personal data. The APIs are built for public, aggregate or de-identified data, such as hospital price files and study-level clinical trial tables. If you need to check data that contains PHI, do not use SpreadRun for it.</P>
+      <P>Appraisal reports. Files sent to the UAD 3.6 Appraisal Report Validator may contain personal data that appears in an appraisal report, such as names of borrowers, owners and sellers and property addresses. SpreadRun processes them in memory only to produce the report and does not store them. You confirm you are permitted to share them with SpreadRun as a service provider. The PHI prohibition still applies.</P>
 
       <SectionTitle>Acceptable use</SectionTitle>
       <P>You agree not to misuse the APIs, including by attempting to gain unauthorized access, interfering with the service or its security, circumventing limits or billing, sending malicious content, reselling access without our permission, or using the service for any unlawful purpose. We may suspend keys or accounts that do.</P>

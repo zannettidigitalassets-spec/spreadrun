@@ -157,14 +157,14 @@ def from_zip(body: bytes):
     found = []
     for info in infos:
         if info.file_size > MAX_XML_IN_ZIP:
-            raise InputError(f'{info.filename[:80]} is over {MAX_XML_IN_ZIP // 1024 // 1024} MB uncompressed.')
+            raise InputError(f'An XML file in the ZIP is over {MAX_XML_IN_ZIP // 1024 // 1024} MB uncompressed.')
         try:
             with zf.open(info) as fh:
                 data = fh.read(MAX_XML_IN_ZIP + 1)
         except (zipfile.BadZipFile, RuntimeError, NotImplementedError, zlib.error):
-            raise InputError(f'{info.filename[:80]} in the ZIP could not be read (encrypted or corrupt).') from None
+            raise InputError('An XML file in the ZIP could not be read (encrypted or corrupt).') from None
         if len(data) > MAX_XML_IN_ZIP:
-            raise InputError(f'{info.filename[:80]} is over {MAX_XML_IN_ZIP // 1024 // 1024} MB uncompressed.')
+            raise InputError(f'An XML file in the ZIP is over {MAX_XML_IN_ZIP // 1024 // 1024} MB uncompressed.')
         if b'<MESSAGE' in data[:4096] or b':MESSAGE' in data[:4096]:
             found.append(data)
     if len(found) != 1:
@@ -195,7 +195,7 @@ def parse(body: bytes):
                          f'({MISMO_NS}). This does not look like a MISMO appraisal file.')
     ver = root.get('MISMOReferenceModelIdentifier') or ''
     if not ver.startswith('3.6'):
-        raise InputError(f'MISMOReferenceModelIdentifier is {ver or "missing"}; UAD 3.6 files use 3.6.0366. '
+        raise InputError(f'MISMOReferenceModelIdentifier is {"not 3.6" if ver else "missing"}; UAD 3.6 files use 3.6.0366. '
                          'Files from the legacy UAD (MISMO 2.6) are not supported.')
     return root, ('zip' if packaged else 'xml'), len(body)
 
@@ -213,7 +213,7 @@ def report_type(doc):
     for key, name in SUPPORTED.items():
         if rid.startswith(key):
             return name, rid
-    raise InputError(f'Unsupported report type "{rid[:80]}". This version validates URAR reports only.')
+    raise InputError('Unsupported report type in ValuationReportContentIdentifier. This version validates URAR reports only.')
 
 
 # ---------------------------------------------------------------- three-valued logic
@@ -503,7 +503,7 @@ def spec_checks(doc, add):
                 closed = all(en['enum'] and en['fmt'] in ('Enumerated', 'Boolean') for en in ents)
                 enums = sorted({x for en in ents for x in en['enum']}) if closed else []
                 if enums and v not in enums:
-                    add('error', 'A1-ENUM', doc.xpath(e), f'{name} = "{v[:40]}" is not a supported UAD value. '
+                    add('error', 'A1-ENUM', doc.xpath(e), f'{name} is not a supported UAD value. '
                         f'Supported: {", ".join(enums[:12])}{"..." if len(enums) > 12 else ""}.', ents[0]['id'])
                     continue
                 fmts = [(en['fmt'], en['det']) for en in ents if en['fmt']]
@@ -525,7 +525,7 @@ def spec_checks(doc, add):
                 # Attribute rows are split by use type (@ValuationUseType itself defines it): use them all.
                 enums = sorted({x for en in ents for x in en['enum']}) if all(en['enum'] for en in ents) else []
                 if enums and v not in enums:
-                    add('error', 'A1-ENUM', doc.xpath(e) + '/@' + local(attr), f'@{local(attr)} = "{v[:40]}" is not a supported '
+                    add('error', 'A1-ENUM', doc.xpath(e) + '/@' + local(attr), f'@{local(attr)} is not a supported '
                         f'UAD value. Supported: {", ".join(enums[:12])}{"..." if len(enums) > 12 else ""}.', ents[0]['id'])
     for path, elems in sorted(unknown.items()):
         parent = path.rsplit('/', 1)[0]
@@ -575,6 +575,11 @@ def spec_checks(doc, add):
 
 
 # ---------------------------------------------------------------- entry point
+
+def safe_label(value, pattern):
+    m = re.match(pattern, value or '')
+    return m.group(0) if m else None
+
 
 def validate(body: bytes, today=None):
     today = today or dt.datetime.now(dt.timezone.utc).date()
@@ -628,14 +633,17 @@ def validate(body: bytes, today=None):
     findings.sort(key=lambda f: (order[f['severity']], f['ruleId'], f['path']))
     counts = Counter(f['severity'] for f in findings)
     status = 'FAIL' if counts['error'] else ('WARN' if counts['warning'] else 'PASS')
-    props = Counter(e.get('ValuationUseType') or 'unspecified' for e in doc.by_path.get(PROPERTY, []))
+    # Keys are only the six UAD use types: never a value copied from the file.
+    props = Counter((u if u in USE_TYPES else ('unspecified' if u is None else 'unsupported'))
+                    for u in (e.get('ValuationUseType') for e in doc.by_path.get(PROPERTY, [])))
     not_impl = R['notImplemented']
     return {
         'schemaVersion': 1,
         'status': status,
         'reportType': rtype,
-        'reportContentIdentifier': rid[:120],
-        'mismoReferenceModelIdentifier': root.get('MISMOReferenceModelIdentifier'),
+        # Constrained to the spec's own label and version patterns, never free text from the file.
+        'reportContentIdentifier': safe_label(rid, r'URAR Delivery Specification( v\d+(\.\d+)*)?'),
+        'mismoReferenceModelIdentifier': safe_label(root.get('MISMOReferenceModelIdentifier'), r'3\.6(\.\d+)*'),
         'input': {'container': container, 'xmlBytes': xml_bytes,
                   'note': 'Only the XML is validated. A package\'s PDF and photos are not checked.' if container == 'zip' else None},
         'properties': dict(sorted(props.items())),

@@ -25,7 +25,7 @@ export const UAD_FAQ = [
   ['Which compliance rules are not implemented?',
     `${NOT_DONE} of the ${coverage.rulesTotal} rules. Each one needs interpretation the published rule text does not settle, such as links between parts of the report, date arithmetic and sums, or row-by-row comparisons across comparables. Every report lists their rule IDs, and the API docs give the reason for each. A rule that is not implemented never produces a finding, so it can never make a report fail.`],
   ['Is the appraisal data stored?',
-    'No. Files are processed in memory for the length of the request and are not stored or shared. Even so, the Terms do not allow personal data in submissions, so replace borrower, owner and seller names with placeholders before sending a real report. Findings name the location and the rule, not your values, except that an unsupported code in an enumerated field is shown (up to 40 characters) so you can see what was sent. For billing and usage we log the time, endpoint, result status, upload size and duration, never the file contents.'],
+    'No. Files are processed in memory for the length of the request and are not stored or shared. Appraisal reports contain personal data such as borrower, owner and seller names and property addresses; the Terms allow it for this validator only, on that basis. Findings name the location, the rule and the problem, never a value from your file. For billing and usage we log the time, endpoint, result status, upload size and duration, never the file contents.'],
   ['Where do the rules come from?',
     'From the appendices the GSEs publish for UAD 3.6: the URAR Delivery Specification and the URAR compliance rules. They are translated into a machine-readable rule table by a script, and the translation is tested against the GSE sample scenarios. Where this validator and the Delivery Specification differ, the Delivery Specification controls. SpreadRun is not affiliated with or endorsed by Fannie Mae or Freddie Mac.'],
   ['When is a run charged?',
@@ -69,7 +69,7 @@ export default function UadApi() {
           <p><b>A PASS does not mean UCDP acceptance.</b> These are structural checks, not legal, compliance or underwriting advice. {NOT_DONE} of the {coverage.rulesTotal} published URAR compliance rules are not implemented (listed below), UCDP also runs GSE proprietary checks, and only the XML is checked.</p>
         </div>
         <div className="note">
-          <p><b>Personal data.</b> SpreadRun's <a href="/terms">Terms</a> do not allow submissions that contain personal data, and appraisal reports usually name the borrower, the property owner and the seller. Replace those names with placeholders before you send a file; the checks do not depend on what the names say. The sample files on this page use invented names and addresses.</p>
+          <p><b>Personal data.</b> Appraisal reports name the borrower, the property owner and the seller and give the property address. Under the <a href="/terms">Terms</a>, files sent to this validator may contain that personal data: it is processed in memory only to produce the report and is not stored, and no value from your file is repeated in the report. You confirm you are permitted to share the file with SpreadRun as a service provider. The sample files on this page use invented names and addresses.</p>
         </div>
         <div className="btn-row">
           <a className="btn" href="#demo">Check a report</a>
