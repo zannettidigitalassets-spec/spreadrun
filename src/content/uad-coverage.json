@@ -1,0 +1,762 @@
+{
+ "sources": {
+  "a1": {
+   "title": "Appendix A-1: URAR Delivery Specification",
+   "sheet": "UAD Delivery Spec 1.4"
+  },
+  "h1": {
+   "title": "Appendix H-1: URAR Compliance Rules",
+   "sheet": "UAD Compliance Rules v1.5"
+  }
+ },
+ "rulesTotal": 728,
+ "rulesImplemented": 585,
+ "implementedBySeverity": {
+  "Fatal": 480,
+  "Warning": 105
+ },
+ "notImplemented": [
+  {
+   "id": "UAD1030",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1037",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1043",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1048",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1051",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1053",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1058",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1062",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1068",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1070",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1075",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1080",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1086",
+   "severity": "Fatal",
+   "reason": "Row-by-row comparison across all comparables"
+  },
+  {
+   "id": "UAD1089",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1121",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1123",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1138",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1142",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1143",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1149",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1150",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1152",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1154",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1164",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1177",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1179",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1183",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1192",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1199",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1200",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1201",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1202",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1207",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1209",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1228",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1237",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1239",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1250",
+   "severity": "Warning",
+   "reason": "Row-by-row comparison across all comparables"
+  },
+  {
+   "id": "UAD1255",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1256",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1261",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1268",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1272",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1274",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1278",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1283",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1287",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1289",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1292",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1296",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1299",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1302",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1304",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1310",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1313",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1320",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1323",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1325",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1328",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1331",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1335",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1339",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1344",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1352",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1355",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1357",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1361",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1370",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1375",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1378",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1398",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1400",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1405",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1421",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1439",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1445",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1450",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1455",
+   "severity": "Warning",
+   "reason": "Row-by-row comparison across all comparables"
+  },
+  {
+   "id": "UAD1461",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1468",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1470",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1477",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1529",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1533",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1535",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1543",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1570",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1574",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1575",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1603",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1611",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1614",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1622",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1656",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1657",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1658",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1667",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1680",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1683",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1685",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1686",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1687",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1689",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1690",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1691",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1692",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1693",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1694",
+   "severity": "Fatal",
+   "reason": "Row-by-row comparison across all comparables"
+  },
+  {
+   "id": "UAD1695",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1696",
+   "severity": "Warning",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1698",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1699",
+   "severity": "Fatal",
+   "reason": "Names a data point or container the delivery specification does not define at that location"
+  },
+  {
+   "id": "UAD1700",
+   "severity": "Fatal",
+   "reason": "Names a data point or container the delivery specification does not define at that location"
+  },
+  {
+   "id": "UAD1701",
+   "severity": "Fatal",
+   "reason": "Names a data point or container the delivery specification does not define at that location"
+  },
+  {
+   "id": "UAD1715",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1717",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1718",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1719",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1720",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1722",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1730",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1733",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1734",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1741",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1742",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1743",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1746",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1747",
+   "severity": "Fatal",
+   "reason": "Links between parts of the report (RELATIONSHIP / xlink)"
+  },
+  {
+   "id": "UAD1748",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1749",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1758",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1759",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1763",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1764",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1765",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1766",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1767",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1768",
+   "severity": "Fatal",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1769",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1774",
+   "severity": "Fatal",
+   "reason": "Date arithmetic, sums or nested conditions"
+  },
+  {
+   "id": "UAD1777",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1778",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  },
+  {
+   "id": "UAD1779",
+   "severity": "Warning",
+   "reason": "Wording without one unambiguous machine reading"
+  }
+ ],
+ "corrections": {
+  "UAD1097": [
+   "\"in in\" read as \"in\""
+  ],
+  "UAD1099": [
+   "\"IMRPOVEMENT\" read as \"IMPROVEMENT\""
+  ],
+  "UAD1108": [
+   "\"ConstructionMethod\" read as \"ConstructionMethodType\""
+  ],
+  "UAD1110": [
+   "\"ConstructionMethod\" read as \"ConstructionMethodType\""
+  ],
+  "UAD1116": [
+   "\"ConstructionMethod\" read as \"ConstructionMethodType\""
+  ],
+  "UAD1117": [
+   "\"ConstructionMethod\" read as \"ConstructionMethodType\""
+  ],
+  "UAD1119": [
+   "\"ConstructionMethod\" read as \"ConstructionMethodType\""
+  ],
+  "UAD1120": [
+   "\"ConstructionMethod\" read as \"ConstructionMethodType\""
+  ]
+ },
+ "dataPoints": 810
+}

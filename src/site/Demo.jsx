@@ -244,3 +244,71 @@ export function MrfDemo({ api, sample }) {
     </div>
   );
 }
+
+// Synthetic URAR files (scripts/uad/make_fixtures.py). Their report is dated 2019, so the two rules on report age
+// would warn against today's date: the samples are checked as of their signature date instead.
+const UAD_SAMPLE_AS_OF = '2019-09-20';
+const UAD_SAMPLES = [
+  ['uad-pass.xml', 'Valid URAR (synthetic)'],
+  ['uad-fail.xml', 'URAR with errors'],
+];
+
+export function UadDemo({ api, sample }) {
+  const [file, setFile] = useState(null); // { name, blob }
+  const [asOf, setAsOf] = useState('');
+  const credits = useCredits(api);
+  const mode = useMode(api, credits);
+  const [state, run] = useRunner(api, credits);
+
+  const pick = (e) => {
+    const f = e.target.files?.[0];
+    if (f) { setFile({ name: f.name, blob: f }); setAsOf(''); }
+  };
+  const loadSample = async ([path]) => {
+    const blob = await fetch(`/samples/${path}`).then((r) => r.blob());
+    setFile({ name: path, blob });
+    setAsOf(UAD_SAMPLE_AS_OF);
+  };
+  const tooBig = file && file.blob.size > mode.maxBytes;
+  const submit = (e) => {
+    e.preventDefault();
+    if (!file) return;
+    const isZip = file.name.toLowerCase().endsWith('.zip');
+    run({ paid: mode.paid, body: file.blob, contentType: isZip ? 'application/zip' : 'application/xml', query: asOf ? `?asOf=${asOf}` : '' });
+  };
+
+  return (
+    <div className="split">
+      <form className="demo" onSubmit={submit}>
+        <ModeNote api={api} credits={credits} mode={mode} demoLimits={`files up to ${kb(api.demoMaxBodyBytes)}, 10 runs a day`} />
+        <p className="small muted">A UAD 3.6 URAR XML file, or the UAD 3.6 ZIP package (only its XML is checked).</p>
+        <div className="field">
+          <label htmlFor="uad-file">Appraisal file</label>
+          <input id="uad-file" type="file" accept=".xml,.zip,application/xml,text/xml,application/zip" onChange={pick} />
+          <span className="hint">Processed in memory and not stored. Replace borrower, owner and seller names first (see the Terms).</span>
+        </div>
+        <div className="btn-row" style={{ margin: '0 0 16px' }}>
+          {UAD_SAMPLES.map((s) => (
+            <button key={s[0]} type="button" className="btn secondary small" onClick={() => loadSample(s)}>{s[1]}</button>
+          ))}
+        </div>
+        <div className="field">
+          <label htmlFor="uad-asof">Check date rules as of (optional)</label>
+          <input id="uad-asof" type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} style={{ maxWidth: 220 }} />
+          <span className="hint">Leave empty for today. Two rules compare the report's dates with this date: not in the future, not more than 367 days old.</span>
+        </div>
+        {file && <p className="small">Selected: <code>{file.name}</code> ({kb(file.blob.size)})</p>}
+        <button className="btn" type="submit" disabled={!file || state.phase === 'running' || tooBig}>
+          {runLabel(mode.paid, api, 'Check report', 'Checking', state.phase === 'running')}
+        </button>
+        <div className="status-line" aria-live="polite">
+          {state.phase === 'running' && 'Checking against the UAD 3.6 delivery specification and compliance rules.'}
+          {state.phase === 'done' && `Done. ${state.report.findingCount} ${state.report.findingCount === 1 ? 'finding' : 'findings'}.${state.paid ? ` Charged ${dollars(api.priceCents)}.` : ''}`}
+        </div>
+        {tooBig && <div className="error-box">This file is over the {kb(mode.maxBytes)} limit for this mode.{mode.paid ? ' Send the XML file instead of the whole package.' : ' Send the XML file instead of the package, or sign in with credits for up to 4.4 MB.'}</div>}
+        {state.phase === 'error' && <div className="error-box" role="alert">{state.error}</div>}
+      </form>
+      <div><Result state={state} kind="uad" sample={sample} sampleLabel="Synthetic URAR file with six deliberate errors" /></div>
+    </div>
+  );
+}

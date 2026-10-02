@@ -33,6 +33,7 @@ const NEED_LD = {
   '/': ['Organization', 'WebSite', 'ItemList', 'FAQPage'],
   '/apis/clinical-trial-table-validator': ['SoftwareApplication', 'FAQPage'],
   '/apis/hospital-mrf-validator': ['SoftwareApplication', 'FAQPage'],
+  '/apis/uad-36-appraisal-validator': ['SoftwareApplication', 'FAQPage'],
   '/guides/hospital-price-transparency-file-requirements-2026': ['Article'],
 };
 const decode = (s) => s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#x27;/g, "'");
@@ -46,6 +47,7 @@ for (const f of pages) {
 
   if (/—/.test(html)) fail(`${u}: contains an em dash`);
   if (/secondring|second ring/i.test(html)) fail(`${u}: mentions SecondRing`);
+  if (/a la mode|alamode|uad reader/i.test(text)) fail(`${u}: names a retired third-party UAD tool`);
   if (/zannetti|\bchris\b|pittsburgh|seven fields/i.test(html)) fail(`${u}: contains a personal name or location`);
   if (/coming soon|buy\.stripe\.com|plink_|\bpro plan\b|upgrade to pro|starter plan|basic plan/i.test(text + html)) fail(`${u}: leftover SaaS pricing or coming-soon copy`);
   if (/\$0\.35/.test(text)) fail(`${u}: stale $0.35 price`);
@@ -81,8 +83,8 @@ const client = fs.readFileSync(path.join(root, 'src/entry-client.jsx'), 'utf8');
 for (const u of known) if (!client.includes(`'${u}': () => import(`)) fail(`${u}: no client loader in entry-client.jsx`);
 
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
-for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/docs',
-  '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/guides',
+for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/docs',
+  '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/guides',
   '/guides/hospital-price-transparency-file-requirements-2026']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);
 }

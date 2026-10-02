@@ -19,13 +19,14 @@ import hashlib
 import json
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import openpyxl
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'pylib' / 'spreadrun_api' / 'validators' / 'uad' / 'rules.json'
+COVERAGE = ROOT / 'src' / 'content' / 'uad-coverage.json'
 
 VA = ('MESSAGE/DOCUMENT_SETS/DOCUMENT_SET/DOCUMENTS/DOCUMENT/DEAL_SETS/DEAL_SET/DEALS/DEAL/SERVICES/SERVICE/'
       'VALUATION/VALUATION_RESPONSE/VALUATION_ANALYSES/VALUATION_ANALYSIS')
@@ -200,20 +201,20 @@ TOKEN = re.compile(r'\s*(?:(?P<str>"[^"]*")|(?P<num>\d[\d,]*(?:\.\d+)?)(?![\w-])
 # Evident typos in H-1 rule logic, corrected so the rule can run. Each names something that does not exist
 # in the delivery specification next to the one that does. Recorded in rules.json under "corrections".
 TYPOS = [
-    (r'\bIMRPOVEMENT\b', 'IMPROVEMENT'),
-    (r'\bConstructionMethod\b(?!Type)', 'ConstructionMethodType'),
-    (r'\bin in\b', 'in'),
+    (r'\bIMRPOVEMENT\b', 'IMPROVEMENT', 'IMRPOVEMENT'),
+    (r'\bConstructionMethod\b(?!Type)', 'ConstructionMethodType', 'ConstructionMethod'),
+    (r'\bin in\b', 'in', 'in in'),
 ]
 CORRECTED = defaultdict(list)
 
 
 def normalize(text, rule_id=None):
     t = clean(text).replace('\u201c', '"').replace('\u201d', '"').replace('\u2019', "'")
-    for pat, rep in TYPOS:
+    for pat, rep, label in TYPOS:
         if re.search(pat, t):
             t = re.sub(pat, rep, t)
             if rule_id:
-                CORRECTED[rule_id].append(f'{pat.strip(chr(92) + "b")} -> {rep}')
+                CORRECTED[rule_id].append(f'"{label}" read as "{rep}"')
     # Phrasings with one reading, rewritten into the grammar below.
     t = t.replace('is not a valid 2-character US State or Territory Code', 'is not a valid state code')
     t = re.sub(r'\s+for a given comp\b', '', t)
@@ -671,6 +672,19 @@ def translate(rule, res):
     }
 
 
+def public_reason(reason):
+    """Group the translator's reasons into the categories shown on the website."""
+    if reason.startswith('RELATIONSHIP'):
+        return 'Links between parts of the report (RELATIONSHIP / xlink)'
+    if reason.startswith('"for each combination"'):
+        return 'Row-by-row comparison across all comparables'
+    if reason.startswith('rule needs'):
+        return 'Date arithmetic, sums or nested conditions'
+    if 'not in the delivery specification' in reason or 'ambiguous' in reason:
+        return 'Names a data point or container the delivery specification does not define at that location'
+    return 'Wording without one unambiguous machine reading'
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--spec-dir', required=True, help='folder holding a1.xlsx and h1.xlsx (GSE appendices)')
@@ -685,7 +699,7 @@ def main():
     report_ids = sorted({e for k, v in datapoints.items() if k.endswith('/ValuationReportContentIdentifier') for x in v for e in x['enum']})
 
     h1 = openpyxl.load_workbook(h1_file, read_only=True)
-    rules_sheet = next(n for n in h1.sheetnames if n.startswith('UAD Compliance Rules'))
+    rules_sheet = next(n for n in h1.sheetnames if n.startswith('UAD Compliance Rules') and 'Marked' not in n)
     h1_rows = [r for r in sheet_rows(h1, rules_sheet) if clean(r.get('Message ID'))]
 
     res = Resolver(containers, datapoints)
@@ -713,6 +727,20 @@ def main():
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, separators=(',', ':'), sort_keys=True, ensure_ascii=False))
+
+    # Small summary for the website (product page and docs state exact coverage from this).
+    sev = lambda xs: dict(sorted(Counter('Fatal' if x['sev'].startswith('Fatal') else 'Warning' for x in xs).items()))
+    summary = {
+        'sources': {k: {'title': v['title'], 'sheet': v['sheet']} for k, v in out['sources'].items()},
+        'rulesTotal': len(h1_rows),
+        'rulesImplemented': len(rules),
+        'implementedBySeverity': sev(rules),
+        'notImplemented': [{'id': x['id'], 'severity': 'Fatal' if x['sev'].startswith('Fatal') else 'Warning',
+                            'reason': public_reason(x['reason'])} for x in sorted(skipped, key=lambda x: x['id'])],
+        'corrections': out['corrections'],
+        'dataPoints': len(datapoints),
+    }
+    COVERAGE.write_text(json.dumps(summary, indent=1) + '\n')
     n = len(h1_rows)
     print(f'{len(rules)}/{n} H-1 rules translated ({len(rules) * 100 // n}%), {len(skipped)} not implemented; '
           f'{len(datapoints)} data points, {len(containers)} containers -> {OUT.relative_to(ROOT)} ({OUT.stat().st_size:,} bytes)')

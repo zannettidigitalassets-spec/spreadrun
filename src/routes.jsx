@@ -4,9 +4,11 @@ import Home, { HOME_FAQ } from './pages/Home.jsx';
 import Catalog from './pages/Catalog.jsx';
 import ClinicalApi, { CLINICAL_FAQ } from './pages/ClinicalApi.jsx';
 import MrfApi, { MRF_FAQ } from './pages/MrfApi.jsx';
+import UadApi, { UAD_FAQ } from './pages/UadApi.jsx';
 import Docs from './pages/Docs.jsx';
 import DocsClinical from './pages/DocsClinical.jsx';
 import DocsMrf from './pages/DocsMrf.jsx';
+import DocsUad from './pages/DocsUad.jsx';
 import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import Account from './pages/Account.jsx';
@@ -49,6 +51,7 @@ const appLd = (slug, description) => {
 
 const CLINICAL_DESC = 'Catch malformed NCT IDs, missing fields, duplicates, and bad dates in clinical trial results tables before analysis. $0.25 per completed audit.';
 const MRF_DESC = 'Validate hospital machine-readable price files against CMS v3.0 specs. JSON and tall/wide CSV. Deterministic report, no install. $0.25 per validation.';
+const UAD_DESC = 'Validate UAD 3.6 URAR appraisal XML against the GSE delivery spec and compliance rules. JSON report with an XPath per finding. $1.00 per report.';
 const HOME_DESC = 'Niche data-validation APIs for regulated industries. Hospital price transparency files, clinical trial tables, and more. Per-use pricing, no subscriptions.';
 const GUIDE_DESC = 'CMS hospital price transparency requirements for 2026: MRF formats, data elements, new allowed-amount rules, and how to check your file before posting.';
 
@@ -97,6 +100,14 @@ export const ROUTES = {
     jsonLd: () => [appLd('hospital-mrf-validator', MRF_DESC), faqLd(MRF_FAQ),
       crumbsLd([['/', 'Home'], ['/apis', 'APIs'], ['/apis/hospital-mrf-validator', 'Hospital MRF Validator']])],
   },
+  '/apis/uad-36-appraisal-validator': {
+    Component: UadApi,
+    title: 'UAD 3.6 Appraisal Validator API: URAR XML Checks',
+    description: UAD_DESC,
+    priority: '0.9',
+    jsonLd: () => [appLd('uad-36-appraisal-validator', UAD_DESC), faqLd(UAD_FAQ),
+      crumbsLd([['/', 'Home'], ['/apis', 'APIs'], ['/apis/uad-36-appraisal-validator', 'UAD 3.6 Appraisal Report Validator']])],
+  },
   '/docs': {
     Component: Docs,
     title: 'API Docs: Authentication, Billing and Errors | SpreadRun',
@@ -113,6 +124,12 @@ export const ROUTES = {
     Component: DocsMrf,
     title: 'Hospital MRF Validator API Reference | SpreadRun',
     description: 'Upload format, parameters, sampling limits, report fields, finding codes, errors and curl and Python samples for the Hospital MRF Validator API.',
+    priority: '0.7',
+  },
+  '/docs/uad-36-appraisal-validator': {
+    Component: DocsUad,
+    title: 'UAD 3.6 Appraisal Report Validator API Reference | SpreadRun',
+    description: 'Request format, asOf, ZIP packages, report fields, rule IDs, the compliance rules not implemented, errors and code samples for the UAD 3.6 validator.',
     priority: '0.7',
   },
   '/guides': {

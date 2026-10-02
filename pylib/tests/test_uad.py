@@ -238,6 +238,21 @@ class UadInputErrors(unittest.TestCase):
         self.assertInputError(b'<root/>', 'MESSAGE')
         self.assertInputError(b'%PDF-1.7', 'PDF')
         self.assertInputError(b'PK\x03\x04rest', 'ZIP')
+
+    def test_zip_packages(self):
+        import io, zipfile
+        def pack(files):
+            buf = io.BytesIO()
+            with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as z:
+                for name, data in files.items():
+                    z.writestr(name, data)
+            return buf.getvalue()
+        xml = (FIX / 'uad-pass.xml').read_bytes()
+        r = runners.run_uad(pack({'report.xml': xml, 'report.pdf': b'%PDF-1.7', 'photos/front.jpg': b'jpg'}), as_of=AS_OF)
+        self.assertEqual((r['status'], r['input']['container'], r['input']['xmlBytes']), ('PASS', 'zip', len(xml)))
+        self.assertIn('PDF and photos are not checked', r['input']['note'])
+        self.assertInputError(pack({'report.pdf': b'%PDF'}), 'no .xml file')
+        self.assertInputError(pack({'a.xml': xml, 'b.xml': xml}), 'exactly one')
         self.assertInputError(f'<MESSAGE xmlns="{NS}" MISMOReferenceModelIdentifier="2.6"/>'.encode(), 'legacy UAD')
         self.assertInputError(f'<MESSAGE xmlns="{NS}" MISMOReferenceModelIdentifier="3.6.0366"/>'.encode(), 'report type')
 

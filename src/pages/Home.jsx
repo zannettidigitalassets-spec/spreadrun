@@ -8,7 +8,7 @@ import clinicalExample from '../content/examples/clinical-paid-fail.json';
 // flat $0.25 pricing, uploads only (no URL fetching in V1), no em dashes.
 export const HOME_FAQ = [
   ['What is SpreadRun?',
-    'A small catalog of data-validation APIs for regulated industries. Each product checks one specific thing, currently hospital price transparency files and clinical trial results tables, through a documented REST API with per-use pricing.'],
+    'A small catalog of data-validation APIs for regulated industries. Each product checks one specific thing, currently hospital price transparency files, clinical trial results tables and UAD 3.6 appraisal reports, through a documented REST API with per-use pricing.'],
   ['How is this different from the free government tools?',
     'Government validators, like the one CMS publishes, are built for one-off manual checks, and they are good at that. SpreadRun\'s APIs are built for repeated, programmatic use: no installation, structured JSON reports, and endpoints your pipeline or agent can call directly.'],
   ['How does pricing work?',
@@ -22,13 +22,13 @@ export const HOME_FAQ = [
 ];
 
 export default function Home() {
-  const [clinical, mrf] = [APIS[0], APIS[1]];
+  const [clinical, mrf, uad] = [APIS[0], APIS[1], APIS[2]];
   return (
     <Layout path="/">
       <div className="wrap hero">
         <div>
           <h1>Data validation APIs for regulated industries.</h1>
-          <p className="lede">Narrow tools that check one thing correctly: hospital price files against the CMS v3.0 template, clinical trial tables before analysis. Per-use pricing. No subscriptions, no sales calls.</p>
+          <p className="lede">Narrow tools that check one thing correctly: hospital price files against the CMS v3.0 template, clinical trial tables before analysis, UAD 3.6 appraisal XML against the GSE rules. Per-use pricing. No subscriptions, no sales calls.</p>
           <div className="btn-row">
             <a className="btn" href="/apis">Browse the APIs</a>
             <a className="btn secondary" href="/docs">Read the docs</a>
@@ -62,6 +62,13 @@ export default function Home() {
             <p>Audits normalized clinical-trial study and outcome tables: NCT ID validity, required fields, duplicates, orphan outcomes, outcome types and results-posting dates. Exact row locations for every finding.</p>
             <p className="price">{dollars(clinical.priceCents)} per completed audit</p>
             <a className="btn small" href={`/apis/${clinical.slug}#demo`}>Audit your tables</a>
+          </div>
+          <div className="card">
+            <div className="badges"><span className="badge tier">Built by SpreadRun</span><span className="badge beta">Beta</span></div>
+            <h3><a href={`/apis/${uad.slug}`}>{uad.name}</a></h3>
+            <p>Checks UAD 3.6 URAR appraisal XML, or the whole ZIP package, against the GSE-published delivery specification and compliance rules. Every finding has an XPath, a rule ID and a message. A PASS is not UCDP acceptance.</p>
+            <p className="price">{dollars(uad.priceCents)} per completed report</p>
+            <a className="btn small" href={`/apis/${uad.slug}#demo`}>Check a report</a>
           </div>
           <div className="card quiet">
             <h3>Next validator</h3>

@@ -62,6 +62,7 @@ export default function Catalog() {
           <li>A run is charged when it finishes and returns a report, whether the report says PASS, WARN or FAIL.</li>
           <li>Requests rejected before a report exists are free: bad JSON, clinical tables missing required columns or with ragged rows, an empty or corrupt gzip upload, invalid parameters, a missing or revoked key.</li>
           <li>A price file that turns out not to be a valid MRF (wrong format, unparseable) still gets a completed FAIL report, and that run is charged.</li>
+          <li>For UAD appraisal files it is the other way round: anything that is not a UAD 3.6 URAR file (not XML, not MISMO 3.6, an Update or Completion Report) is rejected as invalid input and not charged.</li>
           <li>If your balance is too low the report is not returned and nothing is charged.</li>
           <li>The test form on each product page is free, with daily limits. Signed in with credits, you can run full validations from the same form, paid from your balance.</li>
           <li>Unused credits are refundable on request within 30 days of purchase. See the <a href="/terms">Terms</a>.</li>

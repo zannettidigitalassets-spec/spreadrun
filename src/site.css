@@ -181,3 +181,6 @@ input[type='file'] { font: 14px var(--sans); }
   .findings td code { word-break: break-all; }
   .sheet-body { padding: 12px; }
 }
+
+/* Long endpoint URLs in doc tables must wrap on phones. */
+@media (max-width: 640px) { .doc-table td code { white-space: normal; overflow-wrap: anywhere; } }

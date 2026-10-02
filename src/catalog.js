@@ -51,6 +51,19 @@ export const APIS = [
       'Checks a hospital machine-readable price file against the CMS v3.0.0 JSON schema and tall or wide CSV templates, including the 2026 allowed-amount fields. Uploads only; large files are sampled.',
     cta: 'Validate a file',
   },
+  {
+    slug: 'uad-36-appraisal-validator',
+    name: 'UAD 3.6 Appraisal Report Validator',
+    tier: 'built',
+    status: 'beta',
+    priceCents: HIGH_STAKES_RUN_CENTS,
+    unit: 'completed report',
+    maxBodyBytes: 4_400_000,
+    demoMaxBodyBytes: 1024 * 1024,
+    summary:
+      'Checks a UAD 3.6 URAR appraisal XML file, or the whole UAD 3.6 ZIP package, against the GSE-published delivery specification and compliance rules. Every finding has an XPath, a rule ID and a message.',
+    cta: 'Check a report',
+  },
 ];
 
 // Tier 2 listings appear here only after an affiliate agreement is approved and signed by the owner.

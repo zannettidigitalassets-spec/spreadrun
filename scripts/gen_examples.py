@@ -82,3 +82,10 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
                                 '?maxRecords=500'))
     save('mrf-demo-fail', *post(demo, (SAMPLES / 'mrf-defective.json').read_bytes(), {'Content-Type': 'application/json'}))
     save('mrf-input-error', *post(paid, (SAMPLES / 'mrf-valid.json').read_bytes(), auth, '?maxRecords=5000'))
+
+    u = 'uad-36-appraisal-validator'
+    paid, demo = serve(u, 'paid'), serve(u, 'demo')
+    as_of = '?asOf=2019-09-20'  # the synthetic files are dated 2019; see scripts/uad/make_fixtures.py
+    save('uad-paid-pass', *post(paid, (SAMPLES / 'uad-pass.xml').read_bytes(), {**auth, 'Content-Type': 'application/xml'}, as_of))
+    save('uad-demo-fail', *post(demo, (SAMPLES / 'uad-fail.xml').read_bytes(), {'Content-Type': 'application/xml'}, as_of))
+    save('uad-input-error', *post(paid, b'<?xml version="1.0"?><VALUATION_RESPONSE/>', {**auth, 'Content-Type': 'application/xml'}))
