@@ -1,0 +1,8 @@
+trial_id,outcome_id,outcome_type,primary_endpoint,result_status,results_first_post_date
+NCT90000001,primary-1,PRIMARY,Change in HbA1c at week 26,POSTED,2025-11-04
+NCT90000001,secondary-1,SECONDARY,Change in body weight at week 26,POSTED,2025-11-04
+NCT90000002,primary-1,PRIMARY,Change in systolic blood pressure at week 12,POSTED,2026-02-30
+NCT90000003,primary-1,PRIMARY,,POSTED,2026-01-15
+NCT90000003,primary-1,PRIMARY,Annualized exacerbation rate,POSTED,2026-01-15
+NCT90000006,primary-1,PRIMARY,Monthly migraine days,POSTED,2026-03-02
+NCT90000005,primary-1,EXPLORATORY,eGFR slope over 104 weeks,POSTED,2026-04-10

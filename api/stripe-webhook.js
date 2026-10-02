@@ -1,34 +1,57 @@
-// This file lives at /api/stripe-webhook.js and Vercel automatically turns it into
-// a live serverless endpoint at https://spreadrun.com/api/stripe-webhook
-// Stripe calls this URL automatically every time a payment event happens.
+// POST /api/stripe-webhook  (called by Stripe)
+// Grants prepaid API credits after a paid Checkout session, exactly once per session, then emails a receipt.
+// Removed 2026-10-02: the real-estate Payment Link (plink_) tier mapping and its welcome email.
 
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
+import { stripe, supabaseAdmin, PACKS, PRICE_PER_CALL_CENTS } from './_lib/clients.js';
+import { receiptEmail } from './_lib/receipt.js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// Created lazily: the Resend constructor throws when the key is missing (e.g. a preview without email).
+const resendClient = () => new Resend(process.env.RESEND_API_KEY);
 
-const supabaseAdmin = createClient(
-  'https://deqchbqeajwrwdfwzxuc.supabase.co',
-  process.env.SUPABASE_SERVICE_KEY
-);
+async function grantCredits(session) {
+  const meta = session.metadata || {};
+  if (meta.kind !== 'spreadrun_credits') return 'ignored: not a credit purchase';
+  if (session.payment_status !== 'paid') return 'ignored: not paid yet';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+  const pack = PACKS[meta.pack];
+  // Never trust the browser or metadata for amounts: the pack must exist and Stripe must have charged its price.
+  if (!pack || session.amount_total !== pack.priceCents || session.currency !== 'usd') {
+    console.error('credit purchase mismatch', { session: session.id, pack: meta.pack, amount: session.amount_total });
+    return 'ignored: amount mismatch';
+  }
+  const email = session.customer_details?.email || session.customer_email;
+  const { data, error } = await supabaseAdmin.rpc('grant_credits', {
+    p_user_id: meta.user_id,
+    p_email: email || 'unknown',
+    p_credit_cents: pack.creditCents,
+    p_session_id: session.id,
+    p_pack: meta.pack,
+    p_amount_paid_cents: session.amount_total,
+    p_stripe_customer_id: typeof session.customer === 'string' ? session.customer : session.customer?.id || null,
+  });
+  if (error) throw new Error(`grant_credits failed: ${error.message}`); // 500 -> Stripe retries; grant is idempotent
 
-// Modern Vercel Functions use the standard Web Request/Response objects directly,
-// rather than the older Node-style (req, res) handler. request.text() gives us
-// the exact raw, unparsed body Stripe needs to verify its signature.
+  if (data.granted && email && process.env.RESEND_API_KEY) {
+    const mail = receiptEmail({
+      packLabel: pack.label, amountPaidCents: session.amount_total, creditCents: pack.creditCents,
+      balanceCents: data.balance_cents, pricePerCallCents: PRICE_PER_CALL_CENTS, sessionId: session.id,
+    });
+    const { error: mailError } = await resendClient().emails.send({
+      from: 'SpreadRun <hello@spreadrun.com>', to: email, replyTo: 'spreadrun@gmail.com', ...mail,
+    });
+    if (mailError) console.error('receipt email failed', JSON.stringify(mailError));
+  }
+  return data.granted ? 'granted' : 'already granted';
+}
+
 export async function POST(request) {
   const rawBody = await request.text();
   const signature = request.headers.get('stripe-signature');
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(
-      rawBody,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
+    event = stripe.webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
@@ -36,132 +59,35 @@ export async function POST(request) {
 
   try {
     switch (event.type) {
-      // Fires the moment someone completes checkout successfully.
-      case 'checkout.session.completed': {
-        const session = event.data.object;
-        const customerEmail = session.customer_details?.email;
-        const stripeCustomerId = session.customer;
-
-        // Determine which tier was purchased based on Payment Link ID
-        const paymentLink = session.payment_link;
-        const BASIC_PAYMENT_LINK = 'plink_1Tm2nyPstGCqmCay1cCrKVO1';
-        const tier = paymentLink === BASIC_PAYMENT_LINK ? 'basic' : 'starter';
-        const isBasic = tier === 'basic';
-
-        if (customerEmail) {
-          const { data, error } = await supabaseAdmin
-            .from('profiles')
-            .upsert(
-              {
-                email: customerEmail,
-                stripe_customer_id: stripeCustomerId,
-                subscription_status: 'active',
-                subscription_tier: tier,
-              },
-              { onConflict: 'email' }
-            );
-
-          if (error) {
-            console.error('Supabase upsert failed:', JSON.stringify(error));
-          } else {
-            console.log('Supabase upsert succeeded:', JSON.stringify(data));
-
-            // Send welcome email via Resend
-            const { error: emailError } = await resend.emails.send({
-              from: 'SpreadRun <hello@spreadrun.com>',
-              to: customerEmail,
-              replyTo: 'spreadrun@gmail.com',
-              subject: isBasic ? 'Welcome to SpreadRun Basic 🎉' : 'Welcome to SpreadRun Starter 🎉',
-              html: `
-                <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; color: #0D1B3E;">
-                  <div style="margin-bottom: 28px;">
-                    <span style="font-weight: 800; font-size: 18px; color: #0D1B3E;">SpreadRun</span>
-                  </div>
-
-                  <h1 style="font-size: 24px; font-weight: 800; margin: 0 0 16px; letter-spacing: -0.5px;">
-                    You're in. Welcome to ${isBasic ? 'Basic' : 'Starter'}. 🎉
-                  </h1>
-
-                  <p style="font-size: 15px; color: #3D4F6E; line-height: 1.7; margin: 0 0 20px;">
-                    Thank you for trusting SpreadRun to help you analyze your deals. That genuinely means a lot — and we're going to make sure it's worth it.
-                  </p>
-
-                  <p style="font-size: 15px; color: #3D4F6E; line-height: 1.7; margin: 0 0 24px;">
-                    Here's what you now have access to:
-                  </p>
-
-                  <div style="background: #F0F4FF; border-radius: 12px; padding: 20px 24px; margin-bottom: 28px;">
-                    <div style="margin-bottom: 10px; font-size: 14px; color: #0D1B3E;">✓ &nbsp;<strong>${isBasic ? 'Save up to 10 properties' : 'Unlimited saved properties'}</strong> — come back to any deal anytime</div>
-                    <div style="margin-bottom: 10px; font-size: 14px; color: #0D1B3E;">✓ &nbsp;<strong>Side-by-side deal comparison</strong> — stack your best options and see which wins on the numbers</div>
-                    <div style="font-size: 14px; color: #0D1B3E;">✓ &nbsp;<strong>PDF deal reports</strong> — clean, branded exports you can share with partners or lenders</div>
-                  </div>
-
-                  <a href="https://spreadrun.com/app" style="display: inline-block; background: #0B5FFF; color: #fff; font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 10px; text-decoration: none; margin-bottom: 28px;">
-                    Go to SpreadRun →
-                  </a>
-
-                  <p style="font-size: 14px; color: #6B7A99; line-height: 1.7; margin: 0 0 8px;">
-                    If you ever have a question, run into an issue, or just want to share feedback — reply directly to this email. We read every message and respond personally.
-                  </p>
-
-                  <p style="font-size: 14px; color: #6B7A99; line-height: 1.7; margin: 0 0 32px;">
-                    Happy analyzing,<br/>
-                    <strong style="color: #0D1B3E;">The SpreadRun Team</strong>
-                  </p>
-
-                  <div style="border-top: 1px solid #EBF0FF; padding-top: 20px;">
-                    <p style="font-size: 12px; color: #9BA8C0; margin: 0;">
-                      SpreadRun · <a href="https://spreadrun.com" style="color: #9BA8C0;">spreadrun.com</a> · For informational purposes only. Not financial advice.
-                    </p>
-                  </div>
-                </div>
-              `,
-            });
-
-            if (emailError) {
-              console.error('Welcome email failed:', JSON.stringify(emailError));
-            } else {
-              console.log('Welcome email sent to:', customerEmail);
-            }
-          }
-        } else {
-          console.error('No customer email found on checkout session, skipping upsert.');
-        }
+      case 'checkout.session.completed':
+      case 'checkout.session.async_payment_succeeded': {
+        const result = await grantCredits(event.data.object);
+        console.log('checkout', event.data.object.id, result);
         break;
       }
 
-      // Fires if a subscription is cancelled or a renewal payment fails outright.
+      // Kept for any legacy subscriptions still on the account (old real-estate tiers).
       case 'customer.subscription.deleted': {
-        const subscription = event.data.object;
-        const stripeCustomerId = subscription.customer;
-
         await supabaseAdmin
           .from('profiles')
           .update({ subscription_status: 'cancelled', subscription_tier: 'free' })
-          .eq('stripe_customer_id', stripeCustomerId);
+          .eq('stripe_customer_id', event.data.object.customer);
         break;
       }
-
-      // Fires on failed recurring payments (e.g. card declined on renewal).
       case 'invoice.payment_failed': {
-        const invoice = event.data.object;
-        const stripeCustomerId = invoice.customer;
-
         await supabaseAdmin
           .from('profiles')
           .update({ subscription_status: 'past_due' })
-          .eq('stripe_customer_id', stripeCustomerId);
+          .eq('stripe_customer_id', event.data.object.customer);
         break;
       }
 
       default:
-        // Unhandled event types are fine to ignore; Stripe sends many we don't need.
         break;
     }
-
     return Response.json({ received: true });
   } catch (err) {
-    console.error('Error processing webhook:', err);
+    console.error('Error processing webhook:', err.message);
     return new Response('Internal error processing webhook', { status: 500 });
   }
 }

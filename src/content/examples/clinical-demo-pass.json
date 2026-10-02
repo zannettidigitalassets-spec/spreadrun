@@ -1,0 +1,41 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "clinical-trial-table-validator",
+    "mode": "demo",
+    "charged": false,
+    "report": {
+      "schemaVersion": 1,
+      "status": "PASS",
+      "rowCounts": {
+        "studiesCsv": 1,
+        "outcomesCsv": 1
+      },
+      "fieldCoverage": {
+        "studiesCsv": {
+          "condition": 1.0,
+          "phase": 1.0,
+          "trial_id": 1.0
+        },
+        "outcomesCsv": {
+          "outcome_id": 1.0,
+          "outcome_type": 1.0,
+          "primary_endpoint": 1.0,
+          "result_status": 1.0,
+          "results_first_post_date": 1.0,
+          "trial_id": 1.0
+        }
+      },
+      "issueCount": 0,
+      "issueCounts": {},
+      "issues": [],
+      "issuesTruncated": false,
+      "inputSha256": {
+        "studiesCsv": "db12864120f9e39f0f22cf53584f9078a46280078239d7b5e6daee1f4a2840da",
+        "outcomesCsv": "ef2422d080c993db9395a5e191c674d24ea712f0672bc2f5b5396e936b68c421"
+      },
+      "scope": "Structural QA only; no source authenticity, clinical accuracy, freshness, regulatory compliance or reuse-rights certification."
+    }
+  }
+}

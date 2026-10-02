@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "status": "FAIL",
+  "rowCounts": {
+    "studiesCsv": 1,
+    "outcomesCsv": 1
+  },
+  "fieldCoverage": {
+    "studiesCsv": {
+      "condition": 1.0,
+      "phase": 1.0,
+      "trial_id": 1.0
+    },
+    "outcomesCsv": {
+      "outcome_id": 1.0,
+      "outcome_type": 1.0,
+      "primary_endpoint": 0.0,
+      "result_status": 1.0,
+      "results_first_post_date": 1.0,
+      "trial_id": 1.0
+    }
+  },
+  "issueCount": 3,
+  "issueCounts": {
+    "INVALID_ISO_DATE": 1,
+    "MISSING_VALUE": 1,
+    "ORPHAN_OUTCOME": 1
+  },
+  "issues": [
+    {
+      "table": "outcomesCsv",
+      "record": 1,
+      "field": "primary_endpoint",
+      "code": "MISSING_VALUE"
+    },
+    {
+      "table": "outcomesCsv",
+      "record": 1,
+      "field": "trial_id",
+      "code": "ORPHAN_OUTCOME"
+    },
+    {
+      "table": "outcomesCsv",
+      "record": 1,
+      "field": "results_first_post_date",
+      "code": "INVALID_ISO_DATE"
+    }
+  ],
+  "issuesTruncated": false,
+  "inputSha256": {
+    "studiesCsv": "db12864120f9e39f0f22cf53584f9078a46280078239d7b5e6daee1f4a2840da",
+    "outcomesCsv": "deee8ef6082a7ff9b3e1accf3ca60489fe165fff1d193448bca3b2b3c0ab6202"
+  },
+  "scope": "Structural QA only; no source authenticity, clinical accuracy, freshness, regulatory compliance or reuse-rights certification."
+}

@@ -3,3 +3,7 @@ dist/
 .env
 .env.*
 .vercel
+
+dist-ssr
+__pycache__/
+*.pyc

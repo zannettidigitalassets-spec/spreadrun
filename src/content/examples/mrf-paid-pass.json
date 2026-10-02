@@ -1,0 +1,71 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "hospital-mrf-validator",
+    "mode": "paid",
+    "charged": true,
+    "priceCents": 25,
+    "balanceCents": 925,
+    "report": {
+      "schemaVersion": 1,
+      "status": "PASS",
+      "validationMode": "sample",
+      "source": {
+        "url": "upload",
+        "finalUrl": null,
+        "filename": "[upload]",
+        "cmsFilenamePattern": null,
+        "httpStatus": null,
+        "contentType": null,
+        "contentLength": 1659,
+        "redirects": [],
+        "compressed": false,
+        "format": "csv",
+        "encoding": "UTF-8"
+      },
+      "cmsProfile": {
+        "requirementVersion": "3.0.0",
+        "source": "CMS",
+        "fullComplianceCertification": false
+      },
+      "file": {
+        "bytesRead": 1659,
+        "decompressedBytes": 1659,
+        "truncatedByLimit": false,
+        "sha256": "2e3e366444f5c172e042d73f539f5386faa64139b7475c064ac873e7d97a97e2",
+        "hashScope": "full-upload",
+        "recordsInspected": 1
+      },
+      "checks": {
+        "reachable": null,
+        "parseable": true,
+        "requiredMetadataPresent": true,
+        "requiredStructurePresent": true
+      },
+      "coverage": {
+        "recordCount": 1,
+        "requiredRecordFieldPresence": {
+          "description": 1.0,
+          "code_information": 1.0,
+          "standard_charges": 1.0
+        }
+      },
+      "issueCounts": {},
+      "issues": [],
+      "issuesOmitted": 0,
+      "summary": {
+        "safeForDownstreamIngestion": true,
+        "notes": [
+          "PASS applies only to the inspected structural profile. WARN requires review; uninspected content is unknown."
+        ]
+      },
+      "limitations": [
+        "Structural preflight only; not CMS certification, legal advice, pricing accuracy or completeness verification.",
+        "Uninspected records and trailing syntax are not validated. No NPI registry, source-authenticity or annual freshness verification.",
+        "Duplicate keys checked within parsed scope; duplicate business records and cross-record pricing relationships are not checked.",
+        "Only CMS v3.0.0 JSON and comma-separated tall/wide CSV; UTF-8 only. ZIP and concatenated gzip unsupported."
+      ]
+    }
+  }
+}

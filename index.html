@@ -3,15 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>%SITE_TITLE%</title>
-    <meta name="description" content="%META_DESCRIPTION%" />
-    <meta property="og:title" content="%SITE_TITLE%" />
-    <meta property="og:description" content="%META_DESCRIPTION%" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.spreadrun.com" />
+    <!--app-head-->
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Google Search Console verification -->
     <meta name="google-site-verification" content="gGxcRo62ZrWQEEv5DM8r3P7Huhk7IiIKh3S5JYU8oio" />
@@ -32,7 +29,7 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/src/entry-client.jsx"></script>
   </body>
 </html>

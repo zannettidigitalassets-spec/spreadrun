@@ -36,9 +36,9 @@ export function useSubscription(user) {
       return;
     }
 
-    // Safety timeout — if Supabase doesn't respond in 5 seconds, default to free tier
+    // Safety timeout: if Supabase doesn't respond in 5 seconds, default to free tier
     const timeout = setTimeout(() => {
-      console.warn('useSubscription timed out — defaulting to free tier');
+      console.warn('useSubscription timed out: defaulting to free tier');
       setTier('free');
       setLoading(false);
     }, 5000);
@@ -220,31 +220,14 @@ export function AuthModal({ onClose }) {
   );
 }
 
-export function UserMenu({ user, isStarter }) {
+// The old "Manage Subscription" button posted {email} to /api/customer-portal with no auth.
+// It was removed on 2026-10-02 and must not come back; billing lives on /account now.
+export function UserMenu({ user }) {
   const [open, setOpen] = useState(false);
-  const [loadingPortal, setLoadingPortal] = useState(false);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setOpen(false);
-  };
-
-  const handleManageSubscription = async () => {
-    setLoadingPortal(true);
-    try {
-      const res = await fetch('/api/customer-portal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.email }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (err) {
-      console.error('Failed to open customer portal:', err);
-    }
-    setLoadingPortal(false);
   };
 
   return (
@@ -276,20 +259,6 @@ export function UserMenu({ user, isStarter }) {
           <div style={{ padding: "8px 12px", fontSize: 12.5, color: "#9BA8C0", borderBottom: "1px solid #EBF0FF", marginBottom: 4 }}>
             {user.email}
           </div>
-          {isStarter && (
-            <button
-              onClick={handleManageSubscription}
-              disabled={loadingPortal}
-              style={{
-                width: "100%", textAlign: "left", background: "none", border: "none",
-                padding: "8px 12px", fontSize: 14, color: "#0B5FFF", fontWeight: 600,
-                cursor: loadingPortal ? "default" : "pointer", borderRadius: 8,
-                opacity: loadingPortal ? 0.6 : 1,
-              }}
-            >
-              {loadingPortal ? "Loading..." : "Manage Subscription"}
-            </button>
-          )}
           <button onClick={handleSignOut} style={{
             width: "100%", textAlign: "left", background: "none", border: "none",
             padding: "8px 12px", fontSize: 14, color: "#D14343", fontWeight: 600,

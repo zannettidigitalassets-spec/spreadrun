@@ -1,0 +1,56 @@
+// The API catalog. Drives the homepage cards, /apis, product pages, docs and the sitemap.
+// Server-side facts (price, size limits) are enforced in pylib/spreadrun_api/catalog.py;
+// scripts/check-site.mjs fails the build if the two disagree.
+
+export const PRICE_PER_CALL_CENTS = 25;
+
+export const CREDIT_PACKS = [
+  { id: 'pack_5', priceCents: 500, calls: 20 },
+  { id: 'pack_20', priceCents: 2000, calls: 80 },
+  { id: 'pack_50', priceCents: 5000, calls: 200 },
+];
+
+// Three tiers in the data model. Only tiers with showOnSite are rendered.
+//   built:   we build and run it (full margin)
+//   partner: curated third-party API, listing page with an outbound link (needs an approved affiliate agreement)
+//   resale:  orchestrated resale, only where commercial rights are verified for a specific deal. None in V1.
+export const TIERS = {
+  built: { label: 'Built by SpreadRun', showOnSite: true },
+  partner: { label: 'Partner API', showOnSite: true },
+  resale: { label: 'Resold API', showOnSite: false },
+};
+
+export const APIS = [
+  {
+    slug: 'clinical-trial-table-validator',
+    name: 'Clinical Trial Results Table QA',
+    tier: 'built',
+    status: 'live',
+    priceCents: PRICE_PER_CALL_CENTS,
+    unit: 'completed audit',
+    maxBodyBytes: 4_400_000,
+    demoMaxBodyBytes: 512 * 1024,
+    summary:
+      'Audits normalized clinical-trial study and outcome tables: NCT ID format, required fields, duplicate keys, orphan outcomes, outcome types and results-posting dates. Every finding comes with its table, row and field.',
+    cta: 'Audit your tables',
+  },
+  {
+    slug: 'hospital-mrf-validator',
+    name: 'Hospital Price Transparency MRF Validator',
+    tier: 'built',
+    status: 'beta',
+    priceCents: PRICE_PER_CALL_CENTS,
+    unit: 'completed validation',
+    maxBodyBytes: 4_400_000,
+    demoMaxBodyBytes: 2 * 1024 * 1024,
+    summary:
+      'Checks a hospital machine-readable price file against the CMS v3.0.0 JSON schema and tall or wide CSV templates, including the 2026 allowed-amount fields. Uploads only; large files are sampled.',
+    cta: 'Validate a file',
+  },
+];
+
+// Tier 2 listings appear here only after an affiliate agreement is approved and signed by the owner.
+export const PARTNER_APIS = [];
+
+export const apiBySlug = (slug) => APIS.find((a) => a.slug === slug);
+export const dollars = (cents) => `$${(cents / 100).toFixed(2)}`;

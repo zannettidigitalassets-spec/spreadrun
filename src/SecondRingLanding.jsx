@@ -78,7 +78,7 @@ export default function SecondRingLanding() {
   const [open, setOpen] = useState(null);
 
   useEffect(() => {
-    setPageMeta(SITE_TITLE, META_DESCRIPTION, "/");
+    setPageMeta(SITE_TITLE, META_DESCRIPTION, "/secondring");
   }, []);
 
   const start = () => {
@@ -101,6 +101,10 @@ export default function SecondRingLanding() {
 
   return (
     <div style={{ fontFamily: "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif", color: C.body, background: "#fff", lineHeight: 1.6 }}>
+      {/* Paused notice (2026-10-02): SecondRing is shelved; the page and early access list stay live. */}
+      <div style={{ background: "#FFF6DB", color: "#5C4400", fontSize: 14, padding: "10px 20px", textAlign: "center", borderBottom: "1px solid #F0DFA6" }}>
+        SecondRing is paused. Early access signups are still open, and we will email the list if it launches.
+      </div>
       {/* News bar */}
       <div style={{ background: C.ink, color: "#DCE6FF", fontSize: 14, padding: "10px 20px", textAlign: "center" }}>
         As of October 1, 2026, Google charges Local Services advertisers for missed calls over 20 seconds, even the ones that never connected. You can end up paying for calls nobody answered. SecondRing texts every one of those callers back.{" "}
@@ -110,7 +114,7 @@ export default function SecondRingLanding() {
       {/* Nav */}
       <header style={{ borderBottom: `1px solid ${C.line}` }}>
         <div style={{ ...wrap, display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
-          <a href="/" style={{ fontWeight: 800, fontSize: 20, color: C.ink, textDecoration: "none", letterSpacing: "-0.4px" }}>SecondRing</a>
+          <a href="/secondring" style={{ fontWeight: 800, fontSize: 20, color: C.ink, textDecoration: "none", letterSpacing: "-0.4px" }}>SecondRing</a>
           <nav style={{ display: "flex", alignItems: "center", gap: 22, fontSize: 15, fontWeight: 600 }}>
             <a href="#product" onClick={scrollTo("product")} style={{ color: C.body, textDecoration: "none" }}>Product</a>
             <a href="#pricing" onClick={scrollTo("pricing")} style={{ color: C.body, textDecoration: "none" }}>Pricing</a>
@@ -118,7 +122,7 @@ export default function SecondRingLanding() {
             {TRIAL_LIVE && !loading && !user && (
               <button onClick={() => setShowAuth(true)} style={{ background: "none", border: `1.5px solid ${C.line}`, borderRadius: 8, padding: "7px 14px", fontWeight: 700, color: C.ink, cursor: "pointer", fontFamily: "inherit", fontSize: 14 }}>Sign in</button>
             )}
-            {!loading && user && <UserMenu user={user} isStarter={false} />}
+            {!loading && user && <UserMenu user={user} />}
           </nav>
         </div>
       </header>

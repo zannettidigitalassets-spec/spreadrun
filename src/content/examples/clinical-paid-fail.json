@@ -1,0 +1,93 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "clinical-trial-table-validator",
+    "mode": "paid",
+    "charged": true,
+    "priceCents": 25,
+    "balanceCents": 950,
+    "report": {
+      "schemaVersion": 1,
+      "status": "FAIL",
+      "rowCounts": {
+        "studiesCsv": 6,
+        "outcomesCsv": 7
+      },
+      "fieldCoverage": {
+        "studiesCsv": {
+          "condition": 1.0,
+          "phase": 1.0,
+          "trial_id": 1.0
+        },
+        "outcomesCsv": {
+          "outcome_id": 1.0,
+          "outcome_type": 1.0,
+          "primary_endpoint": 0.857143,
+          "result_status": 1.0,
+          "results_first_post_date": 1.0,
+          "trial_id": 1.0
+        }
+      },
+      "issueCount": 7,
+      "issueCounts": {
+        "DUPLICATE_KEY": 2,
+        "INVALID_ISO_DATE": 1,
+        "INVALID_NCT_ID": 1,
+        "INVALID_OUTCOME_TYPE": 1,
+        "MISSING_VALUE": 1,
+        "ORPHAN_OUTCOME": 1
+      },
+      "issues": [
+        {
+          "table": "studiesCsv",
+          "record": 4,
+          "field": "trial_id",
+          "code": "INVALID_NCT_ID"
+        },
+        {
+          "table": "studiesCsv",
+          "record": 6,
+          "field": "trial_id",
+          "code": "DUPLICATE_KEY"
+        },
+        {
+          "table": "outcomesCsv",
+          "record": 4,
+          "field": "primary_endpoint",
+          "code": "MISSING_VALUE"
+        },
+        {
+          "table": "outcomesCsv",
+          "record": 5,
+          "field": "outcome_id",
+          "code": "DUPLICATE_KEY"
+        },
+        {
+          "table": "outcomesCsv",
+          "record": 3,
+          "field": "results_first_post_date",
+          "code": "INVALID_ISO_DATE"
+        },
+        {
+          "table": "outcomesCsv",
+          "record": 6,
+          "field": "trial_id",
+          "code": "ORPHAN_OUTCOME"
+        },
+        {
+          "table": "outcomesCsv",
+          "record": 7,
+          "field": "outcome_type",
+          "code": "INVALID_OUTCOME_TYPE"
+        }
+      ],
+      "issuesTruncated": false,
+      "inputSha256": {
+        "studiesCsv": "34a162e906102e1701f4f90de8eea9c57fade81ac11de5310c11b44d46ef4ae9",
+        "outcomesCsv": "4e355d3c00765d6bb0e63e7352f923cf5fda2d8a9d255ae1b57c0dc0639cca96"
+      },
+      "scope": "Structural QA only; no source authenticity, clinical accuracy, freshness, regulatory compliance or reuse-rights certification."
+    }
+  }
+}

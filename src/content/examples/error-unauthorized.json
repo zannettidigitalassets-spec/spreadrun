@@ -1,0 +1,10 @@
+{
+  "status": 401,
+  "body": {
+    "error": {
+      "code": "unauthorized",
+      "message": "Unknown or revoked API key.",
+      "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f"
+    }
+  }
+}

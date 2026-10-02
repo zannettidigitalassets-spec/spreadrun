@@ -1,0 +1,28 @@
+{
+  "note": "Byte-for-byte copies of DataForge validators. DataForge is the source of truth: change the validator there, then copy it here and update the hash. runners.py refuses to run a validator whose hash does not match this file. scripts/check-provenance.mjs checks the same thing at build time.",
+  "dataforgeRepo": "zannettidigitalassets-spec/DataForge",
+  "dataforgeCommit": "6604e1ef92f4800b79aaceb0709611d7e74ebfd5",
+  "copiedOn": "2026-10-02",
+  "files": {
+    "clinical/validator.py": {
+      "source": "products/clinical-results-qa/validator.py",
+      "sha256": "e637de8dbe05c2457544c0aa192756d43be738104465a62643b2125f848fc581"
+    },
+    "mrf/validator.py": {
+      "source": "products/hospital-mrf-validator/validator.py",
+      "sha256": "e6ee70406e2709600f6ab53c9097fab93f7305275083cb1e9b656b99aab91893"
+    },
+    "mrf/vendor/cms-v3.0.0.schema.json": {
+      "source": "products/hospital-mrf-validator/vendor/cms-v3.0.0.schema.json",
+      "sha256": "3160af4f021dc7d57a832452833ea4aae1162b3fc445bee21d2638efa5281803"
+    },
+    "mrf/vendor/tall.csv": {
+      "source": "products/hospital-mrf-validator/vendor/tall.csv",
+      "sha256": "0eb992085afa5faf2721213c2c8b599d57ccdd650e427d5dbd83d26c5375384e"
+    },
+    "mrf/vendor/wide.csv": {
+      "source": "products/hospital-mrf-validator/vendor/wide.csv",
+      "sha256": "86d9e9eed3a0344e9b8182694e94d5dbda69bee2918ac879bb3c06cfcb096736"
+    }
+  }
+}

@@ -1,23 +1,26 @@
 {
   "name": "spreadrun",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "node scripts/check-provenance.mjs && vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-site.mjs",
+    "preview": "vite preview",
+    "test": "node --test api/_tests/api.test.mjs && python3 -m unittest discover -s pylib/tests",
+    "test:sql": "node supabase/tests/storefront.test.mjs",
+    "examples": "python3 scripts/gen_examples.py"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@supabase/supabase-js": "^2.45.0",
     "stripe": "^16.0.0",
-    "resend": "^4.0.0",
-    "pdf-lib": "^1.17.1"
+    "resend": "^4.0.0"
   },
   "devDependencies": {
     "vite": "^5.0.0",
     "@vitejs/plugin-react": "^4.0.0"
-  }
+  },
+  "description": "SpreadRun: data validation APIs for regulated data"
 }

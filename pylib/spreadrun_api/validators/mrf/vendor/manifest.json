@@ -1,0 +1,32 @@
+[
+  {
+    "file": "json-dictionary.md",
+    "url": "https://raw.githubusercontent.com/CMSgov/hospital-price-transparency/5333564a710f80d7740180b9ffab8dbdcba9b502/documentation/JSON/README.md",
+    "sha256": "7bcd9fa270e29efd8d9dc4049724923ec04365980cb773759dd403478e928a14"
+  },
+  {
+    "file": "csv-dictionary.md",
+    "url": "https://raw.githubusercontent.com/CMSgov/hospital-price-transparency/5333564a710f80d7740180b9ffab8dbdcba9b502/documentation/CSV/README.md",
+    "sha256": "5129da0141428d689f79110a10a95607581ee3bef81fb0d937a6d39a6bf39dcc"
+  },
+  {
+    "file": "cms-v3.0.0.schema.json",
+    "url": "https://raw.githubusercontent.com/CMSgov/hospital-price-transparency/5333564a710f80d7740180b9ffab8dbdcba9b502/documentation/JSON/schemas/V3.0.0_Hospital_price_transparency_schema.json",
+    "sha256": "3160af4f021dc7d57a832452833ea4aae1162b3fc445bee21d2638efa5281803"
+  },
+  {
+    "file": "tall.csv",
+    "url": "https://raw.githubusercontent.com/CMSgov/hospital-price-transparency/5333564a710f80d7740180b9ffab8dbdcba9b502/documentation/CSV/templates/V3.0.0_Tall_CSV_Format_Template.csv",
+    "sha256": "0eb992085afa5faf2721213c2c8b599d57ccdd650e427d5dbd83d26c5375384e"
+  },
+  {
+    "file": "wide.csv",
+    "url": "https://raw.githubusercontent.com/CMSgov/hospital-price-transparency/5333564a710f80d7740180b9ffab8dbdcba9b502/documentation/CSV/templates/V3.0.0_Wide_CSV_Format_Template.csv",
+    "sha256": "86d9e9eed3a0344e9b8182694e94d5dbda69bee2918ac879bb3c06cfcb096736"
+  },
+  {
+    "file": "repository-readme.md",
+    "url": "https://raw.githubusercontent.com/CMSgov/hospital-price-transparency/5333564a710f80d7740180b9ffab8dbdcba9b502/README.md",
+    "sha256": "32e76fe340e26267b31ea26378d661fc924392b25764d6eacf08e11d99d21230"
+  }
+]
