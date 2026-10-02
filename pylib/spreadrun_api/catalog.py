@@ -25,6 +25,14 @@ APIS = {
         # Gzip uploads are expanded up to this many bytes; anything past it is reported as not inspected.
         'max_decompressed_bytes': 16 * 1024 * 1024,
     },
+    'uad-36-appraisal-validator': {
+        'name': 'UAD 3.6 Appraisal Report Validator',
+        'price_cents': 100,
+        # Whole-file validation, no sampling. UAD XML references photos by file name, so reports are
+        # usually well under this; a file with embedded content above it is rejected with 413, not sampled.
+        'max_body_bytes': 4_400_000,
+        'demo_max_body_bytes': 1024 * 1024,
+    },
 }
 
 DEMO_RUNS_PER_DAY = 10

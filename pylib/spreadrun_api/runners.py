@@ -59,6 +59,41 @@ def mrf_module():
     return _mrf
 
 
+_uad = None
+
+
+def uad_module():
+    """SpreadRun's own UAD 3.6 engine (not a DataForge copy). Rules: validators/uad/rules.json,
+    generated from the GSE appendices by scripts/uad/build_rules.py."""
+    global _uad
+    if _uad is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_uad_engine', HERE / 'uad' / 'engine.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_uad_engine'] = module
+        spec.loader.exec_module(module)
+        _uad = module
+    return _uad
+
+
+def run_uad(body: bytes, *, as_of=None):
+    """Validate one UAD 3.6 URAR XML file. as_of (YYYY-MM-DD) sets the date the clock-based rules
+    (effective date in the future, more than 367 days old) are evaluated against; default today (UTC)."""
+    import datetime as dt
+    v = uad_module()
+    today = None
+    if as_of is not None:
+        try:
+            today = dt.date.fromisoformat(as_of)
+        except ValueError:
+            raise InputError('asOf must be a date in YYYY-MM-DD format.') from None
+    try:
+        report = v.validate(body, today=today)
+    except v.InputError as exc:
+        raise InputError(str(exc)) from None
+    report['asOf'] = (today or dt.datetime.now(dt.timezone.utc).date()).isoformat()
+    return report
+
+
 def run_clinical(body: bytes):
     """Body is the JSON object the validator expects: {"studiesCsv": "...", "outcomesCsv": "..."}."""
     v = clinical_module()
