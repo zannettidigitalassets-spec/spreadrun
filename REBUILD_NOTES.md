@@ -114,14 +114,14 @@ Vercel Hobby allows at most 12 serverless functions per deployment. The project 
 
 | Function | Serves |
 |---|---|
-| `api/[mode]/[slug].py` | every validator, both `/api/v1/<api>` (paid) and `/api/demo/<api>` (free demo) |
+| `api/[channel]/[slug].py` | every validator, both `/api/v1/<api>` (paid) and `/api/demo/<api>` (free demo) |
 | `api/account.js`, `api/keys.js`, `api/credits/checkout.js`, `api/customer-portal.js`, `api/stripe-webhook.js` | accounts and billing |
 | `api/admin/metrics.js` | the launch verdict |
 | `api/retired.js` | 410 Gone for `/api/rent-estimate` and `/api/early-access` (via `vercel.json` rewrites) |
 
 Adding a validator means adding it to `pylib/spreadrun_api/catalog.py` and a runner; it adds no function. Static functions win
 over the dynamic route because Vercel checks the filesystem first. The route file receives either the public path or the route
-destination (`/api/[mode]/[slug]?mode=v1&slug=<api>`); `handler.resolve_route` accepts both. Verified on 2026-10-02 with
+destination (`/api/[channel]/[slug]?channel=v1&slug=<api>`); `handler.resolve_route` accepts both. Verified on 2026-10-02 with
 `vercel build` and by running the built bundle through Vercel's own Python runtime. `npm run build` fails above 12 functions.
 
 History: 13 functions failed the first preview; dropping the rent-estimate function and the weekly verdict cron got to 11;

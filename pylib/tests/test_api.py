@@ -284,9 +284,18 @@ class DemoFlow(unittest.TestCase):
 class Routing(unittest.TestCase):
     def test_resolve_public_and_destination_paths(self):
         for path in ['/api/v1/hospital-mrf-validator?maxRecords=5',
-                     '/api/[mode]/[slug]?mode=v1&slug=hospital-mrf-validator&maxRecords=5']:
+                     '/api/[channel]/[slug]?channel=v1&slug=hospital-mrf-validator&maxRecords=5']:
             self.assertEqual(handler.resolve_route(path), (MRF, 'paid'))
         self.assertEqual(handler.resolve_route('/api/demo/clinical-trial-table-validator'), (CLIN, 'demo'))
+
+    def test_route_params_do_not_clash_with_mrf_mode(self):
+        # Vercel may pass the destination path, whose query carries the route params next to the caller's own.
+        with mock.patch.object(store, 'rpc', FakeStore().rpc):
+            path = '/api/[channel]/[slug]?channel=demo&slug=hospital-mrf-validator&mode=preflight&maxRecords=50'
+            api, mode = handler.resolve_route(path)
+            status, out = call(api, mode, (FIX / 'valid.json').read_bytes(), path=path)
+        self.assertEqual(status, 200, out)
+        self.assertEqual(out['report']['validationMode'], 'preflight')
         for bad in ['/api/v2/hospital-mrf-validator', '/api/v1/nope', '/api/v1', '/api/admin/metrics', '/x/v1/hospital-mrf-validator']:
             self.assertEqual(handler.resolve_route(bad), (None, None), bad)
 

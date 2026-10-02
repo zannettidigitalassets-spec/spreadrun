@@ -147,16 +147,17 @@ MODES = {'v1': 'paid', 'demo': 'demo'}
 
 
 def resolve_route(path):
-    """Work out (api, mode) for the single dynamic route api/[mode]/[slug].py.
+    """Work out (api, mode) for the single dynamic route api/[channel]/[slug].py.
 
     Vercel may hand the function either the public path (/api/v1/<api>?...) or the
-    route destination (/api/[mode]/[slug]?mode=v1&slug=<api>&...). Both are accepted.
+    route destination (/api/[channel]/[slug]?channel=v1&slug=<api>&...). Both are accepted.
     Returns (None, None) when the path names no known API or mode."""
     parts = urlsplit(path)
     query = parse_qs(parts.query)
     seg = [p for p in parts.path.split('/') if p]
-    if 'mode' in query and 'slug' in query:
-        mode_key, slug = query['mode'][0], query['slug'][0]
+    # The route segment is named "channel", not "mode": the MRF API already uses ?mode=sample|preflight.
+    if 'channel' in query and 'slug' in query:
+        mode_key, slug = query['channel'][0], query['slug'][0]
     elif len(seg) == 3 and seg[0] == 'api':
         mode_key, slug = seg[1], seg[2]
     else:
