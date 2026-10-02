@@ -7,4 +7,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'pylib'))
 
 from spreadrun_api.handler import make_handler  # noqa: E402
 
-handler = make_handler('hospital-mrf-validator', 'paid')
+# Vercel detects Python functions statically and needs a literal `class handler(...)`.
+class handler(make_handler('hospital-mrf-validator', 'paid')):
+    pass

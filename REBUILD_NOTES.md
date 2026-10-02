@@ -131,3 +131,4 @@ DataForge, copy it here, update the hash, run the tests.
 - `npm i --no-save @electric-sql/pglite@0.3 && node supabase/tests/storefront.test.mjs`: the migration in an in-memory
   Postgres, including idempotent charges and grants, the 20-calls-per-$5 rule, revoked keys, demo limits and every verdict state.
 - `python3.12 scripts/gen_examples.py` regenerates the docs examples by running the real handlers.
+- Vercel only registers a Python route when the file has a literal `class handler(...)` (found by reproducing the failed preview build with `vercel build`). The four route files do that.
