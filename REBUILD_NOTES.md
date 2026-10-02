@@ -13,6 +13,7 @@ meta description, canonical and JSON-LD), plus serverless functions on Vercel:
 | `/apis` | Catalog with tier badges, plus `#pricing` |
 | `/apis/clinical-trial-table-validator` | Product page with live demo |
 | `/apis/hospital-mrf-validator` | Product page (beta) with live demo, names CMS's free validator |
+| `/apis/uad-36-appraisal-validator` | Product page (beta) with credit-aware test form; UAD 3.6 URAR validator, $1.00 |
 | `/docs`, `/docs/<api>` | Shared API docs and per-API reference |
 | `/guides`, `/guides/hospital-price-transparency-file-requirements-2026` | SEO guide |
 | `/account` | Email-code sign-in, API keys, credits, usage (noindex) |
@@ -54,7 +55,9 @@ was deleted, not revived.
 
 ## Billing
 
-- Prepaid credits held in cents. Packs: $5 (20 calls), $20 (80), $50 (200). $0.25 per completed run on every API.
+- Prepaid credits held in cents. Packs: $5, $20, $50 of credit (20, 80, 200 standard runs at $0.25). Each API has its own
+  price per completed run (`price_cents` in `pylib/spreadrun_api/catalog.py`, `priceCents` in `src/catalog.js`, the build
+  fails if they differ): Clinical $0.25, MRF $0.25, UAD 3.6 $1.00. The Terms price table renders from the catalog.
   Credits never expire.
 - Charged only when a report is produced (PASS, WARN or FAIL). Input errors, internal errors and billing outages are
   never charged and never return a report. A report is never returned without a successful charge.
@@ -127,6 +130,40 @@ destination (`/api/[channel]/[slug]?channel=v1&slug=<api>`); `handler.resolve_ro
 History: 13 functions failed the first preview; dropping the rent-estimate function and the weekly verdict cron got to 11;
 the dispatcher got to 8.
 
+## UAD 3.6 Appraisal Report Validator (branch `spreadrun/uad-36-validator`)
+
+SpreadRun's own validator, not a DataForge copy. `POST /api/v1/uad-36-appraisal-validator` (and `/api/demo/...`), same
+dispatcher function, so still 8 functions. Body: a UAD 3.6 URAR XML file or the UAD 3.6 ZIP package (its one XML is used).
+
+- **Sources.** GSE-published Appendix A-1 (URAR Delivery Specification, sheet "UAD Delivery Spec 1.4") and Appendix H-1
+  (URAR Compliance Rules, sheet "UAD Compliance Rules v1.5"), downloaded 2026-10-02. They are not committed (public repo),
+  nor is the MISMO XSD, which is not used at all. D-1 sample scenarios are not committed either (GSE copyright notice).
+- **Rule table.** `scripts/uad/build_rules.py --spec-dir <folder with a1.xlsx, h1.xlsx>` writes
+  `pylib/spreadrun_api/validators/uad/rules.json` (paths, formats, supported values, R/CR flags, cardinality, translated
+  H-1 logic; no MISMO definitions) and `src/content/uad-coverage.json` (what the website states). Source SHA-256s are
+  recorded in rules.json. Rerun it when the GSEs publish new appendix versions.
+- **Translation.** H-1 rule logic is plain English. The script parses the shapes with one reading (required, conditional,
+  comparisons, instance counts, uniqueness, date formats, ZIP/state codes, report age). Outside parentheses H-1 means
+  "If A or B, and C is not provided" as (A or B) and C; that precedence is applied. 585 of 728 rules translate (480 Fatal,
+  105 Warning). The other 143 are listed in every report and on the docs page with a reason: date arithmetic or sums
+  (69), wording without one reading (47), RELATIONSHIP/xlink links (20), "for each combination" across comparables (4),
+  names not in A-1 (3). Three evident typos are corrected and recorded (IMRPOVEMENT, ConstructionMethod, "in in").
+- **Evaluation.** Three-valued: a rule fires only when its condition is definitely true, so a missing or ambiguous
+  input never produces a finding. Rules are scoped per valuation PROPERTY (@ValuationUseType) and per container instance.
+  A-1 checks: unknown elements (warning), closed enumerations (Enumerated/Boolean only), formats, empty elements,
+  required (R) only where the container path has one context for that use type, cardinality per use type.
+- **Verification.** All 12 D-1 samples PASS with zero findings as of their signature dates. Removal mutation sweep over
+  every data point of every sample: 320 of 585 rules fire, zero findings about any other data point. Targeted mutations
+  in `pylib/tests/test_uad.py` cover each rule family. `UAD_SAMPLES_DIR=<folder> python3.12 -m unittest ...` adds the
+  sample test; without it that one test is skipped.
+- **Fixtures.** `scripts/uad/make_fixtures.py --sample SF1.xml` writes synthetic `uad-pass.xml` / `uad-fail.xml`
+  (every name, address, identifier and narrative replaced; schemaLocation with a local path removed) to the test fixtures
+  and `public/samples/`. They are dated 2019, so they are checked with `asOf=2019-09-20`.
+- **Not supported:** Appraisal Update (H-2) and Completion (H-3) reports are rejected as input errors (no samples to
+  test them against). Invalid input is never charged.
+- **Owner decision pending:** the Terms and Privacy policy forbid personal data in submissions; real UAD files name the
+  borrower, owner and seller. The product page tells users to replace those names. Legal text is unchanged.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist
@@ -148,7 +185,7 @@ the dispatcher got to 8.
 - `node --test api/_tests/api.test.mjs`: portal auth fix, checkout pricing, webhook grants and tamper checks, key hashing, admin auth.
 - `python3.12 -m unittest discover -s pylib/tests`: validator parity with DataForge's recorded outputs, upload adapter,
   paid flow (charge, no charge on input error, insufficient credits, races, billing outage), demo flow and limits, the real
-  HTTP handler class.
+  HTTP handler class, and the UAD validator (`test_uad.py`: rule families, input errors, ZIP, $1.00 billing, rule table).
 - `npm i --no-save @electric-sql/pglite@0.3 && node supabase/tests/storefront.test.mjs`: the migration in an in-memory
   Postgres, including idempotent charges and grants, the 20-calls-per-$5 rule, revoked keys, demo limits and every verdict state.
 - `python3.12 scripts/gen_examples.py` regenerates the docs examples by running the real handlers.
