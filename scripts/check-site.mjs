@@ -19,7 +19,7 @@ const urlOf = (f) => {
 };
 const known = new Set(pages.map(urlOf));
 const staticFiles = new Set(files.map((f) => '/' + path.relative(dist, f).replace(/\\/g, '/')));
-const apiRoutes = new Set(['/api/account', '/api/keys', '/api/credits/checkout', '/api/customer-portal', '/api/early-access',
+const apiRoutes = new Set(['/api/account', '/api/keys', '/api/credits/checkout', '/api/customer-portal',
   ...APIS.flatMap((a) => [`/api/v1/${a.slug}`, `/api/demo/${a.slug}`])]);
 
 // Exact metadata from the content files (em dashes in the original titles became colons, prices became $0.25).
@@ -37,7 +37,6 @@ const NEED_LD = {
 };
 const decode = (s) => s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#x27;/g, "'");
 const titles = new Map();
-const isLegacyStatic = (u) => u.startsWith('/guides/lsa-');
 
 for (const f of pages) {
   const u = urlOf(f);
@@ -46,11 +45,11 @@ for (const f of pages) {
   const text = decode(body.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' '));
 
   if (/—/.test(html)) fail(`${u}: contains an em dash`);
+  if (/secondring|second ring/i.test(html)) fail(`${u}: mentions SecondRing`);
   if (/zannetti|\bchris\b|pittsburgh|seven fields/i.test(html)) fail(`${u}: contains a personal name or location`);
   if (/coming soon|buy\.stripe\.com|plink_|\bpro plan\b|upgrade to pro|starter plan|basic plan/i.test(text + html)) fail(`${u}: leftover SaaS pricing or coming-soon copy`);
   if (/\$0\.35/.test(text)) fail(`${u}: stale $0.35 price`);
 
-  if (isLegacyStatic(u)) continue; // static SecondRing guide keeps its own head
   const h1 = (body.match(/<h1[\s>]/g) || []).length;
   if (h1 !== 1) fail(`${u}: ${h1} <h1> elements`);
   const title = decode((html.match(/<title>([^<]*)<\/title>/) || [])[1] || '');
@@ -79,15 +78,15 @@ for (const f of pages) {
 }
 
 const client = fs.readFileSync(path.join(root, 'src/entry-client.jsx'), 'utf8');
-for (const u of known) if (!isLegacyStatic(u) && !client.includes(`'${u}': () => import(`)) fail(`${u}: no client loader in entry-client.jsx`);
+for (const u of known) if (!client.includes(`'${u}': () => import(`)) fail(`${u}: no client loader in entry-client.jsx`);
 
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
 for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/docs',
   '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/guides',
-  '/guides/hospital-price-transparency-file-requirements-2026', '/secondring', '/guides/lsa-missed-call-charges-october-2026']) {
+  '/guides/hospital-price-transparency-file-requirements-2026']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);
 }
-for (const u of ['/account', '/404']) if (sitemap.includes(`${u}</loc>`)) fail(`sitemap should not list ${u}`);
+for (const u of ['/account', '/404', '/secondring', '/guides/lsa-missed-call-charges-october-2026']) if (sitemap.includes(`${u}</loc>`)) fail(`sitemap should not list ${u}`);
 const robots = fs.readFileSync(path.join(dist, 'robots.txt'), 'utf8');
 if (!robots.includes('Sitemap: https://www.spreadrun.com/sitemap.xml')) fail('robots.txt missing sitemap');
 

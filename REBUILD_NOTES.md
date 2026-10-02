@@ -17,9 +17,7 @@ meta description, canonical and JSON-LD), plus serverless functions on Vercel:
 | `/guides`, `/guides/hospital-price-transparency-file-requirements-2026` | SEO guide |
 | `/account` | Email-code sign-in, API keys, credits, usage (noindex) |
 | `/contact` | Contact form (Formspree, unchanged integration) |
-| `/secondring` | SecondRing landing, moved off `/`, marked paused |
-| `/guides/lsa-missed-call-charges-october-2026` | SecondRing guide, unchanged except links now point to `/secondring` |
-| `/privacy`, `/terms` | SpreadRun umbrella documents, approved 2026-10-02. Part A covers SpreadRun; Part B is SecondRing's text, unchanged (`src/legal/SecondRing*.jsx`, do not reword) |
+| `/privacy`, `/terms` | SpreadRun-only documents, approved 2026-10-02 |
 
 ## Reused
 
@@ -27,8 +25,8 @@ meta description, canonical and JSON-LD), plus serverless functions on Vercel:
 - Stripe integration: same SDK and account. Checkout, the webhook and the authenticated portal pattern from `secondring/stripe`
   (`api/_lib/clients.js`). Nothing in the Stripe dashboard was renamed or changed.
 - Supabase project, email one-time-code sign-in, Resend email, Google Analytics, Search Console / Impact / AdSense meta tags.
-- `/api/early-access` (SecondRing list) unchanged. `/api/rent-estimate` still answers 410, but through a rewrite into the
-  early-access function instead of its own function (see Function limit).
+- `/api/rent-estimate` and `/api/early-access` both answer 410 Gone from one function, `api/retired.js`, through
+  `vercel.json` rewrites (see Function limit).
 - DataForge validators, copied byte for byte (see Provenance).
 
 ## Rebuilt
@@ -103,8 +101,9 @@ DataForge, copy it here, update the hash, run the tests.
 
 ## Shelved, not deleted
 
-- SecondRing: page at `/secondring` with a paused notice, early-access form and Twilio untouched. Product code stays on the
-  `secondring/*` branches.
+- SecondRing: removed from the site on 2026-10-02 (landing page, LSA guide, early-access form, legal Part B). `/secondring` and
+  `/guides/lsa-missed-call-charges-october-2026` 308 to `/`; `/api/early-access` answers 410. Twilio was not touched, and the
+  early-access signups already collected stay in the Supabase `early_access` table. Product code stays on the `secondring/*` branches.
 - Real-estate SaaS: calculators, guides, analyzer, My Deals and their Payment Links were removed from `main`'s source
   (they live in git history). Old URLs 301 to `/` or `/guides`.
 - FetchAll: separate project, not touched.
@@ -112,9 +111,9 @@ DataForge, copy it here, update the hash, run the tests.
 ## Function limit (Hobby plan)
 
 Vercel Hobby allows at most 12 serverless functions per deployment. V1 uses 11: four validator routes (paid and demo for each
-API), account, keys, credits checkout, customer portal, Stripe webhook, admin metrics and early-access. `npm run build` fails
+API), account, keys, credits checkout, customer portal, Stripe webhook, admin metrics and one 410 handler for retired endpoints. `npm run build` fails
 if the count goes over 12. To get here from 13: `/api/rent-estimate` lost its own function (a `vercel.json` rewrite sends it
-to early-access, which answers the same 410; plain `vercel.json` rules can't return a 410 by themselves) and the weekly
+to `api/retired.js`, which answers the same 410; plain `vercel.json` rules can't return a 410 by themselves) and the weekly
 verdict email cron was dropped.
 
 Scaling constraint, not fixed now: every new API costs 2 functions (paid and demo), so the cap bites again at about 5 APIs.

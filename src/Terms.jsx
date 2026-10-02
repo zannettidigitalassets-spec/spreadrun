@@ -1,23 +1,13 @@
-import LegalPage, { Part } from './legal/LegalPage.jsx';
-import { SectionTitle, P, UL } from './LegalLayout.jsx';
-import SecondRingTerms from './legal/SecondRingTerms.jsx';
+import LegalPage, { SectionTitle, P, UL } from './legal/LegalPage.jsx';
 
 // Approved 2026-10-02 from docs/legal-drafts/terms-DRAFT.md with the owner's decisions applied:
 // brand-only operator wording, 30-day refunds on unused credits, and no PHI or personal data in submissions.
-// Part B is SecondRing's Terms, unchanged (src/legal/SecondRingTerms.jsx).
 export const UPDATED = 'October 2, 2026';
 
 export default function Terms() {
   return (
     <LegalPage path="/terms" title="Terms of Service" updated={UPDATED}>
-      <P>These Terms of Service ("Terms") are an agreement between you and the operator of the SpreadRun and SecondRing brands ("we," "us," "our"). They have two parts:</P>
-      <UL>
-        <li><strong>Part A</strong> covers SpreadRun: the data-validation APIs, the free test forms, accounts, API keys and prepaid credits.</li>
-        <li><strong>Part B</strong> covers SecondRing, a missed-call text-back service that is currently paused. Part B is unchanged from SecondRing's Terms.</li>
-      </UL>
-      <P>By using a service covered by these Terms you agree to the part that applies to it. If you do not agree, do not use the service.</P>
-
-      <Part id="spreadrun">Part A: SpreadRun APIs</Part>
+      <P>These Terms of Service ("Terms") are an agreement between you and SpreadRun ("we," "us," "our"). They cover spreadrun.com, the SpreadRun data-validation APIs, the free test forms, accounts, API keys and prepaid credits. By using SpreadRun you agree to these Terms. If you do not agree, do not use SpreadRun.</P>
 
       <SectionTitle>Who can use SpreadRun</SectionTitle>
       <P>SpreadRun is for businesses and professionals. You must be at least 18 and able to form a binding contract. If you use SpreadRun for an organization, you confirm you are authorized to bind it. You are responsible for everything done under your account and with your API keys.</P>
@@ -68,13 +58,8 @@ export default function Terms() {
       <SectionTitle>Termination</SectionTitle>
       <P>You may stop using SpreadRun at any time. We may suspend or end your access if you breach these Terms or if required by law.</P>
 
-      <Part id="secondring">Part B: SecondRing (paused)</Part>
-      <P>SecondRing is paused. Its website and early access list remain available at <a href="/secondring">spreadrun.com/secondring</a>. The following are SecondRing's Terms, unchanged. In Part B, "the Service" means SecondRing.</P>
-      <SecondRingTerms />
-
-      <Part id="changes">Changes and contact</Part>
       <SectionTitle>Changes to these Terms</SectionTitle>
-      <P>We may update these Terms. If a change is material, we will notify account holders by email or on the site before it takes effect. Continuing to use a service after a change means you accept the updated Terms.</P>
+      <P>We may update these Terms. If a change is material, we will notify account holders by email or on the site before it takes effect. Continuing to use SpreadRun after a change means you accept the updated Terms.</P>
       <SectionTitle>Contact us</SectionTitle>
       <P>Questions about these Terms? Use our <a href="/contact">contact page</a> or email <a href="mailto:spreadrun@gmail.com">spreadrun@gmail.com</a>.</P>
     </LegalPage>

@@ -15,7 +15,6 @@ export const LOADERS = {
   '/guides/hospital-price-transparency-file-requirements-2026': () => import('./pages/MrfGuide.jsx'),
   '/account': () => import('./pages/Account.jsx'),
   '/contact': () => import('./Contact.jsx'),
-  '/secondring': () => import('./SecondRingLanding.jsx'),
   '/privacy': () => import('./Privacy.jsx'),
   '/terms': () => import('./Terms.jsx'),
   '/404': () => import('./NotFound.jsx'),

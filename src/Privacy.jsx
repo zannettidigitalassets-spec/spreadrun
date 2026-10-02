@@ -1,23 +1,13 @@
-import LegalPage, { Part } from './legal/LegalPage.jsx';
-import { SectionTitle, P, UL } from './LegalLayout.jsx';
-import SecondRingPrivacy from './legal/SecondRingPrivacy.jsx';
+import LegalPage, { SectionTitle, P, UL } from './legal/LegalPage.jsx';
 
 // Approved 2026-10-02 from docs/legal-drafts/privacy-DRAFT.md with the owner's decisions applied:
 // brand-only operator wording, and no protected health information or personal data in submissions.
-// Part B is SecondRing's policy, unchanged (src/legal/SecondRingPrivacy.jsx).
 export const UPDATED = 'October 2, 2026';
 
 export default function Privacy() {
   return (
     <LegalPage path="/privacy" title="Privacy Policy" updated={UPDATED}>
-      <P>This Privacy Policy covers spreadrun.com and the services offered on it. It has two parts:</P>
-      <UL>
-        <li><strong>Part A</strong> covers SpreadRun: the website, the data-validation APIs (including the free test forms), accounts, API keys and credit purchases.</li>
-        <li><strong>Part B</strong> covers SecondRing, a missed-call text-back service that is currently paused. Part B is unchanged from SecondRing's policy, including its text messaging (SMS) terms.</li>
-      </UL>
-      <P>SpreadRun and SecondRing are brands run by the same operator. In this policy, "we," "us" and "our" mean the operator of those brands.</P>
-
-      <Part id="spreadrun">Part A: SpreadRun</Part>
+      <P>This Privacy Policy explains what SpreadRun ("we," "us," "our") collects when you use spreadrun.com, the SpreadRun data-validation APIs (including the free test forms), accounts, API keys and credit purchases, how we use it, and the choices you have.</P>
 
       <SectionTitle>Who this covers</SectionTitle>
       <UL>
@@ -67,13 +57,8 @@ export default function Privacy() {
       <P>We use browser storage for sign-in and cookies to measure site usage with Google Analytics. You can block or delete cookies in your browser settings, though some features may not work.</P>
 
       <SectionTitle>Children</SectionTitle>
-      <P>The services are for businesses and professionals and are not directed to children under 13. We do not knowingly collect information from children.</P>
+      <P>SpreadRun is for businesses and professionals and are not directed to children under 13. We do not knowingly collect information from children.</P>
 
-      <Part id="secondring">Part B: SecondRing (paused)</Part>
-      <P>SecondRing is paused. Its website and early access list remain available at <a href="/secondring">spreadrun.com/secondring</a>. The following is SecondRing's privacy policy, unchanged. In Part B, "the Service" means SecondRing.</P>
-      <SecondRingPrivacy />
-
-      <Part id="changes">Changes and contact</Part>
       <SectionTitle>Changes to this policy</SectionTitle>
       <P>We may update this policy. If a change is material we will notify account holders by email or on the site. The date at the top shows when it was last updated.</P>
       <SectionTitle>Contact us</SectionTitle>

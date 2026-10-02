@@ -140,11 +140,13 @@ test('admin metrics: requires the admin token', async () => {
   assert.equal(ok.status, 200);
 });
 
-test('rent-estimate: retired path answers 410 through early-access (no function of its own)', async () => {
-  const { POST } = await import('../early-access.js');
-  for (const url of ['https://www.spreadrun.com/api/rent-estimate', 'https://www.spreadrun.com/api/early-access?retired=rent-estimate']) {
-    const res = await POST(new Request(url, { method: 'POST', body: '{"userId":"x"}' }));
-    assert.equal(res.status, 410);
-    assert.deepEqual(await res.json(), { error: 'gone', message: 'This feature has been retired.' });
+test('retired endpoints answer 410 from one function', async () => {
+  const { POST } = await import('../retired.js');
+  const res = await POST(new Request('https://www.spreadrun.com/api/retired', { method: 'POST', body: '{"userId":"x"}' }));
+  assert.equal(res.status, 410);
+  assert.deepEqual(await res.json(), { error: 'gone', message: 'This feature has been retired.' });
+  const vercel = JSON.parse(await (await import('node:fs/promises')).readFile(new URL('../../vercel.json', import.meta.url), 'utf8'));
+  for (const src of ['/api/rent-estimate', '/api/early-access']) {
+    assert.ok(vercel.rewrites.some((r) => r.source === src && r.destination === '/api/retired'), src);
   }
 });

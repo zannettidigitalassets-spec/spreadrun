@@ -12,10 +12,8 @@ import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import Account from './pages/Account.jsx';
 import Contact from './Contact.jsx';
 import NotFound from './NotFound.jsx';
-import SecondRingLanding from './SecondRingLanding.jsx';
 import Privacy from './Privacy.jsx';
 import Terms from './Terms.jsx';
-import { SITE_TITLE as SECONDRING_TITLE, META_DESCRIPTION as SECONDRING_DESC } from './launchConfig.js';
 import { APIS, PRICE_PER_CALL_CENTS } from './catalog.js';
 
 export const ORIGIN = 'https://www.spreadrun.com';
@@ -152,22 +150,16 @@ export const ROUTES = {
     description: 'Questions about a SpreadRun API, volume pricing, or a validator you need. We read every message.',
     priority: '0.4',
   },
-  '/secondring': {
-    Component: SecondRingLanding,
-    title: SECONDRING_TITLE,
-    description: SECONDRING_DESC,
-    priority: '0.3',
-  },
   '/privacy': {
     Component: Privacy,
     title: 'Privacy Policy | SpreadRun',
-    description: 'What SpreadRun and SecondRing collect, how it is used and shared, and your choices, including SMS opt-in data for SecondRing.',
+    description: 'What SpreadRun collects when you use its data-validation APIs and website, how it is used and shared, and your choices.',
     priority: '0.2',
   },
   '/terms': {
     Component: Terms,
     title: 'Terms of Service | SpreadRun',
-    description: 'Terms for SpreadRun APIs, prepaid credits and refunds, and the paused SecondRing service, including its SMS terms.',
+    description: 'Terms for using SpreadRun data-validation APIs: accounts, API keys, prepaid credits, refunds and acceptable use.',
     priority: '0.2',
   },
   '/404': {

@@ -83,6 +83,16 @@
       "source": "/guides/real-estate-terms-glossary",
       "destination": "/guides",
       "permanent": true
+    },
+    {
+      "source": "/secondring",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/lsa-missed-call-charges-october-2026",
+      "destination": "/",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -104,7 +114,11 @@
     },
     {
       "source": "/api/rent-estimate",
-      "destination": "/api/early-access?retired=rent-estimate"
+      "destination": "/api/retired"
+    },
+    {
+      "source": "/api/early-access",
+      "destination": "/api/retired"
     }
   ],
   "functions": {

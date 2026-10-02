@@ -37,7 +37,6 @@ export default function Layout({ path = '/', children }) {
             <a href="/contact">Contact</a>
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
-            <a href="/secondring">SecondRing (paused)</a>
           </nav>
         </div>
       </footer>
