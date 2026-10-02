@@ -1,78 +1,83 @@
-import { useEffect } from "react";
-import { setPageMeta } from "./seo.js";
-import LegalLayout, { SectionTitle, P, UL, SUPPORT_EMAIL } from "./LegalLayout.jsx";
+import LegalPage, { Part } from './legal/LegalPage.jsx';
+import { SectionTitle, P, UL } from './LegalLayout.jsx';
+import SecondRingPrivacy from './legal/SecondRingPrivacy.jsx';
+
+// Approved 2026-10-02 from docs/legal-drafts/privacy-DRAFT.md with the owner's decisions applied:
+// brand-only operator wording, and no protected health information or personal data in submissions.
+// Part B is SecondRing's policy, unchanged (src/legal/SecondRingPrivacy.jsx).
+export const UPDATED = 'October 2, 2026';
 
 export default function Privacy() {
-  useEffect(() => {
-    setPageMeta("Privacy Policy | SecondRing", "How SecondRing collects, uses, and protects information, including SMS opt-in data.", "/privacy");
-  }, []);
   return (
-    <LegalLayout title="Privacy Policy" updated="September 30, 2026">
-      <P>This Privacy Policy explains what SecondRing ("we," "us," "our") collects, how we use it, and the choices you have. It covers our website, the SecondRing app, and the text messages the Service sends and receives.</P>
+    <LegalPage path="/privacy" title="Privacy Policy" updated={UPDATED}>
+      <P>This Privacy Policy covers spreadrun.com and the services offered on it. It has two parts:</P>
+      <UL>
+        <li><strong>Part A</strong> covers SpreadRun: the website, the data-validation APIs (including the free test forms), accounts, API keys and credit purchases.</li>
+        <li><strong>Part B</strong> covers SecondRing, a missed-call text-back service that is currently paused. Part B is unchanged from SecondRing's policy, including its text messaging (SMS) terms.</li>
+      </UL>
+      <P>SpreadRun and SecondRing are brands run by the same operator. In this policy, "we," "us" and "our" mean the operator of those brands.</P>
+
+      <Part id="spreadrun">Part A: SpreadRun</Part>
 
       <SectionTitle>Who this covers</SectionTitle>
       <UL>
-        <li><strong>Our customers:</strong> the contractors and businesses that sign up for SecondRing.</li>
-        <li><strong>Callers and texters:</strong> people who call one of our customers' businesses and receive or reply to a SecondRing text.</li>
-        <li><strong>Website visitors.</strong></li>
+        <li><strong>Account holders:</strong> people who sign in to create API keys, buy credits or view usage.</li>
+        <li><strong>API callers:</strong> systems calling our APIs with an account holder's key.</li>
+        <li><strong>Test-form users:</strong> people who run the free test form on a product page without an account.</li>
+        <li><strong>Website visitors and people who contact us.</strong></li>
       </UL>
 
       <SectionTitle>Information we collect</SectionTitle>
-      <P><strong>From customers:</strong> email address (used to sign in), business name and details, the phone numbers you connect or we provision for you, your message templates and after-hours settings, and billing information. Payment card details are collected and stored by Stripe; we do not see or store full card numbers. We keep your Stripe customer and subscription identifiers, plan, and billing status.</P>
-      <P><strong>From early-access signups:</strong> the name and email you enter on our early-access form. We use it only to tell you when SecondRing launches, and you can ask us to remove it at any time.</P>
-      <P><strong>From callers and texters:</strong> the phone number that called, the time of the call, the text messages sent to and received from that number, and any tags or notes the business adds. We collect this on behalf of the business the person called.</P>
-      <P><strong>From website visitors:</strong> basic usage data such as pages viewed, browser and device type, and approximate location, collected through Google Analytics and similar technologies.</P>
+      <P><strong>Account information:</strong> the email address you sign in with. Sign-in uses a one-time code sent to that email; we do not use passwords.</P>
+      <P><strong>API keys:</strong> when you create a key we show it to you once and store only a one-way hash of it, a short prefix so you can recognize it, its name, and when it was created, last used and revoked.</P>
+      <P><strong>Purchases:</strong> when you buy credits, Stripe collects and stores your payment details; we do not see or store full card numbers. We keep your Stripe customer identifier, the pack you bought, the amount paid, and your credit balance and credit history.</P>
+      <P><strong>Data you submit for validation:</strong> the tables or files you send to an API or test form are processed in memory only for the length of the request, to produce the report. We do not store them, and we do not store the reports. Reports are designed not to repeat values from your data.</P>
+      <P><strong>No health or personal data, please.</strong> The APIs are not intended for protected health information (PHI), and SpreadRun is not a HIPAA business associate. Do not submit PHI, data that identifies patients, or any other personal data. The APIs are built for public, aggregate or de-identified data such as hospital price files and study-level trial tables. See the <a href="/terms">Terms</a>.</P>
+      <P><strong>Usage records:</strong> for each API request we record the time, which API was called, whether it was a paid call or a test-form run, the outcome (for example completed or rejected as invalid input), the report's status (PASS, WARN or FAIL), the request size, how long it took, the amount charged, and for paid calls the account and key used. These records never contain the submitted data.</P>
+      <P><strong>Test-form rate limiting:</strong> for test-form runs we store a salted one-way hash of the network address the request came from, with a daily count, so we can limit free runs. We do not store the address itself.</P>
+      <P><strong>Contact form:</strong> your name, email and message, delivered to us through Formspree.</P>
+      <P><strong>Website visitors:</strong> basic usage data such as pages viewed, browser and device type, and approximate location, collected through Google Analytics and similar technologies.</P>
 
       <SectionTitle>How we use information</SectionTitle>
       <UL>
-        <li>To provide the Service: detect missed calls, send and receive texts, and show conversations in the inbox.</li>
-        <li>To manage your account, free trial, subscription, and billing, and to send service and account messages.</li>
-        <li>To register your business and phone numbers with carriers and messaging providers, as required to send texts.</li>
-        <li>To keep the Service secure, prevent abuse and spam, and comply with legal and carrier requirements.</li>
-        <li>To understand how the site is used and improve the Service.</li>
+        <li>To run the APIs and test forms, check API keys, and charge completed runs against your credits.</li>
+        <li>To process credit purchases and refunds, send receipts, and show your balance, keys and usage on your account page.</li>
+        <li>To prevent abuse, enforce limits, and keep the service secure.</li>
+        <li>To measure how the service is used (for example how many test runs, sign-ups, purchases and paid calls there are) and improve it.</li>
+        <li>To reply when you contact us.</li>
       </UL>
-      <P>We do not sell personal information.</P>
-
-      <SectionTitle>Text messaging (SMS) terms</SectionTitle>
-      <P><strong>Texts sent to callers.</strong> When someone calls a SecondRing customer's business and the call goes unanswered, SecondRing sends one or more text messages on that business's behalf, in response to the call. These messages are conversational and relate to the person's inquiry (for example, asking what they need help with and arranging a callback or quote). They are not marketing messages. By calling a business and continuing the text conversation, the person is contacting that business and expects a reply.</P>
-      <UL>
-        <li><strong>Message frequency varies</strong> and depends on the conversation.</li>
-        <li><strong>Standard message and data rates may apply.</strong></li>
-        <li><strong>To stop</strong> receiving texts, reply <strong>STOP</strong>. You will receive a confirmation and no further messages from that number. Reply <strong>START</strong> to resume.</li>
-        <li><strong>For help</strong>, reply <strong>HELP</strong> or contact us at <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a>.</li>
-        <li>Carriers are not liable for delayed or undelivered messages.</li>
-      </UL>
-      <P><strong>Texts sent to our customers.</strong> If you give us your mobile number, you agree to receive account, billing, and service texts from SecondRing, with the same frequency, rate, STOP, and HELP terms above.</P>
-      <P><strong>No sharing of mobile information.</strong> We do not sell or share your SMS opt-in data or personal information with third parties for marketing purposes. Phone numbers, text message content, and opt-in information are shared only with the service providers that help us deliver messages and run SecondRing, as described below, and with the business the person contacted.</P>
+      <P>We do not sell personal information, and we do not use submitted data for any purpose other than producing your report.</P>
 
       <SectionTitle>Who we share information with</SectionTitle>
-      <P>We share information only as needed to run the Service:</P>
       <UL>
-        <li><strong>The business</strong> a caller contacted, which owns and can see its own conversations.</li>
-        <li><strong>Service providers</strong> that process data for us: Twilio (phone numbers and text delivery), Stripe (payments and billing), Supabase (database and sign-in), Resend (email), Vercel (hosting), and Google Analytics (site analytics). They may use the data only to provide their services to us.</li>
-        <li><strong>Authorities and others</strong> when required by law or to protect rights, safety, or the security of the Service, or in connection with a business transfer such as a merger or sale.</li>
+        <li><strong>Service providers</strong> that process data for us: Stripe (payments), Supabase (database and sign-in), Resend (email), Vercel (hosting and request processing), Formspree (contact form) and Google Analytics (site analytics). They may use the data only to provide their services to us.</li>
+        <li><strong>Authorities and others</strong> when required by law or to protect rights, safety, or the security of the service, or in connection with a business transfer such as a merger or sale.</li>
       </UL>
 
       <SectionTitle>Retention</SectionTitle>
-      <P>We keep account and conversation data while your account is active. We may delete your data after your trial or subscription ends. You can ask us to delete your data sooner. We may keep limited records longer where needed for billing, tax, security, carrier compliance, or legal reasons.</P>
+      <P>We keep your account, keys, credit history and usage records while your account is active, and afterwards for as long as we need them for billing, tax, security and legal reasons. Test-form rate-limit counters are kept only as long as needed to prevent abuse. Submitted data is not retained. You can ask us to delete your account at any time.</P>
 
       <SectionTitle>Security</SectionTitle>
-      <P>We use reasonable technical and organizational measures to protect your information, including encryption in transit and access controls on our database. No system is perfectly secure, and we cannot guarantee absolute security.</P>
+      <P>We use reasonable technical and organizational measures to protect your information, including encryption in transit, hashed API keys, and access controls on our database. No system is perfectly secure, and we cannot guarantee absolute security.</P>
 
       <SectionTitle>Your choices and rights</SectionTitle>
-      <P>You can access, correct, export, or delete your information by contacting us. Callers and texters can opt out of texts by replying STOP, and can ask us or the business they contacted to delete their conversation. Depending on where you live, you may have additional rights under local privacy laws; we will honor valid requests as required.</P>
+      <P>You can access, correct, export, or delete your information by contacting us. You can revoke API keys at any time on your account page. Depending on where you live, you may have additional rights under local privacy laws; we will honor valid requests as required.</P>
 
       <SectionTitle>Cookies and analytics</SectionTitle>
-      <P>We use cookies and similar technologies for sign-in and to measure site usage with Google Analytics. You can block or delete cookies in your browser settings, though some features may not work.</P>
+      <P>We use browser storage for sign-in and cookies to measure site usage with Google Analytics. You can block or delete cookies in your browser settings, though some features may not work.</P>
 
       <SectionTitle>Children</SectionTitle>
-      <P>The Service is for businesses and is not directed to children under 13. We do not knowingly collect information from children.</P>
+      <P>The services are for businesses and professionals and are not directed to children under 13. We do not knowingly collect information from children.</P>
 
+      <Part id="secondring">Part B: SecondRing (paused)</Part>
+      <P>SecondRing is paused. Its website and early access list remain available at <a href="/secondring">spreadrun.com/secondring</a>. The following is SecondRing's privacy policy, unchanged. In Part B, "the Service" means SecondRing.</P>
+      <SecondRingPrivacy />
+
+      <Part id="changes">Changes and contact</Part>
       <SectionTitle>Changes to this policy</SectionTitle>
-      <P>We may update this policy. If a change is material we will notify customers by email or in the Service. The date at the top shows when it was last updated.</P>
-
+      <P>We may update this policy. If a change is material we will notify account holders by email or on the site. The date at the top shows when it was last updated.</P>
       <SectionTitle>Contact us</SectionTitle>
-      <P>SecondRing. Questions or requests: <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "#0B5FFF" }}>{SUPPORT_EMAIL}</a> or our <a href="/contact" style={{ color: "#0B5FFF" }}>contact page</a>.</P>
-    </LegalLayout>
+      <P>Questions or requests: <a href="mailto:spreadrun@gmail.com">spreadrun@gmail.com</a> or our <a href="/contact">contact page</a>.</P>
+    </LegalPage>
   );
 }

@@ -1,4 +1,5 @@
 <!--
+SUPERSEDED 2026-10-02: approved and published as src/Privacy.jsx and src/Terms.jsx. Kept for history only.
 DRAFT for owner approval. NOT live. Do not wire into /privacy until approved.
 Drafted 2026-10-02. Part B is the current SecondRing policy (last updated September 30, 2026), copied word for word
 from src/Privacy.jsx, so the URL the carrier registration cites keeps the exact SMS language.

@@ -160,14 +160,14 @@ export const ROUTES = {
   },
   '/privacy': {
     Component: Privacy,
-    title: 'Privacy Policy | SecondRing',
-    description: 'How SecondRing collects, uses, and protects information, including SMS opt-in data.',
+    title: 'Privacy Policy | SpreadRun',
+    description: 'What SpreadRun and SecondRing collect, how it is used and shared, and your choices, including SMS opt-in data for SecondRing.',
     priority: '0.2',
   },
   '/terms': {
     Component: Terms,
-    title: 'Terms of Service | SecondRing',
-    description: 'The terms for using SecondRing, including SMS terms, billing, and cancellation.',
+    title: 'Terms of Service | SpreadRun',
+    description: 'Terms for SpreadRun APIs, prepaid credits and refunds, and the paused SecondRing service, including its SMS terms.',
     priority: '0.2',
   },
   '/404': {

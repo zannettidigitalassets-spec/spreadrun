@@ -19,7 +19,7 @@ meta description, canonical and JSON-LD), plus serverless functions on Vercel:
 | `/contact` | Contact form (Formspree, unchanged integration) |
 | `/secondring` | SecondRing landing, moved off `/`, marked paused |
 | `/guides/lsa-missed-call-charges-october-2026` | SecondRing guide, unchanged except links now point to `/secondring` |
-| `/privacy`, `/terms` | Still the SecondRing documents. Drafts of the new umbrella versions are in `docs/legal-drafts/` and are not live |
+| `/privacy`, `/terms` | SpreadRun umbrella documents, approved 2026-10-02. Part A covers SpreadRun; Part B is SecondRing's text, unchanged (`src/legal/SecondRing*.jsx`, do not reword) |
 
 ## Reused
 
@@ -127,7 +127,8 @@ The answers are one dispatcher function that serves every validator, or the Pro 
 - MRF validator only inspects a bounded part of large files, by design. Most real hospital files will come back WARN.
 - No per-key rate limit; credits are the only throttle on paid calls.
 - No tier-2 partner listings: none are approved. Tier 3 exists only in `src/catalog.js`.
-- `/privacy` and `/terms` still show the SecondRing documents until the drafts are approved.
+- Refunds (unused credits within 30 days, per the Terms) are handled by hand: refund in the Stripe dashboard, then record a negative
+  `adjustment` row in `credit_ledger` and lower `api_accounts.balance_cents`. There is no refund tooling in V1.
 - The Stripe Customer Portal must be enabled in the Stripe dashboard (test and live) for the "Receipts and saved card"
   button; until then it shows a clear error.
 - Factual claims in the MRF guide come from the owner's research file and were not independently re-verified, apart from

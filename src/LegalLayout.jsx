@@ -1,7 +1,7 @@
 export const SUPPORT_EMAIL = "spreadrun@gmail.com";
 
 export const SectionTitle = ({ children }) => (
-  <h2 style={{ fontSize: 20, fontWeight: 800, margin: "32px 0 12px", letterSpacing: "-0.3px" }}>{children}</h2>
+  <h3 style={{ fontSize: 20, fontWeight: 700, margin: "32px 0 12px", letterSpacing: "-0.3px" }}>{children}</h3>
 );
 
 export const P = ({ children }) => (

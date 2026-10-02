@@ -1,4 +1,5 @@
 <!--
+SUPERSEDED 2026-10-02: approved and published as src/Privacy.jsx and src/Terms.jsx. Kept for history only.
 DRAFT for owner approval. NOT live. Do not wire into /terms until approved.
 Drafted 2026-10-02. Part B is the current SecondRing Terms (last updated September 30, 2026), copied word for word
 from src/Terms.jsx, including the SMS Terms section the carrier registration relies on.
