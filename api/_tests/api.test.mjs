@@ -139,3 +139,12 @@ test('admin metrics: requires the admin token', async () => {
   const ok = await GET(req('/api/admin/metrics', { method: 'GET', headers: { authorization: 'Bearer secret-token' } }));
   assert.equal(ok.status, 200);
 });
+
+test('rent-estimate: retired path answers 410 through early-access (no function of its own)', async () => {
+  const { POST } = await import('../early-access.js');
+  for (const url of ['https://www.spreadrun.com/api/rent-estimate', 'https://www.spreadrun.com/api/early-access?retired=rent-estimate']) {
+    const res = await POST(new Request(url, { method: 'POST', body: '{"userId":"x"}' }));
+    assert.equal(res.status, 410);
+    assert.deepEqual(await res.json(), { error: 'gone', message: 'This feature has been retired.' });
+  }
+});

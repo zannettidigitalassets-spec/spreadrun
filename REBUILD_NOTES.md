@@ -27,7 +27,8 @@ meta description, canonical and JSON-LD), plus serverless functions on Vercel:
 - Stripe integration: same SDK and account. Checkout, the webhook and the authenticated portal pattern from `secondring/stripe`
   (`api/_lib/clients.js`). Nothing in the Stripe dashboard was renamed or changed.
 - Supabase project, email one-time-code sign-in, Resend email, Google Analytics, Search Console / Impact / AdSense meta tags.
-- `/api/early-access` (SecondRing list) and `/api/rent-estimate` (410) unchanged.
+- `/api/early-access` (SecondRing list) unchanged. `/api/rent-estimate` still answers 410, but through a rewrite into the
+  early-access function instead of its own function (see Function limit).
 - DataForge validators, copied byte for byte (see Provenance).
 
 ## Rebuilt
@@ -42,7 +43,7 @@ meta description, canonical and JSON-LD), plus serverless functions on Vercel:
 - Python API routes (`api/v1/*.py`, `api/demo/*.py`, logic in `pylib/spreadrun_api/`), stdlib plus two pinned
   dependencies for the MRF validator (`requirements.txt`).
 - Node routes: `api/account.js`, `api/keys.js`, `api/credits/checkout.js`, `api/customer-portal.js` (fixed),
-  `api/stripe-webhook.js` (credit grants + receipt), `api/admin/metrics.js`, `api/admin/verdict-report.js` (weekly cron).
+  `api/stripe-webhook.js` (credit grants + receipt), `api/admin/metrics.js`.
 - Supabase migration `supabase/migrations/20261002_storefront.sql`.
 
 ## Security fix: `/api/customer-portal`
@@ -74,8 +75,9 @@ events and credit purchases (`storefront_events`, `credit_ledger`).
 `storefront_metrics()` (also the `storefront_verdict` view, and `GET /api/admin/metrics` with `ADMIN_TOKEN`) computes:
 PASS as soon as 3+ paying users or 25+ paid runs land within 30 days of `storefront_settings.launch_at`; KILL if the window
 closes without either; IN_PROGRESS in between; NOT_STARTED until `launch_at` is set. Accounts whose email is in
-`storefront_settings.internal_emails` never count. A Vercel cron emails the verdict every Monday
-(`/api/admin/verdict-report`, production only) to `REPORT_EMAIL` (default spreadrun@gmail.com).
+`storefront_settings.internal_emails` never count. For V1 the owner checks it manually: `GET /api/admin/metrics` with
+`Authorization: Bearer <ADMIN_TOKEN>`, or `select * from storefront_verdict;` in Supabase. (A weekly emailed verdict was built
+and removed to stay under the Hobby function limit; it is in git history at `ef7c286` if wanted later.)
 
 ## Provenance
 
@@ -106,6 +108,17 @@ DataForge, copy it here, update the hash, run the tests.
 - Real-estate SaaS: calculators, guides, analyzer, My Deals and their Payment Links were removed from `main`'s source
   (they live in git history). Old URLs 301 to `/` or `/guides`.
 - FetchAll: separate project, not touched.
+
+## Function limit (Hobby plan)
+
+Vercel Hobby allows at most 12 serverless functions per deployment. V1 uses 11: four validator routes (paid and demo for each
+API), account, keys, credits checkout, customer portal, Stripe webhook, admin metrics and early-access. `npm run build` fails
+if the count goes over 12. To get here from 13: `/api/rent-estimate` lost its own function (a `vercel.json` rewrite sends it
+to early-access, which answers the same 410; plain `vercel.json` rules can't return a 410 by themselves) and the weekly
+verdict email cron was dropped.
+
+Scaling constraint, not fixed now: every new API costs 2 functions (paid and demo), so the cap bites again at about 5 APIs.
+The answers are one dispatcher function that serves every validator, or the Pro plan. Decide only if the 30-day verdict is PASS.
 
 ## Known limitations
 

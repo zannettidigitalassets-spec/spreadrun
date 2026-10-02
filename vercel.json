@@ -5,30 +5,107 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "spreadrun.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "spreadrun.com"
+        }
+      ],
       "destination": "https://www.spreadrun.com/:path*",
       "permanent": true
     },
-    { "source": "/app", "destination": "/", "permanent": true },
-    { "source": "/app/:path*", "destination": "/", "permanent": true },
-    { "source": "/dscr-calculator", "destination": "/", "permanent": true },
-    { "source": "/flip-calculator", "destination": "/", "permanent": true },
-    { "source": "/rental-calculator", "destination": "/", "permanent": true },
-    { "source": "/guides/dscr-loan-calculator", "destination": "/guides", "permanent": true },
-    { "source": "/guides/rental-cash-flow-calculator", "destination": "/guides", "permanent": true },
-    { "source": "/guides/70-percent-rule-house-flipping", "destination": "/guides", "permanent": true },
-    { "source": "/guides/good-cap-rate-rental-property", "destination": "/guides", "permanent": true },
-    { "source": "/guides/how-to-analyze-rental-property", "destination": "/guides", "permanent": true },
-    { "source": "/guides/cleveland-rental-property-investing", "destination": "/guides", "permanent": true },
-    { "source": "/guides/indianapolis-rental-property-investing", "destination": "/guides", "permanent": true },
-    { "source": "/guides/columbus-rental-property-investing", "destination": "/guides", "permanent": true },
-    { "source": "/guides/real-estate-terms-glossary", "destination": "/guides", "permanent": true }
+    {
+      "source": "/app",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/app/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/dscr-calculator",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/flip-calculator",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/rental-calculator",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/dscr-loan-calculator",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/guides/rental-cash-flow-calculator",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/guides/70-percent-rule-house-flipping",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/guides/good-cap-rate-rental-property",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/guides/how-to-analyze-rental-property",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/guides/cleveland-rental-property-investing",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/guides/indianapolis-rental-property-investing",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/guides/columbus-rental-property-investing",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/guides/real-estate-terms-glossary",
+      "destination": "/guides",
+      "permanent": true
+    }
   ],
   "rewrites": [
-    { "source": "/api/v1/clinical-trial-table-validator", "destination": "/api/v1/clinical_trial_table_validator" },
-    { "source": "/api/v1/hospital-mrf-validator", "destination": "/api/v1/hospital_mrf_validator" },
-    { "source": "/api/demo/clinical-trial-table-validator", "destination": "/api/demo/clinical_trial_table_validator" },
-    { "source": "/api/demo/hospital-mrf-validator", "destination": "/api/demo/hospital_mrf_validator" }
+    {
+      "source": "/api/v1/clinical-trial-table-validator",
+      "destination": "/api/v1/clinical_trial_table_validator"
+    },
+    {
+      "source": "/api/v1/hospital-mrf-validator",
+      "destination": "/api/v1/hospital_mrf_validator"
+    },
+    {
+      "source": "/api/demo/clinical-trial-table-validator",
+      "destination": "/api/demo/clinical_trial_table_validator"
+    },
+    {
+      "source": "/api/demo/hospital-mrf-validator",
+      "destination": "/api/demo/hospital_mrf_validator"
+    },
+    {
+      "source": "/api/rent-estimate",
+      "destination": "/api/early-access?retired=rent-estimate"
+    }
   ],
   "functions": {
     "api/**/*.py": {
@@ -36,17 +113,24 @@
       "excludeFiles": "{node_modules/**,src/**,public/**,dist/**,docs/**,scripts/**,supabase/**,pylib/tests/**,api/_tests/**,**/__pycache__/**}"
     }
   },
-  "crons": [
-    { "path": "/api/admin/verdict-report", "schedule": "0 13 * * 1" }
-  ],
   "headers": [
     {
       "source": "/account",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
     },
     {
       "source": "/api/(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
     }
   ]
 }

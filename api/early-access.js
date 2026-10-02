@@ -5,12 +5,21 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseAdmin = createClient(
   'https://deqchbqeajwrwdfwzxuc.supabase.co',
-  process.env.SUPABASE_SERVICE_KEY
+  process.env.SUPABASE_SERVICE_KEY || 'missing' // never empty: the 410 path must load without it
 );
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+// Retired endpoint: /api/rent-estimate is rewritten here (vercel.json) so its 410 needs no function of its own.
+// The Hobby plan caps a deployment at 12 functions. vercel.json rules can't return a 410 by themselves.
+const RETIRED = Response.json({ error: 'gone', message: 'This feature has been retired.' }, { status: 410 });
+const isRetired = (request) => {
+  const url = new URL(request.url);
+  return url.pathname === '/api/rent-estimate' || url.searchParams.get('retired') === 'rent-estimate';
+};
+
 export async function POST(request) {
+  if (isRetired(request)) return RETIRED.clone();
   try {
     const body = await request.json().catch(() => ({}));
     if (body.company) return Response.json({ ok: true }); // bot: pretend success

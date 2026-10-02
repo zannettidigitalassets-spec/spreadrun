@@ -101,6 +101,14 @@ for (const a of APIS) {
   if (num('demo_max_body_bytes') !== a.demoMaxBodyBytes) fail(`${a.slug}: demo max body differs`);
 }
 
+// Vercel Hobby allows at most 12 functions per deployment. Count route files the way Vercel does:
+// every .js/.py under api/ except files or folders starting with "_".
+const routeFiles = walk(path.join(root, 'api'))
+  .map((f) => path.relative(path.join(root, 'api'), f).replace(/\\/g, '/'))
+  .filter((f) => /\.(js|mjs|py)$/.test(f) && !f.split('/').some((part) => part.startsWith('_')));
+if (routeFiles.length > 12) fail(`${routeFiles.length} serverless functions; the Hobby plan allows 12: ${routeFiles.join(', ')}`);
+console.log(`functions: ${routeFiles.length} of 12 (${routeFiles.join(', ')})`);
+
 if (problems.length) {
   console.error(`check-site: ${problems.length} problem(s)\n - ` + problems.join('\n - '));
   process.exit(1);
