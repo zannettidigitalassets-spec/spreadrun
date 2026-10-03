@@ -38,7 +38,7 @@ export default function DocsMrf() {
     <Layout path={`/docs/${API.slug}`}>
       <Crumbs items={[['/', 'Home'], ['/docs', 'Docs'], [null, 'Hospital MRF Validator']]} />
       <div className="wrap section article" style={{ paddingTop: 24 }}>
-        <h1>Hospital MRF Validator API</h1>
+        <h1>Hospital MRF Validator API Reference</h1>
         <p className="lede" style={{ marginTop: 20 }}>Beta. Structural preflight of a hospital price file against the CMS v3.0.0 schema and CSV templates. <a href={`/apis/${API.slug}`}>Product page and free test form.</a></p>
         <nav className="toc" aria-label="On this page">
           <a href="#endpoint">Endpoint</a><a href="#input">Request</a><a href="#coverage">What gets inspected</a><a href="#report">Report</a><a href="#codes">Finding codes</a><a href="#errors">Errors</a><a href="#examples">Code samples</a>

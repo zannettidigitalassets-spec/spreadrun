@@ -1,3 +1,4 @@
+import Badges from '../site/Badges.jsx';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import { APIS, PARTNER_APIS, TIERS, CREDIT_PACKS, dollars } from '../catalog.js';
 
@@ -23,15 +24,12 @@ export default function Catalog() {
     <Layout path="/apis">
       <Crumbs items={[['/', 'Home'], [null, 'APIs']]} />
       <div className="wrap section" style={{ paddingTop: 24 }}>
-        <h1>APIs</h1>
+        <h1>Data Validation API Catalog and Pricing</h1>
         <p className="lede">Every API here is documented, testable for free on its page, and billed per completed run from prepaid credits.</p>
         <div className="cards">
           {listed.map((a) => (
             <div className="card" key={a.slug}>
-              <div className="badges">
-                <span className="badge tier">{TIERS[a.tier].label}</span>
-                {a.status === 'beta' && <span className="badge beta">Beta</span>}
-              </div>
+              <Badges api={a} />
               <h3><a href={`/apis/${a.slug}`}>{a.name}</a></h3>
               <p>{a.summary}</p>
               <p className="price">{dollars(a.priceCents)} per {a.unit}</p>
@@ -50,14 +48,7 @@ export default function Catalog() {
         <p>Each API has a price per completed run, paid from prepaid credits. Credits are a dollar balance that works on every API, and they never expire.</p>
         <PriceTable />
         <h3 style={{ marginTop: 28 }}>Credit packs</h3>
-        <div className="packs">
-          {CREDIT_PACKS.map((p) => (
-            <div className="pack" key={p.id}>
-              <div className="amt">{dollars(p.priceCents)}</div>
-              <div>{p.calls} standard runs</div>
-            </div>
-          ))}
-        </div>
+        <p>{CREDIT_PACKS.map((p) => `$${p.priceCents / 100}`).join(', ').replace(/, ([^,]*)$/, ' and $1')} packs buy that much credit, usable on every API. A $5 pack covers 20 runs at $0.25, or 5 runs at $1.00, or any mix.</p>
         <ul>
           <li>A run is charged when it finishes and returns a report, whether the report says PASS, WARN or FAIL.</li>
           <li>Requests rejected before a report exists are free: bad JSON, clinical tables missing required columns or with ragged rows, an empty or corrupt gzip upload, invalid parameters, a missing or revoked key.</li>

@@ -31,7 +31,7 @@ export default function Docs() {
     <Layout path="/docs">
       <Crumbs items={[['/', 'Home'], [null, 'Docs']]} />
       <div className="wrap section article" style={{ paddingTop: 24 }}>
-        <h1>API docs</h1>
+        <h1>SpreadRun API documentation</h1>
         <p className="lede" style={{ marginTop: 20 }}>Everything common to every SpreadRun API: authentication, billing, errors and limits. Each API has its own page for request and report formats.</p>
 
         <h2>APIs</h2>

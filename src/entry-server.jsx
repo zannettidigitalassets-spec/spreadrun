@@ -1,5 +1,5 @@
 import { renderToString } from 'react-dom/server';
-import { ROUTES, ORIGIN, routeFor } from './routes.jsx';
+import { ROUTES, ORIGIN, ORG, routeFor } from './routes.jsx';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // JSON-LD inside <script>: escape "<" so no content can close the tag.
@@ -9,7 +9,7 @@ export const paths = () => Object.keys(ROUTES);
 
 export function render(path) {
   const r = routeFor(path);
-  const url = ORIGIN + (path === '/' ? '' : path);
+  const url = ORIGIN + path;   // the homepage is https://www.spreadrun.com/, as in the sitemap
   const head = [
     `<title>${esc(r.title)}</title>`,
     `<meta name="description" content="${esc(r.description)}" />`,
@@ -19,6 +19,7 @@ export function render(path) {
     `<meta property="og:type" content="${r.ogType || 'website'}" />`,
     `<meta property="og:url" content="${url}" />`,
     `<meta property="og:site_name" content="SpreadRun" />`,
+    ld({ '@context': 'https://schema.org', ...ORG }),   // every page
     ...(r.jsonLd ? r.jsonLd().map(ld) : []),
   ].join('\n    ');
   const html = renderToString(<r.Component />);

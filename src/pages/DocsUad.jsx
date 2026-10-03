@@ -50,7 +50,7 @@ export default function DocsUad() {
     <Layout path={`/docs/${API.slug}`}>
       <Crumbs items={[['/', 'Home'], ['/docs', 'Docs'], [null, 'UAD 3.6 Appraisal Report Validator']]} />
       <div className="wrap section article" style={{ paddingTop: 24 }}>
-        <h1>UAD 3.6 Appraisal Report Validator API</h1>
+        <h1>UAD 3.6 Appraisal Report Validator API Reference</h1>
         <p className="lede" style={{ marginTop: 20 }}>Beta. Structural checks of a UAD 3.6 URAR appraisal file against the GSE-published delivery specification and compliance rules. <a href={`/apis/${API.slug}`}>Product page and free test form.</a></p>
         <nav className="toc" aria-label="On this page">
           <a href="#endpoint">Endpoint</a><a href="#input">Request</a><a href="#coverage">Coverage</a><a href="#report">Report</a><a href="#rules">Rule IDs</a><a href="#not-implemented">Not implemented</a><a href="#errors">Errors</a><a href="#examples">Code samples</a>

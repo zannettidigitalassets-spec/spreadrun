@@ -1,3 +1,4 @@
+import Badges from '../site/Badges.jsx';
 import Layout from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
 import ReportSheet from '../site/ReportSheet.jsx';
@@ -50,21 +51,21 @@ export default function Home() {
         <h2 id="catalog">The catalog</h2>
         <div className="cards">
           <div className="card">
-            <div className="badges"><span className="badge tier">Built by SpreadRun</span><span className="badge beta">Beta</span></div>
+            <Badges api={mrf} />
             <h3><a href={`/apis/${mrf.slug}`}>{mrf.name}</a></h3>
             <p>Validates hospital machine-readable price files against the CMS v3.0.0 schema and CSV templates. JSON, tall CSV, wide CSV. Checks required metadata, template columns, billing code types, payer rules and the 2026 allowed-amount elements.</p>
             <p className="price">{dollars(mrf.priceCents)} per completed validation</p>
             <a className="btn small" href={`/apis/${mrf.slug}#demo`}>Validate a file</a>
           </div>
           <div className="card">
-            <div className="badges"><span className="badge tier">Built by SpreadRun</span></div>
+            <Badges api={clinical} />
             <h3><a href={`/apis/${clinical.slug}`}>{clinical.name}</a></h3>
             <p>Audits normalized clinical-trial study and outcome tables: NCT ID validity, required fields, duplicates, orphan outcomes, outcome types and results-posting dates. Exact row locations for every finding.</p>
             <p className="price">{dollars(clinical.priceCents)} per completed audit</p>
             <a className="btn small" href={`/apis/${clinical.slug}#demo`}>Audit your tables</a>
           </div>
           <div className="card">
-            <div className="badges"><span className="badge tier">Built by SpreadRun</span><span className="badge beta">Beta</span></div>
+            <Badges api={uad} />
             <h3><a href={`/apis/${uad.slug}`}>{uad.name}</a></h3>
             <p>Checks UAD 3.6 URAR appraisal XML, or the whole ZIP package, against the GSE-published delivery specification and compliance rules. Every finding has an XPath, a rule ID and a message. A PASS is not UCDP acceptance.</p>
             <p className="price">{dollars(uad.priceCents)} per completed report</p>

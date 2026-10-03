@@ -22,19 +22,37 @@ const staticFiles = new Set(files.map((f) => '/' + path.relative(dist, f).replac
 const apiRoutes = new Set(['/api/account', '/api/keys', '/api/credits/checkout', '/api/customer-portal',
   ...APIS.flatMap((a) => [`/api/v1/${a.slug}`, `/api/demo/${a.slug}`])]);
 
-// Exact metadata from the content files (em dashes in the original titles became colons, prices became $0.25).
+// Exact titles and descriptions approved for the main pages (SEO pass, October 2026).
 const EXPECT = {
-  '/': ['SpreadRun: Data Validation APIs for Regulated Data', 'Niche data-validation APIs for regulated industries. Hospital price transparency files, clinical trial tables, and more. Per-use pricing, no subscriptions.'],
-  '/apis/clinical-trial-table-validator': ['Clinical Trial Table QA API: Validate Results Data', 'Catch malformed NCT IDs, missing fields, duplicates, and bad dates in clinical trial results tables before analysis. $0.25 per completed audit.'],
-  '/apis/hospital-mrf-validator': ['Hospital MRF Validator: CMS Price Transparency API', 'Validate hospital machine-readable price files against CMS v3.0 specs. JSON and tall/wide CSV. Deterministic report, no install. $0.25 per validation.'],
-  '/guides/hospital-price-transparency-file-requirements-2026': ['Hospital Price Transparency File Requirements (2026 Guide)', 'CMS hospital price transparency requirements for 2026: MRF formats, data elements, new allowed-amount rules, and how to check your file before posting.'],
+  '/': ['SpreadRun: Data Validation APIs for Regulated Data', 'Data validation APIs for regulated industries: hospital price files, clinical trial tables, UAD 3.6 appraisals. Per-use pricing, free tests, no subscription.'],
+  '/apis/clinical-trial-table-validator': ['Clinical Trial Table QA API: Validate Clinical Trial Results Data | SpreadRun', null],
+  '/apis/hospital-mrf-validator': ['Hospital MRF Validator: CMS Price Transparency API', null],
+  '/apis/uad-36-appraisal-validator': ['UAD 3.6 Appraisal Validator API: URAR XML Checks | SpreadRun', null],
+  '/guides/hospital-price-transparency-file-requirements-2026': ['Hospital Price Transparency File Requirements (2026 Guide) | SpreadRun', null],
 };
+const PRODUCT_LD = ['SoftwareApplication', 'FAQPage', 'BreadcrumbList'];
+const GUIDE_LD = ['Article', 'BreadcrumbList'];
 const NEED_LD = {
-  '/': ['Organization', 'WebSite', 'ItemList', 'FAQPage'],
-  '/apis/clinical-trial-table-validator': ['SoftwareApplication', 'FAQPage'],
-  '/apis/hospital-mrf-validator': ['SoftwareApplication', 'FAQPage'],
-  '/apis/uad-36-appraisal-validator': ['SoftwareApplication', 'FAQPage'],
-  '/guides/hospital-price-transparency-file-requirements-2026': ['Article'],
+  '/': ['WebSite', 'ItemList', 'FAQPage'],
+  '/apis': ['ItemList', 'BreadcrumbList'],
+  '/apis/clinical-trial-table-validator': PRODUCT_LD,
+  '/apis/hospital-mrf-validator': PRODUCT_LD,
+  '/apis/uad-36-appraisal-validator': PRODUCT_LD,
+  '/docs': ['BreadcrumbList'],
+  '/docs/clinical-trial-table-validator': ['BreadcrumbList'],
+  '/docs/hospital-mrf-validator': ['BreadcrumbList'],
+  '/docs/uad-36-appraisal-validator': ['BreadcrumbList'],
+  '/guides': ['BreadcrumbList'],
+  '/guides/hospital-price-transparency-file-requirements-2026': GUIDE_LD,
+  '/guides/uad-3-6-requirements-2026': GUIDE_LD,
+  '/guides/clinical-trial-data-quality-checks': GUIDE_LD,
+};
+// No empty strings, arrays or objects anywhere inside a JSON-LD block.
+const emptyField = (v, at = '') => {
+  if (v === '' || v === null || v === undefined) return at || '(root)';
+  if (Array.isArray(v)) return v.length ? v.map((x, i) => emptyField(x, `${at}[${i}]`)).find(Boolean) : at;
+  if (typeof v === 'object') return Object.keys(v).length ? Object.entries(v).map(([k, x]) => emptyField(x, `${at}.${k}`)).find(Boolean) : at;
+  return undefined;
 };
 const decode = (s) => s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#x27;/g, "'");
 const titles = new Map();
@@ -58,17 +76,34 @@ for (const f of pages) {
   const desc = decode((html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '');
   if (!title) fail(`${u}: missing <title>`);
   if (!desc) fail(`${u}: missing meta description`);
-  if (desc.length > 160) fail(`${u}: meta description is ${desc.length} chars`);
+  const indexable = !html.includes('name="robots" content="noindex"');
+  if (indexable && (desc.length < 150 || desc.length > 160)) fail(`${u}: meta description is ${desc.length} chars (want 150 to 160)`);
+  if (!indexable && desc.length > 160) fail(`${u}: meta description is ${desc.length} chars`);
   if (titles.has(title)) fail(`${u}: duplicate title with ${titles.get(title)}`);
   titles.set(title, u);
-  if (EXPECT[u] && (EXPECT[u][0] !== title || EXPECT[u][1] !== desc)) fail(`${u}: title/description differ from the content file`);
+  if (EXPECT[u] && (EXPECT[u][0] !== title || (EXPECT[u][1] && EXPECT[u][1] !== desc))) fail(`${u}: title/description differ from the approved text`);
   const noindex = html.includes('name="robots" content="noindex"');
-  if (!noindex && !html.includes(`<link rel="canonical" href="https://www.spreadrun.com${u === '/' ? '' : u}"`)) fail(`${u}: missing canonical`);
+  if (!noindex && !html.includes(`<link rel="canonical" href="https://www.spreadrun.com${u}"`)) fail(`${u}: missing canonical`);
 
   const types = [];
   for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
-    try { types.push(JSON.parse(m[1])['@type']); } catch { fail(`${u}: invalid JSON-LD`); }
+    let obj;
+    try { obj = JSON.parse(m[1]); } catch { fail(`${u}: invalid JSON-LD`); continue; }
+    types.push(obj['@type']);
+    if (obj['@context'] !== 'https://schema.org') fail(`${u}: JSON-LD ${obj['@type']} without schema.org context`);
+    const empty = emptyField(obj);
+    if (empty) fail(`${u}: JSON-LD ${obj['@type']} has an empty field at ${empty}`);
+    if (/aggregateRating|"review"/i.test(m[1])) fail(`${u}: rating or review markup (there are none to mark up)`);
+    if (obj['@type'] === 'SoftwareApplication') {
+      const o = obj.offers || {};
+      if (obj.applicationCategory !== 'DeveloperApplication' || obj.operatingSystem !== 'Web' || !obj.url || !o.price || o.priceCurrency !== 'USD' || !o.description) {
+        fail(`${u}: SoftwareApplication is missing a required field`);
+      }
+    }
+    if (obj['@type'] === 'Article' && !(obj.headline && obj.datePublished && obj.author?.['@type'] === 'Organization')) fail(`${u}: Article needs headline, datePublished, Organization author`);
+    if (obj['@type'] === 'Organization' && (obj.name !== 'SpreadRun' || obj.url !== 'https://www.spreadrun.com')) fail(`${u}: Organization name/url`);
   }
+  if (!types.includes('Organization')) fail(`${u}: missing Organization JSON-LD`);
   for (const t of NEED_LD[u] || []) if (!types.includes(t)) fail(`${u}: missing ${t} JSON-LD`);
 
   for (const m of html.matchAll(/href="(\/[^"#?]*)/g)) {
@@ -85,7 +120,7 @@ for (const u of known) if (!client.includes(`'${u}': () => import(`)) fail(`${u}
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
 for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/docs',
   '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/guides',
-  '/guides/hospital-price-transparency-file-requirements-2026']) {
+  '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);
 }
 for (const u of ['/account', '/404', '/secondring', '/guides/lsa-missed-call-charges-october-2026']) if (sitemap.includes(`${u}</loc>`)) fail(`sitemap should not list ${u}`);
@@ -100,6 +135,26 @@ for (const a of APIS) {
   if (num('price_cents') !== a.priceCents) fail(`${a.slug}: price differs between src/catalog.js and catalog.py`);
   if (num('max_body_bytes') !== a.maxBodyBytes) fail(`${a.slug}: max body differs`);
   if (num('demo_max_body_bytes') !== a.demoMaxBodyBytes) fail(`${a.slug}: demo max body differs`);
+}
+
+// Legacy URLs: one 301 hop to the www site, listed before the apex rule so no request goes through two redirects,
+// and never to a URL that is itself redirected.
+const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+const apexAt = vercel.redirects.findIndex((r) => r.has);
+const sources = new Set(vercel.redirects.filter((r) => !r.has).map((r) => r.source));
+vercel.redirects.forEach((r, i) => {
+  if (r.has) return;
+  if (r.statusCode !== 301) fail(`redirect ${r.source}: status ${r.statusCode || (r.permanent ? 308 : 307)}, want 301`);
+  if (i > apexAt) fail(`redirect ${r.source}: listed after the apex rule (redirect chain from spreadrun.com)`);
+  const dest = r.destination.replace('https://www.spreadrun.com', '') || '/';
+  if (!r.destination.startsWith('https://www.spreadrun.com/')) fail(`redirect ${r.source}: destination is not absolute www`);
+  if (sources.has(dest)) fail(`redirect ${r.source}: points at another redirect (${dest})`);
+  if (!known.has(dest.replace(/\/$/, '') || '/')) fail(`redirect ${r.source}: destination ${dest} is not a page`);
+  if (sitemap.includes(`${r.source}</loc>`)) fail(`sitemap lists redirected ${r.source}`);
+});
+for (const legacy of ['/secondring', '/guides/lsa-missed-call-charges-october-2026']) {
+  const r = vercel.redirects.find((x) => x.source === legacy);
+  if (!r || r.destination !== 'https://www.spreadrun.com/') fail(`${legacy} must 301 to https://www.spreadrun.com/`);
 }
 
 // Vercel Hobby allows at most 12 functions per deployment. Count route files the way Vercel does:

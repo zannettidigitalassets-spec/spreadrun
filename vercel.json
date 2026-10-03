@@ -4,6 +4,86 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/app",
+      "destination": "https://www.spreadrun.com/",
+      "statusCode": 301
+    },
+    {
+      "source": "/app/:path*",
+      "destination": "https://www.spreadrun.com/",
+      "statusCode": 301
+    },
+    {
+      "source": "/dscr-calculator",
+      "destination": "https://www.spreadrun.com/",
+      "statusCode": 301
+    },
+    {
+      "source": "/flip-calculator",
+      "destination": "https://www.spreadrun.com/",
+      "statusCode": 301
+    },
+    {
+      "source": "/rental-calculator",
+      "destination": "https://www.spreadrun.com/",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/dscr-loan-calculator",
+      "destination": "https://www.spreadrun.com/guides",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/rental-cash-flow-calculator",
+      "destination": "https://www.spreadrun.com/guides",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/70-percent-rule-house-flipping",
+      "destination": "https://www.spreadrun.com/guides",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/good-cap-rate-rental-property",
+      "destination": "https://www.spreadrun.com/guides",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/how-to-analyze-rental-property",
+      "destination": "https://www.spreadrun.com/guides",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/cleveland-rental-property-investing",
+      "destination": "https://www.spreadrun.com/guides",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/indianapolis-rental-property-investing",
+      "destination": "https://www.spreadrun.com/guides",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/columbus-rental-property-investing",
+      "destination": "https://www.spreadrun.com/guides",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/real-estate-terms-glossary",
+      "destination": "https://www.spreadrun.com/guides",
+      "statusCode": 301
+    },
+    {
+      "source": "/secondring",
+      "destination": "https://www.spreadrun.com/",
+      "statusCode": 301
+    },
+    {
+      "source": "/guides/lsa-missed-call-charges-october-2026",
+      "destination": "https://www.spreadrun.com/",
+      "statusCode": 301
+    },
+    {
       "source": "/:path*",
       "has": [
         {
@@ -12,86 +92,6 @@
         }
       ],
       "destination": "https://www.spreadrun.com/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/app",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/app/:path*",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/dscr-calculator",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/flip-calculator",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/rental-calculator",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/guides/dscr-loan-calculator",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
-      "source": "/guides/rental-cash-flow-calculator",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
-      "source": "/guides/70-percent-rule-house-flipping",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
-      "source": "/guides/good-cap-rate-rental-property",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
-      "source": "/guides/how-to-analyze-rental-property",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
-      "source": "/guides/cleveland-rental-property-investing",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
-      "source": "/guides/indianapolis-rental-property-investing",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
-      "source": "/guides/columbus-rental-property-investing",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
-      "source": "/guides/real-estate-terms-glossary",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
-      "source": "/secondring",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/guides/lsa-missed-call-charges-october-2026",
-      "destination": "/",
       "permanent": true
     }
   ],

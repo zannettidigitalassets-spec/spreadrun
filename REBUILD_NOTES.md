@@ -168,6 +168,20 @@ dispatcher function, so still 8 functions. Body: a UAD 3.6 URAR XML file or the 
   to the six use types and the spec's own label and version patterns. `UadNoValueEcho` in `test_uad.py` overwrites every
   value and attribute in a report with markers and fails if any marker appears in the report or an error message.
 
+## SEO pass (branch `spreadrun/seo-pass`, 2026-10-02)
+
+- Titles, H1s and meta descriptions live in `src/routes.jsx` and the page files. Indexable pages must have 150 to 160
+  character descriptions; `scripts/check-site.mjs` enforces it, plus one H1 per page, a self-referencing canonical
+  (the homepage is `https://www.spreadrun.com/`, matching the sitemap), Organization JSON-LD on every page,
+  BreadcrumbList on product, docs and guide pages, complete SoftwareApplication offers, no rating or review markup and
+  no empty JSON-LD fields.
+- Legacy URLs 301 straight to absolute www destinations and are listed before the apex-to-www rule, so neither host
+  takes two hops. Vercel's own trailing-slash rule runs before user redirects, so `/secondring/` (with a slash) is
+  308 then 301; nothing links to it.
+- Fonts load without blocking first paint; `--muted` darkened to pass 4.5:1 contrast. Lighthouse on the local build:
+  mobile performance 97 to 98, accessibility, SEO 100.
+- New guides: `/guides/uad-3-6-requirements-2026`, `/guides/clinical-trial-data-quality-checks`.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist

@@ -2,7 +2,7 @@
 :root {
   --ink: #14213d;
   --body: #3a4657;
-  --muted: #6b7685;
+  --muted: #636e7c;   /* 4.5:1 or better on every panel background */
   --line: #dce2e8;
   --panel: #f2f5f7;
   --surface: #ffffff;
@@ -113,6 +113,7 @@ main { display: block; }
 .badge { font-size: 12.5px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); background: #fff; }
 .badge.tier { color: var(--accent); border-color: #b8d6d5; background: var(--accent-soft); }
 .badge.beta { color: var(--warn); border-color: #ecd49c; background: var(--warn-soft); }
+.badge.live { color: var(--pass); border-color: #b9dcc7; background: var(--pass-soft); }
 
 /* Steps: these really are a sequence, so they are numbered */
 .steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; counter-reset: step; max-width: none; }
@@ -184,3 +185,5 @@ input[type='file'] { font: 14px var(--sans); }
 
 /* Long endpoint URLs in doc tables must wrap on phones. */
 @media (max-width: 640px) { .doc-table td code { white-space: normal; overflow-wrap: anywhere; } }
+/* Long identifiers in guide text (XML attribute names) wrap on phones. */
+.article p code, .article li code { overflow-wrap: anywhere; }

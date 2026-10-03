@@ -1,3 +1,4 @@
+import Badges from '../site/Badges.jsx';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
 import CodeSample from '../site/CodeSample.jsx';
@@ -57,7 +58,7 @@ export default function MrfApi() {
     <Layout path={`/apis/${API.slug}`}>
       <Crumbs items={[['/', 'Home'], ['/apis', 'APIs'], [null, 'Hospital MRF Validator']]} />
       <div className="wrap section" style={{ paddingTop: 24 }}>
-        <div className="badges" style={{ marginBottom: 14 }}><span className="badge tier">Built by SpreadRun</span><span className="badge beta">Beta</span></div>
+        <Badges api={API} style={{ marginBottom: 14 }} />
         <h1>Hospital Price Transparency MRF Validator</h1>
         <p className="lede" style={{ marginTop: 20 }}>Check a hospital machine-readable price file against the CMS template and data specifications before you post it, or before you spend compute ingesting someone else's. Upload a file and get a deterministic, itemized report in seconds. No installs, no Docker, no sign-up required to run a test.</p>
         <div className="note">
@@ -77,7 +78,7 @@ export default function MrfApi() {
             <li><b>File structure.</b> Valid JSON for the v3.0.0 schema, or well-formed tall or wide CSV with every column the CMS template requires, no duplicate or placeholder headers, and every row as wide as its header.</li>
             <li><b>Required metadata.</b> Hospital name, last-updated date (a valid date), location names, addresses, Type 2 NPIs, license information, the attestation and version 3.0.0 are present and well-formed.</li>
             <li><b>Standard charge records.</b> Each inspected record has a description, billing codes, a care setting and charges that fit the schema.</li>
-            <li><b>2026 data elements.</b> For percentage or algorithm charges: count of allowed amounts, plus median, 10th and 90th percentile allowed amounts unless the count is 0.</li>
+            <li><b>2026 data elements.</b> For percentage or algorithm charges: count of allowed amounts, plus median, 10th and 90th percentile allowed amounts unless the count is 0. The <a href="/guides/hospital-price-transparency-file-requirements-2026">2026 file requirements guide</a> explains what changed and why.</li>
             <li><b>Billing codes.</b> Each code has a type from the CMS list: CPT, HCPCS, MS-DRG, NDC, RC, CDM and the rest.</li>
             <li><b>Payer rules.</b> Payer and plan names present, methodology from the CMS list, at least one of a dollar, percentage or algorithm charge, and notes when the methodology is "other".</li>
             <li><b>Numbers.</b> No negative or zero charges, no malformed or non-finite numbers.</li>

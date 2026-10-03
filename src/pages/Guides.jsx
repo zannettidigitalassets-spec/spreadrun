@@ -6,6 +6,16 @@ export const GUIDES = [
     title: 'Hospital Price Transparency File Requirements: The Complete 2026 Guide',
     blurb: 'What the machine-readable file must contain, the three CMS formats, what changed in 2026, common failure modes, and how to check a file before posting.',
   },
+  {
+    href: '/guides/uad-3-6-requirements-2026',
+    title: 'UAD 3.6 Requirements: The 2026 Guide',
+    blurb: 'What UAD 3.6 is and what it replaces, the November 2, 2026 deadline, the delivery specification and compliance rules, common failures in appraisal XML, and a checklist.',
+  },
+  {
+    href: '/guides/clinical-trial-data-quality-checks',
+    title: 'Clinical Trial Data Quality Checks: A Practical Guide',
+    blurb: 'Why extracted trial tables break, the NCT number format, the checks that matter before analysis, and the orphan-outcome and duplicate patterns that do the most damage.',
+  },
 ];
 
 export default function Guides() {

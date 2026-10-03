@@ -39,7 +39,7 @@ export default function DocsClinical() {
     <Layout path={`/docs/${API.slug}`}>
       <Crumbs items={[['/', 'Home'], ['/docs', 'Docs'], [null, API.name]]} />
       <div className="wrap section article" style={{ paddingTop: 24 }}>
-        <h1>{API.name} API</h1>
+        <h1>{API.name} API Reference</h1>
         <p className="lede" style={{ marginTop: 20 }}>Structural QA of two normalized tables. <a href={`/apis/${API.slug}`}>Product page and free test form.</a></p>
         <nav className="toc" aria-label="On this page">
           <a href="#endpoint">Endpoint</a><a href="#input">Request</a><a href="#report">Report</a><a href="#codes">Finding codes</a><a href="#errors">Errors</a><a href="#examples">Code samples</a>

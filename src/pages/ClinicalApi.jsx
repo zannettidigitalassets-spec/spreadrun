@@ -1,3 +1,4 @@
+import Badges from '../site/Badges.jsx';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
 import CodeSample from '../site/CodeSample.jsx';
@@ -60,8 +61,8 @@ export default function ClinicalApi() {
     <Layout path={`/apis/${API.slug}`}>
       <Crumbs items={[['/', 'Home'], ['/apis', 'APIs'], [null, API.name]]} />
       <div className="wrap section" style={{ paddingTop: 24 }}>
-        <div className="badges" style={{ marginBottom: 14 }}><span className="badge tier">Built by SpreadRun</span></div>
-        <h1>Clinical Trial Results Table QA</h1>
+        <Badges api={API} style={{ marginBottom: 14 }} />
+        <h1>Clinical Trial Table QA API: Validate Results Data</h1>
         <p className="lede" style={{ marginTop: 20 }}>Validate normalized clinical-trial study and outcome tables before they feed your analysis, your joins, or your customers. Submit your tables; get a deterministic audit that flags malformed NCT IDs, missing required fields, duplicate records, orphan outcomes, invalid outcome types and bad results-posting dates, with exact row locations for every finding. {dollars(API.priceCents)} per completed audit. No subscription.</p>
         <div className="btn-row">
           <a className="btn" href="#demo">Run an audit</a>
@@ -83,6 +84,7 @@ export default function ClinicalApi() {
             <li><b>Structural integrity.</b> Unique headers, the same number of cells in every row, well-formed CSV. Tables that fail these are rejected before the audit and not charged.</li>
           </ul>
           <p>Every finding includes the table, row number, field, and the rule that fired, so fixing is mechanical, not detective work. The report also gives the share of non-empty values per required column.</p>
+          <p>Why these checks, and how trial tables break in the first place: <a href="/guides/clinical-trial-data-quality-checks">Clinical Trial Data Quality Checks: A Practical Guide</a>.</p>
         </div>
         <div>
           <h2>Who it's for</h2>
