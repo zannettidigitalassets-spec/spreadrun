@@ -192,6 +192,22 @@ def run_wh347(body: bytes):
         raise InputError(str(exc)) from None
 
 
+_wh347_form = None
+
+
+def wh347_pdf(body: bytes) -> bytes:
+    """The official WH-347 (Rev. January 2025) filled from a payroll that passed: page 1 for every 8 rows, page 2 with
+    the Statement of Compliance unsigned. Built in memory for the response; never stored or logged."""
+    global _wh347_form
+    if _wh347_form is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_wh347_form', HERE / 'wh347' / 'form.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_wh347_form'] = module
+        spec.loader.exec_module(module)
+        _wh347_form = module
+    return _wh347_form.fill(wh347_module().form_data(body))
+
+
 def run_clinical(body: bytes):
     """Body is the JSON object the validator expects: {"studiesCsv": "...", "outcomesCsv": "..."}."""
     v = clinical_module()

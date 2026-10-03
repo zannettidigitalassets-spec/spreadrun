@@ -3,6 +3,7 @@
 Run from the repo root:  python3.12 -m unittest discover -s pylib/tests -v
 Fixtures are synthetic (scripts/wh347/make_fixtures.py): a fictional contractor, invented workers and invented rates.
 """
+import base64
 import csv
 import io
 import json
@@ -323,6 +324,113 @@ class Wh347NoValueEcho(unittest.TestCase):
             status, err = call(WH, 'paid', f'{{"x": "{self.MARK}"}}'.encode(), {'Authorization': f'Bearer {key}'})
             self.assertEqual(status, 400)
         self.assertNotIn(self.MARK, json.dumps([out, err, fake.ledger, fake.calls, fake.demo], default=str))
+
+
+class Wh347FilledForm(unittest.TestCase):
+    """The filled WH-347 PDF: paid calls only, PASS only, on request, unsigned, and never anywhere but the response."""
+    MARK = 'ZQXMARK'
+
+    def setUp(self):
+        self.fake = FakeStore()
+        self.p = [mock.patch.object(store, 'rpc', self.fake.rpc), mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'test'})]
+        for p in self.p:
+            p.start()
+        self.key, self.user = self.fake.add_user(100000)
+
+    def tearDown(self):
+        for p in self.p:
+            p.stop()
+
+    def paid(self, body, q='/?form=pdf'):
+        return call(WH, 'paid', body if isinstance(body, bytes) else json.dumps(body).encode(),
+                    {'Authorization': f'Bearer {self.key}'}, q)
+
+    @staticmethod
+    def texts(pdf):
+        """[(page index, x, y, text)] for every text run drawn in the PDF."""
+        from pypdf import PdfReader
+        out = []
+        for i, page in enumerate(PdfReader(io.BytesIO(pdf)).pages):
+            page.extract_text(visitor_text=lambda t, cm, tm, fd, fs, i=i: out.append((i, tm[4], tm[5], t)) if t.strip() else None)
+        return out
+
+    def test_pass_gives_pdf_at_the_same_price(self):
+        status, out = self.paid((FIX / 'wh347-pass.xlsx').read_bytes())
+        self.assertEqual((status, out['report']['status'], out['priceCents']), (200, 'PASS', 2500))
+        self.assertEqual(self.fake.balance[self.user], 100000 - 2500)          # one charge, PDF included
+        f = out['filledForm']
+        self.assertTrue(f['available'])
+        pdf = base64.b64decode(f['base64'])
+        self.assertEqual((pdf[:5], len(pdf), f['contentType']), (b'%PDF-', f['bytes'], 'application/pdf'))
+        from pypdf import PdfReader
+        self.assertEqual(len(PdfReader(io.BytesIO(pdf)).pages), 2)
+        text = ' '.join(t for *_, t in self.texts(pdf))
+        for v in ('Example Community Center Renovation', 'EX-2026-0147', '09/26/2026', 'Sample-01', '1,477.36', '58.50'):
+            self.assertIn(v, text)
+
+    def test_statement_of_compliance_left_unsigned(self):
+        _, out = self.paid((FIX / 'wh347-pass.xlsx').read_bytes())
+        runs = self.texts(base64.b64decode(out['filledForm']['base64']))
+        template = self.texts((ROOT / 'pylib/spreadrun_api/validators/wh347/wh347-rev-2025-01.pdf').read_bytes())
+        drawn = [r for r in runs if r not in template and r[0] == 1]      # what SpreadRun added to page 2
+        self.assertTrue(drawn)
+        for _, x, y, _t in drawn:
+            top = 612 - y
+            self.assertFalse(top > 470, 'nothing in the signature, date, phone, email or remarks area')
+            self.assertFalse(x > 471 and 70 < top < 96, 'certifying official left blank')
+            self.assertFalse(x < 50 and 100 < top < 470, 'no statement check boxes marked')
+
+    def test_more_than_eight_rows_adds_page_one_copies(self):
+        p = payload()
+        rows, cols = rows_of(p['payrollCsv'])
+        extra = []
+        for k in range(1, 3):
+            for r in rows:
+                extra.append(dict(r, entry_no=str(int(r['entry_no']) + 10 * k), worker_id=str(1000 + 10 * k + int(r['entry_no']))))
+        p['payrollCsv'] = to_csv(rows + extra, cols)
+        status, out = self.paid(p)
+        self.assertEqual(out['report']['status'], 'PASS')
+        from pypdf import PdfReader
+        pages = PdfReader(io.BytesIO(base64.b64decode(out['filledForm']['base64']))).pages
+        # 15 rows: two copies of page 1, then page 2, then an addendum because 12 workers claim a fringe credit and
+        # page 2 has room for 8.
+        self.assertEqual(len(pages), 4)
+        self.assertIn('WH-347 addendum', pages[3].extract_text())
+
+    def test_only_on_pass_on_request_and_paid(self):
+        _, out = self.paid((FIX / 'wh347-fail.xlsx').read_bytes())
+        self.assertEqual((out['report']['status'], out['filledForm']['available']), ('FAIL', False))
+        self.assertNotIn('base64', out['filledForm'])
+        _, out = self.paid((FIX / 'wh347-pass.xlsx').read_bytes(), q='/')
+        self.assertNotIn('filledForm', out)
+        status, out = call(WH, 'demo', (FIX / 'wh347-pass.xlsx').read_bytes(), {'X-Forwarded-For': '203.0.113.7'}, '/?form=pdf')
+        self.assertEqual((status, out['mode']), (200, 'demo'))
+        self.assertNotIn('filledForm', out)
+        status, out = call('pbj-staffing-qa', 'paid', (FIX / 'pbj-pass.xml').read_bytes(),
+                           {'Authorization': f'Bearer {self.key}'}, '/?form=pdf&asOf=2026-10-03')
+        self.assertNotIn('filledForm', out)
+
+    def test_values_only_in_the_pdf(self):
+        """Markers in every text field: they belong in the PDF and nowhere else (report, ledger, usage log)."""
+        p = payload()
+        p['header'] = {k: f'{self.MARK}h{i}' if k not in ('week_ending', 'payroll_no') else v
+                       for i, (k, v) in enumerate(p['header'].items())}
+        p = with_rows(p, lambda rs: [r.update(last_name=self.MARK + 'L', first_name=self.MARK + 'F',
+                                              worker_id=self.MARK + r['worker_id']) for r in rs])
+        status, out = self.paid(p)
+        self.assertEqual(out['report']['status'], 'PASS')
+        pdf_text = ' '.join(t for *_, t in self.texts(base64.b64decode(out['filledForm']['base64'])))
+        self.assertIn(self.MARK, pdf_text)
+        rest = dict(out)
+        rest.pop('filledForm')
+        self.assertNotIn(self.MARK, json.dumps(rest))
+        self.assertNotIn(self.MARK, json.dumps([self.fake.ledger, self.fake.calls, self.fake.demo], default=str))
+
+    def test_form_failure_keeps_the_report(self):
+        with mock.patch.object(runners, 'wh347_pdf', side_effect=RuntimeError(self.MARK)):
+            status, out = self.paid((FIX / 'wh347-pass.xlsx').read_bytes())
+        self.assertEqual((status, out['report']['status'], out['filledForm']['available']), (200, 'PASS', False))
+        self.assertNotIn(self.MARK, json.dumps(out))
 
 
 class Wh347Billing(unittest.TestCase):

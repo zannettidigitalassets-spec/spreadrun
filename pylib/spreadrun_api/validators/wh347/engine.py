@@ -361,6 +361,13 @@ def validate(body: bytes):
     if cwhssa is None:
         rep.add('error', 'WH-HEADER-FORMAT', '/header/cwhssa', 'cwhssa must be yes or no.')
         cwhssa = True
+    # Optional check boxes at the top of the form: used only to fill the PDF.
+    if as_bool(h.get('final_payroll'), default=False) is None:
+        rep.add('error', 'WH-HEADER-FORMAT', '/header/final_payroll', 'final_payroll must be yes or no.', 'wh347')
+    if str(h.get('contractor_role') or '').strip() and norm_text(h.get('contractor_role')) not in (
+            'prime', 'prime contractor', 'sub', 'subcontractor'):
+        rep.add('error', 'WH-HEADER-FORMAT', '/header/contractor_role', 'contractor_role must be prime or '
+                'subcontractor.', 'wh347')
 
     # Wage determination table.
     wd = {}
@@ -702,4 +709,46 @@ def finish(rep, fmt, body, counts, cwhssa, week_ending):
                  'payroll complies with Davis-Bacon requirements, and this is not legal or compliance advice.',
         'input': {'format': fmt, 'bytes': len(body)},
         'inputSha256': hashlib.sha256(body).hexdigest(),
+    }
+
+
+# ------------------------------------------------------------------ data for the filled form (PASS reports only)
+def form_data(body: bytes):
+    """The values the filled WH-347 needs, from the same input validate() checked. Used only to draw the PDF that
+    goes back to the caller who sent the data; never logged or stored."""
+    data, _ = parse_body(body)
+    h = {HEADER_ALIASES.get(k, k): v for k, v in data['header'].items()}
+    header = {k: str(h.get(k) if h.get(k) is not None else '').strip() for k in HEADER_FIELDS}
+    role = norm_text(h.get('contractor_role'))
+    rows = data['payroll']['rows']
+    fringe, seen = [], set()
+    for r in rows:
+        entry = norm_text(r.get('entry_no'))
+        try:
+            total_6b = money(r.get('fringe_credit', '')) or Decimal(0)
+            hourly = money(r.get('fringe_credit_hourly', ''))
+            hours = money(r.get('total_hours', '')) or Decimal(0)
+        except ValueError:
+            continue
+        if entry in seen or total_6b <= 0:
+            continue
+        seen.add(entry)
+        if hourly is None and hours > 0:
+            hourly = (total_6b / hours).quantize(CENT, rounding=ROUND_HALF_UP)
+        name = ', '.join(x for x in (str(r.get('last_name', '')).strip(), str(r.get('first_name', '')).strip()) if x)
+        fringe.append((name, str(hourly) if hourly is not None else ''))
+    programs, pseen = [], set()
+    for r in (data['appr']['rows'] if data.get('appr') else []):
+        key = (norm_text(r.get('program_name')), norm_text(r.get('classification')))
+        if key not in pseen and (key[0] or key[1]):
+            pseen.add(key)
+            programs.append((str(r.get('program_name', '')).strip(), str(r.get('classification', '')).strip()))
+    return {
+        'header': header,
+        'weekEnding': as_date(h.get('week_ending'), data.get('date1904', False)),
+        'final': as_bool(h.get('final_payroll'), default=False) is True,
+        'role': 'prime' if role in ('prime', 'prime contractor') else 'sub' if role in ('sub', 'subcontractor') else None,
+        'rows': rows,
+        'programs': programs,
+        'fringe': fringe,
     }

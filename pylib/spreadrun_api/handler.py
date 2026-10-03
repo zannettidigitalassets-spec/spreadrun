@@ -4,6 +4,7 @@ process() holds the whole request flow and is plain Python so tests can call it 
 Paid flow: authenticate key -> check balance -> run validator -> charge_request -> return report.
 Input errors are never charged. A report is never returned without a successful charge.
 """
+import base64
 import hashlib
 import json
 import os
@@ -66,6 +67,26 @@ def _run(api, body, query, *, demo):
         max_records = min(max_records, cfg['demo_max_records'])
     filename = (query.get('filename') or [None])[0]
     return runners.run_mrf(body, mode=mode, max_records=max_records, filename=filename)
+
+
+def _filled_form(api, body, query, report):
+    """WH-347 only, paid calls only, on request (?form=pdf): the official form filled from the payroll, for a PASS
+    report only. Returned to the caller in this response and nowhere else: not stored, not logged, not cached.
+    It sits outside `report`, which never contains values from the input."""
+    if api != 'wh347-payroll-precheck' or (query.get('form') or [''])[0] != 'pdf':
+        return None
+    if report.get('status') != 'PASS':
+        return {'available': False, 'reason': 'The completed form is only produced for a PASS report. Fix the findings '
+                                              'and run the check again.'}
+    try:
+        pdf = runners.wh347_pdf(body)
+    except Exception as exc:  # noqa: BLE001 - the report still stands; never leak internals or input
+        print(f'[spreadrun] wh347 form error: {type(exc).__name__}', file=sys.stderr)
+        return {'available': False, 'reason': 'The form could not be produced for this payroll. The report is unaffected.'}
+    return {'available': True, 'filename': 'WH-347-filled-unsigned.pdf', 'contentType': 'application/pdf',
+            'bytes': len(pdf), 'base64': base64.b64encode(pdf).decode('ascii'),
+            'note': 'Filled from your payroll. The Statement of Compliance is not signed or checked: the certifying '
+                    'official completes and signs page 2.'}
 
 
 def process(api, mode, headers, read_body, path='/'):
@@ -135,6 +156,8 @@ def process(api, mode, headers, read_body, path='/'):
              bytes_in=len(body), ip_hash=ip_hash)
         return 200, {'requestId': request_id, 'api': api, 'mode': 'demo', 'charged': False, 'report': report}
 
+    filled = _filled_form(api, body, query, report)
+
     try:
         result = billing.charge_request(caller, api=api, price_cents=cfg['price_cents'], request_id=request_id,
                                         status=report['status'], duration_ms=duration_ms, bytes_in=len(body))
@@ -146,8 +169,11 @@ def process(api, mode, headers, read_body, path='/'):
     if not result.ok:
         return _err(402, 'insufficient_credits', 'Not enough credits for this call. Buy credits on your account page.',
                     balanceCents=result.balance_cents, priceCents=cfg['price_cents'], requestId=request_id, charged=False)
-    return 200, {'requestId': request_id, 'api': api, 'mode': 'paid', 'charged': True,
-                 'priceCents': cfg['price_cents'], 'balanceCents': result.balance_cents, 'report': report}
+    payload = {'requestId': request_id, 'api': api, 'mode': 'paid', 'charged': True,
+               'priceCents': cfg['price_cents'], 'balanceCents': result.balance_cents, 'report': report}
+    if filled is not None:
+        payload['filledForm'] = filled
+    return 200, payload
 
 
 MODES = {'v1': 'paid', 'demo': 'demo'}
