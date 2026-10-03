@@ -319,6 +319,17 @@ export function UadDemo({ api, sample }) {
 // Synthetic PBJ files (scripts/pbj/make_fixtures.py) for July 1 to September 30, 2026. They are checked as of
 // October 3, 2026 so the "no future dates" edit and the RN-day count give the same result on any day.
 const PBJ_SAMPLE_AS_OF = '2026-10-03';
+// Optional inputs for the Five-Star staffing estimate. The samples use an invented census of about 20 residents a day.
+const PBJ_STAFFING = [
+  ['census', 'Resident days in the quarter', 'Sum of each day\'s census, as in your MDS census report.'],
+  ['weekendCensus', 'Resident days on weekends', 'Saturdays and Sundays only. Optional.'],
+  ['caseMixRatio', 'Nursing case-mix ratio', 'Your nursing CMI divided by the national average. 1.0 if unknown.'],
+  ['rnTurnover', 'RN turnover (%)', 'Twelve months, as on Care Compare. Optional.'],
+  ['nurseTurnover', 'Total nurse turnover (%)', 'Optional.'],
+  ['adminDepartures', 'Administrator departures', 'In the last twelve months. Optional.'],
+];
+const PBJ_SAMPLE_STAFFING = { census: '1840', weekendCensus: '520' };
+const emptyStaffing = () => Object.fromEntries(PBJ_STAFFING.map(([k]) => [k, '']));
 const PBJ_SAMPLES = [
   ['pbj-pass.xml', 'Valid PBJ file (synthetic)'],
   ['pbj-fail.xml', 'PBJ file with errors'],
@@ -331,23 +342,30 @@ const pbjType = (name) => {
 export function PbjDemo({ api, sample }) {
   const [file, setFile] = useState(null); // { name, blob }
   const [asOf, setAsOf] = useState('');
+  const [staffing, setStaffing] = useState(emptyStaffing);
   const credits = useCredits(api);
   const mode = useMode(api, credits);
   const [state, run] = useRunner(api, credits);
 
   const pick = (e) => {
     const f = e.target.files?.[0];
-    if (f) { setFile({ name: f.name, blob: f }); setAsOf(''); }
+    if (f) { setFile({ name: f.name, blob: f }); setAsOf(''); setStaffing(emptyStaffing()); }
   };
   const loadSample = async ([path]) => {
     const blob = await fetch(`/samples/${path}`).then((r) => r.blob());
     setFile({ name: path, blob });
     setAsOf(PBJ_SAMPLE_AS_OF);
+    setStaffing({ ...emptyStaffing(), ...PBJ_SAMPLE_STAFFING });
   };
   const tooBig = file && file.blob.size > mode.maxBytes;
   const submit = (e) => {
     e.preventDefault();
-    if (file) run({ paid: mode.paid, body: file.blob, contentType: pbjType(file.name), query: asOf ? `?asOf=${asOf}` : '' });
+    if (!file) return;
+    const params = new URLSearchParams();
+    if (asOf) params.set('asOf', asOf);
+    for (const [k, v] of Object.entries(staffing)) if (String(v).trim()) params.set(k, String(v).trim());
+    const q = params.toString();
+    run({ paid: mode.paid, body: file.blob, contentType: pbjType(file.name), query: q ? `?${q}` : '' });
   };
 
   return (
@@ -370,6 +388,20 @@ export function PbjDemo({ api, sample }) {
           <input id="pbj-asof" type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} style={{ maxWidth: 220 }} />
           <span className="hint">Leave empty for today. Set it to the day you plan to upload: CMS rejects dates after that day, and the count of days without RN hours stops there.</span>
         </div>
+        <details className="estimate-inputs">
+          <summary>See what CMS sees: estimate your staffing star rating (optional)</summary>
+          <p className="small muted">Add your resident days and the report estimates hours per resident day and a staffing star range with the CMS Five-Star method. It is an estimate, not your CMS rating.</p>
+          <div className="input-grid">
+            {PBJ_STAFFING.map(([k, label, hint]) => (
+              <div className="field" key={k} style={{ margin: 0 }}>
+                <label htmlFor={`pbj-${k}`} className="small">{label}</label>
+                <input id={`pbj-${k}`} type="number" inputMode="decimal" min="0" step="any" value={staffing[k]}
+                  onChange={(e) => setStaffing({ ...staffing, [k]: e.target.value })} />
+                <span className="hint">{hint}</span>
+              </div>
+            ))}
+          </div>
+        </details>
         {file && <p className="small">Selected: <code>{file.name}</code> ({kb(file.blob.size)})</p>}
         <button className="btn" type="submit" disabled={!file || state.phase === 'running' || tooBig}>
           {runLabel(mode.paid, api, 'Check file', 'Checking', state.phase === 'running')}

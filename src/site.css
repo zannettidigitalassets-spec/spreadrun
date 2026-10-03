@@ -161,6 +161,13 @@ input[type='file'] { font: 14px var(--sans); }
 .wh-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; margin: 0 0 16px; }
 .wh-grid input[type='date'] { font: 15px var(--sans); color: var(--ink); border: 1px solid #b9c3cd; border-radius: var(--radius); padding: 9px 12px; width: 100%; background: #fff; }
 @media (max-width: 520px) { .wh-grid { grid-template-columns: 1fr; } }
+.input-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; margin: 12px 0 0; }
+.input-grid input { font: 15px var(--sans); color: var(--ink); border: 1px solid #b9c3cd; border-radius: var(--radius); padding: 9px 12px; width: 100%; background: #fff; }
+@media (max-width: 520px) { .input-grid { grid-template-columns: 1fr; } }
+.estimate-inputs { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin: 0 0 16px; background: var(--panel); }
+.estimate-inputs summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 14px; }
+.estimate { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 12px; }
+.estimate .stars { font-size: 20px; font-weight: 700; color: var(--ink); }
 .status-line { font-size: 14px; color: var(--muted); margin: 12px 0 0; min-height: 22px; }
 .error-box { border: 1px solid #f0b8b1; background: var(--fail-soft); color: #7a1a12; padding: 12px 14px; border-radius: var(--radius); font-size: 14px; margin: 12px 0 0; }
 .ok-box { border: 1px solid #a9d6bd; background: var(--pass-soft); color: #134d31; padding: 12px 14px; border-radius: var(--radius); font-size: 14px; margin: 12px 0 0; }

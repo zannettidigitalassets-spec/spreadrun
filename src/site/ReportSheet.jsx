@@ -158,6 +158,14 @@ function Pbj({ r }) {
         </div>
       ) : <p className="small" style={{ margin: 0 }}>No findings. A PASS here is not CMS acceptance and does not mean the file would survive an audit.</p>}
       {r.findingsTruncated && <p className="small muted">The first 500 findings are listed. findingCounts has the full totals.</p>}
+      {r.submissionDeadline && (
+        <p className="small" style={{ marginTop: 10 }}>
+          {r.submissionDeadline.passed
+            ? <>The CMS deadline for this quarter, {r.submissionDeadline.date}, has passed.</>
+            : <>Due to CMS by <b>{r.submissionDeadline.date}</b>, {r.submissionDeadline.time}: <b>{r.submissionDeadline.daysRemaining}</b> {r.submissionDeadline.daysRemaining === 1 ? 'day' : 'days'} left.</>}
+        </p>
+      )}
+      {r.staffingEstimate && <StaffingEstimate e={r.staffingEstimate} />}
       {r.asOf && <p className="small muted" style={{ marginTop: 8 }}>Checked as of {r.asOf}.</p>}
     </>
   );
@@ -195,5 +203,29 @@ function Wh347({ r }) {
       {r.findingsTruncated && <p className="small muted">The first 500 findings are listed. findingCounts has the full totals.</p>}
       {r.overtimeRule === 'not-applied' && <p className="small muted" style={{ marginTop: 8 }}>Overtime rule not applied (cwhssa set to no).</p>}
     </>
+
+const starText = (e) => (e.stars ? `${e.stars} ${e.stars === 1 ? 'star' : 'stars'}` : `${e.starRange[0]} to ${e.starRange[1]} stars`);
+
+function StaffingEstimate({ e }) {
+  if (!e.available) return <div className="estimate"><p className="small" style={{ margin: 0 }}>{e.reason}</p></div>;
+  return (
+    <div className="estimate">
+      <div className="sheet-title" style={{ fontSize: 15 }}>Staffing rating estimate</div>
+      <p className="small muted" style={{ margin: '2px 0 8px' }}>{e.label}</p>
+      {e.excluded
+        ? <p className="small">{e.note}</p>
+        : (
+          <>
+            <p style={{ margin: '0 0 6px' }}><span className="stars">{starText(e)}</span> <span className="small muted">score {e.scoreRange[0] === e.scoreRange[1] ? e.scoreRange[0] : `${e.scoreRange[0]} to ${e.scoreRange[1]}`} of 380</span></p>
+            <div className="facts" style={{ marginBottom: 6 }}>
+              <span>Total nurse <b>{e.adjustedHprd.total.toFixed(2)}</b> HPRD</span>
+              <span>RN <b>{e.adjustedHprd.rn.toFixed(2)}</b></span>
+              <span>Weekend <b>{e.adjustedHprd.weekendTotal.toFixed(2)}</b></span>
+            </div>
+            <p className="small" style={{ margin: '0 0 6px' }}>{e.note}</p>
+          </>
+        )}
+      <ul className="small muted" style={{ margin: 0, paddingLeft: 18 }}>{e.assumptions.map((a) => <li key={a}>{a}</li>)}</ul>
+    </div>
   );
 }
