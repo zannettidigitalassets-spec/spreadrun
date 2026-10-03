@@ -116,9 +116,17 @@ export default function PbjApi() {
         <Badges api={API} style={{ marginBottom: 14 }} />
         <h1>PBJ Staffing Data Pre-Submission QA</h1>
         <DeadlineBanner />
-        <p className="lede" style={{ marginTop: 20 }}>Check a nursing home's quarterly Payroll Based Journal (PBJ) staffing file before you upload it to CMS. Send the XML, or the ZIP you would upload, and get a PASS, WARN or FAIL report in seconds, with a field path, a rule ID and a message for every finding.</p>
+        <p className="lede" style={{ marginTop: 20 }}>A bad PBJ quarter costs a nursing home a star. Check the staffing file before it goes to CMS and see what CMS will see: every problem with a rule ID and a plain explanation, an estimate of your staffing star rating, and the days left to the deadline.</p>
+        <h2 style={{ marginTop: 32 }}>What a bad quarter costs</h2>
+        <ul className="checklist">
+          <li><b>No accepted file by the deadline:</b> a one-star staffing rating for the quarter. CMS accepts nothing after the deadline, and there are no exceptions.</li>
+          <li><b>Four or more days with no RN hours</b> while residents were in the building: a one-star staffing rating for the quarter.</li>
+          <li><b>A failed or unanswered PBJ audit:</b> a one-star staffing rating for three months. Grouping several agency staff under one ID fails an audit with no reconsideration.</li>
+          <li><b>And a one-star staffing rating takes a full star off the overall Care Compare rating.</b></li>
+        </ul>
+        <p className="small">Sources: CMS Five-Star Technical Users' Guide (September 2026) and the CMS PBJ Policy Manual and FAQ, linked at the bottom of this page.</p>
         <div className="note">
-          <p><b>Where this fits.</b> Uploading to CMS is free, and you still have to do it: CMS runs its own edits and posts a Final File Validation Report in iQIES, which the PBJ Policy Manual says can take up to 24 hours to arrive. Late files are not accepted. SpreadRun is the check before that: instant, repeatable, callable from your payroll export or scheduling system, with consistency checks the CMS edits do not run and flags for staffing patterns CMS has documented as audit or rating risks. Hours for July 1 to September 30, 2026 (fiscal 2026 quarter 4) are due by November 14, 2026, 11:59 PM Eastern Time.</p>
+          <p><b>Where this fits.</b> Uploading to CMS is free, and you still have to do it: CMS runs its own edits and posts a Final File Validation Report in iQIES, which the PBJ Policy Manual says can take up to 24 hours to arrive. SpreadRun works above that layer, before you upload. It explains every problem with a rule ID, a location and the CMS document it comes from. It shows what CMS sees: the RN coverage gaps and audit patterns CMS has named, and, if you add your resident days, an estimate of the staffing star rating with the published CMS method. It keeps the deadline in front of you. And each report carries the date and a SHA-256 fingerprint of the exact file checked, so you can keep a record of what was checked before submission. No software to install, no contract, and the test below needs no account.</p>
         </div>
         <div className="note">
           <p><b>A PASS does not mean the filing will survive a CMS audit.</b> These are structural checks, not legal or compliance advice. A PASS does not mean CMS will accept the file either: CMS also checks your facility ID and employee IDs against its own records. PBJ audits compare reported hours with payroll, invoices and contracts, which this validator never sees.</p>
@@ -156,6 +164,11 @@ export default function PbjApi() {
             <li><b>Dates inside the quarter.</b> Work dates outside the quarter in the header (CMS skips those records), and hours before an employee's hire date or after their termination date.</li>
             <li><b>Employees.</b> Hours for an employee ID missing from the file's employees section, duplicate employee IDs, termination dates before hire dates.</li>
           </ul>
+          <h3 style={{ marginTop: 24 }}>4. See what CMS sees (optional)</h3>
+          <ul className="checklist">
+            <li><b>Staffing star estimate.</b> Add your resident days for the quarter and the report computes total nurse, RN and weekend hours per resident day from the file, scores them with the CMS cut points, and gives an estimated staffing star rating or range. Add your case-mix ratio and turnover to narrow it. Always labelled as an estimate, not your CMS rating.</li>
+            <li><b>Deadline.</b> Every report names the CMS deadline for the file's quarter and the days left.</li>
+          </ul>
         </div>
         <div>
           <h2>Who it's for</h2>
@@ -170,7 +183,7 @@ export default function PbjApi() {
             <li>Whether hours match payroll, invoices or contracts. That is what PBJ audits test, and only your records can answer it. The OIG found 45 of 100 sampled nursing homes reported RN hours that their records did not support (March 2024 data, report A-09-24-02005).</li>
             <li>Whether your facility ID and employee IDs are on file with CMS (CMS edits -3693 and -4016 need the CMS system). Hours for an ID that is not in the file's own employees section are flagged.</li>
             <li>Whether hours were worked onsite and whether the 30-minute meal break was deducted. The file has no shift times or locations.</li>
-            <li>Census and hours per resident day: census comes from MDS, not PBJ.</li>
+            <li>Your actual CMS staffing rating. CMS takes census and case mix from MDS and turnover from six quarters of PBJ; the estimate uses the numbers you send.</li>
             <li>Employee Link (administration) files, and ZIP and file naming rules.</li>
           </ul>
         </div>
@@ -181,7 +194,7 @@ export default function PbjApi() {
         <ol className="steps">
           <li><h3>Send</h3><p>POST the PBJ staffing XML file, a gzip of it, or the upload ZIP as the request body. Up to 4.4 MB per request; inside a ZIP, each XML file may be up to 50 MB. The whole file is checked: no sampling.</p></li>
           <li><h3>Validate</h3><p>Structure and allowed values from the CMS v4.10.0 specifications, then daily and monthly totals, quarter coverage and the risk patterns.</p></li>
-          <li><h3>Report</h3><p>JSON with <code>status</code> (PASS, WARN or FAIL), <code>findings</code> (severity, ruleId, XPath-style path, message, source), the reporting quarter, counts of employees, days and hours, and days with and without RN hours.</p></li>
+          <li><h3>Report</h3><p>JSON with <code>status</code> (PASS, WARN or FAIL), <code>findings</code> (severity, ruleId, XPath-style path, message, source), the reporting quarter, counts of employees, days and hours, days with and without RN hours, the deadline, and the staffing estimate when you send a census.</p></li>
         </ol>
         <p className="small">Full request and report schema in the <a href={`/docs/${API.slug}`}>API docs</a>.</p>
       </section>
