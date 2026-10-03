@@ -80,9 +80,17 @@ export default function Wh347Api() {
       <div className="wrap section" style={{ paddingTop: 24 }}>
         <Badges api={API} style={{ marginBottom: 14 }} />
         <h1>Davis-Bacon WH-347 Certified Payroll Pre-Check</h1>
-        <p className="lede" style={{ marginTop: 20 }}>Check a weekly certified payroll before you sign it. Send the payroll and the wage determination rates, and SpreadRun recomputes every row: classifications, basic rates, fringe benefits, overtime, apprentice rates and the gross, deductions and net pay math. You get a PASS, WARN or FAIL report with the row, column, rule and a plain message for every finding.</p>
+        <p className="lede" style={{ marginTop: 20 }}>A certified payroll is a signed statement to the federal government, and a wrong one can cost you the money owed on the job and the right to bid on the next one. Check each week's payroll before you sign it: SpreadRun recomputes every row against the wage determination and explains every problem with its row, column, rule and source.</p>
+        <h2 style={{ marginTop: 32 }}>What a wrong payroll can cost</h2>
+        <ul className="costs">
+          <li><b>Withheld payments.</b> The contracting agency can withhold contract payments to cover back wages, interest and other amounts owed, and can take them from your other federal or Davis-Bacon contracts too. Payments can also be suspended while payrolls or records are missing.</li>
+          <li><b>Overtime damages.</b> On contracts covered by the Contract Work Hours and Safety Standards Act, unpaid overtime brings back wages plus liquidated damages of $33 for each worker for each day they worked over 40 hours in the week without overtime pay.</li>
+          <li><b>Debarment.</b> A contractor found to have disregarded its obligations to workers is barred from federal and Davis-Bacon contracts for 3 years, and so are its responsible officers and the firms they have an interest in.</li>
+          <li><b>Falsification.</b> Signing a Statement of Compliance that is not true can lead to civil or criminal prosecution under federal false statement and false claims laws.</li>
+        </ul>
+        <p className="small">Sources: 29 CFR 5.5, 5.9 and 5.12 and the WH-347 Statement of Compliance, linked at the bottom of this page.</p>
         <div className="note">
-          <p><b>Where this fits.</b> The Department of Labor publishes Form WH-347 and its instructions for free, and using the form itself is optional: any format with the same information works. What nobody does for you is the arithmetic. SpreadRun recomputes the payroll against the wage determination programmatically, from this page or through the API, before the payroll is certified and filed. That is when a short rate or a total that does not add up is cheapest to fix.</p>
+          <p><b>Where this fits.</b> The Department of Labor publishes Form WH-347 and its instructions for free, and using the form itself is optional: any format with the same information works. What the form does not do is check itself. SpreadRun works before the payroll is certified: an independent recomputation of every rate, fringe, overtime hour and total, with findings you can act on (a rule ID, the exact row and column, and the regulation or instruction behind it). Each report carries the date and a SHA-256 fingerprint of the exact file checked, so you can keep a record of what was checked before you signed. No software to install, no contract, and the test below needs no account.</p>
         </div>
         <div className="note">
           <p><b>A PASS does not mean the payroll complies with Davis-Bacon requirements.</b> These are structural checks, not legal or compliance advice. The check uses the wage determination rates you send and cannot tell whether they are the right ones, whether workers are classified correctly, or whether fringe plans are bona fide.</p>

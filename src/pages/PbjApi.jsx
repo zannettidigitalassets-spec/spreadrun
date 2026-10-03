@@ -118,7 +118,7 @@ export default function PbjApi() {
         <DeadlineBanner />
         <p className="lede" style={{ marginTop: 20 }}>A bad PBJ quarter costs a nursing home a star. Check the staffing file before it goes to CMS and see what CMS will see: every problem with a rule ID and a plain explanation, an estimate of your staffing star rating, and the days left to the deadline.</p>
         <h2 style={{ marginTop: 32 }}>What a bad quarter costs</h2>
-        <ul className="checklist">
+        <ul className="costs">
           <li><b>No accepted file by the deadline:</b> a one-star staffing rating for the quarter. CMS accepts nothing after the deadline, and there are no exceptions.</li>
           <li><b>Four or more days with no RN hours</b> while residents were in the building: a one-star staffing rating for the quarter.</li>
           <li><b>A failed or unanswered PBJ audit:</b> a one-star staffing rating for three months. Grouping several agency staff under one ID fails an audit with no reconsideration.</li>

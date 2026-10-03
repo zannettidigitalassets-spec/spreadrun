@@ -172,6 +172,9 @@ input[type='file'] { font: 14px var(--sans); }
 .deadline-days { font-size: 18px; white-space: nowrap; color: var(--warn); }
 .deadline-days b { font-size: 26px; }
 @media (max-width: 520px) { .deadline { flex-direction: column; align-items: flex-start; gap: 6px; } }
+.costs { padding-left: 20px; max-width: 760px; }
+.costs li { margin: 0 0 10px; }
+.costs li::marker { color: var(--fail); }
 .status-line { font-size: 14px; color: var(--muted); margin: 12px 0 0; min-height: 22px; }
 .error-box { border: 1px solid #f0b8b1; background: var(--fail-soft); color: #7a1a12; padding: 12px 14px; border-radius: var(--radius); font-size: 14px; margin: 12px 0 0; }
 .ok-box { border: 1px solid #a9d6bd; background: var(--pass-soft); color: #134d31; padding: 12px 14px; border-radius: var(--radius); font-size: 14px; margin: 12px 0 0; }
