@@ -30,6 +30,8 @@ export const WH347_FAQ = [
     'The way 29 CFR 5.31 describes: the basic hourly rate must be paid in cash, and the fringe benefit rate can be met by plan contributions (column 6B), cash in lieu of benefits (column 6C), cash wages above the basic rate, or a mix. A row fails when everything paid for its hours comes to less than the basic rate plus the fringe rate owed. Fringe credit can never make up a basic rate below the wage determination.'],
   ['What about apprentices?',
     'List each registered apprenticeship program\'s wage schedule in the Apprenticeship sheet: classification, level, wage percentage of the journeyworker rate, fringe percentage (leave it blank if the program does not specify, and the full fringe rate applies) and the ratio. Apprentice rows are checked against their level\'s rate, and each day\'s count of apprentices against journeyworkers in the same classification on this payroll. An apprentice with no program schedule must be paid the journeyworker rate.'],
+  ['Can SpreadRun fill in the WH-347 for me?',
+    'Yes, once the payroll passes. Signed in with credits (or through the API with ?form=pdf), a PASS comes back with the completed DOL Form WH-347, January 2025 revision: page 1 with every worker, hour, rate, deduction and total from your file (a new page 1 for every 8 rows), and page 2 with the project details, apprenticeship programs and hourly fringe credits. The fringe plan names and numbers, the OA or SAA boxes, the Statement of Compliance boxes and the signature are left for your certifying official. A payroll with findings gets no form: fix the findings and run it again. The form is included in the report price.'],
   ['Is the payroll data stored?',
     'No. Files are processed in memory for the length of the request and are not stored or shared. Certified payrolls name workers and carry identifying numbers and pay, which is personal data. Findings name the row, the column, the rule and the problem, never a value from your file. For billing and usage we log the time, endpoint, result status, upload size and duration, never the file contents.'],
   ['When is a run charged?',
@@ -41,7 +43,7 @@ const CURL = `curl -X POST "https://www.spreadrun.com/api/v1/wh347-payroll-prech
   -H "Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" \\
   --data-binary @payroll_week_06.xlsx`;
 
-const PY = `import os, requests
+const PY = `import base64, os, requests
 
 payload = {
     "header": {"project_name": "...", "project_no": "...", "payroll_no": 6,
@@ -54,16 +56,21 @@ payload = {
     "apprenticeshipCsv": open("apprenticeship.csv").read(),   # optional
 }
 r = requests.post(
-    "https://www.spreadrun.com/api/v1/wh347-payroll-precheck",
+    "https://www.spreadrun.com/api/v1/wh347-payroll-precheck?form=pdf",
     headers={"Authorization": f"Bearer {os.environ['SPREADRUN_API_KEY']}"},
     json=payload,
     timeout=60,
 )
 r.raise_for_status()
-report = r.json()["report"]
+data = r.json()
+report = data["report"]
 print(report["status"], report["findingCounts"])
 for f in report["findings"]:
-    print(f["severity"], f["ruleId"], f["path"], f["message"])`;
+    print(f["severity"], f["ruleId"], f["path"], f["message"])
+form = data.get("filledForm") or {}
+if form.get("available"):                  # PASS only: the completed WH-347, unsigned
+    with open("WH-347-filled-unsigned.pdf", "wb") as out:
+        out.write(base64.b64decode(form["base64"]))`;
 
 export function Wh347Sources() {
   return (
@@ -80,7 +87,7 @@ export default function Wh347Api() {
       <div className="wrap section" style={{ paddingTop: 24 }}>
         <Badges api={API} style={{ marginBottom: 14 }} />
         <h1>Davis-Bacon WH-347 Certified Payroll Pre-Check</h1>
-        <p className="lede" style={{ marginTop: 20 }}>A certified payroll is a signed statement to the federal government, and a wrong one can cost you the money owed on the job and the right to bid on the next one. Check each week's payroll before you sign it: SpreadRun recomputes every row against the wage determination and explains every problem with its row, column, rule and source.</p>
+        <p className="lede" style={{ marginTop: 20 }}>A certified payroll is a signed statement to the federal government, and a wrong one can cost you the money owed on the job and the right to bid on the next one. Check each week's payroll before you sign it: SpreadRun recomputes every row against the wage determination and explains every problem with its row, column, rule and source. Validate, then download the completed WH-347 ready to sign.</p>
         <h2 style={{ marginTop: 32 }}>What a wrong payroll can cost</h2>
         <ul className="costs">
           <li><b>Withheld payments.</b> The contracting agency can withhold contract payments to cover back wages, interest and other amounts owed, and can take them from your other federal or Davis-Bacon contracts too. Payments can also be suspended while payrolls or records are missing.</li>
@@ -90,18 +97,19 @@ export default function Wh347Api() {
         </ul>
         <p className="small">Sources: 29 CFR 5.5, 5.9 and 5.12 and the WH-347 Statement of Compliance, linked at the bottom of this page.</p>
         <div className="note">
-          <p><b>Where this fits.</b> The Department of Labor publishes Form WH-347 and its instructions for free, and using the form itself is optional: any format with the same information works. What the form does not do is check itself. SpreadRun works before the payroll is certified: an independent recomputation of every rate, fringe, overtime hour and total, with findings you can act on (a rule ID, the exact row and column, and the regulation or instruction behind it). Each report carries the date and a SHA-256 fingerprint of the exact file checked, so you can keep a record of what was checked before you signed. No software to install, no contract, and the test below needs no account.</p>
+          <p><b>Where this fits.</b> The Department of Labor publishes Form WH-347 and its instructions for free, and using the form itself is optional: any format with the same information works. What the form does not do is check itself. SpreadRun works before the payroll is certified: an independent recomputation of every rate, fringe, overtime hour and total, with findings you can act on (a rule ID, the exact row and column, and the regulation or instruction behind it). Each report carries the date and a SHA-256 fingerprint of the exact file checked, so you can keep a record of what was checked before you signed. When the payroll passes, you can also download the completed WH-347: it is still the Department of Labor's form, filled from your validated data, with the Statement of Compliance left blank for your certifying official to check and sign. You sign it and file it. No software to install, no contract, and the test below needs no account.</p>
         </div>
         <div className="note">
           <p><b>A PASS does not mean the payroll complies with Davis-Bacon requirements.</b> These are structural checks, not legal or compliance advice. The check uses the wage determination rates you send and cannot tell whether they are the right ones, whether workers are classified correctly, or whether fringe plans are bona fide.</p>
         </div>
         <div className="note">
-          <p><b>Personal data.</b> Certified payrolls name workers and carry identifying numbers and pay. Under the <a href="/terms">Terms</a>, files sent to this check may contain that data: it is processed in memory only to produce the report and is not stored, and no value from your file is repeated in the report. You confirm you are permitted to share the file with SpreadRun as a service provider. Never send full Social Security numbers: certified payrolls must not include them, and the check flags any that look like one. The sample files on this page are invented.</p>
+          <p><b>Personal data.</b> Certified payrolls name workers and carry identifying numbers and pay. Under the <a href="/terms">Terms</a>, files sent to this check may contain that data: it is processed in memory only to produce the report and is not stored, and no value from your file is repeated in the report. You confirm you are permitted to share the file with SpreadRun as a service provider. If you ask for the completed WH-347, it is built from your values in memory and sent only to you, in the same response; it is not stored, logged or cached. Never send full Social Security numbers: certified payrolls must not include them, and the check flags any that look like one. The sample files on this page are invented.</p>
         </div>
         <div className="btn-row">
           <a className="btn" href="#demo">Check a payroll</a>
           <a className="btn secondary" href="/samples/wh347-pass.xlsx">Download the sample workbook</a>
         </div>
+        <p className="small">Quick overtime math for one worker? Use the free <a href="/tools/davis-bacon-overtime-calculator">Davis-Bacon overtime calculator</a>.</p>
       </div>
 
       <section className="section wrap split" aria-labelledby="checks">
@@ -144,7 +152,7 @@ export default function Wh347Api() {
         <ol className="steps">
           <li><h3>Send</h3><p>An .xlsx workbook with Header, Payroll, Wage Determination and optional Apprenticeship sheets, or JSON with the header and the tables as CSV. One row per worker per classification, with daily straight time and overtime hours, as on the WH-347. Up to 4.4 MB.</p></li>
           <li><h3>Recompute</h3><p>Every row against its classification's basic and fringe rates, every worker's week against the overtime rule, and every total against its parts.</p></li>
-          <li><h3>Report</h3><p>JSON with <code>status</code> (PASS, WARN or FAIL), <code>findings</code> (severity, ruleId, path such as <code>/payroll/row[3]/st_rate</code>, message, source), and counts of workers, rows, hours and apprentices.</p></li>
+          <li><h3>Report</h3><p>JSON with <code>status</code> (PASS, WARN or FAIL), <code>findings</code> (severity, ruleId, path such as <code>/payroll/row[3]/st_rate</code>, message, source), and counts of workers, rows, hours and apprentices. For a paid PASS, the completed WH-347 as a PDF, unsigned.</p></li>
         </ol>
         <p className="small">Every column, the JSON format and the full report schema are in the <a href={`/docs/${API.slug}`}>API docs</a>. The <a href="/samples/wh347-pass.xlsx">sample workbook</a> doubles as a template; its rates are invented.</p>
       </section>
@@ -156,7 +164,7 @@ export default function Wh347Api() {
 
       <section className="section wrap" aria-labelledby="price-h">
         <h2 id="price-h">Pricing</h2>
-        <p><b>{dollars(API.priceCents)} per completed report.</b> One weekly payroll, one full report.</p>
+        <p><b>{dollars(API.priceCents)} per completed report.</b> One weekly payroll, one full report, and for a payroll that passes, the completed WH-347 PDF at no extra charge.</p>
         <ul>
           <li>Billed when a report is produced, PASS, WARN or FAIL. Invalid input is never billed: a PDF, a workbook missing a required sheet, JSON without the payroll or the rates.</li>
           <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50 or $100 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} weekly checks. Credits never expire. <a href="/apis#pricing">All pricing</a></li>

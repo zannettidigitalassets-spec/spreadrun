@@ -60,7 +60,7 @@ function useRunner(api, credits) {
     try {
       const data = await runValidation(api, { paid, session: credits.session, ...args });
       if (paid && typeof data.balanceCents === 'number') credits.spent(data.balanceCents);
-      setState({ phase: 'done', report: data.report, error: '', paid });
+      setState({ phase: 'done', report: data.report, form: data.filledForm || null, error: '', paid });
     } catch (e) {
       setState({ phase: 'error', report: null, error: e.message, paid });
     }
@@ -418,6 +418,38 @@ export function PbjDemo({ api, sample }) {
   );
 }
 
+// After a WH-347 run: the completed form (paid PASS only), or what to do next.
+function FilledFormNote({ state }) {
+  const f = state.form;
+  if (f && f.available) {
+    const download = () => {
+      const bytes = Uint8Array.from(atob(f.base64), (ch) => ch.charCodeAt(0));
+      const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = f.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    };
+    return (
+      <div className="ok-box">
+        <p style={{ margin: '0 0 8px' }}><b>Your completed WH-347 is ready.</b> {f.note}</p>
+        <button type="button" className="btn small" onClick={download}>Download the completed WH-347 (PDF)</button>
+      </div>
+    );
+  }
+  if (state.paid && state.report.status !== 'PASS') {
+    return <p className="small" style={{ marginTop: 12 }}>Fix the findings and run the check again. The completed WH-347 is produced only for a payroll that passes.</p>;
+  }
+  if (!state.paid && state.report.status === 'PASS') {
+    return <p className="small muted" style={{ marginTop: 12 }}>Signed in with credits, a passing payroll also comes back as the completed WH-347, ready to sign.</p>;
+  }
+  if (f && !f.available) return <p className="small" style={{ marginTop: 12 }}>{f.reason}</p>;
+  return null;
+}
+
 // WH-347 payrolls: an .xlsx workbook, or three CSV tables plus the header fields sent as JSON.
 const XLSX_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 const WH347_HEADER = [
@@ -463,8 +495,10 @@ export function Wh347Demo({ api, sample }) {
   const submit = (e) => {
     e.preventDefault();
     if (!ready) return;
-    if (kind === 'xlsx') run({ paid: mode.paid, body: file.blob, contentType: XLSX_TYPE });
-    else run({ paid: mode.paid, body: json, contentType: 'application/json' });
+    // Paid runs also ask for the filled WH-347, which the API returns only for a PASS.
+    const query = mode.paid ? '?form=pdf' : '';
+    if (kind === 'xlsx') run({ paid: mode.paid, body: file.blob, contentType: XLSX_TYPE, query });
+    else run({ paid: mode.paid, body: json, contentType: 'application/json', query });
   };
 
   return (
@@ -523,6 +557,7 @@ export function Wh347Demo({ api, sample }) {
           {state.phase === 'running' && 'Recomputing the payroll against the wage determination rates.'}
           {state.phase === 'done' && `Done. ${state.report.findingCount} ${state.report.findingCount === 1 ? 'finding' : 'findings'}.${state.paid ? ` Charged ${dollars(api.priceCents)}.` : ''}`}
         </div>
+        {state.phase === 'done' && <FilledFormNote state={state} />}
         {tooBig && <div className="error-box">This payroll is over the {kb(mode.maxBytes)} limit for this mode.{mode.paid ? '' : ' Sign in with credits, or use the API, for up to 4.4 MB.'}</div>}
         {state.phase === 'error' && <div className="error-box" role="alert">{state.error}</div>}
       </form>

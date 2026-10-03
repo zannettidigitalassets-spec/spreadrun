@@ -16,6 +16,8 @@ const HEADER = [
   ['wage_determination_no', 'Wage determination number(s) and modification'],
   ['week_ending', 'Week ending date: YYYY-MM-DD, MM/DD/YYYY or an Excel date'],
   ['cwhssa', 'Optional. yes (default) if the contract is subject to the Contract Work Hours and Safety Standards Act, otherwise no. In JSON, a top-level true or false.'],
+  ['final_payroll', 'Optional. yes to mark the "final certified payroll" box on the filled form.'],
+  ['contractor_role', 'Optional. prime or subcontractor, to mark that box on the filled form.'],
 ];
 
 const PAYROLL = [
@@ -116,7 +118,7 @@ export default function DocsWh347() {
         <h1>Davis-Bacon WH-347 Certified Payroll Pre-Check API Reference</h1>
         <p className="lede" style={{ marginTop: 20 }}>Beta. Recomputes one weekly certified payroll, in the fields of Form WH-347 (Rev. January 2025), against the wage determination rates sent with it. <a href={`/apis/${API.slug}`}>Product page and free test form.</a></p>
         <nav className="toc" aria-label="On this page">
-          <a href="#endpoint">Endpoint</a><a href="#input">Request</a><a href="#columns">Columns</a><a href="#report">Report</a><a href="#rules">Rule IDs</a><a href="#not-checked">Not checked</a><a href="#errors">Errors</a><a href="#examples">Code samples</a>
+          <a href="#endpoint">Endpoint</a><a href="#input">Request</a><a href="#columns">Columns</a><a href="#form">Filled form</a><a href="#report">Report</a><a href="#rules">Rule IDs</a><a href="#not-checked">Not checked</a><a href="#errors">Errors</a><a href="#examples">Code samples</a>
         </nav>
 
         <h2 id="endpoint">Endpoint</h2>
@@ -144,6 +146,10 @@ export default function DocsWh347() {
         </div>
         <p>Wage determination: <code>classification</code>, <code>base_rate</code>, <code>fringe_rate</code> (blank means 0). One row per classification.</p>
         <p>Apprenticeship: <code>classification</code>, <code>level</code>, <code>wage_percent</code> (of the journeyworker basic rate), <code>fringe_percent</code> (blank when the program does not specify fringe benefits, so the full rate applies), <code>ratio</code> (apprentices:journeyworkers, such as <code>1:3</code>), and optionally <code>program_name</code>.</p>
+
+        <h2 id="form">Filled WH-347 (PDF)</h2>
+        <p>Add <code>?form=pdf</code> to a paid call. When the report is a PASS, the response also has <code>filledForm</code>, outside <code>report</code>: <code>available</code>, <code>filename</code>, <code>contentType</code> (<code>application/pdf</code>), <code>bytes</code>, <code>base64</code> and a <code>note</code>. It is DOL Form WH-347, January 2025 revision, as published, with your values drawn on it: page 1 for every 8 payroll rows (entry numbers continue across pages), then page 2 with the project details, up to three apprenticeship programs and up to eight workers' total hourly fringe credit, and an addendum page for any more. Fringe plan names, types and numbers, the OA or SAA boxes, the Statement of Compliance boxes, the certifying official and the signature, date, telephone and email are left blank for the contractor.</p>
+        <p>For WARN or FAIL, <code>filledForm</code> is <code>{'{"available": false, "reason": "..."}'}</code>. Demo calls never get a form. The form is included in the report price, is built in memory for the response and is not stored, logged or cached. It contains your payroll values, as it must; the <code>report</code> still never does.</p>
 
         <h2 id="report">Report</h2>
         <table className="doc-table">
