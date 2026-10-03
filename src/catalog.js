@@ -77,6 +77,19 @@ export const APIS = [
       'Checks a nursing home\'s quarterly Payroll Based Journal staffing XML, or the ZIP you upload to CMS, against the CMS PBJ data specifications v4.10.0 before you submit, and flags staffing patterns CMS has documented as audit or rating risks.',
     cta: 'Check a PBJ file',
   },
+  {
+    slug: 'wh347-payroll-precheck',
+    name: 'Davis-Bacon WH-347 Certified Payroll Pre-Check',
+    tier: 'built',
+    status: 'beta',
+    priceCents: HIGH_STAKES_RUN_CENTS,
+    unit: 'completed report',
+    maxBodyBytes: 4_400_000,
+    demoMaxBodyBytes: 512 * 1024,
+    summary:
+      'Recomputes a weekly Davis-Bacon certified payroll (WH-347 fields) against the wage determination rates you supply: classifications, basic rates, fringe benefits, overtime, apprentice rates and ratios, and the gross, deductions and net pay math.',
+    cta: 'Check a payroll',
+  },
 ];
 
 // Tier 2 listings appear here only after an affiliate agreement is approved and signed by the owner.

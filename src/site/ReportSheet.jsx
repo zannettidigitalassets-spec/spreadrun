@@ -1,6 +1,6 @@
 import { CLINICAL_CODES, MRF_CODES } from './codes.js';
 
-// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj'.
+// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347'.
 export default function ReportSheet({ kind, report, label, sub }) {
   if (!report) return null;
   return (
@@ -13,7 +13,7 @@ export default function ReportSheet({ kind, report, label, sub }) {
         <span className={`stamp ${report.status}`}>{report.status}</span>
       </div>
       <div className="sheet-body">
-        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : <Mrf r={report} />}
+        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : <Mrf r={report} />}
       </div>
     </div>
   );
@@ -159,6 +159,41 @@ function Pbj({ r }) {
       ) : <p className="small" style={{ margin: 0 }}>No findings. A PASS here is not CMS acceptance and does not mean the file would survive an audit.</p>}
       {r.findingsTruncated && <p className="small muted">The first 500 findings are listed. findingCounts has the full totals.</p>}
       {r.asOf && <p className="small muted" style={{ marginTop: 8 }}>Checked as of {r.asOf}.</p>}
+    </>
+  );
+}
+
+function Wh347({ r }) {
+  const c = r.counts;
+  return (
+    <>
+      <div className="facts">
+        {r.weekEnding && <span>Week ending <b>{r.weekEnding}</b></span>}
+        <span><b>{c.workers}</b> {c.workers === 1 ? 'worker' : 'workers'}</span>
+        <span><b>{c.rows}</b> rows</span>
+        <span><b>{Number(c.totalHours).toLocaleString('en-US')}</b> hours</span>
+        {c.apprentices > 0 && <span><b>{c.apprentices}</b> {c.apprentices === 1 ? 'apprentice' : 'apprentices'}</span>}
+        <span><b>{r.findingCounts.error}</b> {r.findingCounts.error === 1 ? 'error' : 'errors'}</span>
+        <span><b>{r.findingCounts.warning}</b> {r.findingCounts.warning === 1 ? 'warning' : 'warnings'}</span>
+      </div>
+      {r.findings.length > 0 ? (
+        <div className="table-scroll">
+          <table className="findings">
+            <thead><tr><th>Severity</th><th>Rule</th><th>Where and what</th></tr></thead>
+            <tbody>
+              {r.findings.map((f, n) => (
+                <tr key={n}>
+                  <td className={`sev-${f.severity === 'error' ? 'ERROR' : 'WARNING'}`}>{f.severity === 'error' ? 'Error' : 'Warning'}</td>
+                  <td className="code ids">{f.ruleId.split('-').map((p, k) => <span key={k}>{k ? <>-<wbr /></> : null}{p}</span>)}</td>
+                  <td><code style={{ wordBreak: 'break-all' }}>{f.path}</code><div className="small">{f.message}</div></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : <p className="small" style={{ margin: 0 }}>No findings against the rates supplied. A PASS here does not mean the payroll complies with Davis-Bacon requirements.</p>}
+      {r.findingsTruncated && <p className="small muted">The first 500 findings are listed. findingCounts has the full totals.</p>}
+      {r.overtimeRule === 'not-applied' && <p className="small muted" style={{ marginTop: 8 }}>Overtime rule not applied (cwhssa set to no).</p>}
     </>
   );
 }

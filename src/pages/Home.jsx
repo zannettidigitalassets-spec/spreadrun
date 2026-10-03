@@ -9,7 +9,7 @@ import clinicalExample from '../content/examples/clinical-paid-fail.json';
 // flat $0.25 pricing, uploads only (no URL fetching in V1), no em dashes.
 export const HOME_FAQ = [
   ['What is SpreadRun?',
-    'A small catalog of data-validation APIs for regulated industries. Each product checks one specific thing, currently hospital price transparency files, clinical trial results tables, UAD 3.6 appraisal reports and nursing home PBJ staffing files, through a documented REST API with per-use pricing.'],
+    'A small catalog of data-validation APIs for regulated industries. Each product checks one specific thing, currently hospital price transparency files, clinical trial results tables, UAD 3.6 appraisal reports, nursing home PBJ staffing files and Davis-Bacon certified payrolls, through a documented REST API with per-use pricing.'],
   ['How is this different from the free government tools?',
     'Government validators, like the one CMS publishes, are built for one-off manual checks, and they are good at that. SpreadRun\'s APIs are built for repeated, programmatic use: no installation, structured JSON reports, and endpoints your pipeline or agent can call directly.'],
   ['How does pricing work?',
@@ -23,13 +23,13 @@ export const HOME_FAQ = [
 ];
 
 export default function Home() {
-  const [clinical, mrf, uad, pbj] = [APIS[0], APIS[1], APIS[2], APIS[3]];
+  const [clinical, mrf, uad, pbj, wh347] = [APIS[0], APIS[1], APIS[2], APIS[3], APIS[4]];
   return (
     <Layout path="/">
       <div className="wrap hero">
         <div>
           <h1>Data validation APIs for regulated industries.</h1>
-          <p className="lede">Narrow tools that check one thing correctly: hospital price files against the CMS v3.0 template, clinical trial tables before analysis, UAD 3.6 appraisal XML against the GSE rules, nursing home PBJ staffing files before they go to CMS. Per-use pricing. No subscriptions, no sales calls.</p>
+          <p className="lede">Narrow tools that check one thing correctly: hospital price files against the CMS v3.0 template, clinical trial tables before analysis, UAD 3.6 appraisal XML against the GSE rules, nursing home PBJ staffing files before they go to CMS, Davis-Bacon payrolls before they are certified. Per-use pricing. No subscriptions, no sales calls.</p>
           <div className="btn-row">
             <a className="btn" href="/apis">Browse the APIs</a>
             <a className="btn secondary" href="/docs">Read the docs</a>
@@ -77,6 +77,13 @@ export default function Home() {
             <p>Checks a nursing home's quarterly Payroll Based Journal staffing XML, or the upload ZIP, against the CMS v4.10.0 specifications before it goes to CMS, and flags staffing patterns CMS has named as audit or rating risks. A PASS is not CMS acceptance.</p>
             <p className="price">{dollars(pbj.priceCents)} per completed report</p>
             <a className="btn small" href={`/apis/${pbj.slug}#demo`}>Check a PBJ file</a>
+          </div>
+          <div className="card">
+            <Badges api={wh347} />
+            <h3><a href={`/apis/${wh347.slug}`}>{wh347.name}</a></h3>
+            <p>Recomputes a weekly Davis-Bacon certified payroll against your wage determination rates before you sign it: basic rates, fringe benefits, overtime, apprentice rates and ratios, and the gross, deductions and net pay math. A PASS is not a compliance finding.</p>
+            <p className="price">{dollars(wh347.priceCents)} per completed report</p>
+            <a className="btn small" href={`/apis/${wh347.slug}#demo`}>Check a payroll</a>
           </div>
           <div className="card quiet">
             <h3>Next validator</h3>

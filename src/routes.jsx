@@ -6,11 +6,13 @@ import ClinicalApi, { CLINICAL_FAQ } from './pages/ClinicalApi.jsx';
 import MrfApi, { MRF_FAQ } from './pages/MrfApi.jsx';
 import UadApi, { UAD_FAQ } from './pages/UadApi.jsx';
 import PbjApi, { PBJ_FAQ } from './pages/PbjApi.jsx';
+import Wh347Api, { WH347_FAQ } from './pages/Wh347Api.jsx';
 import Docs from './pages/Docs.jsx';
 import DocsClinical from './pages/DocsClinical.jsx';
 import DocsMrf from './pages/DocsMrf.jsx';
 import DocsUad from './pages/DocsUad.jsx';
 import DocsPbj from './pages/DocsPbj.jsx';
+import DocsWh347 from './pages/DocsWh347.jsx';
 import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
@@ -59,7 +61,7 @@ const appLd = (slug, description) => {
 // Meta descriptions are 150 to 160 characters (scripts/check-site.mjs enforces it).
 const D = {
   home: 'Data validation APIs for regulated industries: hospital price files, clinical trial tables, UAD 3.6 appraisals. Per-use pricing, free tests, no subscription.',
-  apis: 'Every SpreadRun data validation API with per-run pricing: clinical trial table QA, hospital MRF validation, UAD 3.6 appraisals and PBJ staffing data QA.',
+  apis: 'Every SpreadRun data validation API with per-run pricing: clinical trial tables, hospital MRF files, UAD 3.6 appraisals, PBJ staffing data and WH-347 payrolls.',
   clinical: 'Audit clinical trial results tables before analysis: NCT ID validity, required fields, duplicates, orphan outcomes, dates. $0.25 per audit, free live test.',
   mrf: 'Validate hospital machine-readable price files against the CMS v3.0 template: JSON, tall and wide CSV, plain or gzip. $0.25 per validation, free live test.',
   uad: 'Check UAD 3.6 appraisal XML against GSE delivery specs and compliance rules before UCDP submission. Every finding has an XPath. $1.00 per report, free test.',
@@ -67,6 +69,8 @@ const D = {
   docsClinical: 'Clinical Trial Results Table QA API reference: endpoints, request format, required columns, report schema, finding codes, error codes, and code samples.',
   docsMrf: 'Hospital MRF Validator API reference: endpoints, upload formats, query parameters, sampling limits, report schema, finding codes, error codes, and samples.',
   pbj: 'Check nursing home PBJ staffing XML against CMS v4.10.0 specs before upload, with documented audit risk flags. Results in seconds. $1.00 per report, free test.',
+  wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $1.00 per report, free test.',
+  docsWh347: 'WH-347 Certified Payroll Pre-Check API reference: endpoints, workbook and JSON input, every payroll column, report schema, rule IDs, and all error codes.',
   docsPbj: 'PBJ Staffing Data Pre-Submission QA API reference: endpoints, ZIP and XML uploads, the asOf date, report schema, CMS edit and risk rule IDs, and error codes.',
   docsUad: 'UAD 3.6 Appraisal Report Validator API reference: endpoints, request format, ZIP packages, report schema, rule IDs, rules not yet covered, and error codes.',
   guides: 'Plain-English guides to the data rules our validators check: hospital price transparency files, clinical trial data quality, and UAD 3.6 appraisal reports.',
@@ -80,7 +84,7 @@ const D = {
 
 const HOME = [['/', 'Home']];
 const product = (slug, name, title, desc, faq) => ({
-  Component: { 'clinical-trial-table-validator': ClinicalApi, 'hospital-mrf-validator': MrfApi, 'uad-36-appraisal-validator': UadApi, 'pbj-staffing-qa': PbjApi }[slug],
+  Component: { 'clinical-trial-table-validator': ClinicalApi, 'hospital-mrf-validator': MrfApi, 'uad-36-appraisal-validator': UadApi, 'pbj-staffing-qa': PbjApi, 'wh347-payroll-precheck': Wh347Api }[slug],
   title, description: desc, priority: '0.9',
   jsonLd: () => [appLd(slug, desc), faqLd(faq), crumbsLd([...HOME, ['/apis', 'APIs'], [`/apis/${slug}`, name]])],
 });
@@ -137,6 +141,8 @@ export const ROUTES = {
     'UAD 3.6 Appraisal Validator API: URAR XML Checks | SpreadRun', D.uad, UAD_FAQ),
   '/apis/pbj-staffing-qa': product('pbj-staffing-qa', 'PBJ Staffing Data Pre-Submission QA',
     'PBJ Staffing Data Validator: Check CMS PBJ XML Before Upload | SpreadRun', D.pbj, PBJ_FAQ),
+  '/apis/wh347-payroll-precheck': product('wh347-payroll-precheck', 'WH-347 Certified Payroll Pre-Check',
+    'WH-347 Certified Payroll Checker: Davis-Bacon Pre-Check API | SpreadRun', D.wh347, WH347_FAQ),
   '/docs': {
     Component: Docs,
     title: 'API Docs: Authentication, Billing and Errors | SpreadRun',
@@ -148,6 +154,7 @@ export const ROUTES = {
   '/docs/hospital-mrf-validator': docsPage('hospital-mrf-validator', DocsMrf, 'Hospital MRF Validator', D.docsMrf),
   '/docs/uad-36-appraisal-validator': docsPage('uad-36-appraisal-validator', DocsUad, 'UAD 3.6 Appraisal Report Validator', D.docsUad),
   '/docs/pbj-staffing-qa': docsPage('pbj-staffing-qa', DocsPbj, 'PBJ Staffing Data Pre-Submission QA', D.docsPbj),
+  '/docs/wh347-payroll-precheck': docsPage('wh347-payroll-precheck', DocsWh347, 'Davis-Bacon WH-347 Certified Payroll Pre-Check', D.docsWh347),
   '/guides': {
     Component: Guides,
     title: 'Guides: Hospital Price Transparency and Clinical Data | SpreadRun',

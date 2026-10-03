@@ -382,3 +382,116 @@ export function PbjDemo({ api, sample }) {
     </div>
   );
 }
+
+// WH-347 payrolls: an .xlsx workbook, or three CSV tables plus the header fields sent as JSON.
+const XLSX_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+const WH347_HEADER = [
+  ['project_name', 'Project name'], ['project_no', 'Project or contract no.'], ['payroll_no', 'Certified payroll no.'],
+  ['week_ending', 'Week ending date'], ['contractor_name', 'Contractor business name'],
+  ['contractor_address', 'Contractor business address'], ['project_location', 'Project location'],
+  ['wage_determination_no', 'Wage determination no.'],
+];
+const WH347_SAMPLES = [
+  ['wh347-pass', 'Clean sample payroll'],
+  ['wh347-fail', 'Sample with errors'],
+];
+
+export function Wh347Demo({ api, sample }) {
+  const [kind, setKind] = useState('xlsx');
+  const [file, setFile] = useState(null); // { name, blob }
+  const [csvs, setCsvs] = useState({ payrollCsv: '', wageDeterminationCsv: '', apprenticeshipCsv: '' });
+  const [header, setHeader] = useState(Object.fromEntries(WH347_HEADER.map(([k]) => [k, ''])));
+  const [cwhssa, setCwhssa] = useState(true);
+  const credits = useCredits(api);
+  const mode = useMode(api, credits);
+  const [state, run] = useRunner(api, credits);
+
+  const loadSample = async ([base]) => {
+    if (kind === 'xlsx') {
+      const blob = await fetch(`/samples/${base}.xlsx`).then((r) => r.blob());
+      setFile({ name: `${base}.xlsx`, blob });
+    } else {
+      const p = await fetch(`/samples/${base}.json`).then((r) => r.json());
+      setHeader({ ...header, ...p.header });
+      setCsvs({ payrollCsv: p.payrollCsv, wageDeterminationCsv: p.wageDeterminationCsv, apprenticeshipCsv: p.apprenticeshipCsv || '' });
+      setCwhssa(p.cwhssa !== false);
+    }
+  };
+  const readFile = (key) => (e) => {
+    const f = e.target.files?.[0];
+    if (f) f.text().then((t) => setCsvs((c) => ({ ...c, [key]: t })));
+  };
+  const json = JSON.stringify({ header, cwhssa, ...csvs, apprenticeshipCsv: csvs.apprenticeshipCsv || undefined });
+  const size = kind === 'xlsx' ? (file ? file.blob.size : 0) : new Blob([json]).size;
+  const tooBig = size > mode.maxBytes;
+  const ready = kind === 'xlsx' ? !!file : csvs.payrollCsv.trim() && csvs.wageDeterminationCsv.trim();
+  const submit = (e) => {
+    e.preventDefault();
+    if (!ready) return;
+    if (kind === 'xlsx') run({ paid: mode.paid, body: file.blob, contentType: XLSX_TYPE });
+    else run({ paid: mode.paid, body: json, contentType: 'application/json' });
+  };
+
+  return (
+    <div className="split">
+      <form className="demo" onSubmit={submit}>
+        <ModeNote api={api} credits={credits} mode={mode} demoLimits={`up to ${kb(api.demoMaxBodyBytes)} per run, 10 runs a day`} />
+        <fieldset className="field" style={{ border: 0, padding: 0, margin: '0 0 12px' }}>
+          <legend className="small" style={{ fontWeight: 600 }}>Payroll format</legend>
+          <label className="small" style={{ marginRight: 16 }}><input type="radio" name="wh-kind" checked={kind === 'xlsx'} onChange={() => setKind('xlsx')} /> Excel workbook (.xlsx)</label>
+          <label className="small"><input type="radio" name="wh-kind" checked={kind === 'csv'} onChange={() => setKind('csv')} /> CSV tables</label>
+        </fieldset>
+        <div className="btn-row" style={{ margin: '0 0 16px' }}>
+          {WH347_SAMPLES.map((s) => (
+            <button key={s[0]} type="button" className="btn secondary small" onClick={() => loadSample(s)}>{s[1]}</button>
+          ))}
+        </div>
+        {kind === 'xlsx' ? (
+          <div className="field">
+            <label htmlFor="wh-file">Payroll workbook</label>
+            <input id="wh-file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) setFile({ name: f.name, blob: f }); }} />
+            <span className="hint">Sheets: Header, Payroll, Wage Determination, and Apprenticeship if you have apprentices. Start from the <a href="/samples/wh347-pass.xlsx">sample workbook</a>.</span>
+          </div>
+        ) : (
+          <>
+            <div className="wh-grid">
+              {WH347_HEADER.map(([k, label]) => (
+                <div className="field" key={k} style={{ margin: 0 }}>
+                  <label htmlFor={`wh-${k}`} className="small">{label}</label>
+                  <input id={`wh-${k}`} type={k === 'week_ending' ? 'date' : 'text'} value={header[k]}
+                    onChange={(e) => setHeader({ ...header, [k]: e.target.value })} />
+                </div>
+              ))}
+            </div>
+            {[['payrollCsv', 'Payroll (CSV)', 'wh347-payroll.csv'], ['wageDeterminationCsv', 'Wage determination rates (CSV)', 'wh347-wage-determination.csv'],
+              ['apprenticeshipCsv', 'Apprenticeship programs (CSV, optional)', 'wh347-apprenticeship.csv']].map(([k, label, ex]) => (
+              <div className="field" key={k}>
+                <label htmlFor={`wh-${k}`}>{label}</label>
+                <span className="hint">Columns as in <a href={`/samples/${ex}`}>this example</a>.</span>
+                <input type="file" accept=".csv,text/csv" onChange={readFile(k)} aria-label={`Upload ${label}`} />
+                <textarea id={`wh-${k}`} value={csvs[k]} onChange={(e) => setCsvs({ ...csvs, [k]: e.target.value })} spellCheck={false} />
+              </div>
+            ))}
+          </>
+        )}
+        <label className="small" style={{ display: 'flex', gap: 8, alignItems: 'center', margin: '0 0 16px' }}>
+          <input type="checkbox" checked={cwhssa} disabled={kind === 'xlsx'} onChange={(e) => setCwhssa(e.target.checked)} />
+          {kind === 'xlsx' ? 'Overtime rule: set cwhssa (yes or no) on the Header sheet' : 'Contract is subject to the Contract Work Hours and Safety Standards Act (overtime over 40 hours)'}
+        </label>
+        <p className="small muted" style={{ margin: '0 0 12px' }}>Processed in memory and not stored. Reports never repeat names, IDs or amounts from your file.</p>
+        {kind === 'xlsx' && file && <p className="small">Selected: <code>{file.name}</code> ({kb(file.blob.size)})</p>}
+        <button className="btn" type="submit" disabled={!ready || state.phase === 'running' || tooBig}>
+          {runLabel(mode.paid, api, 'Check payroll', 'Checking', state.phase === 'running')}
+        </button>
+        <div className="status-line" aria-live="polite">
+          {state.phase === 'running' && 'Recomputing the payroll against the wage determination rates.'}
+          {state.phase === 'done' && `Done. ${state.report.findingCount} ${state.report.findingCount === 1 ? 'finding' : 'findings'}.${state.paid ? ` Charged ${dollars(api.priceCents)}.` : ''}`}
+        </div>
+        {tooBig && <div className="error-box">This payroll is over the {kb(mode.maxBytes)} limit for this mode.{mode.paid ? '' : ' Sign in with credits, or use the API, for up to 4.4 MB.'}</div>}
+        {state.phase === 'error' && <div className="error-box" role="alert">{state.error}</div>}
+      </form>
+      <div><Result state={state} kind="wh347" sample={sample} sampleLabel="Synthetic payroll with planted problems" /></div>
+    </div>
+  );
+}
