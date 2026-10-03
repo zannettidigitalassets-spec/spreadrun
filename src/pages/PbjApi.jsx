@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Badges from '../site/Badges.jsx';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
@@ -14,9 +15,47 @@ export const PBJ_SOURCES = [
     'https://www.cms.gov/medicare/quality/nursing-home-improvement/staffing-data-submission'],
   ['CMS PBJ audit selection criteria, as reported by Skilled Nursing News (November 2018)',
     'https://skillednursingnews.com/2018/11/cms-peels-back-curtain-providers-receive-pbj-audits/'],
+  ['CMS Nursing Home Five-Star Quality Rating System: Technical Users\' Guide (September 2026) and cut point tables',
+    'https://www.cms.gov/medicare/health-safety-standards/certification-compliance/five-star-quality-rating-system'],
   ['HHS OIG report A-09-24-02005 on RN hours reported in PBJ (June 2026)',
     'https://oig.hhs.gov/reports/all/2026/cmss-processes-were-not-effective-in-ensuring-the-accuracy-of-staffing-information-reported-in-the-payroll-based-journal/'],
 ];
+
+// PBJ is due by the end of the 45th day after each federal fiscal quarter (11:59 PM Eastern). The page shows the next
+// deadline; the build renders the one current at build time and the browser updates the count on load.
+const QUARTER_ENDS = [[0, 1, 1], [3, 1, 2], [6, 1, 3], [9, 1, 4]];   // [month index of the day after, day, FY quarter]
+export function nextPbjDeadline(now) {
+  const y = now.getFullYear();
+  const today = Date.UTC(y, now.getMonth(), now.getDate());
+  const cands = [];
+  for (const yr of [y - 1, y, y + 1]) {
+    for (const [m, , fq] of QUARTER_ENDS) {
+      const end = Date.UTC(yr, m, 0);                       // last day of the quarter
+      const due = end + 45 * 86400000;
+      const start = new Date(Date.UTC(yr, m - 3, 1));
+      cands.push({ due, end, start, fq, fy: yr });   // the quarter ending Dec 31 of yr - 1 is fiscal yr quarter 1
+    }
+  }
+  const next = cands.filter((c) => c.due >= today).sort((a, b) => a.due - b.due)[0];
+  return { ...next, days: Math.round((next.due - today) / 86400000) };
+}
+const fmt = (ms) => new Date(ms).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'long', day: 'numeric', year: 'numeric' });
+const BUILD_DEADLINE = nextPbjDeadline(new Date(Date.UTC(2026, 9, 3)));
+
+export function DeadlineBanner() {
+  const [d, setD] = useState(BUILD_DEADLINE);
+  const [live, setLive] = useState(false);
+  useEffect(() => { setD(nextPbjDeadline(new Date())); setLive(true); }, []);
+  return (
+    <div className="deadline" role="note">
+      <div className="deadline-days">{live ? <><b>{d.days}</b> {d.days === 1 ? 'day' : 'days'} left</> : <b>Next deadline</b>}</div>
+      <div>
+        <b>{fmt(d.due)}, 11:59 PM Eastern</b> is the CMS deadline for hours from {fmt(d.start)} to {fmt(d.end)} (fiscal {d.fy} quarter {d.fq}).
+        {' '}CMS accepts no files after it, and a quarter with no accepted file gets a one-star staffing rating.
+      </div>
+    </div>
+  );
+}
 
 export const PBJ_FAQ = [
   ['CMS already validates PBJ files for free. Why pay for this?',
@@ -35,6 +74,8 @@ export const PBJ_FAQ = [
     'No. Files are processed in memory for the length of the request and are not stored or shared. PBJ files identify staff by employee ID and contain hire and termination dates and hours worked, which is personal data about your staff. Findings name the location, the rule and the problem, never a value from your file. For billing and usage we log the time, endpoint, result status, upload size and duration, never the file contents.'],
   ['When is a run charged?',
     `When the validator finishes and returns a report, whether it says PASS, WARN or FAIL: ${dollars(API.priceCents)} per report. Requests rejected before a report exists are free: not XML, not a PBJ nursingHomeData file, an Employee Link file, a ZIP with no XML file, or DOCTYPE and entity declarations.`],
+  ['How close is the staffing star estimate to the real rating?',
+    'It follows the published CMS method (Five-Star Technical Users\' Guide, September 2026): reported nurse hours per resident day, adjusted for case mix, scored with the CMS cut points, plus the three turnover measures, against the 380-point scale. What it cannot match is CMS\'s inputs. CMS takes the census and case mix from MDS assessments and turnover from six quarters of PBJ data. If you send your resident days, case-mix ratio and turnover from your own reports, the estimate is close; leave any out and it shows a range. Either way it is an estimate, not your CMS rating.'],
   ['Why do some dates show as in the future?',
     'CMS rejects any date after the day you upload. The check uses today by default. To check a file as of the day you plan to upload it, pass asOf=YYYY-MM-DD. The count of days without RN hours also stops at that date, so a quarter still in progress is not penalized for days that have not happened.'],
 ];
@@ -74,6 +115,7 @@ export default function PbjApi() {
       <div className="wrap section" style={{ paddingTop: 24 }}>
         <Badges api={API} style={{ marginBottom: 14 }} />
         <h1>PBJ Staffing Data Pre-Submission QA</h1>
+        <DeadlineBanner />
         <p className="lede" style={{ marginTop: 20 }}>Check a nursing home's quarterly Payroll Based Journal (PBJ) staffing file before you upload it to CMS. Send the XML, or the ZIP you would upload, and get a PASS, WARN or FAIL report in seconds, with a field path, a rule ID and a message for every finding.</p>
         <div className="note">
           <p><b>Where this fits.</b> Uploading to CMS is free, and you still have to do it: CMS runs its own edits and posts a Final File Validation Report in iQIES, which the PBJ Policy Manual says can take up to 24 hours to arrive. Late files are not accepted. SpreadRun is the check before that: instant, repeatable, callable from your payroll export or scheduling system, with consistency checks the CMS edits do not run and flags for staffing patterns CMS has documented as audit or rating risks. Hours for July 1 to September 30, 2026 (fiscal 2026 quarter 4) are due by November 14, 2026, 11:59 PM Eastern Time.</p>
