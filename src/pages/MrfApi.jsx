@@ -64,6 +64,9 @@ export default function MrfApi() {
         <div className="note">
           <p><b>Free alternative:</b> CMS publishes its own <a href={CMS_TOOL}>Hospital Price Transparency Validator</a> at no cost, online and as a command-line tool, and it checks the whole file. Use it for one-off manual checks. This API is for checking files from code: no install, JSON reports, one endpoint for all three layouts. It inspects a bounded part of each file, described below.</p>
         </div>
+        <div className="note">
+          <p><b>A PASS does not mean the file meets CMS requirements.</b> These are structural checks, not legal, regulatory or compliance advice, and a PASS does not mean the file would hold up in a CMS review.</p>
+        </div>
         <div className="btn-row">
           <a className="btn" href="#demo">Run a validation</a>
           <a className="btn secondary" href="/account">Get API access</a>

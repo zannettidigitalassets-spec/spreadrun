@@ -64,6 +64,9 @@ export default function ClinicalApi() {
         <Badges api={API} style={{ marginBottom: 14 }} />
         <h1>Clinical Trial Table QA API: Validate Results Data</h1>
         <p className="lede" style={{ marginTop: 20 }}>Validate normalized clinical-trial study and outcome tables before they feed your analysis, your joins, or your customers. Submit your tables; get a deterministic audit that flags malformed NCT IDs, missing required fields, duplicate records, orphan outcomes, invalid outcome types and bad results-posting dates, with exact row locations for every finding. {dollars(API.priceCents)} per completed audit. No subscription.</p>
+        <div className="note">
+          <p><b>A PASS does not mean the data is accepted anywhere.</b> These are structural checks, not legal, regulatory or compliance advice, and a PASS does not mean the tables would be accepted by a registry or survive an audit.</p>
+        </div>
         <div className="btn-row">
           <a className="btn" href="#demo">Run an audit</a>
           <a className="btn secondary" href="/account">Get API access</a>
