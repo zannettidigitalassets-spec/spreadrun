@@ -41,6 +41,13 @@ APIS = {
         'max_body_bytes': 4_400_000,
         'demo_max_body_bytes': 1024 * 1024,
     },
+    'wh347-payroll-precheck': {
+        'name': 'Davis-Bacon WH-347 Certified Payroll Pre-Check',
+        'price_cents': 100,
+        # One weekly payroll: JSON with CSV tables, or an .xlsx workbook. Whole file checked, no sampling.
+        'max_body_bytes': 4_400_000,
+        'demo_max_body_bytes': 512 * 1024,
+    },
 }
 
 DEMO_RUNS_PER_DAY = 10

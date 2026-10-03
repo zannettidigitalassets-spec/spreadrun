@@ -129,6 +129,31 @@ def run_pbj(body: bytes, *, as_of=None):
     return report
 
 
+_wh347 = None
+
+
+def wh347_module():
+    """SpreadRun's own Davis-Bacon WH-347 engine. Rules from the WH-347 instructions (Rev. January 2025) and
+    29 CFR 5.5, 5.31 and 5.32; wage determination rates come with each request."""
+    global _wh347
+    if _wh347 is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_wh347_engine', HERE / 'wh347' / 'engine.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_wh347_engine'] = module
+        spec.loader.exec_module(module)
+        _wh347 = module
+    return _wh347
+
+
+def run_wh347(body: bytes):
+    """Check one weekly certified payroll: JSON with CSV tables, or an .xlsx workbook."""
+    v = wh347_module()
+    try:
+        return v.validate(body)
+    except v.InputError as exc:
+        raise InputError(str(exc)) from None
+
+
 def run_clinical(body: bytes):
     """Body is the JSON object the validator expects: {"studiesCsv": "...", "outcomesCsv": "..."}."""
     v = clinical_module()

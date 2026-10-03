@@ -96,3 +96,10 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     save('pbj-paid-pass', *post(paid, (SAMPLES / 'pbj-pass.xml').read_bytes(), {**auth, 'Content-Type': 'application/xml'}, as_of))
     save('pbj-demo-fail', *post(demo, (SAMPLES / 'pbj-fail.xml').read_bytes(), {'Content-Type': 'application/xml'}, as_of))
     save('pbj-input-error', *post(paid, b'<?xml version="1.0"?><nursingHomeData><header fileSpecVersion="4.10.0">', {**auth, 'Content-Type': 'application/xml'}))
+
+    w = 'wh347-payroll-precheck'
+    paid, demo = serve(w, 'paid'), serve(w, 'demo')
+    xlsx = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    save('wh347-paid-pass', *post(paid, (SAMPLES / 'wh347-pass.json').read_bytes(), {**auth, 'Content-Type': 'application/json'}))
+    save('wh347-demo-fail', *post(demo, (SAMPLES / 'wh347-fail.xlsx').read_bytes(), {'Content-Type': xlsx}))
+    save('wh347-input-error', *post(paid, b'{"header": {}, "payrollCsv": "entry_no,last_name\\n1,x\\n"}', {**auth, 'Content-Type': 'application/json'}))

@@ -1,0 +1,55 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "wh347-payroll-precheck",
+    "mode": "paid",
+    "charged": true,
+    "priceCents": 100,
+    "balanceCents": 625,
+    "report": {
+      "schemaVersion": 1,
+      "status": "PASS",
+      "form": "WH-347 (Rev. January 2025)",
+      "weekEnding": "2026-09-26",
+      "overtimeRule": "cwhssa",
+      "counts": {
+        "rows": 5,
+        "workers": 4,
+        "apprentices": 1,
+        "classifications": 4,
+        "totalHours": "164.00"
+      },
+      "findingCount": 0,
+      "findingCounts": {
+        "error": 0,
+        "warning": 0
+      },
+      "ruleCounts": {},
+      "findings": [],
+      "findingsTruncated": false,
+      "notChecked": [
+        "Whether the wage determination rates you supplied are the right ones for the contract, project location and dates. SpreadRun checks against the rates you send; it does not look them up.",
+        "Whether workers are classified correctly for the work they actually did.",
+        "Hours worked on other projects for the same contractor, which count toward the 40-hour overtime threshold but are not on this payroll.",
+        "Whether apprentices are individually registered, and the apprentice ratio across the contractor's whole workforce on the job site (only this payroll is counted).",
+        "Whether fringe benefit plans are bona fide, annualization of fringe credits, and approval of unfunded plans.",
+        "Whether deductions are permitted under 29 CFR part 3.",
+        "The Statement of Compliance and signature on page 2."
+      ],
+      "sources": {
+        "wh347": "DOL Wage and Hour Division, Instructions for Completing Form WH-347 (Rev. January 2025)",
+        "cfr5.5": "29 CFR 5.5(a), Davis-Bacon contract clauses: wage payment, certified payrolls, apprentices",
+        "cfr5.5b": "29 CFR 5.5(b)(1), Contract Work Hours and Safety Standards Act overtime (contracts over $100,000)",
+        "cfr5.31": "29 CFR 5.31, meeting wage determination obligations (basic rate and fringe benefits)",
+        "cfr5.32": "29 CFR 5.32, overtime payments (fringe benefits and cash in lieu excluded from the basic rate)"
+      },
+      "scope": "Recomputes the payroll against the wage determination rates supplied. A PASS does not mean the payroll complies with Davis-Bacon requirements, and this is not legal or compliance advice.",
+      "input": {
+        "format": "json",
+        "bytes": 1902
+      },
+      "inputSha256": "36a5a7ab053a3ab899ee436ccb0693dbcec207fe08057db699e76a0b5c880291"
+    }
+  }
+}

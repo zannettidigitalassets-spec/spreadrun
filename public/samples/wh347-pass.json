@@ -1,0 +1,16 @@
+{
+  "header": {
+    "project_name": "Example Community Center Renovation",
+    "project_no": "EX-2026-0147",
+    "payroll_no": "6",
+    "contractor_name": "Example Builders LLC (fictional)",
+    "project_location": "Example County, Example State",
+    "wage_determination_no": "EX20260001 Mod 0 (invented rates)",
+    "week_ending": "2026-09-26",
+    "contractor_address": "100 Sample Way, Example City"
+  },
+  "cwhssa": true,
+  "payrollCsv": "entry_no,last_name,first_name,middle_initial,worker_id,worker_type,apprentice_level,classification,st_1,st_2,st_3,st_4,st_5,st_6,st_7,ot_1,ot_2,ot_3,ot_4,ot_5,ot_6,ot_7,total_hours,st_rate,ot_rate,fringe_credit_hourly,fringe_credit,cash_in_lieu_hourly,cash_in_lieu,gross_project,gross_all_work,tax_withholding,fica,other_deductions,total_deductions,net_pay\n1,Sample-01,Worker,,4410,J,,Electrician,8,8,8,8,8,,,,,,,,4,,44,39.00,58.50,18.25,803.00,,0.00,1794.00,1794.00,179.40,137.24,0,316.64,1477.36\n2,Sample-02,Worker,,7782,RA,2,Electrician,8,8,8,8,8,,,,,,,,,,40,23.10,,18.25,730.00,,0.00,924.00,924.00,92.40,70.69,0,163.09,760.91\n3,Sample-03,Worker,,1209,J,,Carpenter,8,8,8,8,8,,,,,,,,,,40,31.20,,,0.00,14.10,564.00,1812.00,1812.00,181.20,138.62,0,319.82,1492.18\n4,Sample-04,Worker,,5530,J,,Laborer: Common or General,8,8,8,,,,,,,,,,,,24,24.15,,6.00,144.00,5.40,129.60,709.20,1562.80,156.28,119.55,15.00,290.83,1271.97\n4,Sample-04,Worker,,5530,J,,Operator: Backhoe/Excavator,,,,8,8,,,,,,,,,,16,35.80,,6.00,96.00,10.05,160.80,733.60,,,,,,\n",
+  "wageDeterminationCsv": "classification,base_rate,fringe_rate\nElectrician,38.50,18.25\nCarpenter,31.20,14.10\nLaborer: Common or General,24.15,11.40\nOperator: Backhoe/Excavator,35.80,16.05\n",
+  "apprenticeshipCsv": "classification,level,wage_percent,fringe_percent,ratio,program_name\nElectrician,2,60,,1:1,Example Electrical JATC (fictional)\nElectrician,3,70,,1:1,Example Electrical JATC (fictional)\n"
+}

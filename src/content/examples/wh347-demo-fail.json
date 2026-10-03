@@ -1,0 +1,194 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "wh347-payroll-precheck",
+    "mode": "demo",
+    "charged": false,
+    "report": {
+      "schemaVersion": 1,
+      "status": "FAIL",
+      "form": "WH-347 (Rev. January 2025)",
+      "weekEnding": "2026-09-26",
+      "overtimeRule": "cwhssa",
+      "counts": {
+        "rows": 8,
+        "workers": 7,
+        "apprentices": 3,
+        "classifications": 4,
+        "totalHours": "252.00"
+      },
+      "findingCount": 18,
+      "findingCounts": {
+        "error": 15,
+        "warning": 3
+      },
+      "ruleCounts": {
+        "WH-APPR-PROGRAM": 1,
+        "WH-APPR-RATIO": 1,
+        "WH-DEDUCTIONS-TOTAL": 1,
+        "WH-FRINGE-SHORT": 3,
+        "WH-GROSS-ALL-WORK": 1,
+        "WH-GROSS-MISMATCH": 2,
+        "WH-HOURS-TOTAL": 1,
+        "WH-ID-FULL-SSN": 1,
+        "WH-NET-PAY": 2,
+        "WH-OT-HOURS": 1,
+        "WH-RATE-BASE": 2,
+        "WH-RATE-OT-BASE": 1,
+        "WH-WD-CLASSIFICATION": 1
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "ruleId": "WH-APPR-PROGRAM",
+          "path": "/payroll/row[8]/apprentice_level",
+          "message": "No apprenticeship program wage schedule was supplied for this classification and level, so the journeyworker rate on the wage determination applies.",
+          "source": "cfr5.5"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-DEDUCTIONS-TOTAL",
+          "path": "/payroll/row[4]/total_deductions",
+          "message": "Total deductions does not equal tax withholdings plus FICA plus other deductions.",
+          "source": "wh347"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-FRINGE-SHORT",
+          "path": "/payroll/row[3]",
+          "message": "Wages, fringe benefit credit (6B) and cash in lieu of fringe benefits (6C) together are less than the basic hourly rate plus the fringe benefit rate owed for these hours (overtime premium on the basic rate only).",
+          "source": "cfr5.31"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-FRINGE-SHORT",
+          "path": "/payroll/row[6]",
+          "message": "Wages, fringe benefit credit (6B) and cash in lieu of fringe benefits (6C) together are less than the basic hourly rate plus the fringe benefit rate owed for these hours (overtime premium on the basic rate only).",
+          "source": "cfr5.31"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-FRINGE-SHORT",
+          "path": "/payroll/row[8]",
+          "message": "Wages, fringe benefit credit (6B) and cash in lieu of fringe benefits (6C) together are less than the basic hourly rate plus the fringe benefit rate owed for these hours (overtime premium on the basic rate only).",
+          "source": "cfr5.31"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-GROSS-ALL-WORK",
+          "path": "/payroll/row[3]/gross_all_work",
+          "message": "Gross amount earned for all work (7B) is less than the gross amount earned on this project (7A).",
+          "source": "wh347"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-HOURS-TOTAL",
+          "path": "/payroll/row[4]/total_hours",
+          "message": "total_hours (column 5) does not equal the straight time and overtime hours entered for each day (column 4).",
+          "source": "wh347"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-ID-FULL-SSN",
+          "path": "/payroll/row[3]/worker_id",
+          "message": "This identifying number looks like a full Social Security number. Certified payrolls must not include full SSNs; use the last four digits or another number specific to the worker.",
+          "source": "cfr5.5"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-NET-PAY",
+          "path": "/payroll/row[1]/net_pay",
+          "message": "Net pay (9) does not equal gross amount earned for all work (7B) minus total deductions (8).",
+          "source": "wh347"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-NET-PAY",
+          "path": "/payroll/row[4]/net_pay",
+          "message": "Net pay (9) does not equal gross amount earned for all work (7B) minus total deductions (8).",
+          "source": "wh347"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-OT-HOURS",
+          "path": "/payroll/row[6]",
+          "message": "More than 40 straight time hours in the week for this worker (all classification rows together). On contracts subject to the Contract Work Hours and Safety Standards Act, hours over 40 must be paid as overtime.",
+          "source": "cfr5.5b"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-RATE-BASE",
+          "path": "/payroll/row[3]/st_rate",
+          "message": "The straight time rate is below the basic hourly rate required for this classification on the wage determination. Fringe benefit payments cannot make up a shortfall in the basic rate.",
+          "source": "cfr5.31"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-RATE-BASE",
+          "path": "/payroll/row[8]/st_rate",
+          "message": "The straight time rate is below the basic hourly rate required for this classification on the wage determination. Fringe benefit payments cannot make up a shortfall in the basic rate.",
+          "source": "cfr5.31"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-RATE-OT-BASE",
+          "path": "/payroll/row[1]/ot_rate",
+          "message": "The overtime rate is below one and one-half times the basic hourly rate on the wage determination.",
+          "source": "cfr5.32"
+        },
+        {
+          "severity": "error",
+          "ruleId": "WH-WD-CLASSIFICATION",
+          "path": "/payroll/row[5]/classification",
+          "message": "This labor classification is not in the wage determination table. Workers must be paid the rate for the classification of work actually performed; a classification missing from the wage determination needs a conformance request through the contracting officer.",
+          "source": "wh347"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "WH-APPR-RATIO",
+          "path": "/payroll/row[2]",
+          "message": "On 5 days this payroll shows more apprentices in this classification than the program ratio allows for the journeyworkers on it. Apprentices over the ratio must be paid the full journeyworker rate. Only this payroll is counted.",
+          "source": "cfr5.5"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "WH-GROSS-MISMATCH",
+          "path": "/payroll/row[1]/gross_project",
+          "message": "Gross amount earned on this project (7A) does not equal hours times the rates paid, with or without the payment in lieu of fringe benefits (6C). Check for a missing or extra amount.",
+          "source": "wh347"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "WH-GROSS-MISMATCH",
+          "path": "/payroll/row[3]/gross_project",
+          "message": "Gross amount earned on this project (7A) does not equal hours times the rates paid, with or without the payment in lieu of fringe benefits (6C). Check for a missing or extra amount.",
+          "source": "wh347"
+        }
+      ],
+      "findingsTruncated": false,
+      "notChecked": [
+        "Whether the wage determination rates you supplied are the right ones for the contract, project location and dates. SpreadRun checks against the rates you send; it does not look them up.",
+        "Whether workers are classified correctly for the work they actually did.",
+        "Hours worked on other projects for the same contractor, which count toward the 40-hour overtime threshold but are not on this payroll.",
+        "Whether apprentices are individually registered, and the apprentice ratio across the contractor's whole workforce on the job site (only this payroll is counted).",
+        "Whether fringe benefit plans are bona fide, annualization of fringe credits, and approval of unfunded plans.",
+        "Whether deductions are permitted under 29 CFR part 3.",
+        "The Statement of Compliance and signature on page 2."
+      ],
+      "sources": {
+        "wh347": "DOL Wage and Hour Division, Instructions for Completing Form WH-347 (Rev. January 2025)",
+        "cfr5.5": "29 CFR 5.5(a), Davis-Bacon contract clauses: wage payment, certified payrolls, apprentices",
+        "cfr5.5b": "29 CFR 5.5(b)(1), Contract Work Hours and Safety Standards Act overtime (contracts over $100,000)",
+        "cfr5.31": "29 CFR 5.31, meeting wage determination obligations (basic rate and fringe benefits)",
+        "cfr5.32": "29 CFR 5.32, overtime payments (fringe benefits and cash in lieu excluded from the basic rate)"
+      },
+      "scope": "Recomputes the payroll against the wage determination rates supplied. A PASS does not mean the payroll complies with Davis-Bacon requirements, and this is not legal or compliance advice.",
+      "input": {
+        "format": "xlsx",
+        "bytes": 8993
+      },
+      "inputSha256": "174185a29655dfde481cedac1fff956b248bccceb19704916c1f4908c36c917d"
+    }
+  }
+}
