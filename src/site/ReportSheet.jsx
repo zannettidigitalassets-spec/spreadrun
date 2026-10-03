@@ -203,6 +203,8 @@ function Wh347({ r }) {
       {r.findingsTruncated && <p className="small muted">The first 500 findings are listed. findingCounts has the full totals.</p>}
       {r.overtimeRule === 'not-applied' && <p className="small muted" style={{ marginTop: 8 }}>Overtime rule not applied (cwhssa set to no).</p>}
     </>
+  );
+}
 
 const starText = (e) => (e.stars ? `${e.stars} ${e.stars === 1 ? 'star' : 'stars'}` : `${e.starRange[0]} to ${e.starRange[1]} stars`);
 
