@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import ReportSheet from './ReportSheet.jsx';
-import { dollars } from '../catalog.js';
+import { CREDIT_PACKS, dollars } from '../catalog.js';
 
 // Test forms on product pages. Two modes:
 //   demo: anyone, free, small limits, 10 runs a day (POST /api/demo/<api>)
@@ -75,6 +75,9 @@ function useMode(api, credits) {
   return { paid, preferDemo, setPreferDemo, maxBytes: paid ? api.maxBodyBytes : api.demoMaxBodyBytes };
 }
 
+// The smallest credit pack that covers at least one run of this API.
+const smallestPack = (api) => (CREDIT_PACKS.find((p) => p.priceCents >= api.priceCents) || CREDIT_PACKS[CREDIT_PACKS.length - 1]).priceCents;
+
 export function ModeNote({ api, credits, mode, demoLimits }) {
   const price = dollars(api.priceCents);
   if (credits.canPay) {
@@ -102,7 +105,7 @@ export function ModeNote({ api, credits, mode, demoLimits }) {
   }
   return (
     <p className="small muted">
-      Free demo, no account: {demoLimits}. For full validations from this form, <a href="/account">sign in and buy credits</a>: {price} per completed report, packs from $5.
+      Free demo, no account: {demoLimits}. For full validations from this form, <a href="/account">sign in and buy credits</a>: {price} per completed report, packs from ${smallestPack(api) / 100}.
     </p>
   );
 }

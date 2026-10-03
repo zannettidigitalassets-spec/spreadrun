@@ -7,10 +7,10 @@ export function PriceTable() {
   return (
     <div className="table-scroll">
       <table className="doc-table" style={{ maxWidth: 720 }}>
-        <thead><tr><th>API</th><th>Price per completed run</th><th>Runs per $5 pack</th></tr></thead>
+        <thead><tr><th>API</th><th>Price per completed run</th><th>Runs per $50 pack</th></tr></thead>
         <tbody>
           {APIS.map((a) => (
-            <tr key={a.slug}><td><a href={`/apis/${a.slug}`}>{a.name}</a></td><td>{dollars(a.priceCents)}</td><td>{Math.floor(500 / a.priceCents)}</td></tr>
+            <tr key={a.slug}><td><a href={`/apis/${a.slug}`}>{a.name}</a></td><td>{dollars(a.priceCents)}</td><td>{Math.floor(5000 / a.priceCents)}</td></tr>
           ))}
         </tbody>
       </table>
@@ -48,7 +48,7 @@ export default function Catalog() {
         <p>Each API has a price per completed run, paid from prepaid credits. Credits are a dollar balance that works on every API, and they never expire.</p>
         <PriceTable />
         <h3 style={{ marginTop: 28 }}>Credit packs</h3>
-        <p>{CREDIT_PACKS.map((p) => `$${p.priceCents / 100}`).join(', ').replace(/, ([^,]*)$/, ' and $1')} packs buy that much credit, usable on every API. A $5 pack covers 20 runs at $0.25, or 5 runs at $1.00, or any mix.</p>
+        <p>{CREDIT_PACKS.map((p) => `$${p.priceCents / 100}`).join(', ').replace(/, ([^,]*)$/, ' and $1')} packs buy that much credit, usable on every API. A $5 pack covers 20 runs at $0.25 or 5 runs at $1.00. A $50 pack covers 2 runs at $25.00. Any mix works.</p>
         <ul>
           <li>A run is charged when it finishes and returns a report, whether the report says PASS, WARN or FAIL.</li>
           <li>Requests rejected before a report exists are free: bad JSON, clinical tables missing required columns or with ragged rows, an empty or corrupt gzip upload, invalid parameters, a missing or revoked key.</li>
