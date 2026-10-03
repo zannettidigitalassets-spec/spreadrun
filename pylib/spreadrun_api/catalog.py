@@ -35,7 +35,7 @@ APIS = {
     },
     'pbj-staffing-qa': {
         'name': 'PBJ Staffing Data Pre-Submission QA',
-        'price_cents': 100,
+        'price_cents': 2500,   # professional tier
         # Whole-file validation, no sampling. Large facilities' quarterly files can pass 4.4 MB as plain XML;
         # gzip or ZIP uploads (what CMS takes) are accepted; each XML inside may expand to 50 MB.
         'max_body_bytes': 4_400_000,

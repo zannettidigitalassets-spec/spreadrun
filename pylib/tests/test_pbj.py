@@ -286,7 +286,7 @@ class PbjNoValueEcho(unittest.TestCase):
             if len(e) == 0:
                 e.text = f'{self.MARK}{e.text}'
         with mock.patch.object(store, 'rpc', fake.rpc), mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'test'}):
-            key, _ = fake.add_user(500)
+            key, _ = fake.add_user(5000)
             status, out = call(PBJ, 'paid', ET.tostring(r), {'Authorization': f'Bearer {key}'}, f'/?asOf={AS_OF}')
             self.assertEqual((status, out['charged']), (200, True))
             status, err = call(PBJ, 'paid', f'<nursingHomeData>{self.MARK}'.encode(), {'Authorization': f'Bearer {key}'})
@@ -307,21 +307,24 @@ class PbjBilling(unittest.TestCase):
             p.stop()
 
     def test_completed_report_costs_one_dollar(self):
-        key, user = self.fake.add_user(150)
+        key, user = self.fake.add_user(3000)
         status, out = call(PBJ, 'paid', (FIX / 'pbj-fail.xml').read_bytes(), {'Authorization': f'Bearer {key}'}, f'/?asOf={AS_OF}')
-        self.assertEqual((status, out['report']['status'], out['priceCents'], self.fake.balance[user]), (200, 'FAIL', 100, 50))
+        self.assertEqual((status, out['report']['status'], out['priceCents'], self.fake.balance[user]), (200, 'FAIL', 2500, 500))
 
     def test_session_pays_and_low_balance_is_402(self):
-        jwt, user = self.fake.add_session(100)
+        jwt, user = self.fake.add_session(2500)
         status, out = call(PBJ, 'paid', (FIX / 'pbj-pass.xml').read_bytes(), {'Authorization': f'Bearer {jwt}'}, f'/?asOf={AS_OF}')
         self.assertEqual((status, self.fake.balance[user]), (200, 0))
         status, out = call(PBJ, 'paid', (FIX / 'pbj-pass.xml').read_bytes(), {'Authorization': f'Bearer {jwt}'})
         self.assertEqual(status, 402)
 
     def test_invalid_input_is_free_and_demo_is_capped(self):
-        key, user = self.fake.add_user(500)
+        key, user = self.fake.add_user(5000)
         status, out = call(PBJ, 'paid', b'not xml', {'Authorization': f'Bearer {key}'})
-        self.assertEqual((status, out['error']['charged'], self.fake.balance[user]), (400, False, 500))
+        self.assertEqual((status, out['error']['charged'], self.fake.balance[user]), (400, False, 5000))
+        poor, _ = self.fake.add_user(2499)     # one cent short of a professional-tier run
+        status, out = call(PBJ, 'paid', (FIX / 'pbj-pass.xml').read_bytes(), {'Authorization': f'Bearer {poor}'})
+        self.assertEqual((status, out['error']['priceCents']), (402, 2500))
         status, out = call(PBJ, 'demo', (FIX / 'pbj-pass.xml').read_bytes(), {'X-Forwarded-For': '203.0.113.77'}, f'/?asOf={AS_OF}')
         self.assertEqual((status, out['charged'], out['report']['status']), (200, False, 'PASS'))
         status, _ = call(PBJ, 'demo', b'<nursingHomeData>' + b' ' * (1024 * 1024) + b'</nursingHomeData>', {'X-Forwarded-For': '203.0.113.77'})

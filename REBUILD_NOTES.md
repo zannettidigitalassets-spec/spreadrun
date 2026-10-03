@@ -185,7 +185,7 @@ dispatcher function, so still 8 functions. Body: a UAD 3.6 URAR XML file or the 
 ## PBJ Staffing Data Pre-Submission QA (branch `spreadrun/pbj-staffing-qa`, 2026-10-03)
 
 SpreadRun's own validator. `POST /api/v1/pbj-staffing-qa` (and `/api/demo/...`), same dispatcher function, so still 8
-functions. $1.00 per completed report (`HIGH_STAKES_RUN_CENTS`); packs unchanged. Body: the quarterly PBJ staffing XML,
+functions. $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`; was $1.00 at launch). Body: the quarterly PBJ staffing XML,
 gzip of it, or the CMS upload ZIP (up to 20 XML files, each up to 50 MB uncompressed, one combined report and one charge).
 
 - **Sources.** CMS PBJ Data Specifications v4.10.0 (January 16, 2026; the only version CMS accepts from April 1, 2026),

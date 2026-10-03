@@ -70,7 +70,7 @@ export const APIS = [
     name: 'PBJ Staffing Data Pre-Submission QA',
     tier: 'built',
     status: 'beta',
-    priceCents: HIGH_STAKES_RUN_CENTS,
+    priceCents: PROFESSIONAL_RUN_CENTS,
     unit: 'completed report',
     maxBodyBytes: 4_400_000,
     demoMaxBodyBytes: 1024 * 1024,

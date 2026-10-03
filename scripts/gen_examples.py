@@ -93,9 +93,11 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     b = 'pbj-staffing-qa'
     paid, demo = serve(b, 'paid'), serve(b, 'demo')
     as_of = '?asOf=2026-10-03'  # the synthetic files cover July 1 to September 30, 2026; see scripts/pbj/make_fixtures.py
-    save('pbj-paid-pass', *post(paid, (SAMPLES / 'pbj-pass.xml').read_bytes(), {**auth, 'Content-Type': 'application/xml'}, as_of))
+    rich, _ = fake.add_user(10000)   # $100 of credit: covers $25 professional-tier runs
+    rich_auth = {'Authorization': f'Bearer {rich}'}
+    save('pbj-paid-pass', *post(paid, (SAMPLES / 'pbj-pass.xml').read_bytes(), {**rich_auth, 'Content-Type': 'application/xml'}, as_of))
     save('pbj-demo-fail', *post(demo, (SAMPLES / 'pbj-fail.xml').read_bytes(), {'Content-Type': 'application/xml'}, as_of))
-    save('pbj-input-error', *post(paid, b'<?xml version="1.0"?><nursingHomeData><header fileSpecVersion="4.10.0">', {**auth, 'Content-Type': 'application/xml'}))
+    save('pbj-input-error', *post(paid, b'<?xml version="1.0"?><nursingHomeData><header fileSpecVersion="4.10.0">', {**rich_auth, 'Content-Type': 'application/xml'}))
 
     w = 'wh347-payroll-precheck'
     paid, demo = serve(w, 'paid'), serve(w, 'demo')
