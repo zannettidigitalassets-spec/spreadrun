@@ -175,6 +175,12 @@ input[type='file'] { font: 14px var(--sans); }
 .costs { padding-left: 20px; max-width: 760px; }
 .costs li { margin: 0 0 10px; }
 .costs li::marker { color: var(--fail); }
+.calc-result { border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; background: #fff; }
+.calc-big { display: flex; flex-direction: column; margin: 0 0 12px; }
+.calc-big b { font-size: 28px; color: var(--ink); line-height: 1.2; }
+.calc-math { padding-left: 18px; font-size: 15px; }
+.calc-math li { margin: 0 0 6px; }
+.calc-cta { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 12px; font-weight: 600; color: var(--ink); }
 .status-line { font-size: 14px; color: var(--muted); margin: 12px 0 0; min-height: 22px; }
 .error-box { border: 1px solid #f0b8b1; background: var(--fail-soft); color: #7a1a12; padding: 12px 14px; border-radius: var(--radius); font-size: 14px; margin: 12px 0 0; }
 .ok-box { border: 1px solid #a9d6bd; background: var(--pass-soft); color: #134d31; padding: 12px 14px; border-radius: var(--radius); font-size: 14px; margin: 12px 0 0; }

@@ -11,6 +11,7 @@ export const LOADERS = {
   '/apis/uad-36-appraisal-validator': () => import('./pages/UadApi.jsx'),
   '/apis/pbj-staffing-qa': () => import('./pages/PbjApi.jsx'),
   '/apis/wh347-payroll-precheck': () => import('./pages/Wh347Api.jsx'),
+  '/tools/davis-bacon-overtime-calculator': () => import('./pages/OvertimeCalculator.jsx'),
   '/docs': () => import('./pages/Docs.jsx'),
   '/docs/clinical-trial-table-validator': () => import('./pages/DocsClinical.jsx'),
   '/docs/hospital-mrf-validator': () => import('./pages/DocsMrf.jsx'),
