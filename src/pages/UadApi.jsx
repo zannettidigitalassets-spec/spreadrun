@@ -62,7 +62,8 @@ export default function UadApi() {
       <div className="wrap section" style={{ paddingTop: 24 }}>
         <Badges api={API} style={{ marginBottom: 14 }} />
         <h1>UAD 3.6 Appraisal Report Validator</h1>
-        <p className="lede" style={{ marginTop: 20 }}>Check a UAD 3.6 URAR appraisal file from your own code. Send the XML, or the whole UAD 3.6 ZIP package, and get a PASS, WARN or FAIL report against the GSE-published delivery specification and compliance rules, with an XPath, a rule ID and a message for every finding.</p>
+        <p className="subhead">Don't trust your software's green check? Verify independently.</p>
+        <p className="lede" style={{ marginTop: 16 }}>Check a UAD 3.6 URAR appraisal file from your own code. Send the XML, or the whole UAD 3.6 ZIP package, and get a PASS, WARN or FAIL report against the GSE-published delivery specification and compliance rules, with an XPath, a rule ID and a message for every finding.</p>
         <div className="note">
           <p><b>Where this fits.</b> Appraisal software already runs the GSE compliance rules while a report is written, and the Uniform Collateral Data Portal (UCDP) runs them again when the lender submits it, at no fee to lenders. Fannie Mae also offers a UAD Compliance API to technology vendors. SpreadRun is the programmatic option for everyone else who handles the XML: lenders, AMCs and QC teams checking files at intake, and developers testing a UAD 3.6 export, with no portal login and no vendor agreement. UAD 3.6 is required for new UCDP submissions from November 2, 2026 (<a href={UCDP_FAQ_URL}>UCDP FAQ</a>). New to the change? Start with <a href="/guides/uad-3-6-requirements-2026">UAD 3.6 Requirements: The 2026 Guide</a>.</p>
         </div>
