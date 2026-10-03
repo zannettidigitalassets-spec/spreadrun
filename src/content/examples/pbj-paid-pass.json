@@ -1,0 +1,67 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "pbj-staffing-qa",
+    "mode": "paid",
+    "charged": true,
+    "priceCents": 100,
+    "balanceCents": 725,
+    "report": {
+      "schemaVersion": 1,
+      "status": "PASS",
+      "specVersion": "4.10.0",
+      "fileSpecVersion": "4.10.0",
+      "reportingQuarter": {
+        "federalFiscalYear": 2026,
+        "quarter": 4,
+        "start": "2026-07-01",
+        "end": "2026-09-30"
+      },
+      "processType": "merge",
+      "counts": {
+        "employees": 14,
+        "staffHoursRecords": 14,
+        "workDays": 789,
+        "hourEntries": 789,
+        "totalHours": 6917.5
+      },
+      "coverage": {
+        "daysWithHours": 92,
+        "daysWithRnHours": 92,
+        "daysWithoutRnHours": 0
+      },
+      "findingCount": 0,
+      "findingCounts": {
+        "error": 0,
+        "warning": 0
+      },
+      "ruleCounts": {},
+      "findings": [],
+      "findingsTruncated": false,
+      "notChecked": [
+        "Whether facilityId and employee IDs match what CMS has on file (CMS edits -3693 and -4016 need the PBJ system).",
+        "Whether hours match payroll, invoices or contracts, which is what PBJ audits verify.",
+        "Whether hours were worked onsite, and whether meal breaks were actually deducted (the file has no shift times).",
+        "Census and hours per resident day (census comes from MDS, not PBJ).",
+        "PBJ Administration Submission files (Employee Link).",
+        "ZIP and XML file naming rules, and the 5 MB limit CMS applies to the upload ZIP."
+      ],
+      "sources": {
+        "spec": "CMS PBJ Data Specifications v4.10.0 (January 16, 2026), edit IDs and XSD",
+        "manual": "CMS PBJ Policy Manual v2.8 (August 2026)",
+        "faq": "CMS PBJ Policy Manual FAQ (August 2026)",
+        "fivestar": "CMS Nursing Home Five-Star Quality Rating System Technical Users' Guide (July 2026)",
+        "audit2018": "CMS PBJ audit selection criteria as stated by CMS and reported by Skilled Nursing News (November 2018)"
+      },
+      "scope": "Structural checks against the CMS PBJ data specifications and documented risk patterns. A PASS does not mean CMS will accept the file or that it will survive a CMS audit, and this is not legal or compliance advice.",
+      "input": {
+        "container": "xml",
+        "xmlFiles": 1,
+        "xmlBytes": 233073
+      },
+      "inputSha256": "a1da2506994af98f782f9ecc409b18a4dbdca9f7d7e3ba1e33b9668bab76873a",
+      "asOf": "2026-10-03"
+    }
+  }
+}

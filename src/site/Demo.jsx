@@ -312,3 +312,73 @@ export function UadDemo({ api, sample }) {
     </div>
   );
 }
+
+// Synthetic PBJ files (scripts/pbj/make_fixtures.py) for July 1 to September 30, 2026. They are checked as of
+// October 3, 2026 so the "no future dates" edit and the RN-day count give the same result on any day.
+const PBJ_SAMPLE_AS_OF = '2026-10-03';
+const PBJ_SAMPLES = [
+  ['pbj-pass.xml', 'Valid PBJ file (synthetic)'],
+  ['pbj-fail.xml', 'PBJ file with errors'],
+];
+const pbjType = (name) => {
+  const n = name.toLowerCase();
+  return n.endsWith('.zip') ? 'application/zip' : n.endsWith('.gz') ? 'application/gzip' : 'application/xml';
+};
+
+export function PbjDemo({ api, sample }) {
+  const [file, setFile] = useState(null); // { name, blob }
+  const [asOf, setAsOf] = useState('');
+  const credits = useCredits(api);
+  const mode = useMode(api, credits);
+  const [state, run] = useRunner(api, credits);
+
+  const pick = (e) => {
+    const f = e.target.files?.[0];
+    if (f) { setFile({ name: f.name, blob: f }); setAsOf(''); }
+  };
+  const loadSample = async ([path]) => {
+    const blob = await fetch(`/samples/${path}`).then((r) => r.blob());
+    setFile({ name: path, blob });
+    setAsOf(PBJ_SAMPLE_AS_OF);
+  };
+  const tooBig = file && file.blob.size > mode.maxBytes;
+  const submit = (e) => {
+    e.preventDefault();
+    if (file) run({ paid: mode.paid, body: file.blob, contentType: pbjType(file.name), query: asOf ? `?asOf=${asOf}` : '' });
+  };
+
+  return (
+    <div className="split">
+      <form className="demo" onSubmit={submit}>
+        <ModeNote api={api} credits={credits} mode={mode} demoLimits={`files up to ${kb(api.demoMaxBodyBytes)}, 10 runs a day`} />
+        <p className="small muted">The quarterly PBJ staffing XML file, or the ZIP you upload to CMS. ZIP files are much smaller, so send the ZIP for a large facility.</p>
+        <div className="field">
+          <label htmlFor="pbj-file">PBJ file</label>
+          <input id="pbj-file" type="file" accept=".xml,.zip,.gz,application/xml,text/xml,application/zip,application/gzip" onChange={pick} />
+          <span className="hint">Processed in memory and not stored. Reports never repeat values from your file.</span>
+        </div>
+        <div className="btn-row" style={{ margin: '0 0 16px' }}>
+          {PBJ_SAMPLES.map((s) => (
+            <button key={s[0]} type="button" className="btn secondary small" onClick={() => loadSample(s)}>{s[1]}</button>
+          ))}
+        </div>
+        <div className="field">
+          <label htmlFor="pbj-asof">Check as of (optional)</label>
+          <input id="pbj-asof" type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} style={{ maxWidth: 220 }} />
+          <span className="hint">Leave empty for today. Set it to the day you plan to upload: CMS rejects dates after that day, and the count of days without RN hours stops there.</span>
+        </div>
+        {file && <p className="small">Selected: <code>{file.name}</code> ({kb(file.blob.size)})</p>}
+        <button className="btn" type="submit" disabled={!file || state.phase === 'running' || tooBig}>
+          {runLabel(mode.paid, api, 'Check file', 'Checking', state.phase === 'running')}
+        </button>
+        <div className="status-line" aria-live="polite">
+          {state.phase === 'running' && 'Checking against the CMS PBJ data specifications v4.10.0.'}
+          {state.phase === 'done' && `Done. ${state.report.findingCount} ${state.report.findingCount === 1 ? 'finding' : 'findings'}.${state.paid ? ` Charged ${dollars(api.priceCents)}.` : ''}`}
+        </div>
+        {tooBig && <div className="error-box">This file is over the {kb(mode.maxBytes)} limit for this mode.{mode.paid ? ' Send the ZIP instead of the XML file.' : ' Send the ZIP instead of the XML file, or sign in with credits for up to 4.4 MB.'}</div>}
+        {state.phase === 'error' && <div className="error-box" role="alert">{state.error}</div>}
+      </form>
+      <div><Result state={state} kind="pbj" sample={sample} sampleLabel="Synthetic PBJ file with eight kinds of problem" /></div>
+    </div>
+  );
+}

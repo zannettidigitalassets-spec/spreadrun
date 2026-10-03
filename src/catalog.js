@@ -64,6 +64,19 @@ export const APIS = [
       'Checks a UAD 3.6 URAR appraisal XML file, or the whole UAD 3.6 ZIP package, against the GSE-published delivery specification and compliance rules. Every finding has an XPath, a rule ID and a message.',
     cta: 'Check a report',
   },
+  {
+    slug: 'pbj-staffing-qa',
+    name: 'PBJ Staffing Data Pre-Submission QA',
+    tier: 'built',
+    status: 'beta',
+    priceCents: HIGH_STAKES_RUN_CENTS,
+    unit: 'completed report',
+    maxBodyBytes: 4_400_000,
+    demoMaxBodyBytes: 1024 * 1024,
+    summary:
+      'Checks a nursing home\'s quarterly Payroll Based Journal staffing XML, or the ZIP you upload to CMS, against the CMS PBJ data specifications v4.10.0 before you submit, and flags staffing patterns CMS has documented as audit or rating risks.',
+    cta: 'Check a PBJ file',
+  },
 ];
 
 // Tier 2 listings appear here only after an affiliate agreement is approved and signed by the owner.

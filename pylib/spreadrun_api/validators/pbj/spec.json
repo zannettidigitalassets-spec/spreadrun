@@ -1,0 +1,332 @@
+{
+ "edits": {
+  "-1009": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "The date must contain a year equal to or greater than 1895.",
+   "type": "Consistency"
+  },
+  "-1010": {
+   "deleted": false,
+   "severity": "Warning",
+   "text": "If the value for date (in the Staffing Hours section) is not within the date range of the reportQuarter (specified in the Header section of the PBJ submission file), the Staffing Hours record will not be processed.",
+   "type": "Consistency"
+  },
+  "-1018": {
+   "deleted": true,
+   "severity": "Warning",
+   "text": "***THIS EDIT WAS SUSPENDED IN V4.00.1 AND DELETED IN V4.10.0***",
+   "type": "Format"
+  },
+  "-1019": {
+   "deleted": true,
+   "severity": "Fatal",
+   "text": "***THIS EDIT WAS SUSPENDED IN V4.00.1 AND DELETED IN V4.10.0***",
+   "type": "Format"
+  },
+  "-1020": {
+   "deleted": false,
+   "severity": "Warning",
+   "text": "If fileSpecVersion =[2.00.0, 2.00.3,4.00.0] and the current date is earlier than April 1, 2026, then the following message shall be displayed: The XML file was submitted using a fileSpecVersion value that will be retired on April 1, 2026. Refer to the CMS PBJ XML File Structure Standards described in the PBJ Data Submission Specifications Overview document. Users are encouraged to begin using fileSpecVersion 4.10.0. XML files submitted with versions other than 4.10.0 on or after April 1, 2026 will be rejected.",
+   "type": "Format"
+  },
+  "-1021": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "If fileSpecVersion =[2.00.0, 2.00.3,4.00.0] and the current date is on or after April 1, 2026, then the following message shall be displayed: The XML file was submitted using a fileSpecVersion value that was retired on April 1, 2026. Refer to the CMS PBJ XML File Structure Standards described in the PBJ Data Submission Specifications Overview document. XML files must be submitted with fileSpecVersion =[4.10.0].",
+   "type": "Format"
+  },
+  "-3676": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "Values of Code and Checklist Items: Only the coded values listed in the \"Item Values\" table of the Detailed Data Specifications Report may be submitted for this item.",
+   "type": "Format"
+  },
+  "-3677": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "Values of Date Items: This item must contain a valid date in YYYY-MM-DD format. Note that if a date in YYYY-MM-DD format is submitted, it must be 10 characters in length and each of the 8 non-dash characters must contain the digits 0 (zero) through 9. YYYY, MM, and DD must be zero filled, where necessary. For example, October 1, 2015 must be submitted as \"2015-10-01\".",
+   "type": "Format"
+  },
+  "-3679": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "Values of Numeric Items: Only the values listed in the \"Item Values\" table of the Detailed Data Specifications Report may be submitted for this item. The submitted value must be greater than or equal to the minimum value listed in the table and less than or equal to the maximum value listed in the table, or it must match one of the remaining special values (if any) that are listed in the table. The length of the submitted value must not exceed the allowed maximum length for the item.",
+   "type": "Format"
+  },
+  "-3690": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "Formatting of Alphanumeric Text Items That Can Contain Dashes, Spaces, and Special Characters: If this item is not equal to one of the special values (if any) that are listed in the Item Values table of the Detailed Data Specifications Report, then it must contain a text string. This text string may contain only the following characters: a) The numeric characters: [0] through [9]. b) The letters [A] through [Z] and [a] through [z]. c) The character [-]. d) The following special characters: [@] (at sign) ['] (single quote) [/] (forward slash) [+] (plus sign) [,] (comma) [.] (period) [_] (underscore) e) Embedded spaces (spaces surrounded by any of the characters listed above). For example, [LEGAL TEXT] would be allowed.",
+   "type": "Format"
+  },
+  "-3692": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "Formatting of email address. Any valid email address will be accepted. The text string may contain any printable characters except the following: ' single quote \" double quote , comma ; semi-colon : colon \\ back slash ( ) right and left parentheses [ ] right and left brackets { } right and left braces > greater than space (embedded space)",
+   "type": "Format"
+  },
+  "-3693": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "facilityId is the facility/provider ID. CCN is the CMS Certification Number. a) The facilityId must be assigned to the provider. The state agency assigns the facilityId to nursing homes. The submitted value must match the facilityId in the PBJ System for the facility or provider. Your file cannot be saved until there is a valid CCN entered. Once the CCN is entered, please resubmit this submission. Contact your facility Administrator to work with your state to enter the CCN once it is assigned by CMS. b) A user submitting a file for a provider must be authorized to submit for the provider identified by the FAC_ID item in the file. A valid CCN is also required for authorization.",
+   "type": "Format"
+  },
+  "-3702": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "This is a required text item. A valid non-blank value must be submitted.",
+   "type": "Format"
+  },
+  "-3793": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "The length of the text submitted for a free-form text item must not exceed the maximum length specified for that item.",
+   "type": "Format"
+  },
+  "-3802": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "Formatting of Alphanumeric Text Items That Can Contain Dashes, Spaces, Ampersands, and Other Special Characters: If this item is not equal to one of the special values (if any) that are listed in the Item Values table of the Detailed Data Specifications Report, then it must contain a text string. This text string may contain only the following characters: a) The numeric characters: [0] through [9]. b) The letters [A] through [Z] and [a] through [z]. c) The character [-]. d) The following special characters: [&] (ampersand) [@] (at sign) ['] (single quote) [/] (forward slash) [+] (plus sign) [,] (comma) [.] (period) [_] (underscore) e) Embedded spaces (spaces surrounded by any of the characters listed above). For example, [LEGAL TEXT] would be allowed.",
+   "type": "Format"
+  },
+  "-4002": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "The date must be earlier than or equal to the current date .",
+   "type": "Consistency"
+  },
+  "-4003": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "This item is a part of the Header section, and it is required on all PBJ submission files.",
+   "type": "Consistency"
+  },
+  "-4004": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "This item is a part of the Employee section, and it is required whenever the Employee section is included in a PBJ submission file.",
+   "type": "Consistency"
+  },
+  "-4005": {
+   "deleted": false,
+   "severity": "Warning",
+   "text": "This item is an optional part of the Employee section. Edits only apply when a value is submitted. Please read the Overview document for additional information on the processing of hireDate and terminationDate .",
+   "type": "Information"
+  },
+  "-4006": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "This item is a part of the Staffing Hours section, and it is required whenever the Staffing Hours section is included in a PBJ submission file.",
+   "type": "Consistency"
+  },
+  "-4008": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "This item is applicable to the Staffing Hours section, and it is required. The item controls how submitted Staffing Hours data will be processed by the PBJ system. See the Overview document for further information.",
+   "type": "Consistency"
+  },
+  "-4010": {
+   "deleted": false,
+   "severity": "Warning",
+   "text": "This item is an optional part of the Header section. Edits only apply when a value is submitted.",
+   "type": "Information"
+  },
+  "-4015": {
+   "deleted": true,
+   "severity": "Fatal",
+   "text": "***THIS EDIT WAS DELETED IN V4.10.0***",
+   "type": "Consistency"
+  },
+  "-4016": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "A value submitted for employeeId in the Staffing Hours section must match an existing value for employeeId in the PBJ system. If a match cannot be found, the PBJ submission file will be rejected.",
+   "type": "Consistency"
+  },
+  "-4017": {
+   "deleted": false,
+   "severity": "Warning",
+   "text": "Note that this item is part of the section XML tags, i.e., it does not have its own XML tag.",
+   "type": "Information"
+  },
+  "-4018": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "Formatting of Employee ID: If this item is not equal to one of the special values (if any) that are listed in the Item Values table of the Detailed Data Specifications Report, then it must contain a text string. This text string may contain only the following characters: a) The numeric characters: [0] through [9] b) The letters [A] through [Z] and [a] through [z]. c) The character [-]. d) The following special characters: [\\] (backslash) [,] (comma) [.] (period) [_] (underscore) e) Embedded spaces (spaces surrounded by any of the characters listed above). For example, [PBJ EMP1] would be allowed.",
+   "type": "Format"
+  },
+  "-4019": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "The date must contain a year earlier than or equal to 2050.",
+   "type": "Format"
+  },
+  "-4020": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "This item is a part of the Employee Link section, and it is required whenever the Employee Link section is included in a PBJ submission file.",
+   "type": "Consistency"
+  },
+  "-4021": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "A value submitted for this item in the Employee Link section must match an existing value for employeeId in the PBJ system. If a match cannot be found, the PBJ submission file will be rejected.",
+   "type": "Consistency"
+  },
+  "-4022": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "The report quarter must be equal to the current quarter for Employee Link data in a PBJ Administration Submission file.",
+   "type": "Consistency"
+  },
+  "-4023": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "This item is an optional part of the Employee Link section. Edits only apply when a value is submitted.",
+   "type": "Consistency"
+  },
+  "-4024": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "The same value for oldEmployeeId and/or newEmployeeId cannot be listed more than once in the Employee Link section.",
+   "type": "Consistency"
+  },
+  "-4025": {
+   "deleted": false,
+   "severity": "Fatal",
+   "text": "The total number of hours by an employee for a single date must be less than or equal to 22.50. This total includes the sum of all hours across all jobTitleCodes for the specified date .",
+   "type": "Consistency"
+  }
+ },
+ "jobTitleCodes": {
+  "1": "Administrator",
+  "2": "Medical Director",
+  "3": "Other Physician",
+  "4": "Physician Assistant",
+  "5": "Registered Nurse Director of Nursing",
+  "6": "Registered Nurse with Administrative Duties",
+  "7": "Registered Nurse",
+  "8": "Licensed Practical/Vocational Nurse with Administrative Duties",
+  "9": "Licensed Practical/Vocational Nurse",
+  "10": "Certified Nurse Aide",
+  "11": "Nurse Aide in Training",
+  "12": "Medication Aide/Technician",
+  "13": "Physician Services",
+  "14": "Clinical Nurse Specialist",
+  "15": "Pharmacist",
+  "16": "Dietitian",
+  "17": "Feeding Assistant",
+  "18": "Occupational Therapist",
+  "19": "Occupational Therapy Assistant",
+  "20": "Occupational Therapy Aide",
+  "21": "Physical Therapist",
+  "22": "Physical Therapy Assistant",
+  "23": "Physical Therapy Aide",
+  "24": "Respiratory Therapist",
+  "25": "Respiratory Therapy Technician",
+  "26": "Speech/Language Pathologist",
+  "27": "Therapeutic Recreation Specialist",
+  "28": "Qualified Activities Professional",
+  "29": "Other Activities Staff",
+  "30": "Qualified Social Worker",
+  "31": "Other Social Worker",
+  "32": "Dentist (optional)",
+  "33": "Podiatrist (optional)",
+  "34": "Mental Health Service Worker",
+  "35": "Vocational Service Worker (optional)",
+  "36": "Clinical Laboratory Service Worker",
+  "37": "Diagnostic X-ray Service Worker",
+  "38": "Blood Service Worker (optional)",
+  "39": "Housekeeping Service Worker (optional)",
+  "40": "Other Service Worker (optional)"
+ },
+ "payTypeCodes": {
+  "1": "Exempt",
+  "2": "Non-exempt",
+  "3": "Contract"
+ },
+ "published": "2026-01-16",
+ "reportQuarters": {
+  "1": "1st quarter (10/01 - 12/31)",
+  "2": "2nd quarter (01/01 - 03/31)",
+  "3": "3rd quarter (04/01 - 06/30)",
+  "4": "4th quarter (07/01 - 09/30)"
+ },
+ "retiredFileSpecVersions": [
+  "2.00.0",
+  "2.00.3",
+  "4.00.0"
+ ],
+ "rnJobTitleCodes": [
+  5,
+  6,
+  7
+ ],
+ "sources": {
+  "itm_val.csv": {
+   "sha256": "63d4db20f5049b79c7eebf2823b020a77c041e44f256db703f82cc4b1f09b4bf"
+  },
+  "xsd": {
+   "file": "nhpbj_4_10_0.xsd",
+   "sha256": "a47ff641ccd4027ee026f492c2f7323f58b245072894f5218623733c2ca6ebb2"
+  }
+ },
+ "stateCodes": [
+  "AK",
+  "AL",
+  "AR",
+  "AZ",
+  "CA",
+  "CO",
+  "CT",
+  "DC",
+  "DE",
+  "FL",
+  "GA",
+  "HI",
+  "IA",
+  "ID",
+  "IL",
+  "IN",
+  "KS",
+  "KY",
+  "LA",
+  "MA",
+  "MD",
+  "ME",
+  "MI",
+  "MN",
+  "MO",
+  "MS",
+  "MT",
+  "NC",
+  "ND",
+  "NE",
+  "NH",
+  "NJ",
+  "NM",
+  "NV",
+  "NY",
+  "OH",
+  "OK",
+  "OR",
+  "PA",
+  "PR",
+  "RI",
+  "SC",
+  "SD",
+  "TN",
+  "TX",
+  "UT",
+  "VA",
+  "VI",
+  "VT",
+  "WA",
+  "WI",
+  "WV",
+  "WY"
+ ],
+ "title": "CMS PBJ Data Specifications",
+ "version": "4.10.0"
+}

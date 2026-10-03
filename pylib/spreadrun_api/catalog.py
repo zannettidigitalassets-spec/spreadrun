@@ -33,6 +33,14 @@ APIS = {
         'max_body_bytes': 4_400_000,
         'demo_max_body_bytes': 1024 * 1024,
     },
+    'pbj-staffing-qa': {
+        'name': 'PBJ Staffing Data Pre-Submission QA',
+        'price_cents': 100,
+        # Whole-file validation, no sampling. Large facilities' quarterly files can pass 4.4 MB as plain XML;
+        # gzip or ZIP uploads (what CMS takes) are accepted; each XML inside may expand to 50 MB.
+        'max_body_bytes': 4_400_000,
+        'demo_max_body_bytes': 1024 * 1024,
+    },
 }
 
 DEMO_RUNS_PER_DAY = 10

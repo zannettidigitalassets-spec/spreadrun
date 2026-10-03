@@ -50,6 +50,8 @@ def _run(api, body, query, *, demo):
         return runners.run_clinical(body)
     if api == 'uad-36-appraisal-validator':
         return runners.run_uad(body, as_of=(query.get('asOf') or [None])[0])
+    if api == 'pbj-staffing-qa':
+        return runners.run_pbj(body, as_of=(query.get('asOf') or [None])[0])
     cfg = APIS[api]
     mode = (query.get('mode') or ['sample'])[0]
     raw_max = (query.get('maxRecords') or [str(cfg['default_max_records'])])[0]

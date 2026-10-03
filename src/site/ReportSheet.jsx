@@ -1,6 +1,6 @@
 import { CLINICAL_CODES, MRF_CODES } from './codes.js';
 
-// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad'.
+// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj'.
 export default function ReportSheet({ kind, report, label, sub }) {
   if (!report) return null;
   return (
@@ -13,7 +13,7 @@ export default function ReportSheet({ kind, report, label, sub }) {
         <span className={`stamp ${report.status}`}>{report.status}</span>
       </div>
       <div className="sheet-body">
-        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : <Mrf r={report} />}
+        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : <Mrf r={report} />}
       </div>
     </div>
   );
@@ -119,6 +119,46 @@ function Uad({ r }) {
       ) : <p className="small" style={{ margin: 0 }}>No findings from the implemented checks. A PASS here is not UCDP acceptance.</p>}
       {r.findingsTruncated && <p className="small muted">The first 500 findings are listed. findingCounts has the full totals.</p>}
       {r.asOf && <p className="small muted" style={{ marginTop: 8 }}>Date rules evaluated as of {r.asOf}.</p>}
+    </>
+  );
+}
+
+// PBJ paths are short enough to show from the section down: drop the root element.
+const pbjPath = (p) => p.replace(/^\/nursingHomeData/, '') || '/';
+
+function Pbj({ r }) {
+  const q = r.reportingQuarter || (r.files && r.files[0].reportingQuarter);
+  const counts = r.counts;
+  const cov = r.coverage;
+  return (
+    <>
+      <div className="facts">
+        {q && q.quarter && <span>FY{q.federalFiscalYear} Q{q.quarter} <b>{q.start} to {q.end}</b></span>}
+        {r.files && <span><b>{r.files.length}</b> XML files</span>}
+        {counts && <span><b>{counts.employees}</b> employees</span>}
+        {counts && <span><b>{counts.totalHours.toLocaleString('en-US')}</b> hours</span>}
+        {cov && cov.daysWithoutRnHours !== null && <span><b>{cov.daysWithoutRnHours}</b> days without RN hours</span>}
+        <span><b>{r.findingCounts.error}</b> {r.findingCounts.error === 1 ? 'error' : 'errors'}</span>
+        <span><b>{r.findingCounts.warning}</b> {r.findingCounts.warning === 1 ? 'warning' : 'warnings'}</span>
+      </div>
+      {r.findings.length > 0 ? (
+        <div className="table-scroll">
+          <table className="findings">
+            <thead><tr><th>Severity</th><th>Rule</th><th>Where and what</th></tr></thead>
+            <tbody>
+              {r.findings.map((f, n) => (
+                <tr key={n}>
+                  <td className={`sev-${f.severity === 'error' ? 'ERROR' : 'WARNING'}`}>{f.severity === 'error' ? 'Error' : 'Warning'}</td>
+                  <td className="code">{f.ruleId}</td>
+                  <td><code title={f.path} style={{ wordBreak: 'break-all' }}>{f.file ? `file ${f.file}: ` : ''}{pbjPath(f.path)}</code><div className="small">{f.message}</div></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : <p className="small" style={{ margin: 0 }}>No findings. A PASS here is not CMS acceptance and does not mean the file would survive an audit.</p>}
+      {r.findingsTruncated && <p className="small muted">The first 500 findings are listed. findingCounts has the full totals.</p>}
+      {r.asOf && <p className="small muted" style={{ marginTop: 8 }}>Checked as of {r.asOf}.</p>}
     </>
   );
 }

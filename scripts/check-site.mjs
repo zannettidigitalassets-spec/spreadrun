@@ -38,10 +38,12 @@ const NEED_LD = {
   '/apis/clinical-trial-table-validator': PRODUCT_LD,
   '/apis/hospital-mrf-validator': PRODUCT_LD,
   '/apis/uad-36-appraisal-validator': PRODUCT_LD,
+  '/apis/pbj-staffing-qa': PRODUCT_LD,
   '/docs': ['BreadcrumbList'],
   '/docs/clinical-trial-table-validator': ['BreadcrumbList'],
   '/docs/hospital-mrf-validator': ['BreadcrumbList'],
   '/docs/uad-36-appraisal-validator': ['BreadcrumbList'],
+  '/docs/pbj-staffing-qa': ['BreadcrumbList'],
   '/guides': ['BreadcrumbList'],
   '/guides/hospital-price-transparency-file-requirements-2026': GUIDE_LD,
   '/guides/uad-3-6-requirements-2026': GUIDE_LD,
@@ -118,8 +120,8 @@ const client = fs.readFileSync(path.join(root, 'src/entry-client.jsx'), 'utf8');
 for (const u of known) if (!client.includes(`'${u}': () => import(`)) fail(`${u}: no client loader in entry-client.jsx`);
 
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
-for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/docs',
-  '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/guides',
+for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/docs',
+  '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/guides',
   '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);
 }

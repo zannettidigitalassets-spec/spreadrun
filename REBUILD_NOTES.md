@@ -182,6 +182,41 @@ dispatcher function, so still 8 functions. Body: a UAD 3.6 URAR XML file or the 
   mobile performance 97 to 98, accessibility, SEO 100.
 - New guides: `/guides/uad-3-6-requirements-2026`, `/guides/clinical-trial-data-quality-checks`.
 
+## PBJ Staffing Data Pre-Submission QA (branch `spreadrun/pbj-staffing-qa`, 2026-10-03)
+
+SpreadRun's own validator. `POST /api/v1/pbj-staffing-qa` (and `/api/demo/...`), same dispatcher function, so still 8
+functions. $1.00 per completed report (`HIGH_STAKES_RUN_CENTS`); packs unchanged. Body: the quarterly PBJ staffing XML,
+gzip of it, or the CMS upload ZIP (up to 20 XML files, each up to 50 MB uncompressed, one combined report and one charge).
+
+- **Sources.** CMS PBJ Data Specifications v4.10.0 (January 16, 2026; the only version CMS accepts from April 1, 2026),
+  downloaded from the CMS Staffing Data Submission page 2026-10-03. `scripts/pbj/build_spec.py --spec-dir <unzipped
+  specs>` writes `pylib/spreadrun_api/validators/pbj/spec.json` (state, job title and pay type codes, edit IDs with CMS
+  severity and text, source SHA-256s) and copies `nhpbj_4_10_0.xsd`. CMS material is public domain, so both are
+  committed. Rerun when CMS publishes a new version. Policy Manual v2.8 and FAQ (August 2026), the Five-Star Technical
+  Users' Guide (July 2026), the 2018 audit-selection criteria and OIG A-09-24-02005 were read for the risk flags and copy.
+- **Rule families.** `XSD` and `CMS-<edit>` (CMS numbers and severities; Fatal = error), `RISK-*` (documented audit or
+  rating risks, always warnings, each with a `source` key), `SR-*` (file consistency, warnings). Rule table on
+  `/docs/pbj-staffing-qa`.
+- **Risk flags used, and not used.** Used: >400 hours a month per employee ID (CMS audit selection criterion, 2018),
+  4+ days without RN hours (Five-Star one-star staffing rule), SSN-shaped employee IDs (Policy Manual), empty replace
+  upload (Data Specs Overview). Not used because no CMS or OIG source was found: an "800 to 900 hours per quarter"
+  trigger and an OIG "39 to 55 percent" figure from the brief. OIG A-09-24-02005 says 45 of 100 sampled homes reported
+  unsupported RN hours; that is cited as context, not turned into a rule.
+- **Not checkable from the file:** payroll match, onsite work and meal-break deduction (no shift times), facility and
+  employee IDs on file with CMS (-3693, -4016; -4016 is approximated against the file's own employees section as a
+  warning), census and HPRD (MDS), Employee Link files (rejected as input errors), file naming. All listed in `notChecked`.
+- **Clock.** `asOf` (default today UTC) drives -4002 (no future dates) and the RN-day count, which stops at asOf so an
+  in-progress quarter is not penalized. Samples and examples use `asOf=2026-10-03`.
+- **Fixtures.** `scripts/pbj/make_fixtures.py` writes `pbj-pass.xml` / `pbj-fail.xml` (fictional facility SRDEMO01,
+  FY2026 Q4) to the test fixtures and `public/samples/`.
+- **Personal data:** PBJ files carry pseudonymous employee IDs, hire and termination dates and hours. The Terms and
+  Privacy paragraphs that would allow this are PROPOSED, NOT APPLIED; the product page links to the Terms on the
+  assumption they are approved before merge. Do not merge without them.
+- **No value echo:** `PbjNoValueEcho` in `test_pbj.py` marks every value and attribute (single XML, multi-file ZIP and
+  error paths) and checks the report, error messages, ledger and usage log contain no marker. Findings carry only
+  severity, ruleId, path, message, source (and file for multi-file ZIPs, a position, never a name).
+- **Load:** a synthetic 300-employee quarter (5.8 MB XML, 70 KB gzipped) validates in about 1.2 s using about 89 MB.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist
@@ -203,7 +238,8 @@ dispatcher function, so still 8 functions. Body: a UAD 3.6 URAR XML file or the 
 - `node --test api/_tests/api.test.mjs`: portal auth fix, checkout pricing, webhook grants and tamper checks, key hashing, admin auth.
 - `python3.12 -m unittest discover -s pylib/tests`: validator parity with DataForge's recorded outputs, upload adapter,
   paid flow (charge, no charge on input error, insufficient credits, races, billing outage), demo flow and limits, the real
-  HTTP handler class, and the UAD validator (`test_uad.py`: rule families, input errors, ZIP, $1.00 billing, rule table).
+  HTTP handler class, the UAD validator (`test_uad.py`: rule families, input errors, ZIP, $1.00 billing, rule table),
+  and the PBJ validator (`test_pbj.py`: every rule family, input errors, ZIP and gzip, no value echo, $1.00 billing).
 - `npm i --no-save @electric-sql/pglite@0.3 && node supabase/tests/storefront.test.mjs`: the migration in an in-memory
   Postgres, including idempotent charges and grants, the 20-calls-per-$5 rule, revoked keys, demo limits and every verdict state.
 - `python3.12 scripts/gen_examples.py` regenerates the docs examples by running the real handlers.

@@ -91,7 +91,7 @@ export default function Docs() {
         </ul>
 
         <h2 id="demo">Free demo endpoints</h2>
-        <p>Each API has a demo endpoint that needs no key and is never charged: <code>POST /api/demo/&lt;api&gt;</code>. It takes the same input with smaller limits (512 KB for clinical tables, 2 MB and 100 records for MRF files, 1 MB for UAD appraisal files) and allows 10 runs per day per API from one network. It is what the test forms on the product pages use.</p>
+        <p>Each API has a demo endpoint that needs no key and is never charged: <code>POST /api/demo/&lt;api&gt;</code>. It takes the same input with smaller limits (512 KB for clinical tables, 2 MB and 100 records for MRF files, 1 MB for UAD appraisal files and PBJ staffing files) and allows 10 runs per day per API from one network. It is what the test forms on the product pages use.</p>
 
         <h2 id="privacy">Your data</h2>
         <p>Submitted tables, files and appraisal reports are processed in memory for the length of the request and are not stored. We log the time, endpoint, outcome, report status, request size and duration for billing and usage, never the submitted contents.</p>

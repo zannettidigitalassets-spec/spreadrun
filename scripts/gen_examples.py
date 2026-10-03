@@ -89,3 +89,10 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     save('uad-paid-pass', *post(paid, (SAMPLES / 'uad-pass.xml').read_bytes(), {**auth, 'Content-Type': 'application/xml'}, as_of))
     save('uad-demo-fail', *post(demo, (SAMPLES / 'uad-fail.xml').read_bytes(), {'Content-Type': 'application/xml'}, as_of))
     save('uad-input-error', *post(paid, b'<?xml version="1.0"?><VALUATION_RESPONSE/>', {**auth, 'Content-Type': 'application/xml'}))
+
+    b = 'pbj-staffing-qa'
+    paid, demo = serve(b, 'paid'), serve(b, 'demo')
+    as_of = '?asOf=2026-10-03'  # the synthetic files cover July 1 to September 30, 2026; see scripts/pbj/make_fixtures.py
+    save('pbj-paid-pass', *post(paid, (SAMPLES / 'pbj-pass.xml').read_bytes(), {**auth, 'Content-Type': 'application/xml'}, as_of))
+    save('pbj-demo-fail', *post(demo, (SAMPLES / 'pbj-fail.xml').read_bytes(), {'Content-Type': 'application/xml'}, as_of))
+    save('pbj-input-error', *post(paid, b'<?xml version="1.0"?><nursingHomeData><header fileSpecVersion="4.10.0">', {**auth, 'Content-Type': 'application/xml'}))

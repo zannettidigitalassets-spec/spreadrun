@@ -94,6 +94,41 @@ def run_uad(body: bytes, *, as_of=None):
     return report
 
 
+_pbj = None
+
+
+def pbj_module():
+    """SpreadRun's own PBJ engine. Rules: validators/pbj/spec.json, built from the CMS PBJ data
+    specifications v4.10.0 by scripts/pbj/build_spec.py."""
+    global _pbj
+    if _pbj is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_pbj_engine', HERE / 'pbj' / 'engine.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_pbj_engine'] = module
+        spec.loader.exec_module(module)
+        _pbj = module
+    return _pbj
+
+
+def run_pbj(body: bytes, *, as_of=None):
+    """Validate one PBJ staffing submission file (XML, gzip or ZIP). as_of (YYYY-MM-DD) is the date CMS edit
+    -4002 (no future dates) and the RN-day count are evaluated against; default today (UTC)."""
+    import datetime as dt
+    v = pbj_module()
+    today = None
+    if as_of is not None:
+        try:
+            today = dt.date.fromisoformat(as_of)
+        except ValueError:
+            raise InputError('asOf must be a date in YYYY-MM-DD format.') from None
+    try:
+        report = v.validate(body, today=today)
+    except v.InputError as exc:
+        raise InputError(str(exc)) from None
+    report['asOf'] = (today or dt.datetime.now(dt.timezone.utc).date()).isoformat()
+    return report
+
+
 def run_clinical(body: bytes):
     """Body is the JSON object the validator expects: {"studiesCsv": "...", "outcomesCsv": "..."}."""
     v = clinical_module()

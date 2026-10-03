@@ -9,7 +9,7 @@ import clinicalExample from '../content/examples/clinical-paid-fail.json';
 // flat $0.25 pricing, uploads only (no URL fetching in V1), no em dashes.
 export const HOME_FAQ = [
   ['What is SpreadRun?',
-    'A small catalog of data-validation APIs for regulated industries. Each product checks one specific thing, currently hospital price transparency files, clinical trial results tables and UAD 3.6 appraisal reports, through a documented REST API with per-use pricing.'],
+    'A small catalog of data-validation APIs for regulated industries. Each product checks one specific thing, currently hospital price transparency files, clinical trial results tables, UAD 3.6 appraisal reports and nursing home PBJ staffing files, through a documented REST API with per-use pricing.'],
   ['How is this different from the free government tools?',
     'Government validators, like the one CMS publishes, are built for one-off manual checks, and they are good at that. SpreadRun\'s APIs are built for repeated, programmatic use: no installation, structured JSON reports, and endpoints your pipeline or agent can call directly.'],
   ['How does pricing work?',
@@ -23,13 +23,13 @@ export const HOME_FAQ = [
 ];
 
 export default function Home() {
-  const [clinical, mrf, uad] = [APIS[0], APIS[1], APIS[2]];
+  const [clinical, mrf, uad, pbj] = [APIS[0], APIS[1], APIS[2], APIS[3]];
   return (
     <Layout path="/">
       <div className="wrap hero">
         <div>
           <h1>Data validation APIs for regulated industries.</h1>
-          <p className="lede">Narrow tools that check one thing correctly: hospital price files against the CMS v3.0 template, clinical trial tables before analysis, UAD 3.6 appraisal XML against the GSE rules. Per-use pricing. No subscriptions, no sales calls.</p>
+          <p className="lede">Narrow tools that check one thing correctly: hospital price files against the CMS v3.0 template, clinical trial tables before analysis, UAD 3.6 appraisal XML against the GSE rules, nursing home PBJ staffing files before they go to CMS. Per-use pricing. No subscriptions, no sales calls.</p>
           <div className="btn-row">
             <a className="btn" href="/apis">Browse the APIs</a>
             <a className="btn secondary" href="/docs">Read the docs</a>
@@ -70,6 +70,13 @@ export default function Home() {
             <p>Checks UAD 3.6 URAR appraisal XML, or the whole ZIP package, against the GSE-published delivery specification and compliance rules. Every finding has an XPath, a rule ID and a message. A PASS is not UCDP acceptance.</p>
             <p className="price">{dollars(uad.priceCents)} per completed report</p>
             <a className="btn small" href={`/apis/${uad.slug}#demo`}>Check a report</a>
+          </div>
+          <div className="card">
+            <Badges api={pbj} />
+            <h3><a href={`/apis/${pbj.slug}`}>{pbj.name}</a></h3>
+            <p>Checks a nursing home's quarterly Payroll Based Journal staffing XML, or the upload ZIP, against the CMS v4.10.0 specifications before it goes to CMS, and flags staffing patterns CMS has named as audit or rating risks. A PASS is not CMS acceptance.</p>
+            <p className="price">{dollars(pbj.priceCents)} per completed report</p>
+            <a className="btn small" href={`/apis/${pbj.slug}#demo`}>Check a PBJ file</a>
           </div>
           <div className="card quiet">
             <h3>Next validator</h3>

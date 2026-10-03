@@ -1,0 +1,145 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "pbj-staffing-qa",
+    "mode": "demo",
+    "charged": false,
+    "report": {
+      "schemaVersion": 1,
+      "status": "FAIL",
+      "specVersion": "4.10.0",
+      "fileSpecVersion": "4.00.0",
+      "reportingQuarter": {
+        "federalFiscalYear": 2026,
+        "quarter": 4,
+        "start": "2026-07-01",
+        "end": "2026-09-30"
+      },
+      "processType": "merge",
+      "counts": {
+        "employees": 14,
+        "staffHoursRecords": 13,
+        "workDays": 741,
+        "hourEntries": 742,
+        "totalHours": 7184.0
+      },
+      "coverage": {
+        "daysWithHours": 92,
+        "daysWithRnHours": 79,
+        "daysWithoutRnHours": 13
+      },
+      "findingCount": 10,
+      "findingCounts": {
+        "error": 6,
+        "warning": 4
+      },
+      "ruleCounts": {
+        "CMS-1010": 1,
+        "CMS-1021": 1,
+        "CMS-3676": 2,
+        "CMS-3677": 2,
+        "CMS-4025": 1,
+        "RISK-HOURS-PER-MONTH": 1,
+        "RISK-ID-PII": 1,
+        "RISK-NO-RN-DAYS": 1
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "ruleId": "CMS-1021",
+          "path": "/nursingHomeData/header/@fileSpecVersion",
+          "message": "This fileSpecVersion was retired on April 1, 2026. Files must use 4.10.0.",
+          "source": "spec"
+        },
+        {
+          "severity": "error",
+          "ruleId": "CMS-3676",
+          "path": "/nursingHomeData/staffingHours/staffHours[8]/workDays/workDay[67]/hourEntries/hourEntry/jobTitleCode",
+          "message": "jobTitleCode must be one of the CMS job title codes 1 to 40.",
+          "source": "spec"
+        },
+        {
+          "severity": "error",
+          "ruleId": "CMS-3676",
+          "path": "/nursingHomeData/staffingHours/staffHours[9]/workDays/workDay[66]/hourEntries/hourEntry/payTypeCode",
+          "message": "payTypeCode must be 1 (exempt), 2 (non-exempt) or 3 (contract).",
+          "source": "spec"
+        },
+        {
+          "severity": "error",
+          "ruleId": "CMS-3677",
+          "path": "/nursingHomeData/employees/employee[14]/hireDate",
+          "message": "hireDate is empty. Remove the tag when there is no date.",
+          "source": "spec"
+        },
+        {
+          "severity": "error",
+          "ruleId": "CMS-3677",
+          "path": "/nursingHomeData/staffingHours/staffHours[3]/workDays/workDay[53]/date",
+          "message": "date must be a valid date written as YYYY-MM-DD.",
+          "source": "spec"
+        },
+        {
+          "severity": "error",
+          "ruleId": "CMS-4025",
+          "path": "/nursingHomeData/staffingHours/staffHours[4]/workDays/workDay[2]",
+          "message": "This employee has more than 22.5 hours in total on this date (all job titles together). CMS allows at most 22.5 and rejects the file above it.",
+          "source": "spec"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "CMS-1010",
+          "path": "/nursingHomeData/staffingHours/staffHours[7]/workDays/workDay[67]/date",
+          "message": "date is outside the reporting quarter in the header. CMS does not process staffing hours records outside the quarter.",
+          "source": "spec"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "RISK-HOURS-PER-MONTH",
+          "path": "/nursingHomeData/staffingHours/staffHours[12]",
+          "message": "This employee ID has more than 400 hours in one calendar month. CMS has named individual employees reporting over 400 hours a month as an audit selection criterion. The PBJ FAQ separately lists grouping several contract staff under one ID as a reason audits fail. Check that this ID is one person.",
+          "source": "audit2018"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "RISK-ID-PII",
+          "path": "/nursingHomeData/employees/employee[13]/employeeId",
+          "message": "This employeeId has the shape of a Social Security Number. CMS requires IDs that contain no personal information such as an SSN.",
+          "source": "manual"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "RISK-NO-RN-DAYS",
+          "path": "/nursingHomeData/staffingHours",
+          "message": "13 days in the reporting quarter have no RN hours (job title codes 5, 6 and 7). CMS gives a one-star staffing rating for four or more such days when residents were in the facility. This file is a merge, so hours already in the PBJ system may cover some of those days.",
+          "source": "fivestar"
+        }
+      ],
+      "findingsTruncated": false,
+      "notChecked": [
+        "Whether facilityId and employee IDs match what CMS has on file (CMS edits -3693 and -4016 need the PBJ system).",
+        "Whether hours match payroll, invoices or contracts, which is what PBJ audits verify.",
+        "Whether hours were worked onsite, and whether meal breaks were actually deducted (the file has no shift times).",
+        "Census and hours per resident day (census comes from MDS, not PBJ).",
+        "PBJ Administration Submission files (Employee Link).",
+        "ZIP and XML file naming rules, and the 5 MB limit CMS applies to the upload ZIP."
+      ],
+      "sources": {
+        "spec": "CMS PBJ Data Specifications v4.10.0 (January 16, 2026), edit IDs and XSD",
+        "manual": "CMS PBJ Policy Manual v2.8 (August 2026)",
+        "faq": "CMS PBJ Policy Manual FAQ (August 2026)",
+        "fivestar": "CMS Nursing Home Five-Star Quality Rating System Technical Users' Guide (July 2026)",
+        "audit2018": "CMS PBJ audit selection criteria as stated by CMS and reported by Skilled Nursing News (November 2018)"
+      },
+      "scope": "Structural checks against the CMS PBJ data specifications and documented risk patterns. A PASS does not mean CMS will accept the file or that it will survive a CMS audit, and this is not legal or compliance advice.",
+      "input": {
+        "container": "xml",
+        "xmlFiles": 1,
+        "xmlBytes": 219198
+      },
+      "inputSha256": "37a872996cc48adc0da3101a361d4b9561b6cb11f6cad3a0c9ee84e6d3150dcb",
+      "asOf": "2026-10-03"
+    }
+  }
+}
