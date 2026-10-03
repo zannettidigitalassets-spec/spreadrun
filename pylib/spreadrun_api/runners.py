@@ -110,9 +110,46 @@ def pbj_module():
     return _pbj
 
 
-def run_pbj(body: bytes, *, as_of=None):
+# Optional inputs for the PBJ staffing estimate: name -> (minimum, maximum, whole number only, message).
+# Messages never repeat the value sent.
+PBJ_STAFFING_INPUTS = {
+    'census': (1, 1_000_000, False, 'census must be the total resident days in the quarter, a number above 0.'),
+    'weekendCensus': (1, 1_000_000, False, 'weekendCensus must be the resident days on Saturdays and Sundays, a number '
+                      'above 0 and no more than census.'),
+    'caseMixRatio': (0.2, 5, False, 'caseMixRatio must be a number from 0.2 to 5 (1.0 is the national average).'),
+    'rnTurnover': (0, 100, False, 'rnTurnover must be a percentage from 0 to 100.'),
+    'nurseTurnover': (0, 100, False, 'nurseTurnover must be a percentage from 0 to 100.'),
+    'adminDepartures': (0, 50, True, 'adminDepartures must be a whole number from 0 to 50.'),
+}
+
+
+def pbj_staffing_inputs(raw):
+    """raw: name -> string from the query. Returns None when no census is sent (no estimate)."""
+    import math
+    raw = {k: v for k, v in (raw or {}).items() if v not in (None, '')}
+    if not raw:
+        return None
+    if 'census' not in raw:
+        raise InputError('census (total resident days in the quarter) is required for the staffing estimate.')
+    out = {}
+    for name, value in raw.items():
+        lo, hi, whole, msg = PBJ_STAFFING_INPUTS[name]
+        try:
+            num = float(value)
+        except (TypeError, ValueError):
+            raise InputError(msg) from None
+        if not math.isfinite(num) or not lo <= num <= hi or (whole and num != int(num)):
+            raise InputError(msg)
+        out[name] = int(num) if whole else num
+    if out.get('weekendCensus') is not None and out['weekendCensus'] > out['census']:
+        raise InputError(PBJ_STAFFING_INPUTS['weekendCensus'][3])
+    return out
+
+
+def run_pbj(body: bytes, *, as_of=None, staffing=None):
     """Validate one PBJ staffing submission file (XML, gzip or ZIP). as_of (YYYY-MM-DD) is the date CMS edit
-    -4002 (no future dates) and the RN-day count are evaluated against; default today (UTC)."""
+    -4002 (no future dates), the RN-day count and the deadline countdown are evaluated against; default today (UTC).
+    staffing: optional census and turnover inputs (see PBJ_STAFFING_INPUTS) for the Five-Star staffing estimate."""
     import datetime as dt
     v = pbj_module()
     today = None
@@ -121,8 +158,9 @@ def run_pbj(body: bytes, *, as_of=None):
             today = dt.date.fromisoformat(as_of)
         except ValueError:
             raise InputError('asOf must be a date in YYYY-MM-DD format.') from None
+    est = pbj_staffing_inputs(staffing)
     try:
-        report = v.validate(body, today=today)
+        report = v.validate(body, today=today, staffing=est)
     except v.InputError as exc:
         raise InputError(str(exc)) from None
     report['asOf'] = (today or dt.datetime.now(dt.timezone.utc).date()).isoformat()

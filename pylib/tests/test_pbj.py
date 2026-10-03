@@ -294,6 +294,105 @@ class PbjNoValueEcho(unittest.TestCase):
         self.assertNotIn(self.MARK, json.dumps([out, err, fake.ledger, fake.calls, fake.demo], default=str))
 
 
+class PbjStaffingEstimate(unittest.TestCase):
+    """The Five-Star staffing estimate from a census the caller sends (Technical Users' Guide, September 2026)."""
+
+    def est(self, name='pbj-pass.xml', **kw):
+        kw = {k: str(v) for k, v in kw.items()}
+        return runners.run_pbj((FIX / name).read_bytes(), as_of=AS_OF, staffing=kw)
+
+    def test_no_census_no_estimate(self):
+        self.assertNotIn('staffingEstimate', run(root()))
+        with self.assertRaises(runners.InputError):
+            self.est(rnTurnover=30)            # turnover without a census
+
+    def test_hprd_and_points(self):
+        # Nurse hours: job title codes 5 to 12 (RN, LPN, nurse aide), dates inside the quarter.
+        nurse = rn = 0.0
+        for wd in root().iter('workDay'):
+            if '2026-07-01' <= wd.findtext('date') <= '2026-09-30':
+                for he in wd.iter('hourEntry'):
+                    job = int(he.findtext('jobTitleCode'))
+                    nurse += float(he.findtext('hours')) if 5 <= job <= 12 else 0
+                    rn += float(he.findtext('hours')) if job in (5, 6, 7) else 0
+        e = self.est(census=1840, weekendCensus=520)['staffingEstimate']
+        self.assertTrue(e['available'] and not e['excluded'])
+        self.assertAlmostEqual(e['reportedHprd']['total'], nurse / 1840, places=3)
+        self.assertAlmostEqual(e['reportedHprd']['rn'], rn / 1840, places=3)
+        self.assertEqual(e['points']['total'], engine.level_points('total', nurse / 1840))
+        self.assertIsNone(e['stars'])                     # turnover unknown: a range
+        self.assertLessEqual(e['starRange'][0], e['starRange'][1])
+        self.assertIn('Estimate only', e['label'])
+
+    def test_cut_points_and_thresholds(self):
+        self.assertEqual([engine.level_points('rn', v) for v in (1.202, 1.2015, 0.274, 0.0)], [100, 100, 10, 10])
+        self.assertEqual(engine.level_points('rn', 1.2014), 90)
+        self.assertEqual([engine.level_points('total', v) for v in (5.07, 3.493, 3.4924)], [100, 50, 40])
+        self.assertEqual([engine.level_points('weekendTotal', v) for v in (4.464, 2.354, 2.3)], [50, 10, 5])
+        self.assertEqual([engine.turnover_points('rnTurnover', v) for v in (20, 20.001, 100)], [50, 45, 5])
+        self.assertEqual([engine.stars(s) for s in (154, 155, 204, 205, 254, 255, 319, 320, 380)], [1, 2, 2, 3, 3, 4, 4, 5, 5])
+
+    def test_full_inputs_give_one_star_value(self):
+        e = self.est(census=1840, weekendCensus=520, caseMixRatio=1.0, rnTurnover=30, nurseTurnover=40,
+                     adminDepartures=0)['staffingEstimate']
+        self.assertEqual(e['scoreRange'][0], e['scoreRange'][1])
+        self.assertEqual(e['stars'], engine.stars(e['scoreRange'][0]))
+        higher_acuity = self.est(census=1840, weekendCensus=520, caseMixRatio=1.3, rnTurnover=30, nurseTurnover=40,
+                                 adminDepartures=0)['staffingEstimate']
+        self.assertLess(higher_acuity['adjustedHprd']['total'], e['adjustedHprd']['total'])
+
+    def test_one_star_exception_and_exclusion(self):
+        e = self.est('pbj-fail.xml', census=1840)['staffingEstimate']
+        self.assertEqual((e['stars'], e['oneStarException']), (1, True))
+        e = self.est(census=100)['staffingEstimate']       # about 64 HPRD: CMS exclusion
+        self.assertTrue(e['excluded'])
+        self.assertIsNone(e['stars'])
+
+    def test_bad_inputs(self):
+        for kw in ({'census': 'abc'}, {'census': 0}, {'census': 'nan'}, {'census': 1840, 'weekendCensus': 5000},
+                   {'census': 1840, 'caseMixRatio': 9}, {'census': 1840, 'adminDepartures': 1.5},
+                   {'census': 1840, 'rnTurnover': -1}):
+            with self.assertRaises(runners.InputError):
+                self.est(**kw)
+
+    def test_deadline(self):
+        d = run(root())['submissionDeadline']
+        self.assertEqual((d['date'], d['daysRemaining'], d['passed']), ('2026-11-14', 42, False))
+        d = runners.run_pbj((FIX / 'pbj-pass.xml').read_bytes(), as_of='2026-11-15')['submissionDeadline']
+        self.assertEqual((d['daysRemaining'], d['passed']), (0, True))
+
+    def test_staffing_inputs_never_echoed(self):
+        # Distinctive numbers: none may appear in the report (outside the file hash), errors or stored rows.
+        vals = {'census': '1837.4321', 'weekendCensus': '519.8765', 'caseMixRatio': '1.0987',
+                'rnTurnover': '31.2468', 'nurseTurnover': '42.1357', 'adminDepartures': '1'}
+        r = runners.run_pbj((FIX / 'pbj-pass.xml').read_bytes(), as_of=AS_OF, staffing=vals)
+        r.pop('inputSha256')
+        dump = json.dumps(r)
+        for k, v in vals.items():
+            if k != 'adminDepartures':
+                self.assertNotIn(v, dump, k)
+                self.assertNotIn(v.rstrip('0'), dump, k)
+        marker = 'ZQXMARK'
+        for k in vals:
+            with self.assertRaises(runners.InputError) as cm:
+                runners.run_pbj((FIX / 'pbj-pass.xml').read_bytes(), as_of=AS_OF, staffing=dict(vals, **{k: marker}))
+            self.assertNotIn(marker, str(cm.exception))
+        fake = FakeStore()
+        with mock.patch.object(store, 'rpc', fake.rpc), mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'test'}):
+            key, _ = fake.add_user(5000)
+            q = '/?asOf=2026-10-03&' + '&'.join(f'{k}={v}' for k, v in vals.items())
+            status, out = call(PBJ, 'paid', (FIX / 'pbj-pass.xml').read_bytes(), {'Authorization': f'Bearer {key}'}, q)
+            self.assertEqual((status, out['charged']), (200, True))
+            status, err = call(PBJ, 'paid', (FIX / 'pbj-pass.xml').read_bytes(), {'Authorization': f'Bearer {key}'},
+                               f'/?census={marker}')
+            self.assertEqual((status, err['error']['charged']), (400, False))
+        stored = json.dumps([fake.ledger, fake.calls, fake.demo, err], default=str)
+        self.assertNotIn(marker, stored)
+        for v in vals.values():
+            if len(v) > 2:
+                self.assertNotIn(v, stored)
+
+
 class PbjBilling(unittest.TestCase):
     def setUp(self):
         self.fake = FakeStore()

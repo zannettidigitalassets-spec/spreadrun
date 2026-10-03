@@ -96,7 +96,9 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     rich, _ = fake.add_user(10000)   # $100 of credit: covers $25 professional-tier runs
     rich_auth = {'Authorization': f'Bearer {rich}'}
     save('pbj-paid-pass', *post(paid, (SAMPLES / 'pbj-pass.xml').read_bytes(), {**rich_auth, 'Content-Type': 'application/xml'}, as_of))
-    save('pbj-demo-fail', *post(demo, (SAMPLES / 'pbj-fail.xml').read_bytes(), {'Content-Type': 'application/xml'}, as_of))
+    # The demo example also sends a census (invented: about 20 residents a day) to show the staffing estimate.
+    save('pbj-demo-fail', *post(demo, (SAMPLES / 'pbj-fail.xml').read_bytes(), {'Content-Type': 'application/xml'},
+                                as_of + '&census=1840&weekendCensus=520'))
     save('pbj-input-error', *post(paid, b'<?xml version="1.0"?><nursingHomeData><header fileSpecVersion="4.10.0">', {**rich_auth, 'Content-Type': 'application/xml'}))
 
     w = 'wh347-payroll-precheck'

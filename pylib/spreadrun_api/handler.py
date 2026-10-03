@@ -51,7 +51,8 @@ def _run(api, body, query, *, demo):
     if api == 'uad-36-appraisal-validator':
         return runners.run_uad(body, as_of=(query.get('asOf') or [None])[0])
     if api == 'pbj-staffing-qa':
-        return runners.run_pbj(body, as_of=(query.get('asOf') or [None])[0])
+        staffing = {k: (query.get(k) or [None])[0] for k in runners.PBJ_STAFFING_INPUTS}
+        return runners.run_pbj(body, as_of=(query.get('asOf') or [None])[0], staffing=staffing)
     if api == 'wh347-payroll-precheck':
         return runners.run_wh347(body)
     cfg = APIS[api]

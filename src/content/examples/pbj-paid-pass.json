@@ -43,7 +43,7 @@
         "Whether facilityId and employee IDs match what CMS has on file (CMS edits -3693 and -4016 need the PBJ system).",
         "Whether hours match payroll, invoices or contracts, which is what PBJ audits verify.",
         "Whether hours were worked onsite, and whether meal breaks were actually deducted (the file has no shift times).",
-        "Census and hours per resident day (census comes from MDS, not PBJ).",
+        "The CMS staffing rating itself. With a census you send, the report estimates hours per resident day and a star range; CMS uses its own MDS census, case mix and six quarters of turnover data.",
         "PBJ Administration Submission files (Employee Link).",
         "ZIP and XML file naming rules, and the 5 MB limit CMS applies to the upload ZIP."
       ],
@@ -51,10 +51,18 @@
         "spec": "CMS PBJ Data Specifications v4.10.0 (January 16, 2026), edit IDs and XSD",
         "manual": "CMS PBJ Policy Manual v2.8 (August 2026)",
         "faq": "CMS PBJ Policy Manual FAQ (August 2026)",
-        "fivestar": "CMS Nursing Home Five-Star Quality Rating System Technical Users' Guide (July 2026)",
+        "fivestar": "CMS Nursing Home Five-Star Quality Rating System Technical Users' Guide (September 2026)",
         "audit2018": "CMS PBJ audit selection criteria as stated by CMS and reported by Skilled Nursing News (November 2018)"
       },
       "scope": "Structural checks against the CMS PBJ data specifications and documented risk patterns. A PASS does not mean CMS will accept the file or that it will survive a CMS audit, and this is not legal or compliance advice.",
+      "submissionDeadline": {
+        "date": "2026-11-14",
+        "time": "11:59 PM Eastern Time",
+        "asOf": "2026-10-03",
+        "daysRemaining": 42,
+        "passed": false,
+        "note": "CMS accepts no submissions after the deadline."
+      },
       "input": {
         "container": "xml",
         "xmlFiles": 1,

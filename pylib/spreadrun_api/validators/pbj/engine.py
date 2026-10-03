@@ -29,6 +29,8 @@ STATES = set(SPEC['stateCodes'])
 JOB_TITLES = {int(k): v for k, v in SPEC['jobTitleCodes'].items()}
 PAY_TYPES = {int(k): v for k, v in SPEC['payTypeCodes'].items()}
 RN_CODES = set(SPEC['rnJobTitleCodes'])
+NURSE_CODES = set(range(5, 13))     # Five-Star total nurse staffing: RN 5-7, LPN 8-9, nurse aide 10-12
+AIDE_CODES = {10, 11, 12}
 RETIRED_VERSIONS = set(SPEC['retiredFileSpecVersions'])
 RETIRE_DATE = dt.date(2026, 4, 1)
 MAX_FINDINGS = 500
@@ -40,7 +42,7 @@ SOURCES = {
     'spec': f'CMS PBJ Data Specifications v{VERSION} (January 16, 2026), edit IDs and XSD',
     'manual': 'CMS PBJ Policy Manual v2.8 (August 2026)',
     'faq': 'CMS PBJ Policy Manual FAQ (August 2026)',
-    'fivestar': 'CMS Nursing Home Five-Star Quality Rating System Technical Users\' Guide (July 2026)',
+    'fivestar': 'CMS Nursing Home Five-Star Quality Rating System Technical Users\' Guide (September 2026)',
     'audit2018': 'CMS PBJ audit selection criteria as stated by CMS and reported by Skilled Nursing News (November 2018)',
 }
 
@@ -257,7 +259,7 @@ def check_text(rep, path, name, v):
         rep.edit(eid, path, f'{name} contains characters the specification does not allow.')
 
 
-def validate(body: bytes, today=None):
+def validate(body: bytes, today=None, staffing=None):
     """One report for the upload. A ZIP with several XML files gets one combined report with a per-file summary;
     each finding then says which file (by position in the ZIP, never by name) it belongs to."""
     today = today or dt.datetime.now(dt.timezone.utc).date()
@@ -296,6 +298,18 @@ def validate(body: bytes, today=None):
             'scope': reports[0]['scope'],
         }
     report.pop('_all', None)
+    single = reports[0] if len(reports) == 1 else None
+    quarters = {(r['reportingQuarter']['start'], r['reportingQuarter']['end']) for r in reports}
+    report['submissionDeadline'] = deadline(reports[0]['reportingQuarter'], today) if len(quarters) == 1 else None
+    if staffing:
+        if single is None:
+            report['staffingEstimate'] = {'available': False, 'reason': 'Not computed for a ZIP with several XML files. '
+                                          'Send one facility\'s file to get an estimate.'}
+        else:
+            report['staffingEstimate'] = staffing_estimate(single, staffing, today)
+    for r in reports:
+        for k in ('_nurseHours', '_noRnDays', '_process'):
+            r.pop(k, None)
     report['input'] = {'container': container, 'xmlFiles': len(files), 'xmlBytes': sum(len(d) for d in files)}
     report['inputSha256'] = hashlib.sha256(body).hexdigest()
     return report
@@ -403,6 +417,7 @@ def validate_tree(root, data, today):
     per_month = defaultdict(float)           # (employeeId, year, month) -> hours
     per_month_el = {}
     rn_days, any_days = set(), set()
+    nurse_hours = {'total': 0.0, 'rn': 0.0, 'weekendTotal': 0.0, 'aide': 0.0, 'weekendAide': 0.0}
     if sh is not None:
         process = sh.get('processType')
         if process is None:
@@ -475,6 +490,15 @@ def validate_tree(root, data, today):
                         per_day[(eid, d)] += hours
                         per_day_el.setdefault((eid, d), wd)
                         per_month[(eid, d.year, d.month)] += hours
+                        if job in NURSE_CODES and (qstart is None or qstart <= d <= qend):
+                            weekend = d.weekday() >= 5
+                            nurse_hours['total'] += hours
+                            nurse_hours['weekendTotal'] += hours if weekend else 0.0
+                            if job in RN_CODES:
+                                nurse_hours['rn'] += hours
+                            if job in AIDE_CODES:
+                                nurse_hours['aide'] += hours
+                                nurse_hours['weekendAide'] += hours if weekend else 0.0
                         per_month_el.setdefault((eid, d.year, d.month), rec)
                         if hours > 0 and (qstart is None or qstart <= d <= qend):
                             any_days.add(d)
@@ -532,11 +556,15 @@ def validate_tree(root, data, today):
         'findings': findings[:MAX_FINDINGS],
         'findingsTruncated': len(findings) > MAX_FINDINGS,
         '_all': findings,
+        '_nurseHours': nurse_hours,
+        '_noRnDays': no_rn_days,
+        '_process': process,
         'notChecked': [
             'Whether facilityId and employee IDs match what CMS has on file (CMS edits -3693 and -4016 need the PBJ system).',
             'Whether hours match payroll, invoices or contracts, which is what PBJ audits verify.',
             'Whether hours were worked onsite, and whether meal breaks were actually deducted (the file has no shift times).',
-            'Census and hours per resident day (census comes from MDS, not PBJ).',
+            'The CMS staffing rating itself. With a census you send, the report estimates hours per resident day and a '
+            'star range; CMS uses its own MDS census, case mix and six quarters of turnover data.',
             'PBJ Administration Submission files (Employee Link).',
             'ZIP and XML file naming rules, and the 5 MB limit CMS applies to the upload ZIP.',
         ],
@@ -545,3 +573,139 @@ def validate_tree(root, data, today):
                   'not mean CMS will accept the file or that it will survive a CMS audit, and this is not legal or '
                   'compliance advice.'),
     }
+
+
+# ------------------------------------------------------------------ deadline
+def deadline(rq, today):
+    """CMS must receive the quarter's file by the end of the 45th day after the quarter (11:59 PM Eastern)."""
+    if not rq or not rq.get('end'):
+        return None
+    due = dt.date.fromisoformat(rq['end']) + dt.timedelta(days=45)
+    left = (due - today).days
+    return {'date': due.isoformat(), 'time': '11:59 PM Eastern Time', 'asOf': today.isoformat(),
+            'daysRemaining': max(left, 0), 'passed': left < 0,
+            'note': ('CMS accepts no submissions after the deadline.' if left >= 0 else
+                     'The deadline for this quarter has passed. CMS accepts no submissions after it.')}
+
+
+# ------------------------------------------------------------------ Five-Star staffing estimate
+# CMS Nursing Home Five-Star Technical Users' Guide, September 2026: staffing domain, Table 3 and Appendix Table A2.
+# Each row: (points, lower bound). A value gets the points of the highest lower bound it reaches.
+CUTS = {
+    'rn': [(100, 1.202), (90, 0.934), (80, 0.786), (70, 0.678), (60, 0.591), (50, 0.513), (40, 0.440), (30, 0.368),
+           (20, 0.275), (10, 0.0)],
+    'total': [(100, 5.070), (90, 4.499), (80, 4.151), (70, 3.910), (60, 3.692), (50, 3.493), (40, 3.293), (30, 3.051),
+              (20, 2.722), (10, 0.0)],
+    'weekendTotal': [(50, 4.464), (45, 3.958), (40, 3.668), (35, 3.429), (30, 3.233), (25, 3.044), (20, 2.862),
+                     (15, 2.637), (10, 2.354), (5, 0.0)],
+}
+# Turnover, percent: (points, upper bound). Lower turnover earns more points.
+TURNOVER_CUTS = {
+    'rnTurnover': [(50, 20.000), (45, 28.571), (40, 35.714), (35, 41.667), (30, 44.444), (25, 52.941), (20, 60.000),
+                   (15, 66.667), (10, 80.000), (5, 100.0)],
+    'nurseTurnover': [(50, 31.126), (45, 37.500), (40, 41.739), (35, 45.679), (30, 49.254), (25, 53.425),
+                      (20, 57.692), (15, 62.791), (10, 69.792), (5, 100.0)],
+}
+STAR_CUTS = [(5, 320), (4, 255), (3, 205), (2, 155), (1, 0)]
+EST_LABEL = ('Estimate only. This is not the CMS staffing rating, which CMS computes from its own MDS census, case mix '
+             'and six quarters of PBJ data.')
+
+
+def level_points(measure, value):
+    v = round(value, 3)
+    return next(p for p, lo in CUTS[measure] if v >= lo)
+
+
+def turnover_points(measure, pct):
+    v = round(pct, 3)
+    return next(p for p, hi in TURNOVER_CUTS[measure] if v <= hi)
+
+
+def stars(score):
+    return next(s for s, lo in STAR_CUTS if score >= lo)
+
+
+def staffing_estimate(r, inp, today):
+    rq = r['reportingQuarter']
+    if not rq.get('start'):
+        return {'available': False, 'reason': 'The header has no valid reporting quarter, so there is no quarter to '
+                'estimate.'}
+    qstart, qend = dt.date.fromisoformat(rq['start']), dt.date.fromisoformat(rq['end'])
+    days = (qend - qstart).days + 1
+    weekend_days = sum(1 for n in range(days) if (qstart + dt.timedelta(n)).weekday() >= 5)
+    h = r['_nurseHours']
+    census = inp['census']
+    assumptions = ['Every day in the quarter had at least one resident.']
+    weekend_census = inp.get('weekendCensus')
+    if weekend_census is None:
+        weekend_census = census * weekend_days / days
+        assumptions.append('Weekend resident days were estimated from the quarter total, assuming the same census '
+                           'every day. Send weekendCensus for a closer estimate.')
+    ratio = inp.get('caseMixRatio')
+    if ratio is None:
+        ratio = 1.0
+        assumptions.append('Case mix at the national average (nursing case-mix ratio 1.0). CMS adjusts for your '
+                           'residents\' acuity; send caseMixRatio if you know it.')
+    assumptions.append('Case-mix adjustment approximated as reported hours divided by the case-mix ratio.')
+    if r['_process'] == 'merge':
+        assumptions.append('This file is a merge: only the hours in this file are counted, not hours already '
+                           'submitted to CMS for the quarter.')
+    if today < qend:
+        assumptions.append('The quarter is not over yet: hours and census should cover the same days.')
+    reported = {'total': h['total'] / census, 'rn': h['rn'] / census, 'weekendTotal': h['weekendTotal'] / weekend_census}
+    aide = h['aide'] / census
+    aide_weekend = h['weekendAide'] / weekend_census
+    adjusted = {k: v / ratio for k, v in reported.items()}
+    out = {
+        'available': True,
+        'label': EST_LABEL,
+        'method': 'CMS Five-Star Technical Users\' Guide (September 2026), staffing domain, Table 3 and Table A2',
+        'reportedHprd': {k: round(v, 3) for k, v in reported.items()},
+        'adjustedHprd': {k: round(v, 3) for k, v in adjusted.items()},
+        'assumptions': assumptions,
+    }
+    # CMS staffing-level exclusions: improbable data means no staffing measures are reported.
+    if (reported['total'] == 0 or reported['weekendTotal'] == 0 or reported['total'] > 12
+            or reported['weekendTotal'] > 12 or aide > 5.25 or aide_weekend > 5.25):
+        out.update({'excluded': True, 'stars': None, 'starRange': None,
+                    'note': 'These staffing levels fall under a CMS exclusion rule (total nurse staffing of zero or '
+                            'above 12 hours per resident day, or nurse aide staffing above 5.25). CMS would not report '
+                            'staffing levels, and the facility may get no staffing rating or a one-star rating.'})
+        return out
+    points = {k: level_points(k, v) for k, v in adjusted.items()}
+    lo = hi = sum(points.values())
+    for m, (pmin, pmax) in (('rnTurnover', (5, 50)), ('nurseTurnover', (5, 50))):
+        if inp.get(m) is not None:
+            points[m] = turnover_points(m, inp[m])
+            lo += points[m]
+            hi += points[m]
+        else:
+            points[m] = None
+            lo += pmin
+            hi += pmax
+    if inp.get('adminDepartures') is not None:
+        n = inp['adminDepartures']
+        points['adminTurnover'] = 30 if n == 0 else 25 if n == 1 else 10
+        lo += points['adminTurnover']
+        hi += points['adminTurnover']
+    else:
+        points['adminTurnover'] = None
+        lo, hi = lo + 10, hi + 30
+    if any(points[m] is None for m in ('rnTurnover', 'nurseTurnover', 'adminTurnover')):
+        assumptions.append('Turnover measures not supplied: the range covers every possible turnover score.')
+    star_lo, star_hi = stars(lo), stars(hi)
+    one_star = r['_noRnDays'] is not None and r['_noRnDays'] >= 4
+    if one_star:
+        star_lo = star_hi = 1
+    out.update({
+        'excluded': False,
+        'points': points,
+        'scoreRange': [lo, hi],
+        'starRange': [star_lo, star_hi],
+        'stars': star_lo if star_lo == star_hi else None,
+        'oneStarException': one_star,
+        'note': ('Four or more days in the quarter have no RN hours, which brings a one-star staffing rating whatever '
+                 'the score.' if one_star else 'Points and stars use the CMS cut points for each measure and the '
+                 'Table 3 thresholds (155, 205, 255 and 320 of 380 points).'),
+    })
+    return out
