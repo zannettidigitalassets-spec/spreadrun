@@ -245,6 +245,23 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - **No value echo:** `Wh347NoValueEcho` in `test_wh347.py` (every cell a marker; markers in names, IDs and
   classifications that still validate; error messages; ledger and usage log).
 - **Load:** 5,000 payroll rows (700 KB JSON) checked in about 0.4 s, about 52 MB.
+## Professional tier, PBJ staffing estimate, $100 pack (branch `spreadrun/pbj-professional`, 2026-10-03)
+
+- **Pricing.** `PROFESSIONAL_RUN_CENTS = 2500`. PBJ moves to $25.00 per completed report; UAD stays $1.00, clinical and
+  MRF stay $0.25. A $100 pack (`pack_100`) joins $5/$20/$50 in server-side `PACKS` (checkout and webhook read only
+  that) and in `src/catalog.js`. Checkout uses inline `price_data`, so no Stripe dashboard change is needed.
+- **Staffing estimate.** Optional query inputs on the PBJ endpoint: `census` (resident days in the quarter),
+  `weekendCensus`, `caseMixRatio`, `rnTurnover`, `nurseTurnover`, `adminDepartures`. Method: CMS Five-Star Technical
+  Users' Guide, September 2026 (job codes 5-12 total nurse, 5-7 RN; weekend = Saturday and Sunday; adjusted = reported
+  / case-mix ratio, an approximation of CMS's reported / case-mix x national average; Table A2 cut points compared at
+  three decimals; Table 3 star thresholds; staffing-level exclusions; four-or-more-no-RN-days one-star exception).
+  Missing turnover gives a score and star range. Always labelled as an estimate with its assumptions. Not computed for
+  multi-file ZIPs. Inputs are never echoed (`PbjStaffingEstimate.test_staffing_inputs_never_echoed`).
+- **Deadline.** Every PBJ report has `submissionDeadline` (quarter end + 45 days, days remaining as of asOf). The page
+  banner computes the next deadline in the browser.
+- **Copy.** PBJ page leads with the cost of a bad quarter (one-star staffing rating for no accepted file, four or more
+  days without RN hours, failed audits; one-star staffing removes a star from the overall rating). Clinical and MRF
+  pages gained the "a PASS is not acceptance" note required on every product page. The Terms pack sentence lists $100.
 
 ## Known limitations
 
