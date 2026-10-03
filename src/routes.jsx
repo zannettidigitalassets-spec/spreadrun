@@ -69,7 +69,7 @@ const D = {
   docsClinical: 'Clinical Trial Results Table QA API reference: endpoints, request format, required columns, report schema, finding codes, error codes, and code samples.',
   docsMrf: 'Hospital MRF Validator API reference: endpoints, upload formats, query parameters, sampling limits, report schema, finding codes, error codes, and samples.',
   pbj: 'Check nursing home PBJ staffing XML against CMS v4.10.0 specs before upload, with documented audit risk flags. Results in seconds. $1.00 per report, free test.',
-  wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $1.00 per report, free test.',
+  wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $25.00 per report, free test.',
   docsWh347: 'WH-347 Certified Payroll Pre-Check API reference: endpoints, workbook and JSON input, every payroll column, report schema, rule IDs, and all error codes.',
   docsPbj: 'PBJ Staffing Data Pre-Submission QA API reference: endpoints, ZIP and XML uploads, the asOf date, report schema, CMS edit and risk rule IDs, and error codes.',
   docsUad: 'UAD 3.6 Appraisal Report Validator API reference: endpoints, request format, ZIP packages, report schema, rule IDs, rules not yet covered, and error codes.',

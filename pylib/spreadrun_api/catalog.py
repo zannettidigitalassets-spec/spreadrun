@@ -43,7 +43,7 @@ APIS = {
     },
     'wh347-payroll-precheck': {
         'name': 'Davis-Bacon WH-347 Certified Payroll Pre-Check',
-        'price_cents': 100,
+        'price_cents': 2500,   # professional tier
         # One weekly payroll: JSON with CSV tables, or an .xlsx workbook. Whole file checked, no sampling.
         'max_body_bytes': 4_400_000,
         'demo_max_body_bytes': 512 * 1024,

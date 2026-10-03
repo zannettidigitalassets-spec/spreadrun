@@ -220,7 +220,7 @@ gzip of it, or the CMS upload ZIP (up to 20 XML files, each up to 50 MB uncompre
 ## Davis-Bacon WH-347 Certified Payroll Pre-Check (branch `spreadrun/wh347-payroll-precheck`, 2026-10-03)
 
 SpreadRun's own check. `POST /api/v1/wh347-payroll-precheck` (and `/api/demo/...`), same dispatcher, still 8 functions.
-$1.00 per completed report; packs unchanged. Demo limit 512 KB.
+$25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo limit 512 KB.
 
 - **Input.** An .xlsx workbook (sheets Header, Payroll, Wage Determination, optional Apprenticeship) or JSON with the
   header object and the tables as CSV text. Columns follow Form WH-347 Rev. January 2025 (one row per worker per

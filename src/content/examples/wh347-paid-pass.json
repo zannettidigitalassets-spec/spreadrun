@@ -5,8 +5,8 @@
     "api": "wh347-payroll-precheck",
     "mode": "paid",
     "charged": true,
-    "priceCents": 100,
-    "balanceCents": 625,
+    "priceCents": 2500,
+    "balanceCents": 7500,
     "report": {
       "schemaVersion": 1,
       "status": "PASS",

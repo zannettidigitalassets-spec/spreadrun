@@ -100,6 +100,8 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     w = 'wh347-payroll-precheck'
     paid, demo = serve(w, 'paid'), serve(w, 'demo')
     xlsx = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    save('wh347-paid-pass', *post(paid, (SAMPLES / 'wh347-pass.json').read_bytes(), {**auth, 'Content-Type': 'application/json'}))
+    rich, _ = fake.add_user(10000)   # $100 of credit: covers $25 professional-tier runs
+    rich_auth = {'Authorization': f'Bearer {rich}'}
+    save('wh347-paid-pass', *post(paid, (SAMPLES / 'wh347-pass.json').read_bytes(), {**rich_auth, 'Content-Type': 'application/json'}))
     save('wh347-demo-fail', *post(demo, (SAMPLES / 'wh347-fail.xlsx').read_bytes(), {'Content-Type': xlsx}))
-    save('wh347-input-error', *post(paid, b'{"header": {}, "payrollCsv": "entry_no,last_name\\n1,x\\n"}', {**auth, 'Content-Type': 'application/json'}))
+    save('wh347-input-error', *post(paid, b'{"header": {}, "payrollCsv": "entry_no,last_name\\n1,x\\n"}', {**rich_auth, 'Content-Type': 'application/json'}))

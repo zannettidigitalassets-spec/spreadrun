@@ -83,7 +83,7 @@ export const APIS = [
     name: 'Davis-Bacon WH-347 Certified Payroll Pre-Check',
     tier: 'built',
     status: 'beta',
-    priceCents: HIGH_STAKES_RUN_CENTS,
+    priceCents: PROFESSIONAL_RUN_CENTS,
     unit: 'completed report',
     maxBodyBytes: 4_400_000,
     demoMaxBodyBytes: 512 * 1024,
