@@ -82,7 +82,12 @@ export default function DocsPbj() {
         <table className="doc-table">
           <thead><tr><th>Query parameter</th><th>Default</th><th>Meaning</th></tr></thead>
           <tbody>
-            <tr><td><code>asOf</code></td><td>today (UTC)</td><td>A date, <code>YYYY-MM-DD</code>: the day you plan to upload. CMS edit -4002 rejects work dates after it, and the count of days without RN hours stops at it.</td></tr>
+            <tr><td><code>asOf</code></td><td>today (UTC)</td><td>A date, <code>YYYY-MM-DD</code>: the day you plan to upload. CMS edit -4002 rejects work dates after it, the count of days without RN hours stops at it, and the deadline countdown starts from it.</td></tr>
+            <tr><td><code>census</code></td><td>none</td><td>Total resident days in the quarter (the sum of each day's census). Turns on the staffing estimate. Above 0.</td></tr>
+            <tr><td><code>weekendCensus</code></td><td>estimated</td><td>Resident days on Saturdays and Sundays. When missing, estimated from <code>census</code> assuming the same census every day.</td></tr>
+            <tr><td><code>caseMixRatio</code></td><td>1.0</td><td>The facility's nursing case-mix index divided by the national average, 0.2 to 5. Adjusted hours are reported hours divided by it.</td></tr>
+            <tr><td><code>rnTurnover</code>, <code>nurseTurnover</code></td><td>none</td><td>Twelve-month turnover percentages, 0 to 100. When missing, the star range covers every possible turnover score.</td></tr>
+            <tr><td><code>adminDepartures</code></td><td>none</td><td>Administrators who left in the last twelve months, a whole number.</td></tr>
           </tbody>
         </table>
         <p>Rejected with HTTP 400 and not charged: an empty body, a PDF, a file that is not well-formed XML, DOCTYPE or entity declarations, a root that is not <code>nursingHomeData</code>, an Employee Link (administration) file, a ZIP with no XML file or more than 20, a corrupt or encrypted ZIP, an invalid <code>asOf</code>. A PBJ file with problems is not an input error: it gets a completed FAIL report, and that run is charged.</p>
@@ -101,6 +106,8 @@ export default function DocsPbj() {
             <tr><td><code>findingCount</code>, <code>findingCounts</code>, <code>ruleCounts</code>, <code>findingsTruncated</code></td><td>Totals, including findings beyond the 500 listed.</td></tr>
             <tr><td><code>files</code></td><td>Only for a ZIP with several XML files: one summary per file, numbered by position in the ZIP, and each finding gets a <code>file</code> number.</td></tr>
             <tr><td><code>notChecked</code>, <code>sources</code>, <code>scope</code></td><td>What the report does not cover, the documents each rule comes from, and what the verdict means.</td></tr>
+            <tr><td><code>submissionDeadline</code></td><td><code>date</code> (the end of the 45th day after the quarter), <code>time</code>, <code>daysRemaining</code> and <code>passed</code>, as of <code>asOf</code>.</td></tr>
+            <tr><td><code>staffingEstimate</code></td><td>Only when <code>census</code> is sent. An estimate, not the CMS rating: <code>reportedHprd</code> and <code>adjustedHprd</code> (total nurse, RN and weekend total nurse hours per resident day; job title codes 5 to 12, RN 5 to 7), <code>points</code> per CMS Table A2, <code>scoreRange</code> out of 380, <code>starRange</code> and <code>stars</code> per Table 3, <code>oneStarException</code> (four or more days without RN hours), <code>excluded</code> (a CMS exclusion rule applies), <code>assumptions</code> and <code>label</code>. The inputs themselves are never repeated.</td></tr>
             <tr><td><code>input</code>, <code>inputSha256</code>, <code>asOf</code></td><td>Container (xml, gzip or zip), number and total size of XML files, the SHA-256 of the request body, and the date used.</td></tr>
           </tbody>
         </table>
