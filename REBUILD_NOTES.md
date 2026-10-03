@@ -263,6 +263,20 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   days without RN hours, failed audits; one-star staffing removes a star from the overall rating). Clinical and MRF
   pages gained the "a PASS is not acceptance" note required on every product page. The Terms pack sentence lists $100.
 
+## Filled WH-347 PDF and free overtime calculator (branch `spreadrun/wh347-form-and-calculator`, 2026-10-03)
+
+- **Filled form.** `?form=pdf` on a paid WH-347 call returns `filledForm` (base64 PDF) next to, never inside, `report`,
+  for a PASS only; WARN/FAIL get `available: false` and a reason; demo calls never get one. Included in the $25 price
+  (one charge). Built in memory per request; not stored, logged or cached (`Cache-Control: no-store` as for every API
+  response). The blank DOL form (`validators/wh347/wh347-rev-2025-01.pdf`, Rev. January 2025, SHA-256
+  fa28f033...b557, a U.S. government work) is used as published and values are drawn on it with pypdf (new
+  dependency, `requirements.txt`): page 1 per 8 rows, page 2 header, up to 3 apprenticeship programs and 8 hourly
+  fringe credits, plain addendum pages for more. Statement of Compliance boxes, certifying official, signature, date,
+  phone, email, fringe plan details and OA/SAA boxes stay blank. Optional header fields `final_payroll` and
+  `contractor_role` tick the top boxes. If drawing fails the report is still delivered (`available: false`).
+- **Calculator.** `/tools/davis-bacon-overtime-calculator`: browser-only arithmetic (`src/site/overtime.js`, node tests
+  in `scripts/tests/`), no request carries the inputs, FAQ JSON-LD from 29 CFR 5.5(b) and 5.32.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist
