@@ -1,6 +1,6 @@
 import { stripe, requireUser, ensureAccount, siteOrigin, json, fail, PACKS } from '../_lib/clients.js';
 
-// POST /api/credits/checkout  { pack: "pack_5" | "pack_20" | "pack_50" }
+// POST /api/credits/checkout  { pack: "pack_5" | "pack_20" | "pack_50" | "pack_100" }
 // One-time Stripe Checkout payment for a prepaid credit pack. Credits are granted by the webhook,
 // only after Stripe confirms payment. Price and credit amount come from PACKS, never the browser.
 export async function POST(request) {

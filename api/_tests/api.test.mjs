@@ -82,6 +82,10 @@ test('checkout: server-side price per pack, unknown pack rejected', async () => 
   assert.equal(params.line_items[0].price_data.unit_amount, 2000);
   assert.equal(params.metadata.user_id, USER.id);
   assert.equal(params.customer_creation, 'always');
+  const big = await POST(req('/api/credits/checkout', { headers: { authorization: 'Bearer good-jwt' }, body: { pack: 'pack_100' } }));
+  assert.equal(big.status, 200);
+  assert.equal(params.line_items[0].price_data.unit_amount, 10000);
+  assert.equal(params.metadata.pack, 'pack_100');
 });
 
 test('webhook: paid credit session grants the server-side pack amount and is the only path', async () => {

@@ -13,7 +13,7 @@ export const HOME_FAQ = [
   ['How is this different from the free government tools?',
     'Government validators, like the one CMS publishes, are built for one-off manual checks, and they are good at that. SpreadRun\'s APIs are built for repeated, programmatic use: no installation, structured JSON reports, and endpoints your pipeline or agent can call directly.'],
   ['How does pricing work?',
-    'You buy prepaid credits through Stripe: $5, $20 or $50 of credit that works on every API. Each API has its own price per completed run, from $0.25 (a $5 pack covers 20 standard runs). Credits never expire. No subscriptions, no seat licenses. Requests rejected as invalid input are not charged. The full price list is on the APIs page.'],
+    'You buy prepaid credits through Stripe: $5, $20, $50 or $100 of credit that works on every API. Each API has its own price per completed run, from $0.25 (a $5 pack covers 20 standard runs). Credits never expire. No subscriptions, no seat licenses. Requests rejected as invalid input are not charged. The full price list is on the APIs page.'],
   ['Do I need an account to try it?',
     'No. Every product page has a live test form. Run a real validation or audit before creating an account or paying anything.'],
   ['Who builds the validators?',

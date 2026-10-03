@@ -48,7 +48,7 @@ export default function Catalog() {
         <p>Each API has a price per completed run, paid from prepaid credits. Credits are a dollar balance that works on every API, and they never expire.</p>
         <PriceTable />
         <h3 style={{ marginTop: 28 }}>Credit packs</h3>
-        <p>{CREDIT_PACKS.map((p) => `$${p.priceCents / 100}`).join(', ').replace(/, ([^,]*)$/, ' and $1')} packs buy that much credit, usable on every API. A $5 pack covers 20 runs at $0.25 or 5 runs at $1.00. A $50 pack covers 2 runs at $25.00. Any mix works.</p>
+        <p>{CREDIT_PACKS.map((p) => `$${p.priceCents / 100}`).join(', ').replace(/, ([^,]*)$/, ' and $1')} packs buy that much credit, usable on every API. A $5 pack covers 20 runs at $0.25 or 5 runs at $1.00. A $50 pack covers 2 runs at $25.00 and a $100 pack covers 4. Any mix works.</p>
         <ul>
           <li>A run is charged when it finishes and returns a report, whether the report says PASS, WARN or FAIL.</li>
           <li>Requests rejected before a report exists are free: bad JSON, clinical tables missing required columns or with ragged rows, an empty or corrupt gzip upload, invalid parameters, a missing or revoked key.</li>

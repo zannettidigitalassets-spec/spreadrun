@@ -13,6 +13,7 @@ export const CREDIT_PACKS = [
   { id: 'pack_5', priceCents: 500, calls: 20 },
   { id: 'pack_20', priceCents: 2000, calls: 80 },
   { id: 'pack_50', priceCents: 5000, calls: 200 },
+  { id: 'pack_100', priceCents: 10000, calls: 400 },
 ];
 
 // Three tiers in the data model. Only tiers with showOnSite are rendered.
