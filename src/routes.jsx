@@ -75,7 +75,7 @@ const D = {
   clinicalGuide: 'How to validate clinical trial data before analysis: NCT number format, required fields, duplicate keys, orphan outcomes, outcome types and results dates.',
   contact: 'Contact SpreadRun about an API, a validator you wish existed, volume pricing, or a problem with a report. Use the form on this page; we read every message.',
   privacy: 'What SpreadRun collects when you use its data-validation APIs and website, how submitted files are handled in memory, how data is used, and your choices.',
-  terms: 'Terms for SpreadRun data-validation APIs: accounts, API keys, prepaid credits, per-run prices, refunds, personal data in appraisal files, and acceptable use.',
+  terms: 'Terms for SpreadRun data-validation APIs: accounts, API keys, credits, prices, refunds, personal data in appraisal and PBJ staffing files, acceptable use.',
 };
 
 const HOME = [['/', 'Home']];
