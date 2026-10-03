@@ -151,7 +151,7 @@ export default function Wh347Api() {
         <p><b>{dollars(API.priceCents)} per completed report.</b> One weekly payroll, one full report.</p>
         <ul>
           <li>Billed when a report is produced, PASS, WARN or FAIL. Invalid input is never billed: a PDF, a workbook missing a required sheet, JSON without the payroll or the rates.</li>
-          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20 or $50 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} weekly checks. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
+          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50 or $100 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} weekly checks. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
           <li>Running payrolls for many projects every week? <a href="/contact">Talk to us</a> first so we can tell you honestly whether this fits.</li>
         </ul>
         <div className="btn-row"><a className="btn" href="#demo">Check a payroll</a><a className="btn secondary" href="/account">Get API access</a></div>
