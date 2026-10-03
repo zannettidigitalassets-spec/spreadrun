@@ -217,6 +217,35 @@ gzip of it, or the CMS upload ZIP (up to 20 XML files, each up to 50 MB uncompre
   severity, ruleId, path, message, source (and file for multi-file ZIPs, a position, never a name).
 - **Load:** a synthetic 300-employee quarter (5.8 MB XML, 70 KB gzipped) validates in about 1.2 s using about 89 MB.
 
+## Davis-Bacon WH-347 Certified Payroll Pre-Check (branch `spreadrun/wh347-payroll-precheck`, 2026-10-03)
+
+SpreadRun's own check. `POST /api/v1/wh347-payroll-precheck` (and `/api/demo/...`), same dispatcher, still 8 functions.
+$1.00 per completed report; packs unchanged. Demo limit 512 KB.
+
+- **Input.** An .xlsx workbook (sheets Header, Payroll, Wage Determination, optional Apprenticeship) or JSON with the
+  header object and the tables as CSV text. Columns follow Form WH-347 Rev. January 2025 (one row per worker per
+  classification, daily ST and OT hours, 6A to 9). The .xlsx reader is our own (zipfile + ElementTree, no new
+  dependency; DOCTYPE/ENTITY rejected, 50 MB uncompressed cap, 5,000 rows per table).
+- **Wage determination rates are supplied by the caller.** No live lookup: the GSA API directory lists no SAM.gov wage
+  determination API and wdol.gov is retired, so there is no stable public source to rely on. The page says so.
+- **Sources (verified 2026-10-03):** DOL WH-347 page and instructions (form Rev. January 2025, OMB 1235-0008), the
+  annotated guide, and 29 CFR part 5 from eCFR: 5.5(a)(1), 5.5(a)(3)(ii)(B) (no full SSNs), 5.5(a)(4)(i) apprentices,
+  5.5(b)(1) CWHSSA overtime, 5.31 fringe crediting, 5.32 overtime excludes fringe and cash in lieu.
+- **Deliberate choices.** Fringe check follows 5.31: any mix of plan credit, cash in lieu and cash wage above the basic
+  rate counts, but nothing makes up a basic rate shortfall. OT below 1.5x the WD basic rate is an error; below 1.5x the
+  rate actually paid is a warning (5.32(c) makes that a question of fact). 7A is an error only when below hours x rates;
+  otherwise a mismatch is a warning, because DOL does not state whether 7A includes 6C. Apprentice ratio is a warning:
+  only this payroll is visible. Trainees are not handled: the current 5.5(a)(4) and the 2025 form cover registered
+  apprentices only.
+- **Not checked:** correctness of the supplied rates, classification of work, hours on other projects, apprentice
+  registration, bona fide plans/annualization/unfunded plan approval, permissible deductions, the signed statement.
+- **Fixtures:** `scripts/wh347/make_fixtures.py` (needs openpyxl at build time only) writes pass/fail payrolls as .xlsx
+  and JSON plus example CSVs, with invented workers and invented rates, to the fixtures and `public/samples/`.
+- **Personal data:** Terms and Privacy each gained one paragraph for certified payrolls (separate commits, for review).
+- **No value echo:** `Wh347NoValueEcho` in `test_wh347.py` (every cell a marker; markers in names, IDs and
+  classifications that still validate; error messages; ledger and usage log).
+- **Load:** 5,000 payroll rows (700 KB JSON) checked in about 0.4 s, about 52 MB.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist
@@ -239,7 +268,8 @@ gzip of it, or the CMS upload ZIP (up to 20 XML files, each up to 50 MB uncompre
 - `python3.12 -m unittest discover -s pylib/tests`: validator parity with DataForge's recorded outputs, upload adapter,
   paid flow (charge, no charge on input error, insufficient credits, races, billing outage), demo flow and limits, the real
   HTTP handler class, the UAD validator (`test_uad.py`: rule families, input errors, ZIP, $1.00 billing, rule table),
-  and the PBJ validator (`test_pbj.py`: every rule family, input errors, ZIP and gzip, no value echo, $1.00 billing).
+  and the PBJ validator (`test_pbj.py`: every rule family, input errors, ZIP and gzip, no value echo, $1.00 billing),
+  and the WH-347 pre-check (`test_wh347.py`: every rule, workbook reader, input errors, no value echo, billing).
 - `npm i --no-save @electric-sql/pglite@0.3 && node supabase/tests/storefront.test.mjs`: the migration in an in-memory
   Postgres, including idempotent charges and grants, the 20-calls-per-$5 rule, revoked keys, demo limits and every verdict state.
 - `python3.12 scripts/gen_examples.py` regenerates the docs examples by running the real handlers.
