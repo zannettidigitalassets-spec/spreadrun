@@ -201,6 +201,7 @@ export default function PbjApi() {
 
       <section className="section wrap" id="demo" aria-labelledby="demo-h">
         <h2 id="demo-h">Try it now</h2>
+        <p className="small">Not ready for the full check? Try the free <a href="/tools/pbj-preflight-checks">PBJ pre-flight checkers</a> first: count zero-RN days and work out meal break deductions in your browser.</p>
         <PbjDemo api={API} sample={example.body.report} />
       </section>
 
