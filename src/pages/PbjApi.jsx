@@ -202,7 +202,7 @@ export default function PbjApi() {
       <section className="section wrap" aria-labelledby="rbs-h">
         <div className="calc-result">
           <h2 id="rbs-h" style={{ marginTop: 0 }}>Your staffing star just got more valuable</h2>
-          <p>On September 8, CMS rolled out Risk-Based Surveys. Qualifying facilities get a streamlined inspection at roughly half the onsite time. The gate includes a 5-star overall rating and a staffing rating of at least 3 stars, and that staffing rating is built from the PBJ data you submit. CMS estimated about 12% of homes would qualify. Eligibility can shift, but the data is yours to check before the November 14 deadline. <a href="#demo">See the staffing picture CMS sees.</a></p>
+          <p>On September 8, CMS rolled out Risk-Based Surveys. Qualifying facilities get a streamlined inspection at roughly half the onsite time. The gate includes a 5-star overall rating and a staffing rating of at least 3 stars, and that staffing rating is built from the PBJ data you submit. CMS estimated about 12% of homes would qualify. A failed PBJ staffing data audit takes you out of the running entirely. Eligibility can shift, but the data is yours to check before the November 14 deadline. <a href="#demo">See the staffing picture CMS sees.</a></p>
           <p className="small muted" style={{ marginBottom: 0 }}>Source: <a href={RBS_MEMO}>CMS QSO-26-14-NH, Nursing Home Risk-Based Survey National Implementation (revised September 29, 2026)</a>.</p>
         </div>
       </section>
