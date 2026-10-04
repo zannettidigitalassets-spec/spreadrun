@@ -8,6 +8,9 @@ import { apiBySlug, dollars } from '../catalog.js';
 import example from '../content/examples/pbj-demo-fail.json';
 
 const API = apiBySlug('pbj-staffing-qa');
+// Risk-Based Survey facts (start September 8, 2026; 5-star overall and at least 3-star staffing among the
+// qualifying criteria; roughly half the onsite time; about 12% qualify) checked against this memo, October 2026.
+const RBS_MEMO = 'https://www.cms.gov/files/document/qso-26-14-nh-revised-2026-09-29.pdf';
 
 // Every fact on this page was checked against the documents linked in PBJ_SOURCES (October 2026).
 export const PBJ_SOURCES = [
@@ -193,6 +196,14 @@ export default function PbjApi() {
             <li>Your actual CMS staffing rating. CMS takes census and case mix from MDS and turnover from six quarters of PBJ; the estimate uses the numbers you send.</li>
             <li>Employee Link (administration) files, and ZIP and file naming rules.</li>
           </ul>
+        </div>
+      </section>
+
+      <section className="section wrap" aria-labelledby="rbs-h">
+        <div className="calc-result">
+          <h2 id="rbs-h" style={{ marginTop: 0 }}>Your staffing star just got more valuable</h2>
+          <p>On September 8, CMS rolled out Risk-Based Surveys. Qualifying facilities get a streamlined inspection at roughly half the onsite time. The gate includes a 5-star overall rating and a staffing rating of at least 3 stars, and that staffing rating is built from the PBJ data you submit. CMS estimated about 12% of homes would qualify. Eligibility can shift, but the data is yours to check before the November 14 deadline. <a href="#demo">See the staffing picture CMS sees.</a></p>
+          <p className="small muted" style={{ marginBottom: 0 }}>Source: <a href={RBS_MEMO}>CMS QSO-26-14-NH, Nursing Home Risk-Based Survey National Implementation (revised September 29, 2026)</a>.</p>
         </div>
       </section>
 
