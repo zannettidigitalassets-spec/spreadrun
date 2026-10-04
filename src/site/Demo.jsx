@@ -60,7 +60,10 @@ function useRunner(api, credits) {
     try {
       const data = await runValidation(api, { paid, session: credits.session, ...args });
       if (paid && typeof data.balanceCents === 'number') credits.spent(data.balanceCents);
-      setState({ phase: 'done', report: data.report, form: data.filledForm || null, error: '', paid });
+      setState({
+        phase: 'done', report: data.report, form: data.filledForm || null, error: '', paid,
+        brief: data.auditBrief || null, records: data.submissionPackage || null,
+      });
     } catch (e) {
       setState({ phase: 'error', report: null, error: e.message, paid });
     }
@@ -412,8 +415,44 @@ export function PbjDemo({ api, sample }) {
         </div>
         {tooBig && <div className="error-box">This file is over the {kb(mode.maxBytes)} limit for this mode.{mode.paid ? ' Send the ZIP instead of the XML file.' : ' Send the ZIP instead of the XML file, or sign in with credits for up to 4.4 MB.'}</div>}
         {state.phase === 'error' && <div className="error-box" role="alert">{state.error}</div>}
+        {state.phase === 'done' && <PbjRecordsNote state={state} api={api} />}
       </form>
       <div><Result state={state} kind="pbj" sample={sample} sampleLabel="Synthetic PBJ file with eight kinds of problem" /></div>
+    </div>
+  );
+}
+
+// Save a file the API returned as base64 (filename, contentType, base64).
+function saveBase64(f) {
+  const bytes = Uint8Array.from(atob(f.base64), (ch) => ch.charCodeAt(0));
+  const url = URL.createObjectURL(new Blob([bytes], { type: f.contentType || 'application/octet-stream' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = f.filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// After a PBJ run: the one-page brief and the records ZIP (paid runs only), or a note on what a paid run adds.
+function PbjRecordsNote({ state, api }) {
+  const b = state.brief;
+  const z = state.records;
+  if (!state.paid) {
+    return <p className="small muted" style={{ marginTop: 12 }}>Signed in with credits, every run also comes back with a one-page PBJ Star &amp; Audit-Risk Brief and a records ZIP holding the brief, your file exactly as uploaded and a README.</p>;
+  }
+  if (!b) return null;
+  return (
+    <div className="ok-box" style={{ marginTop: 12 }}>
+      <p style={{ margin: '0 0 8px' }}><b>Your PBJ Star &amp; Audit-Risk Brief is ready.</b> One page: the projected staffing star (an estimate, not the CMS rating) and the top audit-risk patterns this run found, each with a fix. Included in the {dollars(api.priceCents)} price.</p>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {b.available && <button type="button" className="btn small" onClick={() => saveBase64(b)}>Download the brief (PDF)</button>}
+        {z && z.available && <button type="button" className="btn small" onClick={() => saveBase64(z)}>Download the records ZIP</button>}
+      </div>
+      {!b.available && <p className="small" style={{ margin: '8px 0 0' }}>{b.reason}</p>}
+      {b.available && z && !z.available && <p className="small" style={{ margin: '8px 0 0' }}>{z.reason}</p>}
+      <p className="small muted" style={{ margin: '8px 0 0' }}>The ZIP is a record of what was checked, not a filing. Upload your file to CMS yourself. Nothing is stored on our side.</p>
     </div>
   );
 }
@@ -422,17 +461,7 @@ export function PbjDemo({ api, sample }) {
 function FilledFormNote({ state }) {
   const f = state.form;
   if (f && f.available) {
-    const download = () => {
-      const bytes = Uint8Array.from(atob(f.base64), (ch) => ch.charCodeAt(0));
-      const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = f.filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    };
+    const download = () => saveBase64(f);
     return (
       <div className="ok-box">
         <p style={{ margin: '0 0 8px' }}><b>Your completed WH-347 is ready.</b> {f.note}</p>

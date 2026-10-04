@@ -85,7 +85,7 @@ const CURL = `curl -X POST "https://www.spreadrun.com/api/v1/pbj-staffing-qa" \\
   -H "Content-Type: application/zip" \\
   --data-binary @pbj_2026_q4.zip`;
 
-const PY = `import os, requests
+const PY = `import base64, os, requests
 
 with open("pbj_2026_q4.zip", "rb") as f:   # the ZIP you upload to CMS, or the XML file itself
     r = requests.post(
@@ -95,10 +95,17 @@ with open("pbj_2026_q4.zip", "rb") as f:   # the ZIP you upload to CMS, or the X
         timeout=60,
     )
 r.raise_for_status()
-report = r.json()["report"]
+data = r.json()
+report = data["report"]
 print(report["status"], report["findingCounts"])
 for f in report["findings"]:
-    print(f["severity"], f["ruleId"], f["path"], f["message"])`;
+    print(f["severity"], f["ruleId"], f["path"], f["message"])
+
+# Included in every paid report: the one-page brief and the records ZIP
+for part in ("auditBrief", "submissionPackage"):
+    if data.get(part, {}).get("available"):
+        with open(data[part]["filename"], "wb") as out:
+            out.write(base64.b64decode(data[part]["base64"]))`;
 
 export function SourceList() {
   return (
@@ -209,6 +216,7 @@ export default function PbjApi() {
         <h2 id="price-h">Pricing</h2>
         <p><b>{dollars(API.priceCents)} per completed report.</b> One upload, one full report, even when the ZIP holds several XML files.</p>
         <ul>
+          <li>Every paid report also comes with a one-page <b>PBJ Star &amp; Audit-Risk Brief</b> (the projected staffing star, always labelled an estimate, and the top audit-risk patterns the run found, each with a fix) and a <b>records ZIP</b> holding the brief, your file exactly as uploaded and a README. Same price, one charge. The free demo does not include them.</li>
           <li>Billed when a report is produced, PASS, WARN or FAIL. Invalid input is never billed: not XML, not a PBJ file, an Employee Link file, a ZIP with no XML.</li>
           <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50 or $100 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} reports. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
           <li>Checking files for many buildings every quarter? <a href="/contact">Talk to us</a> first so we can tell you honestly whether this fits.</li>

@@ -294,6 +294,28 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   shift paid or unpaid, the actual break if longer, unpaid break time already out of paid time, minutes converted to
   tenths with the manual's 6-minute table (hundredths shown too). The manual sets no minimum shift length.
 
+## PBJ Star & Audit-Risk Brief and records ZIP (branch `spreadrun/pbj-audit-brief`, 2026-10-04)
+
+- **What.** Every paid PBJ call that produces a report also returns `auditBrief` (one-page PDF) and `submissionPackage`
+  (ZIP: the brief, the upload byte for byte, `README.txt`), outside `report`. Included in the $25.00 charge (one
+  charge). Demo calls, input errors and other APIs get neither. Built in memory per request
+  (`validators/pbj/brief.py`, via `runners.pbj_records`); not stored, logged or cached. Still 8 functions.
+- **PDF.** Written directly as PDF 1.4 with the standard Helvetica fonts: no new dependency. Letter, always one page;
+  type shrinks in small steps only if content ever ran long, and `test_worst_case_fits_one_page_without_shrinking`
+  checks the longest pattern texts, a long path and every engine assumption fit at full size.
+- **Star.** Only the engine's `staffingEstimate` (needs `census`), always labelled an estimate, with the engine's
+  label and assumptions. No census: "Not estimated for this run", plus a note when the four-or-more-days-without-RN
+  finding is present. Validator, estimate math, countdown, pricing and Terms untouched.
+- **Patterns.** Every rule the engine can emit maps to one pattern in `PATTERNS` (a test parses `engine.py` so a new
+  rule without a pattern fails CI). Counts come from `ruleCounts`; errors first, then rank (rating and audit exposure
+  before tidiness), then count. Fewer than three shown when the run has fewer; none invented.
+- **No value echo.** The brief is built from the report only; a marked-file test checks the PDF and README hold no
+  marker. The ZIP holds the upload as sent, and the package is refused if its SHA-256 does not match `inputSha256`.
+- **Vercel response limit.** If the response would pass 4.4 MB (a large upload sent back), the ZIP is dropped with a
+  reason and the brief kept. If the brief or ZIP fails to build, the report is still delivered (`available: false`).
+- **Site.** PBJ form shows Download buttons after a paid run; product page pricing bullet; docs section `#brief`;
+  examples show returned files by size instead of base64 (`scripts/gen_examples.py`).
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist
@@ -317,7 +339,9 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   paid flow (charge, no charge on input error, insufficient credits, races, billing outage), demo flow and limits, the real
   HTTP handler class, the UAD validator (`test_uad.py`: rule families, input errors, ZIP, $1.00 billing, rule table),
   and the PBJ validator (`test_pbj.py`: every rule family, input errors, ZIP and gzip, no value echo, $1.00 billing),
-  and the WH-347 pre-check (`test_wh347.py`: every rule, workbook reader, input errors, no value echo, billing).
+  and the WH-347 pre-check (`test_wh347.py`: every rule, workbook reader, input errors, no value echo, billing),
+  and the PBJ brief and records ZIP (`test_pbj_brief.py`: paid only, one page, byte-identical upload, no value echo,
+  rule coverage, response size, no em dashes).
 - `npm i --no-save @electric-sql/pglite@0.3 && node supabase/tests/storefront.test.mjs`: the migration in an in-memory
   Postgres, including idempotent charges and grants, the 20-calls-per-$5 rule, revoked keys, demo limits and every verdict state.
 - `python3.12 scripts/gen_examples.py` regenerates the docs examples by running the real handlers.

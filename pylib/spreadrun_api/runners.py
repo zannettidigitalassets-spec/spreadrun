@@ -167,6 +167,32 @@ def run_pbj(body: bytes, *, as_of=None, staffing=None):
     return report
 
 
+_pbj_brief = None
+
+
+def pbj_brief_module():
+    global _pbj_brief
+    if _pbj_brief is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_pbj_brief', HERE / 'pbj' / 'brief.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_pbj_brief'] = module
+        spec.loader.exec_module(module)
+        _pbj_brief = module
+    return _pbj_brief
+
+
+def pbj_records(body: bytes, report):
+    """The PBJ Star & Audit-Risk Brief (one-page PDF, from the report alone) and the records ZIP (the brief, the upload
+    byte for byte, a README). Built in memory for the response; never stored or logged. Returns
+    (brief bytes, zip bytes, [names in the ZIP])."""
+    import datetime as dt
+    m = pbj_brief_module()
+    generated = dt.datetime.now(dt.timezone.utc).date()
+    brief = m.brief_pdf(report, generated)
+    zipped, names = m.package(body, report, brief, generated)
+    return brief, zipped, names
+
+
 _wh347 = None
 
 

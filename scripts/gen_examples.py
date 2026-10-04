@@ -52,6 +52,10 @@ def stable(payload):
         payload['requestId'] = REQ_ID
     if 'error' in payload and 'requestId' in payload['error']:
         payload['error']['requestId'] = REQ_ID
+    # Returned files (the PBJ brief and records ZIP, the filled WH-347) are shown by size, not as base64.
+    for k in ('auditBrief', 'submissionPackage', 'filledForm'):
+        if isinstance(payload.get(k), dict) and 'base64' in payload[k]:
+            payload[k]['base64'] = f'<base64, {payload[k]["bytes"]:,} bytes>'
     return payload
 
 

@@ -70,6 +70,27 @@
       },
       "inputSha256": "a1da2506994af98f782f9ecc409b18a4dbdca9f7d7e3ba1e33b9668bab76873a",
       "asOf": "2026-10-03"
+    },
+    "auditBrief": {
+      "available": true,
+      "filename": "PBJ-Star-Audit-Risk-Brief.pdf",
+      "contentType": "application/pdf",
+      "bytes": 2858,
+      "base64": "<base64, 2,858 bytes>",
+      "note": "Included in the report price. Built for this response only: not stored, logged or cached. The brief reports what the checks found; it is not a compliance determination, and the staffing star is an estimate, not the CMS rating."
+    },
+    "submissionPackage": {
+      "available": true,
+      "filename": "SpreadRun-PBJ-records-2026-10-03.zip",
+      "contentType": "application/zip",
+      "bytes": 6156,
+      "files": [
+        "PBJ-Star-Audit-Risk-Brief.pdf",
+        "uploaded-pbj-file.xml",
+        "README.txt"
+      ],
+      "base64": "<base64, 6,156 bytes>",
+      "note": "A records packet, not a filing: the brief, your upload exactly as received, and a README. Upload your file to CMS yourself."
     }
   }
 }

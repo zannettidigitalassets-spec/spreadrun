@@ -112,6 +112,17 @@ export default function DocsPbj() {
           </tbody>
         </table>
 
+        <h2 id="brief">Brief and records ZIP (paid calls)</h2>
+        <p>Every paid call that produces a report also returns two files, outside <code>report</code>, at no extra charge. Demo calls get neither. Both are built in memory for the response and are not stored, logged or cached.</p>
+        <table className="doc-table">
+          <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>auditBrief</code></td><td>The one-page PBJ Star &amp; Audit-Risk Brief as a PDF: <code>available</code>, <code>filename</code>, <code>contentType</code> (<code>application/pdf</code>), <code>bytes</code>, <code>base64</code> and a <code>note</code>. It shows the result and deadline, the staffing star from <code>staffingEstimate</code> (always labelled an estimate, and only when <code>census</code> is sent), and up to three audit-risk patterns from this run's own findings, each with what it means and how to fix it. Errors come first, then rating and audit risks. It is built from the report alone, so it repeats no value from your file. It is not a compliance determination.</td></tr>
+            <tr><td><code>submissionPackage</code></td><td>A ZIP: <code>available</code>, <code>filename</code>, <code>contentType</code> (<code>application/zip</code>), <code>bytes</code>, <code>files</code>, <code>base64</code> and a <code>note</code>. It holds the brief, your upload byte for byte (<code>uploaded-pbj-file.xml</code>, <code>.xml.gz</code> or <code>uploaded-pbj-upload.zip</code>; never changed, corrected or re-created; its SHA-256 matches <code>inputSha256</code>) and a <code>README.txt</code>. It is a record of what was checked, not a filing.</td></tr>
+          </tbody>
+        </table>
+        <p>Either can come back as <code>{'{"available": false, "reason": "..."}'}</code>: when it could not be built (the report is unaffected), or, for the ZIP, when the upload is too large to send back inside one response next to the report.</p>
+
         <h2 id="rules">Rule IDs</h2>
         <p>CMS edits keep their CMS number, so a finding can be matched to the edit the CMS system would report. Fatal CMS edits are errors; CMS warnings, risk flags and consistency checks are warnings.</p>
         <div className="table-scroll">

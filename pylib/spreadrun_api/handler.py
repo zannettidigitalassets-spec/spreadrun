@@ -89,6 +89,50 @@ def _filled_form(api, body, query, report):
                     'official completes and signs page 2.'}
 
 
+PBJ_RECORDS_NOTE = ('Included in the report price. Built for this response only: not stored, logged or cached. The '
+                    'brief reports what the checks found; it is not a compliance determination, and the staffing star '
+                    'is an estimate, not the CMS rating.')
+
+
+def _pbj_records(api, body, report):
+    """PBJ only, paid calls only: the one-page PBJ Star & Audit-Risk Brief and the records ZIP (the brief, the upload
+    byte for byte, a README). Outside `report`, which never contains values from the input; the brief does not either,
+    the ZIP carries the upload as the caller sent it. Returns (auditBrief, submissionPackage) or (None, None)."""
+    if api != 'pbj-staffing-qa':
+        return None, None
+    try:
+        brief, zipped, names = runners.pbj_records(body, report)
+    except Exception as exc:  # noqa: BLE001 - the report still stands; never leak internals or input
+        print(f'[spreadrun] pbj records error: {type(exc).__name__}', file=sys.stderr)
+        down = {'available': False, 'reason': 'The brief and records ZIP could not be produced for this file. The '
+                                              'report is unaffected.'}
+        return dict(down), dict(down)
+    b = {'available': True, 'filename': runners.pbj_brief_module().BRIEF_NAME, 'contentType': 'application/pdf',
+         'bytes': len(brief), 'base64': base64.b64encode(brief).decode('ascii'), 'note': PBJ_RECORDS_NOTE}
+    z = {'available': True, 'filename': f'SpreadRun-PBJ-records-{report.get("asOf", "")}.zip',
+         'contentType': 'application/zip', 'bytes': len(zipped), 'files': names,
+         'base64': base64.b64encode(zipped).decode('ascii'),
+         'note': 'A records packet, not a filing: the brief, your upload exactly as received, and a README. Upload '
+                 'your file to CMS yourself.'}
+    return b, z
+
+
+# Vercel caps a function's response at 4.5 MB. Leave headroom for headers and encoding.
+RESPONSE_LIMIT = 4_400_000
+
+
+def _fit_response(payload):
+    """Drop the records ZIP (then the brief) when the response would pass Vercel's limit, saying why."""
+    for key, reason in (('submissionPackage', 'Your upload is too large to send back inside this response next to the '
+                                              'report. Keep your original file with the brief.'),
+                        ('auditBrief', 'The response would be too large to include the brief.')):
+        if len(json.dumps(payload, separators=(',', ':'))) <= RESPONSE_LIMIT:
+            break
+        if payload.get(key, {}).get('available'):
+            payload[key] = {'available': False, 'reason': reason}
+    return payload
+
+
 def process(api, mode, headers, read_body, path='/'):
     """Returns (http_status, json_payload). headers: mapping with .get(); read_body(n) -> bytes."""
     request_id = str(uuid.uuid4())
@@ -157,6 +201,7 @@ def process(api, mode, headers, read_body, path='/'):
         return 200, {'requestId': request_id, 'api': api, 'mode': 'demo', 'charged': False, 'report': report}
 
     filled = _filled_form(api, body, query, report)
+    audit_brief, records = _pbj_records(api, body, report)
 
     try:
         result = billing.charge_request(caller, api=api, price_cents=cfg['price_cents'], request_id=request_id,
@@ -173,6 +218,10 @@ def process(api, mode, headers, read_body, path='/'):
                'priceCents': cfg['price_cents'], 'balanceCents': result.balance_cents, 'report': report}
     if filled is not None:
         payload['filledForm'] = filled
+    if audit_brief is not None:
+        payload['auditBrief'] = audit_brief
+        payload['submissionPackage'] = records
+        _fit_response(payload)
     return 200, payload
 
 
