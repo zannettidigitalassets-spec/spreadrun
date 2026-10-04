@@ -15,6 +15,7 @@ import DocsPbj from './pages/DocsPbj.jsx';
 import DocsWh347 from './pages/DocsWh347.jsx';
 import OvertimeCalculator, { OT_FAQ, OT_CALC_PATH } from './pages/OvertimeCalculator.jsx';
 import FringeCalculator, { FRINGE_FAQ, FRINGE_CALC_PATH } from './pages/FringeCalculator.jsx';
+import PbjPreflight, { PREFLIGHT_FAQ, PBJ_PREFLIGHT_PATH } from './pages/PbjPreflight.jsx';
 import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
@@ -72,6 +73,7 @@ const D = {
   docsMrf: 'Hospital MRF Validator API reference: endpoints, upload formats, query parameters, sampling limits, report schema, finding codes, error codes, and samples.',
   pbj: 'Check nursing home PBJ staffing XML against CMS v4.10.0 specs before upload, with documented audit risk flags. Results in seconds. $25.00 per report, free test.',
   wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $25.00 per report, free test.',
+  pbjPreflight: 'Free PBJ pre-flight checks: count zero-RN days against the CMS one-star staffing rule and work out meal break deductions the way the PBJ Policy Manual requires.',
   fringeCalc: 'Free Davis-Bacon fringe benefit calculator: annualize plan costs over all hours worked for the hourly prevailing wage fringe credit and compare it to your rate.',
   otCalc: 'Free Davis-Bacon overtime calculator: time and a half on the basic rate for hours over 40 under CWHSSA, fringe owed per hour, and the weekly gross. No signup.',
   docsWh347: 'WH-347 Certified Payroll Pre-Check API reference: endpoints, workbook and JSON input, every payroll column, report schema, rule IDs, and all error codes.',
@@ -177,6 +179,23 @@ export const ROUTES = {
       },
       faqLd(FRINGE_FAQ),
       crumbsLd([...HOME, [FRINGE_CALC_PATH, 'Davis-Bacon Fringe Benefit Calculator']]),
+    ],
+  },
+  [PBJ_PREFLIGHT_PATH]: {
+    Component: PbjPreflight,
+    title: 'PBJ Pre-Flight Checks: Zero-RN Days and Meal Break Calculator | SpreadRun',
+    description: D.pbjPreflight,
+    priority: '0.8',
+    jsonLd: () => [
+      {
+        '@context': 'https://schema.org', '@type': 'WebApplication', name: 'PBJ Pre-Flight Checks',
+        alternateName: ['PBJ meal break deduction calculator', 'Zero RN days staffing star rating checker'],
+        url: ORIGIN + PBJ_PREFLIGHT_PATH, applicationCategory: 'BusinessApplication', operatingSystem: 'Web',
+        description: D.pbjPreflight, isAccessibleForFree: true, publisher: ORG,
+        keywords: 'PBJ meal break deduction calculator, zero RN days staffing star rating, payroll based journal',
+      },
+      faqLd(PREFLIGHT_FAQ),
+      crumbsLd([...HOME, [PBJ_PREFLIGHT_PATH, 'PBJ Pre-Flight Checks']]),
     ],
   },
   '/docs': {

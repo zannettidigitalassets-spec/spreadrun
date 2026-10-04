@@ -13,6 +13,7 @@ export const LOADERS = {
   '/apis/wh347-payroll-precheck': () => import('./pages/Wh347Api.jsx'),
   '/tools/davis-bacon-overtime-calculator': () => import('./pages/OvertimeCalculator.jsx'),
   '/tools/davis-bacon-fringe-calculator': () => import('./pages/FringeCalculator.jsx'),
+  '/tools/pbj-preflight-checks': () => import('./pages/PbjPreflight.jsx'),
   '/docs': () => import('./pages/Docs.jsx'),
   '/docs/clinical-trial-table-validator': () => import('./pages/DocsClinical.jsx'),
   '/docs/hospital-mrf-validator': () => import('./pages/DocsMrf.jsx'),

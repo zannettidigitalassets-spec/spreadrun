@@ -284,6 +284,16 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   comparison with the wage determination fringe rate (a shortfall rounds up to the next cent). Explainer from 29 CFR
   5.2, 5.26, 5.28 and 5.29(f). Cross-linked with the overtime calculator and the WH-347 page.
 
+## PBJ pre-flight checks (branch `spreadrun/pbj-preflight-checks`, 2026-10-04)
+
+- `/tools/pbj-preflight-checks`: browser-only (`src/site/pbjPreflight.js`, node tests in `scripts/tests/`).
+- Zero-RN day scanner: threshold 4 days, verified in the Five-Star Technical Users' Guide (September 2026), staffing
+  scoring exceptions ("four or more days in the quarter with no RN staffing hours (job codes 5-7) on days when there
+  were one or more residents"). Not 7.
+- Meal break calculator follows the PBJ Policy Manual v2.8 (August 2026), not a 6-hour threshold: 30 minutes per full
+  shift paid or unpaid, the actual break if longer, unpaid break time already out of paid time, minutes converted to
+  tenths with the manual's 6-minute table (hundredths shown too). The manual sets no minimum shift length.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist
