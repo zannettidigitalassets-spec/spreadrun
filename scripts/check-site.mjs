@@ -41,6 +41,7 @@ const NEED_LD = {
   '/apis/pbj-staffing-qa': PRODUCT_LD,
   '/apis/wh347-payroll-precheck': PRODUCT_LD,
   '/tools/davis-bacon-overtime-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
+  '/tools/davis-bacon-fringe-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/docs': ['BreadcrumbList'],
   '/docs/clinical-trial-table-validator': ['BreadcrumbList'],
   '/docs/hospital-mrf-validator': ['BreadcrumbList'],
@@ -123,7 +124,7 @@ const client = fs.readFileSync(path.join(root, 'src/entry-client.jsx'), 'utf8');
 for (const u of known) if (!client.includes(`'${u}': () => import(`)) fail(`${u}: no client loader in entry-client.jsx`);
 
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
-for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/tools/davis-bacon-overtime-calculator', '/docs',
+for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/docs',
   '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/docs/wh347-payroll-precheck', '/guides',
   '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);

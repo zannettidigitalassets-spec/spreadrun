@@ -109,7 +109,7 @@ export default function Wh347Api() {
           <a className="btn" href="#demo">Check a payroll</a>
           <a className="btn secondary" href="/samples/wh347-pass.xlsx">Download the sample workbook</a>
         </div>
-        <p className="small">Quick overtime math for one worker? Use the free <a href="/tools/davis-bacon-overtime-calculator">Davis-Bacon overtime calculator</a>.</p>
+        <p className="small">Quick overtime math for one worker? Use the free <a href="/tools/davis-bacon-overtime-calculator">Davis-Bacon overtime calculator</a> or the <a href="/tools/davis-bacon-fringe-calculator">fringe benefit annualization calculator</a>.</p>
       </div>
 
       <section className="section wrap split" aria-labelledby="checks">

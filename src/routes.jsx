@@ -14,6 +14,7 @@ import DocsUad from './pages/DocsUad.jsx';
 import DocsPbj from './pages/DocsPbj.jsx';
 import DocsWh347 from './pages/DocsWh347.jsx';
 import OvertimeCalculator, { OT_FAQ, OT_CALC_PATH } from './pages/OvertimeCalculator.jsx';
+import FringeCalculator, { FRINGE_FAQ, FRINGE_CALC_PATH } from './pages/FringeCalculator.jsx';
 import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
@@ -71,6 +72,7 @@ const D = {
   docsMrf: 'Hospital MRF Validator API reference: endpoints, upload formats, query parameters, sampling limits, report schema, finding codes, error codes, and samples.',
   pbj: 'Check nursing home PBJ staffing XML against CMS v4.10.0 specs before upload, with documented audit risk flags. Results in seconds. $25.00 per report, free test.',
   wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $25.00 per report, free test.',
+  fringeCalc: 'Free Davis-Bacon fringe benefit calculator: annualize plan costs over all hours worked for the hourly prevailing wage fringe credit and compare it to your rate.',
   otCalc: 'Free Davis-Bacon overtime calculator: time and a half on the basic rate for hours over 40 under CWHSSA, fringe owed per hour, and the weekly gross. No signup.',
   docsWh347: 'WH-347 Certified Payroll Pre-Check API reference: endpoints, workbook and JSON input, every payroll column, report schema, rule IDs, and all error codes.',
   docsPbj: 'PBJ Staffing Data Pre-Submission QA API reference: endpoints, ZIP and XML uploads, the asOf date, report schema, CMS edit and risk rule IDs, and error codes.',
@@ -158,6 +160,23 @@ export const ROUTES = {
       },
       faqLd(OT_FAQ),
       crumbsLd([...HOME, [OT_CALC_PATH, 'Davis-Bacon Overtime Calculator']]),
+    ],
+  },
+  [FRINGE_CALC_PATH]: {
+    Component: FringeCalculator,
+    title: 'Davis-Bacon Fringe Benefit Annualization Calculator | SpreadRun',
+    description: D.fringeCalc,
+    priority: '0.8',
+    jsonLd: () => [
+      {
+        '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Davis-Bacon Fringe Benefit Annualization Calculator',
+        alternateName: ['Fringe benefit annualization calculator', 'Prevailing wage fringe credit calculator'],
+        url: ORIGIN + FRINGE_CALC_PATH, applicationCategory: 'BusinessApplication', operatingSystem: 'Web',
+        description: D.fringeCalc, isAccessibleForFree: true, publisher: ORG,
+        keywords: 'davis-bacon fringe benefit calculation, fringe benefit annualization calculator, prevailing wage fringe credit',
+      },
+      faqLd(FRINGE_FAQ),
+      crumbsLd([...HOME, [FRINGE_CALC_PATH, 'Davis-Bacon Fringe Benefit Calculator']]),
     ],
   },
   '/docs': {

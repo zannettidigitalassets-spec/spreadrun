@@ -106,6 +106,7 @@ export default function OvertimeCalculator() {
         <h2 id="faq-h">Questions</h2>
         <Faq items={OT_FAQ} />
         <p className="small" style={{ marginTop: 24 }}>Checking a whole week? The <a href={`/apis/${WH347.slug}`}>WH-347 certified payroll pre-check</a> recomputes every row of the payroll against your wage determination, and for a payroll that passes, gives you the completed WH-347 ready to sign.</p>
+        <p className="small">Also free: the <a href="/tools/davis-bacon-fringe-calculator">Davis-Bacon fringe benefit annualization calculator</a>.</p>
       </section>
     </Layout>
   );

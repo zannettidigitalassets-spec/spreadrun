@@ -162,6 +162,7 @@ input[type='file'] { font: 14px var(--sans); }
 .wh-grid input[type='date'] { font: 15px var(--sans); color: var(--ink); border: 1px solid #b9c3cd; border-radius: var(--radius); padding: 9px 12px; width: 100%; background: #fff; }
 @media (max-width: 520px) { .wh-grid { grid-template-columns: 1fr; } }
 .input-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; margin: 12px 0 0; }
+.input-grid .field { align-content: start; }
 .input-grid input { font: 15px var(--sans); color: var(--ink); border: 1px solid #b9c3cd; border-radius: var(--radius); padding: 9px 12px; width: 100%; background: #fff; }
 @media (max-width: 520px) { .input-grid { grid-template-columns: 1fr; } }
 .estimate-inputs { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin: 0 0 16px; background: var(--panel); }

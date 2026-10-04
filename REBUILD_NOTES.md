@@ -277,6 +277,13 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - **Calculator.** `/tools/davis-bacon-overtime-calculator`: browser-only arithmetic (`src/site/overtime.js`, node tests
   in `scripts/tests/`), no request carries the inputs, FAQ JSON-LD from 29 CFR 5.5(b) and 5.32.
 
+## Fringe benefit annualization calculator (branch `spreadrun/fringe-calculator`, 2026-10-04)
+
+- `/tools/davis-bacon-fringe-calculator`: browser-only (`src/site/fringe.js`, node tests in `scripts/tests/`). Credit =
+  annual cost / all hours worked, private and Davis-Bacon (29 CFR 5.25(c)(1)); cash in lieu adds per hour; optional
+  comparison with the wage determination fringe rate (a shortfall rounds up to the next cent). Explainer from 29 CFR
+  5.2, 5.26, 5.28 and 5.29(f). Cross-linked with the overtime calculator and the WH-347 page.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist
