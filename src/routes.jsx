@@ -16,6 +16,8 @@ import DocsPbj from './pages/DocsPbj.jsx';
 import DocsWh347 from './pages/DocsWh347.jsx';
 import DocsPecos from './pages/DocsPecos.jsx';
 import CmmcApi, { CMMC_FAQ } from './pages/CmmcApi.jsx';
+import CobraApi, { COBRA_FAQ } from './pages/CobraApi.jsx';
+import DocsCobra from './pages/DocsCobra.jsx';
 import DocsCmmc from './pages/DocsCmmc.jsx';
 import OvertimeCalculator, { OT_FAQ, OT_CALC_PATH } from './pages/OvertimeCalculator.jsx';
 import FringeCalculator, { FRINGE_FAQ, FRINGE_CALC_PATH } from './pages/FringeCalculator.jsx';
@@ -85,6 +87,8 @@ const D = {
   docsMrf: 'Hospital MRF Validator API reference: endpoints, upload formats, query parameters, sampling limits, report schema, finding codes, error codes, and samples.',
   pbj: 'Check nursing home PBJ staffing XML against CMS v4.10.0 specs before upload, with documented audit risk flags. Results in seconds. $25.00 per report, free test.',
   pecos: 'Pre-check a draft CMS-855I, 855B or 855S Medicare enrollment, NPI and taxonomy against live NPPES, IRS legal name, ZIP+4, expiring items. $25.00 per check.',
+  cobra: 'Check a COBRA election or general notice before it goes out: the DOL content items, the 44-day and 90-day deadlines, and stated payment terms. $25.00 per run.',
+  docsCobra: 'COBRA Notice Content QA API reference: text, PDF or DOCX input, the 14 election and 6 general notice items, deadline rules, report schema, rule IDs and errors.',
   cmmc: 'Verify a CMMC Level 2 self-assessment score before SPRS: recompute it with the DoD method, check POA&M limits, CAGE codes and affirmation. $25.00 per check.',
   docsCmmc: 'CMMC Self-Assessment Score Validator API reference: JSON or CSV input, result values, point values for all 110 requirements, report schema, rule IDs and errors.',
   docsPecos: 'PECOS Medicare Enrollment Pre-Check API reference: endpoints, the JSON input, supporting document keys, report schema, rule IDs, the NPPES lookup and errors.',
@@ -111,7 +115,7 @@ const D = {
 
 const HOME = [['/', 'Home']];
 const product = (slug, name, title, desc, faq) => ({
-  Component: { 'clinical-trial-table-validator': ClinicalApi, 'hospital-mrf-validator': MrfApi, 'uad-36-appraisal-validator': UadApi, 'pbj-staffing-qa': PbjApi, 'wh347-payroll-precheck': Wh347Api, 'pecos-enrollment-precheck': PecosApi, 'cmmc-self-assessment-validator': CmmcApi }[slug],
+  Component: { 'clinical-trial-table-validator': ClinicalApi, 'hospital-mrf-validator': MrfApi, 'uad-36-appraisal-validator': UadApi, 'pbj-staffing-qa': PbjApi, 'wh347-payroll-precheck': Wh347Api, 'pecos-enrollment-precheck': PecosApi, 'cmmc-self-assessment-validator': CmmcApi, 'cobra-notice-qa': CobraApi }[slug],
   title, description: desc, priority: '0.9',
   jsonLd: () => [appLd(slug, desc), faqLd(faq), crumbsLd([...HOME, ['/apis', 'APIs'], [`/apis/${slug}`, name]])],
 });
@@ -172,6 +176,8 @@ export const ROUTES = {
     'WH-347 Certified Payroll Checker: Davis-Bacon Pre-Check API | SpreadRun', D.wh347, WH347_FAQ),
   '/apis/pecos-enrollment-precheck': product('pecos-enrollment-precheck', 'PECOS Medicare Enrollment Pre-Check',
     'PECOS Medicare Enrollment Pre-Check API: CMS-855 Error Checks | SpreadRun', D.pecos, PECOS_FAQ),
+  '/apis/cobra-notice-qa': product('cobra-notice-qa', 'COBRA Notice Content QA',
+    'COBRA Notice Checker: Election and General Notice QA API | SpreadRun', D.cobra, COBRA_FAQ),
   '/apis/cmmc-self-assessment-validator': product('cmmc-self-assessment-validator', 'CMMC Self-Assessment Score Validator',
     'CMMC Self-Assessment Score Validator: Verify Your SPRS Score | SpreadRun', D.cmmc, CMMC_FAQ),
   [OT_CALC_PATH]: {
@@ -317,6 +323,7 @@ export const ROUTES = {
   '/docs/pbj-staffing-qa': docsPage('pbj-staffing-qa', DocsPbj, 'PBJ Staffing Data Pre-Submission QA', D.docsPbj),
   '/docs/wh347-payroll-precheck': docsPage('wh347-payroll-precheck', DocsWh347, 'Davis-Bacon WH-347 Certified Payroll Pre-Check', D.docsWh347),
   '/docs/pecos-enrollment-precheck': docsPage('pecos-enrollment-precheck', DocsPecos, 'PECOS Medicare Enrollment Pre-Check', D.docsPecos),
+  '/docs/cobra-notice-qa': docsPage('cobra-notice-qa', DocsCobra, 'COBRA Notice Content QA', D.docsCobra),
   '/docs/cmmc-self-assessment-validator': docsPage('cmmc-self-assessment-validator', DocsCmmc, 'CMMC Self-Assessment Score Validator', D.docsCmmc),
   '/guides': {
     Component: Guides,
