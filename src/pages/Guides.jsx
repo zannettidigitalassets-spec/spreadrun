@@ -4,11 +4,13 @@ import { PBJ_ERROR_GUIDES } from './PbjErrorGuides.jsx';
 import { DEADLINE_GUIDES } from '../content/deadline-guides.js';
 import { WH347_GUIDES } from '../content/wh347-guides.js';
 import { ENROLL_GUIDES } from '../content/enroll-guides.js';
+import { FINAL_GUIDES } from '../content/final-guides.js';
 
 export const GUIDES = [
   ...DEADLINE_GUIDES.map((g) => ({ href: `/guides/${g.slug}`, title: g.title, blurb: g.blurb })),
   ...WH347_GUIDES.map((g) => ({ href: `/guides/${g.slug}`, title: g.title, blurb: g.blurb })),
   ...ENROLL_GUIDES.map((g) => ({ href: `/guides/${g.slug}`, title: g.title, blurb: g.blurb })),
+  ...FINAL_GUIDES.map((g) => ({ href: `/guides/${g.slug}`, title: g.title, blurb: g.blurb })),
   {
     href: '/guides/hospital-price-transparency-file-requirements-2026',
     title: 'Hospital Price Transparency File Requirements: The Complete 2026 Guide',
