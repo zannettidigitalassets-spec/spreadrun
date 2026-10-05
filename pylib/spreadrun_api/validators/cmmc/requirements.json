@@ -1,5 +1,5 @@
 {
- "note": "NIST SP 800-171 Rev 2 requirements with CMMC Level 2 point values from 32 CFR 170.24(c)(2)(i)(B). Labels are SpreadRun paraphrases of the NIST text; NIST SP 800-171 Rev 2 controls. 3.12.4 has no point value: without a system security plan no score can be given.",
+ "note": "NIST SP 800-171 Rev 2 requirements with the CMMC Level 2 point values from 32 CFR 170.24(c)(2)(i)(B), checked against eCFR in October 2026. Labels are SpreadRun paraphrases of the NIST requirement text. 3.12.4 has no point value: without a system security plan no score can be given.",
  "families": {
   "AC": "Access Control",
   "AT": "Awareness and Training",

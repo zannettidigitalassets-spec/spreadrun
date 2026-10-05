@@ -425,3 +425,16 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   Postgres, including idempotent charges and grants, the 20-calls-per-$5 rule, revoked keys, demo limits and every verdict state.
 - `python3.12 scripts/gen_examples.py` regenerates the docs examples by running the real handlers.
 - Vercel only registers a Python route when the file has a literal `class handler(...)` (found by reproducing the failed preview build with `vercel build`). The four route files do that.
+
+## CMMC Self-Assessment Score Validator (branch `spreadrun/cmmc-self-assessment-validator`, 2026-10-05)
+
+- Catalog entry `cmmc-self-assessment-validator`, $25.00 per completed verification, served by the shared dispatcher
+  (still 8 of 12 functions). Engine: `pylib/spreadrun_api/validators/cmmc/engine.py` (SpreadRun's own, no network).
+  The 110 requirements, point values and labels are in `requirements.json`, which the website imports too.
+- Methodology: CMMC Level 2 Scoring Methodology, 32 CFR 170.24 (eCFR, October 2026), with 170.21 (POA&M), 170.16
+  (SPRS contents, three-year cycle) and 170.22 (affirmation). Point lists read twice from eCFR; the -203 minimum
+  matches the DOJ June 2026 release. CAGE format (five characters) from a DLA document.
+- No personal data: the affirmation is four yes or no fields plus a date. Terms needed no new clause; the price row
+  comes from the catalog.
+- Not used for lack of a primary source: the July 13, 2026 date of the Phase 2 suspension memo (law firm summaries
+  only), any statistic on overstated scores. Old DFARS 252.204-7019/7020 numbers are not used in copy.
