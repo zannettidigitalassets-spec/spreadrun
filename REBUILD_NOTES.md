@@ -316,6 +316,16 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - **Site.** PBJ form shows Download buttons after a paid run; product page pricing bullet; docs section `#brief`;
   examples show returned files by size instead of base64 (`scripts/gen_examples.py`).
 
+## I-9 Section 2 deadline calculator (branch `spreadrun/i9-section2-deadline`, 2026-10-04)
+
+- `/tools/i9-section2-deadline-calculator`: browser-only (`src/site/i9.js`, tests in `scripts/tests/i9.test.mjs`).
+- Section 2 due within three business days of the first day of employment, start day is day 0 (8 CFR 274a.2(b)(1)(ii),
+  M-274 4.0: Monday start, done by Thursday); less than three business days of work means Section 2 on day one.
+  "Business day" is not defined in the rule or the handbook, so weekends and federal holidays are skipped by default
+  and the user can count days they are open. Holidays are OPM's observed dates for 2026 and 2027, plus Dec 31 2027
+  (New Year's 2028 observed); other years show a warning.
+- Fines: $288 to $2,861 per form, 8 CFR 274a.10(b)(2) (DHS rule, Federal Register Jan 2 2025; no 2026 change found).
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist

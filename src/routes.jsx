@@ -16,6 +16,7 @@ import DocsWh347 from './pages/DocsWh347.jsx';
 import OvertimeCalculator, { OT_FAQ, OT_CALC_PATH } from './pages/OvertimeCalculator.jsx';
 import FringeCalculator, { FRINGE_FAQ, FRINGE_CALC_PATH } from './pages/FringeCalculator.jsx';
 import PbjPreflight, { PREFLIGHT_FAQ, PBJ_PREFLIGHT_PATH } from './pages/PbjPreflight.jsx';
+import I9Deadline, { I9_FAQ, I9_PATH } from './pages/I9Deadline.jsx';
 import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
@@ -74,6 +75,7 @@ const D = {
   pbj: 'Check nursing home PBJ staffing XML against CMS v4.10.0 specs before upload, with documented audit risk flags. Results in seconds. $25.00 per report, free test.',
   wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $25.00 per report, free test.',
   pbjPreflight: 'Free PBJ pre-flight checks: count zero-RN days against the CMS one-star staffing rule and work out meal break deductions the way the PBJ Policy Manual requires.',
+  i9: 'Free I-9 Section 2 deadline calculator: the 3rd business day after the first day of work, skipping weekends and federal holidays, plus a self-audit checklist.',
   fringeCalc: 'Free Davis-Bacon fringe benefit calculator: annualize plan costs over all hours worked for the hourly prevailing wage fringe credit and compare it to your rate.',
   otCalc: 'Free Davis-Bacon overtime calculator: time and a half on the basic rate for hours over 40 under CWHSSA, fringe owed per hour, and the weekly gross. No signup.',
   docsWh347: 'WH-347 Certified Payroll Pre-Check API reference: endpoints, workbook and JSON input, every payroll column, report schema, rule IDs, and all error codes.',
@@ -196,6 +198,23 @@ export const ROUTES = {
       },
       faqLd(PREFLIGHT_FAQ),
       crumbsLd([...HOME, [PBJ_PREFLIGHT_PATH, 'PBJ Pre-Flight Checks']]),
+    ],
+  },
+  [I9_PATH]: {
+    Component: I9Deadline,
+    title: 'Free I-9 Section 2 Deadline Calculator and Self-Audit Checklist | SpreadRun',
+    description: D.i9,
+    priority: '0.8',
+    jsonLd: () => [
+      {
+        '@context': 'https://schema.org', '@type': 'WebApplication', name: 'I-9 Section 2 Deadline Calculator',
+        alternateName: ['I-9 three business day calculator', 'Form I-9 self-audit checklist'],
+        url: ORIGIN + I9_PATH, applicationCategory: 'BusinessApplication', operatingSystem: 'Web',
+        description: D.i9, isAccessibleForFree: true, publisher: ORG,
+        keywords: 'I-9 Section 2 deadline, three business days, Form I-9 self-audit checklist',
+      },
+      faqLd(I9_FAQ),
+      crumbsLd([...HOME, [I9_PATH, 'I-9 Section 2 Deadline Calculator']]),
     ],
   },
   '/docs': {
