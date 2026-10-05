@@ -380,6 +380,14 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   checked for DMEPOS (855S) only. CMS-855A is not supported: its supporting-document list could not be verified.
 - Terms and Privacy still forbid personal data for this API: a clause was proposed, not applied.
 
+## PBJ error guides (branch `spreadrun/pbj-error-guides`, 2026-10-05)
+
+- Five guides under /guides (`src/pages/PbjErrorGuides.jsx`, one loader per guide in `src/pages/pbj/`): -1025, -4025,
+  -3679, -3676, -4016. Error text, severity, causes, actions and effective dates come from the CMS iQIES PBJ Error
+  Messages list (QTSO, posted 07/31/2026); v4.10.0 specs and the QTSO iQIES launch notice (August 17, 2026) back the rest.
+- -4012 is in neither the iQIES list nor the v4.10.0 edits, and -4015 was deleted in v4.10.0: no pages for them.
+- The deadline is named once (`PBJ_DEADLINE`): update that constant after November 14.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist

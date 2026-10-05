@@ -28,6 +28,7 @@ import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
 import ClinicalGuide, { CLINICAL_GUIDE } from './pages/ClinicalGuide.jsx';
+import { PBJ_ERROR_GUIDES, PBJ_GUIDE_PUBLISHED, makePbjErrorGuide } from './pages/PbjErrorGuides.jsx';
 import Account from './pages/Account.jsx';
 import Contact from './Contact.jsx';
 import NotFound from './NotFound.jsx';
@@ -304,6 +305,8 @@ export const ROUTES = {
   [`/guides/${CLINICAL_GUIDE.slug}`]: guidePage(CLINICAL_GUIDE, ClinicalGuide, D.clinicalGuide, 'Clinical trial data quality checks'),
   ...Object.fromEntries(UAD_ERROR_GUIDES.map((g) => [`/guides/${g.slug}`,
     guidePage({ ...g, published: UAD_GUIDE_PUBLISHED }, makeUadErrorGuide(g.slug), g.description, g.crumb)])),
+  ...Object.fromEntries(PBJ_ERROR_GUIDES.map((g) => [`/guides/${g.slug}`,
+    guidePage({ ...g, published: PBJ_GUIDE_PUBLISHED }, makePbjErrorGuide(g.slug), g.description, g.crumb)])),
   '/unsubscribe': {
     Component: Unsubscribe,
     title: 'Unsubscribe | SpreadRun',

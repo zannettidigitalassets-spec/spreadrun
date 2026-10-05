@@ -1,5 +1,6 @@
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import { UAD_ERROR_GUIDES } from './UadErrorGuides.jsx';
+import { PBJ_ERROR_GUIDES } from './PbjErrorGuides.jsx';
 
 export const GUIDES = [
   {
@@ -18,6 +19,7 @@ export const GUIDES = [
     blurb: 'Why extracted trial tables break, the NCT number format, the checks that matter before analysis, and the orphan-outcome and duplicate patterns that do the most damage.',
   },
   ...UAD_ERROR_GUIDES.map((g) => ({ href: `/guides/${g.slug}`, title: g.title, blurb: g.blurb })),
+  ...PBJ_ERROR_GUIDES.map((g) => ({ href: `/guides/${g.slug}`, title: g.title, blurb: g.blurb })),
 ];
 
 export default function Guides() {
