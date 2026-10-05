@@ -87,6 +87,11 @@ const NEED_LD = {
   '/guides/wh347-common-mistakes': GUIDE_LD,
   '/guides/davis-bacon-fringe-annualization': GUIDE_LD,
   '/guides/davis-bacon-weighted-overtime': GUIDE_LD,
+  '/guides/pecos-returned-for-corrections': GUIDE_LD,
+  '/guides/npi-not-active-nppes': GUIDE_LD,
+  '/guides/855i-rejection-reasons': GUIDE_LD,
+  '/guides/cobra-election-notice-requirements': GUIDE_LD,
+  '/guides/cobra-notice-deadlines': GUIDE_LD,
 };
 // No empty strings, arrays or objects anywhere inside a JSON-LD block.
 const emptyField = (v, at = '') => {
@@ -165,13 +170,14 @@ for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/ho
   '/guides/uad36-fatal-findings-explained', '/guides/ucdp-not-successful-meaning', '/guides/uad36-warning-vs-fatal', '/guides/uad36-basement-fields-hard-stop', '/guides/uad36-location-view-codes-rejected', '/guides/uad36-concession-mismatch', '/guides/uad36-address-usps-flag', '/guides/ucdp-not-successful-vs-rejected',
   '/guides/pbj-error-minus-1025', '/guides/pbj-error-4025', '/guides/pbj-error-3679', '/guides/pbj-error-3676', '/guides/pbj-error-4016',
   '/guides/pbj-zero-rn-days', '/guides/uad36-rule-uad1189', '/guides/uad36-rule-uad1001', '/guides/pbj-file-rejected', '/guides/how-to-fix-ucdp-errors',
-  '/guides/wh347-apprentice-reporting', '/guides/wh347-statement-of-compliance', '/guides/wh347-common-mistakes', '/guides/davis-bacon-fringe-annualization', '/guides/davis-bacon-weighted-overtime']) {
+  '/guides/wh347-apprentice-reporting', '/guides/wh347-statement-of-compliance', '/guides/wh347-common-mistakes', '/guides/davis-bacon-fringe-annualization', '/guides/davis-bacon-weighted-overtime',
+  '/guides/pecos-returned-for-corrections', '/guides/npi-not-active-nppes', '/guides/855i-rejection-reasons', '/guides/cobra-election-notice-requirements', '/guides/cobra-notice-deadlines']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);
 }
 for (const u of ['/account', '/unsubscribe', '/404', '/secondring', '/guides/lsa-missed-call-charges-october-2026']) if (sitemap.includes(`${u}</loc>`)) fail(`sitemap should not list ${u}`);
-// Guide batches 1 (deadline) and 2 (WH-347): every page cites its primary sources next to the claims, links its
+// Guide batches 1 (deadline), 2 (WH-347) and 3 (PECOS and COBRA): every page cites its primary sources next to the claims, links its
 // CTA, and is listed on the /guides index.
-for (const [file, key] of [['src/content/deadline-guides.js', 'DEADLINE_GUIDES'], ['src/content/wh347-guides.js', 'WH347_GUIDES']]) {
+for (const [file, key] of [['src/content/deadline-guides.js', 'DEADLINE_GUIDES'], ['src/content/wh347-guides.js', 'WH347_GUIDES'], ['src/content/enroll-guides.js', 'ENROLL_GUIDES']]) {
   const mod = await import(path.join(root, file));
   const SRC = mod.SRC;
   const index = fs.readFileSync(path.join(dist, 'guides.html'), 'utf8');
