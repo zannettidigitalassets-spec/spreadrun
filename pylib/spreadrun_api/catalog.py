@@ -55,6 +55,13 @@ APIS = {
         'max_body_bytes': 256 * 1024,
         'demo_max_body_bytes': 64 * 1024,
     },
+    'cobra-notice-qa': {
+        'name': 'COBRA Notice Content QA',
+        'price_cents': 2500,   # professional tier
+        # One notice: JSON with the text, or a PDF or DOCX as base64 (up to 3 MB before encoding).
+        'max_body_bytes': 4_400_000,
+        'demo_max_body_bytes': 1024 * 1024,
+    },
     'cmmc-self-assessment-validator': {
         'name': 'CMMC Self-Assessment Score Validator',
         'price_cents': 2500,   # professional tier

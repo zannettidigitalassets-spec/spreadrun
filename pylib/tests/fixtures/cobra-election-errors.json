@@ -1,0 +1,12 @@
+{
+ "asOf": "2026-11-20",
+ "noticeType": "election",
+ "noticeDate": "2026-11-20",
+ "qualifyingEvent": {
+  "type": "termination",
+  "date": "2026-09-30",
+  "lossOfCoverageDate": "2026-09-30",
+  "employerIsAdministrator": true
+ },
+ "noticeText": "COBRA Continuation Coverage Election Notice\n\nExample Manufacturing Group Health Plan\n\nYour coverage under the Plan will end on September 30, 2026 because of a qualifying event: the end of your employment.\n\nYou and your covered family members may continue coverage. To elect, return the enclosed election form. Your election must be received by October 31, 2026.\n\nIf you do not elect, your coverage ends.\n\nCOBRA continuation coverage is the same coverage you had before. It lasts up to 36 months.\n\nThe monthly premium is $650.00, which is 105 percent of the cost of coverage. Your first payment is due within 30 days after you elect. Payments are due on the first of each month, with a grace period of 15 days.\n\nQuestions? Call the benefits office at (555) 010-0100.\n"
+}

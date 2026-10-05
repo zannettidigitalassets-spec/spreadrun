@@ -265,6 +265,30 @@ def run_pecos(body: bytes, *, lookup=None):
                                   'not charged. Try again in a few minutes.') from None
 
 
+_cobra = None
+
+
+def cobra_module():
+    """SpreadRun's own COBRA notice content engine (not a DataForge copy). No network calls."""
+    global _cobra
+    if _cobra is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_cobra_engine', HERE / 'cobra' / 'engine.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_cobra_engine'] = module
+        spec.loader.exec_module(module)
+        _cobra = module
+    return _cobra
+
+
+def run_cobra(body: bytes, *, as_of=None):
+    """Check one COBRA election or general notice (JSON with the text, or a PDF or DOCX as base64)."""
+    v = cobra_module()
+    try:
+        return v.validate(body, as_of=as_of)
+    except v.InputError as exc:
+        raise InputError(str(exc)) from None
+
+
 _cmmc = None
 
 
