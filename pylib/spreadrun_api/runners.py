@@ -280,11 +280,11 @@ def cmmc_module():
     return _cmmc
 
 
-def run_cmmc(body: bytes, *, as_of=None):
-    """Verify one CMMC Level 2 self-assessment package (JSON)."""
+def run_cmmc(body: bytes, *, as_of=None, demo=False):
+    """Verify one CMMC Level 2 self-assessment package (JSON). demo=True accepts only the sample packages."""
     v = cmmc_module()
     try:
-        return v.validate(body, as_of=as_of)
+        return v.validate(body, as_of=as_of, demo=demo)
     except v.InputError as exc:
         raise InputError(str(exc)) from None
 

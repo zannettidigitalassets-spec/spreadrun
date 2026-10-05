@@ -218,6 +218,23 @@ class RowChecks(unittest.TestCase):
                      'CMMC-AFFIRM-MISSING', 'CMMC-BAND-NONE'):
             self.assertIn(rule, r['ruleCounts'])
 
+    def test_demo_sample_hashes_match_the_published_samples(self):
+        found = {}
+        for name in ('cmmc-clean', 'cmmc-conditional', 'cmmc-errors'):
+            raw = (ROOT / 'public' / 'samples' / f'{name}.json').read_bytes()
+            self.assertEqual(engine.demo_sample(raw), name)
+            self.assertEqual(raw, (FIX / f'{name}.json').read_bytes(), 'test fixtures are copies of the samples')
+            found[name] = True
+        self.assertEqual(len(engine.DEMO_SAMPLES), 3)
+        self.assertIsNone(engine.demo_sample(b'not json'))
+
+    def test_demo_error_does_not_echo(self):
+        p = pkg('cmmc-errors')
+        p['assessment']['cageCodes'] = [MARK]
+        with self.assertRaises(runners.InputError) as cm:
+            runners.run_cmmc(json.dumps(p).encode(), demo=True)
+        self.assertNotIn(MARK, str(cm.exception))
+
     def test_input_errors(self):
         p = pkg()
         cases = [b'not json', b'[]', json.dumps({**p, 'assessment': None}).encode(),
@@ -329,6 +346,38 @@ class CmmcRoute(unittest.TestCase):
         self.assertEqual(status, 200, payload)
         self.assertFalse(payload['charged'])
         self.assertEqual(self.fake.balance[self.user], 3000)
+
+    def test_demo_runs_each_sample_free(self):
+        for name in ('cmmc-clean', 'cmmc-conditional', 'cmmc-errors'):
+            raw = (ROOT / 'public' / 'samples' / f'{name}.json').read_bytes()
+            reformatted = json.dumps(json.loads(raw), separators=(',', ':'), sort_keys=True).encode()
+            for body in (raw, reformatted):
+                status, payload = call(CMMC, 'demo', body, {'X-Forwarded-For': '203.0.113.9'})
+                self.assertEqual(status, 200, (name, payload))
+                self.assertFalse(payload['charged'])
+        self.assertEqual(self.fake.balance[self.user], 3000)
+
+    def test_demo_refuses_own_data(self):
+        own = [pkg(), with_results({'3.1.3': 'NOT MET'}, claimed=109)]
+        changed = pkg('cmmc-errors')
+        changed['assessment']['claimedScore'] = 94           # one value changed from the sample
+        own.append(changed)
+        for p in own:
+            status, payload = call(CMMC, 'demo', json.dumps({**p, 'asOf': '2026-10-04'}).encode(),
+                                   {'X-Forwarded-For': '203.0.113.9'})
+            self.assertEqual(status, 400, payload)
+            self.assertEqual(payload['error']['code'], 'input_error')
+            self.assertIn('sample packages only', payload['error']['message'])
+            self.assertIn('$25.00', payload['error']['message'])
+        self.assertEqual(self.fake.balance[self.user], 3000)
+        self.assertTrue(all(c['outcome'] == 'input_error' for c in self.fake.calls))
+
+    def test_paid_runs_own_data(self):
+        p = with_results({'3.1.3': 'NOT MET'}, claimed=109)
+        p['assessment']['poamInPlace'] = True
+        status, payload = call(CMMC, 'paid', json.dumps(p).encode(), {'Authorization': f'Bearer {self.key}'})
+        self.assertEqual((status, payload['charged'], payload['priceCents']), (200, True, 2500))
+        self.assertEqual(payload['report']['verifiedScore'], 109)
 
     def test_demo_size_limit(self):
         p = pkg()

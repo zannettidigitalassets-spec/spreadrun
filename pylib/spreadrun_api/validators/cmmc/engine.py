@@ -88,6 +88,30 @@ class InputError(ValueError):
     """The request cannot be checked at all (400, not charged). Messages never repeat submitted values."""
 
 
+# The free demo runs the three sample packages on the product page and nothing else: verifying your own results is the
+# paid product. A body matches when its JSON is the same as a sample's, whatever the spacing or key order. The hashes
+# are of the canonical JSON of public/samples/cmmc-*.json; test_cmmc.py recomputes them from those files.
+DEMO_SAMPLES = {
+    '28f5a50eb56221ebb219f17cbeea2d4b56da52d7137495b431083272d4c1cddf': 'cmmc-clean',
+    '3665025b3b2d2e5a088e1d86e70e78c07e30302e6f53f51af9d5f30be96ba1cf': 'cmmc-conditional',
+    'f3848c01a419172edcc3c95c72f74ef13863e4cf6025bba4070c01f7cd8badfb': 'cmmc-errors',
+}
+DEMO_ONLY_SAMPLES = ('The free demo runs the three sample packages only. To verify your own self-assessment, sign in with '
+                     '$25.00 of credit or call the paid API. Nothing was charged.')
+
+
+def canonical_sha(data):
+    return hashlib.sha256(json.dumps(data, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
+
+
+def demo_sample(body: bytes):
+    """The sample's name if the body is one of the demo sample packages, otherwise None."""
+    try:
+        return DEMO_SAMPLES.get(canonical_sha(json.loads(body.decode('utf-8'))))
+    except (UnicodeDecodeError, ValueError):
+        return None
+
+
 class Report:
     def __init__(self):
         self.findings = []
@@ -425,7 +449,9 @@ def _add_years(d, n):
 
 
 # ------------------------------------------------------------------ run
-def validate(body: bytes, *, as_of=None):
+def validate(body: bytes, *, as_of=None, demo=False):
+    if demo and demo_sample(body) is None:
+        raise InputError(DEMO_ONLY_SAMPLES)
     data, rows = parse_body(body)
     today = datetime.now(timezone.utc).date()
     as_of = as_of or parse_date(data.get('asOf')) or today
