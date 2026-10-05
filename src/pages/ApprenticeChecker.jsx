@@ -3,6 +3,7 @@ import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
 import { apiBySlug, dollars } from '../catalog.js';
 import { checkCrafts } from '../site/apprentice.js';
+import ToolSignup from '../site/ToolSignup.jsx';
 
 const WH347 = apiBySlug('wh347-payroll-precheck');
 export const APPRENTICE_PATH = '/tools/davis-bacon-apprentice-checker';
@@ -166,6 +167,7 @@ export default function ApprenticeChecker() {
         <p className="small" style={{ marginTop: 24 }}>This is arithmetic, not legal or compliance advice. SpreadRun is not affiliated with or endorsed by the Department of Labor.</p>
         <p className="small">Also free: the <a href="/tools/davis-bacon-overtime-calculator">Davis-Bacon overtime calculator</a> and the <a href="/tools/davis-bacon-fringe-calculator">fringe benefit annualization calculator</a>. <a href="/tools">All free tools</a>.</p>
       </section>
+      <ToolSignup source={APPRENTICE_PATH} heading="Get new free-tool alerts" blurb="We will email you when there is a new free tool for prevailing wage, staffing or other compliance paperwork." />
     </Layout>
   );
 }
