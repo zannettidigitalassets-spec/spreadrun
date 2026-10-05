@@ -272,6 +272,8 @@ class PecosRoute(unittest.TestCase):
         self.assertEqual(payload['error']['code'], 'registry_unavailable')
         self.assertFalse(payload['error']['charged'])
         self.assertEqual(self.fake.balance[self.user], 3000)
+        # api_calls.outcome only accepts five values, so the outage is logged as internal_error.
+        self.assertEqual([c['outcome'] for c in self.fake.calls], ['internal_error'])
 
     def test_input_error_uncharged(self):
         status, payload = call(PECOS, 'paid', b'{"enrollmentType": "855A"}', {'Authorization': f'Bearer {self.key}'})

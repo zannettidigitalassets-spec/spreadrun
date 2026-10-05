@@ -192,7 +192,8 @@ def process(api, mode, headers, read_body, path='/'):
         _log(api, mode, 'input_error', request_id=request_id, caller=caller, bytes_in=len(body), ip_hash=ip_hash)
         return _err(400, 'input_error', str(exc), requestId=request_id, charged=False)
     except runners.RegistryUnavailable as exc:
-        _log(api, mode, 'registry_unavailable', request_id=request_id, caller=caller, bytes_in=len(body), ip_hash=ip_hash)
+        # api_calls.outcome accepts five values; a registry outage is logged as internal_error (never charged).
+        _log(api, mode, 'internal_error', request_id=request_id, caller=caller, bytes_in=len(body), ip_hash=ip_hash)
         return _err(503, 'registry_unavailable', str(exc), requestId=request_id, charged=False)
     except Exception as exc:  # noqa: BLE001 - never leak internals or input
         print(f'[spreadrun] {api} internal error: {type(exc).__name__}', file=sys.stderr)
