@@ -458,3 +458,21 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   accepted. An SSN-like pattern still gets a warning.
 - Free demo limited to the three sample requests (owner decision, October 5, 2026), fingerprint-matched in engine.py
   (DEMO_SAMPLES) the same way as CMMC; a test recomputes the hashes from public/samples.
+
+## SEO guide batch 1, deadline fire (branch `spreadrun/seo-guides-batch1`, 2026-10-05)
+
+- Five guides (`src/content/deadline-guides.js` for metadata and sources, `src/pages/DeadlineGuides.jsx` for bodies,
+  one loader each in `src/pages/guides/`): pbj-zero-rn-days, uad36-rule-uad1189, uad36-rule-uad1001,
+  pbj-file-rejected, how-to-fix-ucdp-errors. Listed first on /guides. Every claim carries an inline "(Source: ...)".
+- Sources: CMS Five-Star Technical Users' Guide (September 2026) pp. 9-10, 17, 24; CMS PBJ staffing data submission
+  page (September 11, 2026); iQIES PBJ Error Message Reference Guide v1.0 (July 2026); QTSO iQIES PBJ notice (June 30,
+  2026); Appendix H-1 v1.5 (via the validator's rules.json); UCDP General User Guide (February 2026) pp. 43, 56, 58;
+  SSR Guide for UAD 3.6 (August 2025); UCDP FAQ (September 30, 2026); GSE lessons-learned job aid (June 23, 2026);
+  Fannie Mae UAD Compliance API factsheet.
+- Cut: "most common" findings and rejection reasons (neither CMS nor the GSEs publish frequencies; the UCDP page uses
+  the GSE lessons-learned items instead and says so); where to enter below grade areas in named appraisal programs
+  (no vendor documentation we can cite, and the site rule bars naming that vendor); UAD1777 (not in rules.json, so
+  not re-checked here); CASPER as a current report location (CMS retired PBJ in QIES, reports included, on
+  September 15, 2026).
+- Check-site has a block for these pages: CTA links, every listed source cited, at least 3 inline citations, no bare
+  "verified", linked from /guides. scripts/tests/deadline-guides.test.mjs checks the metadata.
