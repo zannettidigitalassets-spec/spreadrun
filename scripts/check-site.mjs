@@ -77,6 +77,11 @@ const NEED_LD = {
   '/guides/pbj-error-3679': GUIDE_LD,
   '/guides/pbj-error-3676': GUIDE_LD,
   '/guides/pbj-error-4016': GUIDE_LD,
+  '/guides/pbj-zero-rn-days': GUIDE_LD,
+  '/guides/uad36-rule-uad1189': GUIDE_LD,
+  '/guides/uad36-rule-uad1001': GUIDE_LD,
+  '/guides/pbj-file-rejected': GUIDE_LD,
+  '/guides/how-to-fix-ucdp-errors': GUIDE_LD,
 };
 // No empty strings, arrays or objects anywhere inside a JSON-LD block.
 const emptyField = (v, at = '') => {
@@ -153,10 +158,26 @@ for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/ho
   '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/docs/wh347-payroll-precheck', '/docs/pecos-enrollment-precheck', '/docs/cmmc-self-assessment-validator', '/docs/cobra-notice-qa', '/guides',
   '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks',
   '/guides/uad36-fatal-findings-explained', '/guides/ucdp-not-successful-meaning', '/guides/uad36-warning-vs-fatal', '/guides/uad36-basement-fields-hard-stop', '/guides/uad36-location-view-codes-rejected', '/guides/uad36-concession-mismatch', '/guides/uad36-address-usps-flag', '/guides/ucdp-not-successful-vs-rejected',
-  '/guides/pbj-error-minus-1025', '/guides/pbj-error-4025', '/guides/pbj-error-3679', '/guides/pbj-error-3676', '/guides/pbj-error-4016']) {
+  '/guides/pbj-error-minus-1025', '/guides/pbj-error-4025', '/guides/pbj-error-3679', '/guides/pbj-error-3676', '/guides/pbj-error-4016',
+  '/guides/pbj-zero-rn-days', '/guides/uad36-rule-uad1189', '/guides/uad36-rule-uad1001', '/guides/pbj-file-rejected', '/guides/how-to-fix-ucdp-errors']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);
 }
 for (const u of ['/account', '/unsubscribe', '/404', '/secondring', '/guides/lsa-missed-call-charges-october-2026']) if (sitemap.includes(`${u}</loc>`)) fail(`sitemap should not list ${u}`);
+// Deadline guide batch 1: every page cites its primary sources next to the claims, links its CTA, and is listed
+// on the /guides index.
+{
+  const { DEADLINE_GUIDES, SRC } = await import(path.join(root, 'src/content/deadline-guides.js'));
+  const index = fs.readFileSync(path.join(dist, 'guides.html'), 'utf8');
+  for (const g of DEADLINE_GUIDES) {
+    const html = fs.readFileSync(path.join(dist, 'guides', `${g.slug}.html`), 'utf8');
+    if (!index.includes(`href="/guides/${g.slug}"`)) fail(`/guides does not link ${g.slug}`);
+    for (const href of g.cta) if (!html.includes(`href="${href}"`)) fail(`${g.slug}: CTA link ${href} missing`);
+    for (const k of g.sources) if (!html.includes(SRC[k][1].replace(/&/g, '&amp;'))) fail(`${g.slug}: source ${k} not cited`);
+    if ((html.match(/\(Source: /g) || []).length < 3) fail(`${g.slug}: fewer than 3 inline citations`);
+    if (/\bverified\b/i.test(html.replace(/<[^>]+>/g, ' '))) fail(`${g.slug}: bare "verified" claim`);
+  }
+}
+
 const robots = fs.readFileSync(path.join(dist, 'robots.txt'), 'utf8');
 if (!robots.includes('Sitemap: https://www.spreadrun.com/sitemap.xml')) fail('robots.txt missing sitemap');
 
