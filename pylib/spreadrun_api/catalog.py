@@ -48,6 +48,13 @@ APIS = {
         'max_body_bytes': 4_400_000,
         'demo_max_body_bytes': 512 * 1024,
     },
+    'pecos-enrollment-precheck': {
+        'name': 'PECOS Medicare Enrollment Pre-Check',
+        'price_cents': 2500,   # professional tier
+        # One enrollment draft as JSON. Small by nature; the cap keeps a run to one provider.
+        'max_body_bytes': 256 * 1024,
+        'demo_max_body_bytes': 64 * 1024,
+    },
 }
 
 DEMO_RUNS_PER_DAY = 10

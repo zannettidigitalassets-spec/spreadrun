@@ -56,6 +56,8 @@ def _run(api, body, query, *, demo):
         return runners.run_pbj(body, as_of=(query.get('asOf') or [None])[0], staffing=staffing)
     if api == 'wh347-payroll-precheck':
         return runners.run_wh347(body)
+    if api == 'pecos-enrollment-precheck':
+        return runners.run_pecos(body)
     cfg = APIS[api]
     mode = (query.get('mode') or ['sample'])[0]
     raw_max = (query.get('maxRecords') or [str(cfg['default_max_records'])])[0]
@@ -189,6 +191,9 @@ def process(api, mode, headers, read_body, path='/'):
     except runners.InputError as exc:
         _log(api, mode, 'input_error', request_id=request_id, caller=caller, bytes_in=len(body), ip_hash=ip_hash)
         return _err(400, 'input_error', str(exc), requestId=request_id, charged=False)
+    except runners.RegistryUnavailable as exc:
+        _log(api, mode, 'registry_unavailable', request_id=request_id, caller=caller, bytes_in=len(body), ip_hash=ip_hash)
+        return _err(503, 'registry_unavailable', str(exc), requestId=request_id, charged=False)
     except Exception as exc:  # noqa: BLE001 - never leak internals or input
         print(f'[spreadrun] {api} internal error: {type(exc).__name__}', file=sys.stderr)
         _log(api, mode, 'internal_error', request_id=request_id, caller=caller, bytes_in=len(body), ip_hash=ip_hash)

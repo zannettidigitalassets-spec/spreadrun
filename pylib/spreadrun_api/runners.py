@@ -19,6 +19,10 @@ class InputError(ValueError):
     """The submitted input cannot be audited. Never billed."""
 
 
+class RegistryUnavailable(RuntimeError):
+    """A public registry the run depends on could not be reached. Never billed."""
+
+
 class ProvenanceError(RuntimeError):
     """A copied validator no longer matches its recorded DataForge hash."""
 
@@ -232,6 +236,33 @@ def wh347_pdf(body: bytes) -> bytes:
         spec.loader.exec_module(module)
         _wh347_form = module
     return _wh347_form.fill(wh347_module().form_data(body))
+
+
+_pecos = None
+
+
+def pecos_module():
+    """SpreadRun's own PECOS enrollment pre-check engine (not a DataForge copy). It makes one live NPPES call per run."""
+    global _pecos
+    if _pecos is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_pecos_engine', HERE / 'pecos' / 'engine.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_pecos_engine'] = module
+        spec.loader.exec_module(module)
+        _pecos = module
+    return _pecos
+
+
+def run_pecos(body: bytes, *, lookup=None):
+    """Pre-check one CMS-855I, 855B or 855S draft (JSON). lookup(npi) replaces the live NPPES call in tests."""
+    v = pecos_module()
+    try:
+        return v.validate(body, lookup=lookup)
+    except v.InputError as exc:
+        raise InputError(str(exc)) from None
+    except v.RegistryUnavailable:
+        raise RegistryUnavailable('The NPPES NPI Registry could not be reached, so the pre-check did not run. You were '
+                                  'not charged. Try again in a few minutes.') from None
 
 
 def run_clinical(body: bytes):
