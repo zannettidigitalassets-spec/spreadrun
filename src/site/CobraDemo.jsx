@@ -1,0 +1,174 @@
+import { useState } from 'react';
+import { ModeNote, Result, kb, runLabel, useCredits, useMode, useRunner } from './Demo.jsx';
+import { dollars } from '../catalog.js';
+
+// The COBRA test form: paste the notice or upload a PDF or DOCX, give the dates, run. The checks run on the server.
+
+const SAMPLES = [
+  ['cobra-election-clean', 'Sample election notice'],
+  ['cobra-election-errors', 'Sample with errors'],
+  ['cobra-general-clean', 'Sample general notice'],
+];
+
+const EVENTS = [
+  ['termination', 'End of employment'],
+  ['reduction-of-hours', 'Reduction in hours'],
+  ['death', 'Death of the employee'],
+  ['medicare-entitlement', 'Employee entitled to Medicare'],
+  ['bankruptcy', 'Employer bankruptcy (retiree coverage)'],
+  ['divorce', 'Divorce'],
+  ['legal-separation', 'Legal separation'],
+  ['dependent-child', 'Child loses dependent status'],
+];
+const BENEFICIARY_REPORTED = ['divorce', 'legal-separation', 'dependent-child'];
+
+const empty = () => ({
+  noticeType: 'election', eventType: 'termination', eventDate: '', lossDate: '', noticeDate: '', notifiedDate: '',
+  coverageStartDate: '', employerIsAdministrator: true, periodStartsAtLossOfCoverage: false,
+});
+
+const toBase64 = (buf) => {
+  let s = '';
+  const bytes = new Uint8Array(buf);
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+};
+
+export default function CobraDemo({ api, sample }) {
+  const credits = useCredits(api);
+  const mode = useMode(api, credits);
+  const [state, run] = useRunner(api, credits);
+  const [f, setF] = useState(empty);
+  const [text, setText] = useState('');
+  const [file, setFile] = useState(null);   // { name, type, base64, size }
+  const [fileError, setFileError] = useState('');
+  const set = (k) => (e) => {
+    const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setF((prev) => ({ ...prev, [k]: v }));
+  };
+  const election = f.noticeType === 'election';
+  const needsNotified = election && (BENEFICIARY_REPORTED.includes(f.eventType) || !f.employerIsAdministrator);
+
+  const loadSample = async ([base]) => {
+    const p = await fetch(`/samples/${base}.json`).then((r) => r.json());
+    const ev = p.qualifyingEvent || {};
+    setF({
+      noticeType: p.noticeType, eventType: ev.type || 'termination', eventDate: ev.date || '', lossDate: ev.lossOfCoverageDate || '',
+      noticeDate: p.noticeDate || '', notifiedDate: ev.administratorNotifiedDate || '', coverageStartDate: p.coverageStartDate || '',
+      employerIsAdministrator: ev.employerIsAdministrator !== false, periodStartsAtLossOfCoverage: !!ev.periodStartsAtLossOfCoverage,
+    });
+    setText(p.noticeText);
+    setFile(null);
+  };
+
+  const pickFile = async (e) => {
+    setFileError('');
+    const picked = e.target.files?.[0];
+    if (!picked) return;
+    const type = /\.pdf$/i.test(picked.name) ? 'pdf' : /\.docx$/i.test(picked.name) ? 'docx' : null;
+    if (!type) { setFileError('Upload a PDF or a DOCX file, or paste the text.'); return; }
+    if (picked.size > 3_000_000) { setFileError('The file is over 3 MB.'); return; }
+    setFile({ name: picked.name, type, size: picked.size, base64: toBase64(await picked.arrayBuffer()) });
+  };
+
+  const body = () => {
+    const p = { noticeType: f.noticeType };
+    if (file) p.noticeFile = { type: file.type, base64: file.base64 };
+    else p.noticeText = text;
+    if (f.noticeDate) p.noticeDate = f.noticeDate;
+    if (election) {
+      p.qualifyingEvent = { type: f.eventType, employerIsAdministrator: f.employerIsAdministrator,
+        periodStartsAtLossOfCoverage: f.periodStartsAtLossOfCoverage };
+      if (f.eventDate) p.qualifyingEvent.date = f.eventDate;
+      if (f.lossDate) p.qualifyingEvent.lossOfCoverageDate = f.lossDate;
+      if (needsNotified && f.notifiedDate) p.qualifyingEvent.administratorNotifiedDate = f.notifiedDate;
+    } else if (f.coverageStartDate) {
+      p.coverageStartDate = f.coverageStartDate;
+    }
+    return JSON.stringify(p);
+  };
+
+  const ready = !!file || text.trim().length > 0;
+  const size = ready ? new Blob([body()]).size : 0;
+  const tooBig = size > mode.maxBytes;
+  const submit = (e) => {
+    e.preventDefault();
+    if (ready && !tooBig) run({ paid: mode.paid, body: body(), contentType: 'application/json' });
+  };
+  const date = (id, k, label, hint) => (
+    <div className="field" style={{ margin: 0 }}>
+      <label htmlFor={id}>{label}</label>
+      <input id={id} type="date" value={f[k]} onChange={set(k)} />
+      {hint && <span className="hint">{hint}</span>}
+    </div>
+  );
+
+  return (
+    <div className="split">
+      <form className="demo" onSubmit={submit}>
+        <ModeNote api={api} credits={credits} mode={mode} demoLimits={`up to ${kb(api.demoMaxBodyBytes)} per run, 10 runs a day`} />
+        <div className="btn-row" style={{ margin: '0 0 16px' }}>
+          {SAMPLES.map((s) => <button key={s[0]} type="button" className="btn secondary small" onClick={() => loadSample(s)}>{s[1]}</button>)}
+        </div>
+
+        <div className="wh-grid">
+          <div className="field" style={{ margin: 0 }}>
+            <label htmlFor="cobra-type">Notice</label>
+            <select id="cobra-type" value={f.noticeType} onChange={set('noticeType')}>
+              <option value="election">Election notice</option>
+              <option value="general">General (initial) notice</option>
+            </select>
+          </div>
+          {election ? (
+            <div className="field" style={{ margin: 0 }}>
+              <label htmlFor="cobra-event">Qualifying event</label>
+              <select id="cobra-event" value={f.eventType} onChange={set('eventType')}>
+                {EVENTS.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
+              </select>
+            </div>
+          ) : date('cobra-cov-start', 'coverageStartDate', 'Plan coverage began')}
+          {election && date('cobra-event-date', 'eventDate', 'Qualifying event date')}
+          {election && date('cobra-loss-date', 'lossDate', 'Coverage ends (loss of coverage)')}
+          {date('cobra-notice-date', 'noticeDate', 'Date the notice goes out', 'Blank means today.')}
+          {needsNotified && date('cobra-notified', 'notifiedDate', 'Administrator notified on', 'The 14 days run from this date.')}
+        </div>
+        {election && (
+          <>
+            <label className="small" style={{ display: 'flex', gap: 8, margin: '0 0 8px' }}>
+              <input type="checkbox" checked={f.employerIsAdministrator} onChange={set('employerIsAdministrator')} />
+              The employer is also the plan administrator (44-day deadline)
+            </label>
+            <label className="small" style={{ display: 'flex', gap: 8, margin: '0 0 16px' }}>
+              <input type="checkbox" checked={f.periodStartsAtLossOfCoverage} onChange={set('periodStartsAtLossOfCoverage')} />
+              The plan starts the notice period at the loss of coverage, not the event
+            </label>
+          </>
+        )}
+
+        <div className="field">
+          <label htmlFor="cobra-text">Notice text</label>
+          <span className="hint">Paste the draft, or upload it below. Send it before names and addresses are filled in, or with placeholders: the check needs the wording, not the people.</span>
+          <textarea id="cobra-text" value={text} onChange={(e) => { setText(e.target.value); setFile(null); }} spellCheck={false} style={{ minHeight: 220 }} disabled={!!file} />
+        </div>
+        <div className="field">
+          <label htmlFor="cobra-file">Or upload a PDF or DOCX</label>
+          <input id="cobra-file" type="file" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={pickFile} />
+          {file && <span className="hint">{file.name} ({kb(file.size)}) will be checked instead of the text box. <button type="button" className="linklike" onClick={() => setFile(null)}>Remove</button></span>}
+          {fileError && <span className="hint" style={{ color: 'var(--fail)' }}>{fileError}</span>}
+        </div>
+
+        <p className="small muted" style={{ margin: '0 0 12px' }}>Processed in memory and not stored. Reports never repeat text, amounts, names or dates from your notice.</p>
+        <button className="btn" type="submit" disabled={!ready || state.phase === 'running' || tooBig}>
+          {runLabel(mode.paid, api, 'Check the notice', 'Checking', state.phase === 'running')}
+        </button>
+        <div className="status-line" aria-live="polite">
+          {state.phase === 'running' && 'Checking the content items, deadlines and stated terms.'}
+          {state.phase === 'done' && `Done. ${state.report.findingCount} ${state.report.findingCount === 1 ? 'finding' : 'findings'}.${state.paid ? ` Charged ${dollars(api.priceCents)}.` : ''}`}
+        </div>
+        {tooBig && <div className="error-box">This notice is over the {kb(mode.maxBytes)} limit for this mode.{mode.paid ? '' : ' Paste the text instead of a file, or sign in with credits for up to 4.4 MB.'}</div>}
+        {state.phase === 'error' && <div className="error-box" role="alert">{state.error}</div>}
+      </form>
+      <div><Result state={state} kind="cobra" sample={sample} sampleLabel="Invented plan with planted errors" /></div>
+    </div>
+  );
+}

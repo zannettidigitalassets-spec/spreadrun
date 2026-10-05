@@ -1,6 +1,6 @@
 import { CLINICAL_CODES, MRF_CODES } from './codes.js';
 
-// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347' | 'pecos' | 'cmmc'.
+// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347' | 'pecos' | 'cmmc' | 'cobra'.
 export default function ReportSheet({ kind, report, label, sub }) {
   if (!report) return null;
   return (
@@ -13,7 +13,7 @@ export default function ReportSheet({ kind, report, label, sub }) {
         <span className={`stamp ${report.status}`}>{report.status}</span>
       </div>
       <div className="sheet-body">
-        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : kind === 'pecos' ? <Pecos r={report} /> : kind === 'cmmc' ? <Cmmc r={report} /> : <Mrf r={report} />}
+        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : kind === 'pecos' ? <Pecos r={report} /> : kind === 'cmmc' ? <Cmmc r={report} /> : kind === 'cobra' ? <Cobra r={report} /> : <Mrf r={report} />}
       </div>
     </div>
   );
@@ -298,6 +298,62 @@ function Cmmc({ r }) {
           {r.findings.length > 60 && <p className="small muted">{r.findings.length - 60} more in the JSON report.</p>}
         </div>
       ) : <p className="small" style={{ margin: 0 }}>No findings. A PASS means the math and the package check out. It is not a certification and does not mean DoD will accept the score.</p>}
+    </>
+  );
+}
+
+const COBRA_ITEM = { found: 'Found', review: 'Review', missing: 'Missing' };
+const COBRA_READY = { ready: 'Ready', review: 'Review', fix: 'Fix', 'not-checked': 'Not checked' };
+const fmtDate = (iso) => new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+
+function Cobra({ r }) {
+  const d = r.deadlines || {};
+  return (
+    <>
+      <div className="facts">
+        <span><b>{r.noticeType === 'election' ? 'Election' : 'General'}</b> notice</span>
+        <span><b>{r.contentItems.found}</b> of {r.contentItems.required} items found</span>
+        {d.electionNoticeDue && <span>Send by <b>{fmtDate(d.electionNoticeDue)}</b></span>}
+        {d.generalNoticeDue && <span>Send by <b>{fmtDate(d.generalNoticeDue)}</b></span>}
+        {d.electionPeriodEndsNoEarlierThan && <span>Election open until at least <b>{fmtDate(d.electionPeriodEndsNoEarlierThan)}</b></span>}
+        <span><b>{r.findingCounts.error}</b> {r.findingCounts.error === 1 ? 'error' : 'errors'}</span>
+        <span><b>{r.findingCounts.warning}</b> {r.findingCounts.warning === 1 ? 'warning' : 'warnings'}</span>
+      </div>
+      <ul className="readiness" style={{ listStyle: 'none', padding: 0, margin: '0 0 12px' }}>
+        {r.readiness.map((x) => (
+          <li key={x.item} className="small" style={{ display: 'flex', gap: 8, padding: '3px 0' }}>
+            <b className={x.status === 'fix' ? 'sev-ERROR' : x.status === 'review' ? 'sev-WARNING' : ''} style={{ minWidth: 86 }}>{COBRA_READY[x.status]}</b>
+            <span>{x.label}</span>
+          </li>
+        ))}
+      </ul>
+      <details style={{ margin: '0 0 12px' }}>
+        <summary className="small" style={{ cursor: 'pointer', fontWeight: 600 }}>Content items ({r.regulation})</summary>
+        <ul style={{ listStyle: 'none', padding: 0, margin: '8px 0 0' }}>
+          {r.checklist.map((x) => (
+            <li key={x.item} className="small" style={{ display: 'flex', gap: 8, padding: '3px 0' }}>
+              <b className={x.status === 'missing' ? 'sev-ERROR' : x.status === 'review' ? 'sev-WARNING' : ''} style={{ minWidth: 64 }}>{COBRA_ITEM[x.status]}</b>
+              <span>({x.item}) {x.label}</span>
+            </li>
+          ))}
+        </ul>
+      </details>
+      {r.findings.length > 0 ? (
+        <div className="table-scroll">
+          <table className="findings">
+            <thead><tr><th>Severity</th><th>Rule</th><th>What</th></tr></thead>
+            <tbody>
+              {r.findings.map((f, n) => (
+                <tr key={n}>
+                  <td className={`sev-${f.severity === 'error' ? 'ERROR' : 'WARNING'}`}>{f.severity === 'error' ? 'Error' : 'Warning'}</td>
+                  <td className="code ids">{f.ruleId.split('-').map((p, k) => <span key={k}>{k ? <>-<wbr /></> : null}{p}</span>)}</td>
+                  <td><div className="small">{f.item ? `Item (${f.item}). ` : ''}{f.message}</div></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : <p className="small" style={{ margin: 0 }}>No findings. A clean check is not legal advice and not a guarantee against DOL penalties.</p>}
     </>
   );
 }
