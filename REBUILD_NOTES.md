@@ -337,6 +337,10 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - Cut from the brief for lack of a primary source: a basement "percent finished" field (not in UAD 3.6), a concession
   vs contract mismatch hard stop or compliance review (no such rule; UCDP never sees the contract), a USPS or geocoding
   mismatch hard stop, "free text = immediate rejection" for view and location codes, and "hard stop 401".
+- Branch `spreadrun/uad36-fatal-findings` (on top of the guides branch) adds three explainers: fatal findings index
+  (592 Fatal and 136 Warning rules, counted from H-1, Fatal rules by Report Section), UCDP Not Successful meaning,
+  and Warning vs Fatal. The UCDP user guide describes overrides for UAD 2.6 hard stops only; for UAD 3.6 all fatal
+  findings must be resolved, so no override path is claimed.
 - The validator does not run UAD1361, UAD1450, UAD1328 or UAD1769 (view and site influence must be included); the
   view guide says so.
 

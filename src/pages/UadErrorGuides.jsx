@@ -17,6 +17,27 @@ export const UAD_CHECKLIST_PATH = '/tools/uad36-preflight-checklist';
 
 export const UAD_ERROR_GUIDES = [
   {
+    slug: 'uad36-fatal-findings-explained',
+    title: 'UAD 3.6 Fatal Findings Explained: What Stops a Report in UCDP',
+    crumb: 'Fatal findings explained',
+    description: 'UAD 3.6 fatal findings explained: what makes a report Not Successful in UCDP, how Fatal differs from Warning, and the fatal rules by area with plain fixes.',
+    blurb: '592 of the 728 URAR rules are Fatal. What that means, where they cluster, and where to start fixing.',
+  },
+  {
+    slug: 'ucdp-not-successful-meaning',
+    title: 'UCDP Not Successful: What It Means and How to Fix It',
+    crumb: 'UCDP Not Successful',
+    description: 'UCDP Not Successful means the UAD 3.6 report triggered fatal findings. What happens next, who sees it, and how a corrected file gets you to Successful.',
+    blurb: 'Step by step: what happened to the report, who sees the result, and how a corrected file gets to Successful.',
+  },
+  {
+    slug: 'uad36-warning-vs-fatal',
+    title: 'UAD 3.6 Warning vs Fatal Findings: Which Ones Stop a Report',
+    crumb: 'Warning vs Fatal',
+    description: 'UAD 3.6 Warning vs Fatal findings in UCDP: which ones stop the submission, which ones can ride, and examples of each from the published compliance rules.',
+    blurb: 'Fatal stops the report. Warning does not, but it is not a free pass either. Examples of each.',
+  },
+  {
     slug: 'uad36-basement-fields-hard-stop',
     title: 'UAD 3.6 Basement Fields: Fixing the Below Grade Hard Stop',
     crumb: 'Below grade hard stop',
@@ -238,7 +259,115 @@ function Statuses() {
   );
 }
 
+
+const AREAS = [
+  ['Sales Comparison Approach', 70, 'Comparable data: proximity, parking, finished area, bedrooms, contract dates, and adjustment totals that must add up (UAD1461).'],
+  ['Site', 66, 'View and site influence (UAD1361, UAD1328), utilities, access, water frontage, and descriptions whenever Other is picked.'],
+  ['Unit Interior', 43, 'Room and bathroom counts, areas including below grade even when 0 (UAD1189, UAD1190, UAD1484), and interior ratings.'],
+  ['Assignment Information', 41, 'The assignment reason, how inspections were done, and appraiser and supervisory appraiser details.'],
+  ['Project Information', 41, 'Condominium, cooperative and other project data, when the property is in a project.'],
+  ['Subject Property', 37, 'The subject address and its format (UAD1001 to UAD1007), dwelling and unit counts, and property rights.'],
+  ['Dwelling Exterior', 28, 'At least one dwelling, construction method, foundation details and condition status.'],
+  ['Data that does not display on the form', 78, 'Technical items in the XML, such as data sources, parcel identifiers and image file references. Many say to contact the software vendor.'],
+];
+
+function FatalIndex() {
+  return (
+    <>
+      <p>When a UAD 3.6 report comes back from UCDP as Not Successful, it is because of Fatal findings. This page explains what that means and where the fatal rules sit, so you know where to look.</p>
+      <h2>What a Fatal finding is</h2>
+      <p>Every URAR compliance rule has a severity. In the published rules, a <b>Fatal</b> finding makes the UCDP submission status <b>Not Successful</b>. A <b>Warning</b> does not stop a Successful status, but it flags something that should be reviewed. Of the {coverage.rulesTotal} URAR compliance rules, 592 are Fatal and 136 are Warnings.</p>
+      <p>A Not Successful report is fixed by correcting the data and sending a new file. For what happens step by step, see <a href="/guides/ucdp-not-successful-meaning">UCDP Not Successful: what it means</a>. For how the two severities differ, see <a href="/guides/uad36-warning-vs-fatal">Warning vs Fatal</a>.</p>
+      <p>Not Successful is not the same as Rejected. Rejected is a separate UCDP status for problems with the package itself, such as a broken ZIP, a missing or extra XML file, malformed XML, a duplicate submission or a file over 60 MB. See <a href="/guides/ucdp-not-successful-vs-rejected">Not Successful vs Rejected</a>.</p>
+      <h2>Where the fatal rules are</h2>
+      <p>The rules are grouped by the URAR section they belong to. These are the areas with the most Fatal rules, counted from the published rules:</p>
+      <div className="table-scroll">
+        <table className="doc-table">
+          <thead><tr><th>Area</th><th>Fatal rules</th><th>What they cover</th></tr></thead>
+          <tbody>{AREAS.map(([a, n, d]) => <tr key={a}><td>{a}</td><td>{n}</td><td>{d}</td></tr>)}</tbody>
+        </table>
+      </div>
+      <p>89 of the rules say "For assistance with this message, contact the appraisal software vendor." The published notes call these technical and likely not something the appraiser can fix alone.</p>
+      <h2>Fatal findings with their own fix guides</h2>
+      <ul>
+        <li><a href="/guides/uad36-basement-fields-hard-stop">Below grade areas left blank</a>: finished, unfinished and nonstandard below grade area are required even when 0.</li>
+        <li><a href="/guides/uad36-location-view-codes-rejected">View and site influence missing</a>: at least one of each, and a description for Other.</li>
+        <li><a href="/guides/uad36-concession-mismatch">Sales concession answers missing</a>: whether there are concessions, whether the amount is known, and the total.</li>
+        <li><a href="/guides/uad36-address-usps-flag">Subject address incomplete</a>: every part of the address, a valid ZIP and a 2-letter state code.</li>
+      </ul>
+      <p className="small muted">Counts and rule IDs from Appendix H-1, URAR Compliance Rules v1.5. Areas are the rules' Report Section; a few rules span two sections and are not counted above.</p>
+    </>
+  );
+}
+
+function NotSuccessfulMeaning() {
+  return (
+    <>
+      <p>Not Successful is the UCDP status a UAD 3.6 report gets when at least one Fatal finding was triggered. It is not a rejection of the file and not a judgment on the value. It means some data has to be fixed.</p>
+      <h2>What happens, step by step</h2>
+      <ol>
+        <li><b>The lender submits the report.</b> Only lenders and their agents can submit to UCDP. Appraisers cannot register.</li>
+        <li><b>UCDP processes it.</b> While it runs, the status is In Progress.</li>
+        <li><b>Findings are issued.</b> For UAD 3.6 they come in three groups: system findings, UAD compliance findings and GSE proprietary findings.</li>
+        <li><b>The status is set.</b> No Fatal findings: Successful. One or more Fatal findings: Not Successful.</li>
+        <li><b>The lender sees it.</b> The Submission Summary Report (SSR) lists each finding with its message. The message text is the text in the published compliance rules, with a rule ID such as UAD1189.</li>
+        <li><b>The report is corrected.</b> Usually the lender or AMC sends the findings back to the appraiser, who fixes the data in the appraisal software and produces a new file.</li>
+        <li><b>The corrected file is resubmitted.</b> A revised URAR uploaded to the same submission replaces the earlier one.</li>
+      </ol>
+      <h2>Why it matters</h2>
+      <p>Loans delivered to either GSE need an appraisal with a Successful status in UCDP, and the final version used in the underwriting decision must be the one that is Successful. A Not Successful report holds up the loan until it is fixed.</p>
+      <h2>Can it be overridden?</h2>
+      <p>The UCDP General User Guide describes override requests for UAD 2.6 hard stops. For UAD 3.6 it says all fatal findings must be resolved to reach Successful, which may require updating the data and resubmitting. We found no override path for UAD 3.6 fatal findings, so plan on a corrected file.</p>
+      <h2>How to get to Successful</h2>
+      <ol>
+        <li>Get the SSR, or at least the list of findings with their rule IDs.</li>
+        <li>Fix the Fatal ones first. Each message says what is missing or wrong.</li>
+        <li>For messages that say to contact the appraisal software vendor, do that: they are usually about how the software wrote the file.</li>
+        <li>Review the Warnings too.</li>
+        <li>Produce a new ZIP from the software and send it back for resubmission.</li>
+      </ol>
+      <p className="small muted">From the UCDP General User Guide (February 2026), the UCDP FAQ, and Appendix H-1, URAR Compliance Rules v1.5.</p>
+    </>
+  );
+}
+
+function WarningVsFatal() {
+  return (
+    <>
+      <p>Each UAD 3.6 compliance rule has one of two severities. The difference decides whether the report can go through.</p>
+      <h2>The rule</h2>
+      <ul>
+        <li><b>Fatal</b>: the UCDP status becomes Not Successful. The report has to be corrected and sent again.</li>
+        <li><b>Warning</b>: does not stop a Successful status. The published rules say an issue has been found that should be reviewed, and action may need to be taken.</li>
+      </ul>
+      <p>So Warnings can ride, in the sense that they do not block the status. They are not something to ignore. The lender and the GSEs see them on the Submission Summary Report too, and the UCDP user guide says all findings should be reviewed and considered.</p>
+      <h2>Examples of Fatal findings</h2>
+      <ul>
+        <li><code>UAD1189</code>: provide the Finished Below Grade area, even if the value is 0.</li>
+        <li><code>UAD1005</code>: the subject ZIP code must be 5 digits, or ZIP+4.</li>
+        <li><code>UAD1361</code>: the type of view must be included.</li>
+        <li><code>UAD1384</code>: provide the Overall Condition rating.</li>
+        <li><code>UAD1461</code>: the Net Adjustment Total does not equal the sum of the individual adjustments.</li>
+      </ul>
+      <h2>Examples of Warnings</h2>
+      <ul>
+        <li><code>UAD1131</code>: the contract date cannot be after the effective date of the appraisal.</li>
+        <li><code>UAD1363</code>: indicate whether the view is the primary view.</li>
+        <li><code>UAD1366</code>: provide the impact the view has on value and marketability.</li>
+        <li><code>UAD1777</code>: give the nonstandard finished below grade area for a comparable when the subject has it.</li>
+        <li><code>UAD1647</code>: provide the median sale price.</li>
+      </ul>
+      <h2>By the numbers</h2>
+      <p>Of the {coverage.rulesTotal} URAR compliance rules, 592 are Fatal and 136 are Warnings. Most of what the rules check can stop a report, so it pays to check before it goes out.</p>
+      <p className="small muted">Rule text and severities from Appendix H-1, URAR Compliance Rules v1.5. Review guidance from the UCDP General User Guide (February 2026).</p>
+    </>
+  );
+}
+
 const BODIES = {
+  'uad36-fatal-findings-explained': FatalIndex,
+  'ucdp-not-successful-meaning': NotSuccessfulMeaning,
+  'uad36-warning-vs-fatal': WarningVsFatal,
   'uad36-basement-fields-hard-stop': Basement,
   'uad36-location-view-codes-rejected': ViewCodes,
   'uad36-concession-mismatch': Concessions,

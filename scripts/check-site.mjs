@@ -59,6 +59,9 @@ const NEED_LD = {
   '/guides/hospital-price-transparency-file-requirements-2026': GUIDE_LD,
   '/guides/uad-3-6-requirements-2026': GUIDE_LD,
   '/guides/clinical-trial-data-quality-checks': GUIDE_LD,
+  '/guides/uad36-fatal-findings-explained': GUIDE_LD,
+  '/guides/ucdp-not-successful-meaning': GUIDE_LD,
+  '/guides/uad36-warning-vs-fatal': GUIDE_LD,
   '/guides/uad36-basement-fields-hard-stop': GUIDE_LD,
   '/guides/uad36-location-view-codes-rejected': GUIDE_LD,
   '/guides/uad36-concession-mismatch': GUIDE_LD,
@@ -139,7 +142,7 @@ const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
 for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/apis/pecos-enrollment-precheck', '/tools', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator', '/tools/uad36-preflight-checklist', '/tools/cpsc-efiling-readiness-checklist', '/docs',
   '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/docs/wh347-payroll-precheck', '/docs/pecos-enrollment-precheck', '/guides',
   '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks',
-  '/guides/uad36-basement-fields-hard-stop', '/guides/uad36-location-view-codes-rejected', '/guides/uad36-concession-mismatch', '/guides/uad36-address-usps-flag', '/guides/ucdp-not-successful-vs-rejected']) {
+  '/guides/uad36-fatal-findings-explained', '/guides/ucdp-not-successful-meaning', '/guides/uad36-warning-vs-fatal', '/guides/uad36-basement-fields-hard-stop', '/guides/uad36-location-view-codes-rejected', '/guides/uad36-concession-mismatch', '/guides/uad36-address-usps-flag', '/guides/ucdp-not-successful-vs-rejected']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);
 }
 for (const u of ['/account', '/unsubscribe', '/404', '/secondring', '/guides/lsa-missed-call-charges-october-2026']) if (sitemap.includes(`${u}</loc>`)) fail(`sitemap should not list ${u}`);
