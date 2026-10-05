@@ -388,6 +388,13 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - -4012 is in neither the iQIES list nor the v4.10.0 edits, and -4015 was deleted in v4.10.0: no pages for them.
 - The deadline is named once (`PBJ_DEADLINE`): update that constant after November 14.
 
+## Davis-Bacon apprentice ratio checker (branch `spreadrun/apprentice-ratio-checker`, 2026-10-05)
+
+- `/tools/davis-bacon-apprentice-checker`: browser-only (`src/site/apprentice.js`, tests in `scripts/tests/`). Per
+  classification per day, apprentices must not exceed floor(journeyworkers x a / b) for the user's a:b program ratio;
+  registration is a presence check only. Rules from 29 CFR 5.5(a)(4)(i) and (a)(3)(i)(D). No ratio is suggested and
+  stepped ratios are not modeled.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist

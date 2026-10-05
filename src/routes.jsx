@@ -24,6 +24,7 @@ import UadPreflight, { UAD_CHECKLIST_FAQ, UAD_CHECKLIST_PATH } from './pages/Uad
 import { UAD_ERROR_GUIDES, UAD_GUIDE_PUBLISHED, makeUadErrorGuide } from './pages/UadErrorGuides.jsx';
 import CpscChecklist, { CPSC_FAQ, CPSC_PATH } from './pages/CpscChecklist.jsx';
 import Unsubscribe from './pages/Unsubscribe.jsx';
+import ApprenticeChecker, { APPRENTICE_FAQ, APPRENTICE_PATH } from './pages/ApprenticeChecker.jsx';
 import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
@@ -85,9 +86,10 @@ const D = {
   docsPecos: 'PECOS Medicare Enrollment Pre-Check API reference: endpoints, the JSON input, supporting document keys, report schema, rule IDs, the NPPES lookup and errors.',
   wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $25.00 per report, free test.',
   pbjPreflight: 'Free PBJ pre-flight checks: count zero-RN days against the CMS one-star staffing rule and work out meal break deductions the way the PBJ Policy Manual requires.',
-  tools: 'Free compliance tools: I-9 deadline calculator, Davis-Bacon overtime and fringe calculators, PBJ pre-flight checks, UAD 3.6 and CPSC eFiling checklists.',
+  tools: 'Free compliance tools: I-9 deadline calculator, Davis-Bacon overtime, fringe and apprentice ratio tools, PBJ pre-flight checks, UAD 3.6 and CPSC checklists.',
   uadChecklist: 'Free UAD 3.6 pre-submission checklist: below grade areas, view and location codes, concessions, address, ratings, prices and the ZIP, with what UCDP does.',
   cpsc: 'Free CPSC eFiling readiness checklist for importers: CPC or GCC, lab ID, citations, test dates, Full vs Reference filing, Product Registry and FTZ timing.',
+  apprentice: 'Free Davis-Bacon apprentice ratio checker: test each craft, each day, against your registered program ratio, and flag missing registration numbers. No signup.',
   i9: 'Free I-9 Section 2 deadline calculator: the 3rd business day after the first day of work, skipping weekends and federal holidays, plus a self-audit checklist.',
   fringeCalc: 'Free Davis-Bacon fringe benefit calculator: annualize plan costs over all hours worked for the hourly prevailing wage fringe credit and compare it to your rate.',
   otCalc: 'Free Davis-Bacon overtime calculator: time and a half on the basic rate for hours over 40 under CWHSSA, fringe owed per hour, and the weekly gross. No signup.',
@@ -260,6 +262,23 @@ export const ROUTES = {
       },
       faqLd(CPSC_FAQ),
       crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [CPSC_PATH, 'CPSC eFiling Readiness Checklist']]),
+    ],
+  },
+  [APPRENTICE_PATH]: {
+    Component: ApprenticeChecker,
+    title: 'Davis-Bacon Apprentice Ratio Checker (Free) | SpreadRun',
+    description: D.apprentice,
+    priority: '0.8',
+    jsonLd: () => [
+      {
+        '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Davis-Bacon Apprentice Ratio Checker',
+        alternateName: ['Davis-Bacon apprentice ratio calculator', 'Apprentice to journeyworker ratio checker'],
+        url: ORIGIN + APPRENTICE_PATH, applicationCategory: 'BusinessApplication', operatingSystem: 'Web',
+        description: D.apprentice, isAccessibleForFree: true, publisher: ORG,
+        keywords: 'Davis-Bacon apprentice ratio calculator, apprentice journeyworker ratio, 29 CFR 5.5(a)(4)',
+      },
+      faqLd(APPRENTICE_FAQ),
+      crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [APPRENTICE_PATH, 'Davis-Bacon Apprentice Ratio Checker']]),
     ],
   },
   [I9_PATH]: {

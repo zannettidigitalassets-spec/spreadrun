@@ -28,6 +28,11 @@ export const TOOLS = [
     blurb: 'Turn what you pay for a benefit plan into the hourly fringe credit, spread over every hour worked, and compare it to your wage determination.',
   },
   {
+    href: '/tools/davis-bacon-apprentice-checker',
+    title: 'Davis-Bacon Apprentice Ratio Checker',
+    blurb: 'Check each craft, each day, against your registered program\'s apprentice ratio, and spot apprentices with no program or registration number on file.',
+  },
+  {
     href: '/tools/pbj-preflight-checks',
     title: 'PBJ Pre-Flight Checks',
     blurb: 'Count days with no RN hours against the CMS one-star staffing rule and work out meal break deductions the way the PBJ Policy Manual requires.',

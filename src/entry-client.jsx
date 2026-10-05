@@ -14,6 +14,7 @@ export const LOADERS = {
   '/apis/pecos-enrollment-precheck': () => import('./pages/PecosApi.jsx'),
   '/tools/davis-bacon-overtime-calculator': () => import('./pages/OvertimeCalculator.jsx'),
   '/tools/davis-bacon-fringe-calculator': () => import('./pages/FringeCalculator.jsx'),
+  '/tools/davis-bacon-apprentice-checker': () => import('./pages/ApprenticeChecker.jsx'),
   '/tools/pbj-preflight-checks': () => import('./pages/PbjPreflight.jsx'),
   '/tools': () => import('./pages/Tools.jsx'),
   '/tools/i9-section2-deadline-calculator': () => import('./pages/I9Deadline.jsx'),
