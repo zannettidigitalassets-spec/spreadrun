@@ -2,7 +2,7 @@ import LegalPage, { SectionTitle, P, UL } from './legal/LegalPage.jsx';
 
 // Approved 2026-10-02 from docs/legal-drafts/privacy-DRAFT.md with the owner's decisions applied:
 // brand-only operator wording, and no protected health information or personal data in submissions.
-export const UPDATED = 'October 2, 2026';
+export const UPDATED = 'October 5, 2026';
 
 export default function Privacy() {
   return (
@@ -26,6 +26,7 @@ export default function Privacy() {
       <P>For the UAD 3.6 Appraisal Report Validator, SpreadRun processes personal data contained in appraisal reports (such as borrower, owner, and seller names and property addresses) in memory only to produce the validation report. It is not stored.</P>
       <P>For the PBJ Staffing Data Pre-Submission QA, SpreadRun processes personal data contained in PBJ staffing files (such as employee identifiers, hire and termination dates, and hours worked) in memory only to produce the validation report. It is not stored.</P>
       <P>For the Davis-Bacon WH-347 Certified Payroll Pre-Check, SpreadRun processes personal data contained in certified payrolls (such as worker names, individual identifying numbers, hours worked, pay and deductions) in memory only to produce the validation report. It is not stored. If you ask for a completed WH-347 form, it is also produced in memory only, returned to you in the same response, and not stored.</P>
+      <P>Email updates from the free tools. If you choose to sign up under one of our free tools, we store your email address, the tool page you signed up from, and the date. We use it only to send deadline reminders and announcements of new SpreadRun tools. Every email has a one-click unsubscribe link, and you can also unsubscribe at spreadrun.com/unsubscribe. We do not sell or share the list. The tools themselves run in your browser; your email is sent to us only if you submit the signup form.</P>
       <P><strong>Usage records:</strong> for each API request we record the time, which API was called, whether it was a paid call or a test-form run, the outcome (for example completed or rejected as invalid input), the report's status (PASS, WARN or FAIL), the request size, how long it took, the amount charged, and for paid calls the account and key used. These records never contain the submitted data.</P>
       <P><strong>Test-form rate limiting:</strong> for test-form runs we store a salted one-way hash of the network address the request came from, with a daily count, so we can limit free runs. We do not store the address itself.</P>
       <P><strong>Contact form:</strong> your name, email and message, delivered to us through Formspree.</P>
