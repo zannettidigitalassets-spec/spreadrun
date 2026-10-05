@@ -60,7 +60,7 @@ def _run(api, body, query, *, demo):
     if api == 'pecos-enrollment-precheck':
         return runners.run_pecos(body)
     if api == 'cobra-notice-qa':
-        return runners.run_cobra(body)
+        return runners.run_cobra(body, demo=demo)
     if api == 'cmmc-self-assessment-validator':
         return runners.run_cmmc(body, demo=demo)
     cfg = APIS[api]

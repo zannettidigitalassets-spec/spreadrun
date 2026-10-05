@@ -280,11 +280,12 @@ def cobra_module():
     return _cobra
 
 
-def run_cobra(body: bytes, *, as_of=None):
-    """Check one COBRA election or general notice (JSON with the text, or a PDF or DOCX as base64)."""
+def run_cobra(body: bytes, *, as_of=None, demo=False):
+    """Check one COBRA election or general notice (JSON with the text, or a PDF or DOCX as base64). demo=True accepts
+    only the sample requests."""
     v = cobra_module()
     try:
-        return v.validate(body, as_of=as_of)
+        return v.validate(body, as_of=as_of, demo=demo)
     except v.InputError as exc:
         raise InputError(str(exc)) from None
 

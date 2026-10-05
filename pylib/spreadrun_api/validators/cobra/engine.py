@@ -64,6 +64,30 @@ class InputError(ValueError):
     """The request cannot be checked at all (400, not charged). Messages never repeat submitted values."""
 
 
+# The free demo runs the three sample notices on the product page and nothing else: checking your own notice is the
+# paid product. A body matches when its JSON is the same as a sample's, whatever the spacing or key order. The hashes
+# are of the canonical JSON of public/samples/cobra-*.json; test_cobra.py recomputes them from those files.
+DEMO_SAMPLES = {
+    '620913f7a201183a2356494961164d9ed1e5a1cfe4af035598ab31720c6e8655': 'cobra-election-clean',
+    '4f7a8aefe3a2057427c00c3f106585a2adbe249edb37b053f337188b42c66691': 'cobra-election-errors',
+    'd0142d44e61c67354869d2150efafe543a4a5254b32f7a0a999dc130965cb174': 'cobra-general-clean',
+}
+DEMO_ONLY_SAMPLES = ('The free demo runs the three sample notices only. To check your own notice, sign in with $25.00 of '
+                     'credit or call the paid API. Nothing was charged.')
+
+
+def canonical_sha(data):
+    return hashlib.sha256(json.dumps(data, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
+
+
+def demo_sample(body: bytes):
+    """The sample's name if the body is one of the demo sample requests, otherwise None."""
+    try:
+        return DEMO_SAMPLES.get(canonical_sha(json.loads(body.decode('utf-8'))))
+    except (UnicodeDecodeError, ValueError, RecursionError):
+        return None
+
+
 class Report:
     def __init__(self):
         self.findings = []
@@ -579,7 +603,9 @@ def _area(f):
     return 'deadline'
 
 
-def validate(body: bytes, *, as_of=None):
+def validate(body: bytes, *, as_of=None, demo=False):
+    if demo and demo_sample(body) is None:
+        raise InputError(DEMO_ONLY_SAMPLES)
     data, nt, text = parse_body(body)
     today = datetime.now(timezone.utc).date()
     as_of = as_of or parse_date(data.get('asOf')) or today

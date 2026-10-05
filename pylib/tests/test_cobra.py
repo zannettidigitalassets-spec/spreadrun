@@ -263,6 +263,21 @@ class Files(unittest.TestCase):
             with self.assertRaises(runners.InputError, msg=body[:60]):
                 runners.run_cobra(body)
 
+    def test_demo_sample_hashes_match_the_published_samples(self):
+        for name in ('cobra-election-clean', 'cobra-election-errors', 'cobra-general-clean'):
+            raw = (ROOT / 'public' / 'samples' / f'{name}.json').read_bytes()
+            self.assertEqual(engine.demo_sample(raw), name)
+            self.assertEqual(raw, (FIX / f'{name}.json').read_bytes(), 'test fixtures are copies of the samples')
+        self.assertEqual(len(engine.DEMO_SAMPLES), 3)
+        self.assertIsNone(engine.demo_sample(b'not json'))
+
+    def test_demo_refusal_does_not_echo(self):
+        p = req()
+        p['noticeText'] += MARK
+        with self.assertRaises(runners.InputError) as cm:
+            runners.run_cobra(json.dumps(p).encode(), demo=True)
+        self.assertNotIn(MARK, str(cm.exception))
+
     def test_ssn_warning(self):
         p = req()
         p['noticeText'] += '\nEmployee SSN 123-45-6789\n'
@@ -352,12 +367,35 @@ class CobraRoute(unittest.TestCase):
         status, payload = call(COBRA, 'paid', json.dumps(req()).encode(), {'Authorization': f'Bearer {key}'})
         self.assertEqual((status, payload['error']['priceCents']), (402, 2500))
 
-    def test_demo_free_with_own_data(self):
+    def test_demo_runs_each_sample_free(self):
+        for name in ('cobra-election-clean', 'cobra-election-errors', 'cobra-general-clean'):
+            raw = (ROOT / 'public' / 'samples' / f'{name}.json').read_bytes()
+            reformatted = json.dumps(json.loads(raw), separators=(',', ':'), sort_keys=True).encode()
+            for body in (raw, reformatted):
+                status, payload = call(COBRA, 'demo', body, {'X-Forwarded-For': '203.0.113.9'})
+                self.assertEqual((status, payload['charged']), (200, False), (name, payload))
+        self.assertEqual(self.fake.balance[self.user], 3000)
+
+    def test_demo_refuses_own_notice(self):
+        own_text = req()
+        own_text['noticeText'] = own_text['noticeText'].replace('Example Manufacturing', 'Other Company')
+        one_date = req()
+        one_date['noticeDate'] = '2026-10-10'
+        as_file = req()
+        as_file['noticeFile'] = {'type': 'docx', 'base64': base64.b64encode(docx(as_file.pop('noticeText'))).decode()}
+        for p in (own_text, one_date, as_file):
+            status, payload = call(COBRA, 'demo', json.dumps(p).encode(), {'X-Forwarded-For': '203.0.113.9'})
+            self.assertEqual((status, payload['error']['code'], payload['error']['charged']), (400, 'input_error', False))
+            self.assertIn('sample notices only', payload['error']['message'])
+            self.assertIn('$25.00', payload['error']['message'])
+        self.assertEqual(self.fake.balance[self.user], 3000)
+        self.assertTrue(all(c['outcome'] == 'input_error' for c in self.fake.calls))
+
+    def test_paid_runs_own_notice(self):
         p = req()
         p['noticeText'] = p['noticeText'].replace('Example Manufacturing', 'Other Company')
-        status, payload = call(COBRA, 'demo', json.dumps(p).encode(), {'X-Forwarded-For': '203.0.113.9'})
-        self.assertEqual((status, payload['charged']), (200, False))
-        self.assertEqual(self.fake.balance[self.user], 3000)
+        status, payload = call(COBRA, 'paid', json.dumps(p).encode(), {'Authorization': f'Bearer {self.key}'})
+        self.assertEqual((status, payload['charged'], payload['priceCents']), (200, True, 2500))
 
     def test_demo_size_limit(self):
         p = req()
