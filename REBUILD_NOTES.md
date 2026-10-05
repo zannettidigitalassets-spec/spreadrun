@@ -438,3 +438,6 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   comes from the catalog.
 - Not used for lack of a primary source: the July 13, 2026 date of the Phase 2 suspension memo (law firm summaries
   only), any statistic on overstated scores. Old DFARS 252.204-7019/7020 numbers are not used in copy.
+- Free demo limited to the three sample packages (owner decision, October 5, 2026). The demo endpoint compares the
+  canonical JSON of the body with the samples' hashes in engine.py (DEMO_SAMPLES); a test recomputes them from
+  public/samples. Changing a sample means updating its hash. Own data runs only on the paid endpoint.
