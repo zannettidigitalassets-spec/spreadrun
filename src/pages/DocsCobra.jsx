@@ -95,13 +95,13 @@ export default function DocsCobra() {
         <h2 id="endpoint">Endpoint</h2>
         <table className="doc-table"><tbody>
           <tr><th>Paid</th><td><code>POST https://www.spreadrun.com/api/v1/{API.slug}</code>, API key required, {dollars(API.priceCents)} per completed QA run</td></tr>
-          <tr><th>Demo</th><td><code>POST https://www.spreadrun.com/api/demo/{API.slug}</code>, no key, 1 MB, 10 runs per day</td></tr>
+          <tr><th>Demo</th><td><code>POST https://www.spreadrun.com/api/demo/{API.slug}</code>, no key, 10 runs per day. Runs the three published sample requests only (<a href="/samples/cobra-election-clean.json">election notice</a>, <a href="/samples/cobra-election-errors.json">with errors</a>, <a href="/samples/cobra-general-clean.json">general notice</a>); spacing and key order do not matter, any changed value does. Your own notice goes to the paid endpoint.</td></tr>
           <tr><th>Body</th><td>A JSON object, UTF-8, up to 4.4 MB.</td></tr>
         </tbody></table>
 
         <h2 id="input">Request</h2>
         <table className="doc-table"><tbody>{TOP.map(([k, m]) => <tr key={k}><td><code>{k}</code></td><td>{m}</td></tr>)}</tbody></table>
-        <p>Start from the <a href="/samples/cobra-election-clean.json">sample election notice request</a> or the <a href="/samples/cobra-general-clean.json">general notice request</a>. The plan and administrator are invented, and beneficiaries are named by status. Send drafts without names, or with placeholders.</p>
+        <p>Start from the <a href="/samples/cobra-election-clean.json">sample election notice request</a> or the <a href="/samples/cobra-general-clean.json">general notice request</a>. The plan and administrator are invented, and beneficiaries are named by status. Finished notices with names are accepted; they are processed in memory and not stored.</p>
 
         <h2 id="items">Content items</h2>
         <h3>Election notice, 29 CFR 2590.606-4(b)(4)</h3>
@@ -151,7 +151,7 @@ export default function DocsCobra() {
         <Json value={demoFail.body.report.findings.slice(0, 6)} />
 
         <h2 id="errors">Errors</h2>
-        <p>See the <a href="/docs#errors">shared error table</a>. Rejected with HTTP 400 and not charged: a body that is not a JSON object, a noticeType other than election or general, both or neither of noticeText and noticeFile, a file that cannot be read, a scanned PDF with no text, an unknown qualifying event type, or wrong value types. Example (HTTP {inputError.status}):</p>
+        <p>See the <a href="/docs#errors">shared error table</a>. Rejected with HTTP 400 and not charged: a body that is not a JSON object, a noticeType other than election or general, both or neither of noticeText and noticeFile, a file that cannot be read, a scanned PDF with no text, an unknown qualifying event type, or wrong value types; on the demo endpoint, anything other than a sample request. Example (HTTP {inputError.status}):</p>
         <Json value={inputError.body} />
 
         <h2 id="examples">Code samples</h2>

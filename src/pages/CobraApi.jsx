@@ -66,8 +66,10 @@ export const COBRA_FAQ = [
     'Group health plans of private employers that normally had 20 or more employees in the prior year. Part-time employees count as fractions. Smaller employers may be covered by a state continuation law instead, which this check does not cover.'],
   ['How are the deadlines worked out?',
     'An election notice is due 44 days after the qualifying event when the employer is also the plan administrator, or after the loss of coverage if the plan starts the clock there. When a separate administrator handles it, the employer has 30 days to notify the administrator and the administrator has 14 days from then. For divorce, legal separation or a child losing dependent status, the 14 days run from the beneficiary\'s notice. A general notice is due 90 days after plan coverage begins. The election period must run at least 60 days from the later of the loss of coverage and the notice.'],
-  ['Should I send the finished notice with names filled in?',
-    'No need. The check reads the wording, not the people. Send the draft before names and addresses go in, or with placeholders, and name beneficiaries by status ("you, your spouse, your dependent children"). If what you send contains what looks like a Social Security number, the report warns you.'],
+  ['Can I send the finished notice with names filled in?',
+    'Yes. A COBRA notice names the employee and family members and carries addresses and premium amounts, and SpreadRun processes it in memory only to produce the report; it is not stored. The check reads the wording, not the people, so a draft with placeholders works just as well. If the notice contains what looks like a Social Security number, the report warns you, because a notice should not carry one.'],
+  ['Can I try it for free?',
+    `Yes, on the three sample notices on this page: a complete election notice, one with planted errors, and a general notice. They run free, up to 10 times a day. Checking your own notice, pasted or uploaded, is the paid run: sign in with at least ${dollars(API.priceCents)} of credit and run it from the same form, or call the API.`],
   ['Is my data stored?',
     'No. The notice is processed in memory for the length of the request and is not stored or shared. The report names items and rules, never text, amounts, names or dates from your notice. For billing and usage we log the time, endpoint, result status, size and duration, never the contents.'],
   ['When is a run charged?',
@@ -128,7 +130,7 @@ export default function CobraApi() {
           <p><b>A clean report is not legal advice and not a guarantee against DOL penalties.</b> It is not a substitute for benefits counsel.</p>
         </div>
         <div className="note">
-          <p><b>No names needed.</b> Send the draft before names and addresses are filled in, or with placeholders. The notice is processed in memory only and nothing from it is repeated in the report. The samples on this page describe an invented plan.</p>
+          <p><b>Personal data.</b> A finished notice names the employee and family members and carries addresses and premium amounts. It is processed in memory only to produce the report and is not stored, and nothing from it is repeated in the report. The samples on this page describe an invented plan.</p>
         </div>
         <div className="btn-row">
           <a className="btn" href="#demo">Check a notice</a>
@@ -185,6 +187,7 @@ export default function CobraApi() {
 
       <section className="section wrap" id="demo" aria-labelledby="demo-h">
         <h2 id="demo-h">Try it now</h2>
+        <p>The sample notices run free. Your own notice, pasted or uploaded, runs as a paid check at {dollars(API.priceCents)} from your credit.</p>
         <CobraDemo api={API} sample={example.body.report} />
       </section>
 
