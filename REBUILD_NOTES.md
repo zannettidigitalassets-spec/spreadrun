@@ -516,3 +516,22 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - The CMS-855I posted on cms.gov is still the 05/23 edition with OMB expiry 05/26; cite its date if CMS posts a new one.
 - scripts/tests/enroll-guides.test.mjs checks metadata, CTAs, all 14 and 6 notice items, the no-ranking rule, the
   seven 855I reasons with fixes, and the worked COBRA timeline. check-site's citation block covers all three batches.
+
+## SEO guide batch 4 (CMMC and remainder), October 5, 2026
+
+Branch `spreadrun/seo-guides-batch4`, not merged. Five pages in `src/content/final-guides.js` and `src/pages/FinalGuides.jsx`, listed on /guides after the PECOS and COBRA pages.
+
+Primary sources, read in full October 5, 2026:
+- /guides/sprs-score-calculation: 32 CFR 170.24 (point lists, partial credit, N/A, SSP), 170.21, 170.16 (SPRS fields).
+- /guides/cmmc-poam-rules: 32 CFR 170.21, 170.24, 170.16 (closeout and expiry).
+- /guides/cobra-penalty-110-per-day: 29 U.S.C. 1132(c)(1), 29 CFR 2575.502c-1, 29 U.S.C. 1166(a), 26 U.S.C. 4980B; Morehouse (6th Cir. 2019), Randolph (5th Cir. 2021), Howard v. Ivy Creek (M.D. Ala.).
+- /guides/medicare-revalidation-missed-deadline: CMS revalidations page, Medicare Revalidation List (linked, not copied), 42 CFR 424.515, 424.540, 424.541, 424.546, 424.535, 424.525, MLN9658742.
+- /guides/what-is-cpsc-efiling: 16 CFR part 1110, 90 FR 1800 final rule (dates), CPSC eFiling Implementation Guide v2.4, Product Registry FAQ v1.4, 15 U.S.C. 2066(a), CPSC 2021 civil penalty adjustment.
+
+Corrections and cuts:
+- The -203 floor is not printed in 170.24; the page shows it as the arithmetic of the 170.24 lists (3.12.4 carries no value: a missing SSP means no score).
+- $110 is a regulatory maximum (statute says $100); presented as discretionary. Medical bills presented as possible "other relief" with cases both ways (Morehouse award reversed; Randolph denied medical expenses).
+- Excise tax shown with its defenses and caps; Form 8928 reporting cut (not read in a primary source this session).
+- No DOL 2026 adjustment claim (not sourced); the page says only that the current eCFR text reads $110.
+- Revalidation: regulation clocks (60, 90, 30, 15 days) cited separately; the MLN "90 to 120 days" notice window replaced by the CMS page's "about three to four months".
+- CPSC: Implementation Guide date not stated (govinfo and the PDF disagree); penalty figures tied to the 2021 adjustment, not called "most recent". None of the cut claims (cargo hold, storage, risk scores, delisting, other penalty figures).
