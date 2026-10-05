@@ -38,6 +38,8 @@ import { DEADLINE_GUIDES, DEADLINE_GUIDE_PUBLISHED } from './content/deadline-gu
 import { makeDeadlineGuide } from './pages/DeadlineGuides.jsx';
 import { WH347_GUIDES, WH347_GUIDE_PUBLISHED } from './content/wh347-guides.js';
 import { makeWh347Guide } from './pages/Wh347Guides.jsx';
+import { ENROLL_GUIDES, ENROLL_GUIDE_PUBLISHED } from './content/enroll-guides.js';
+import { makeEnrollGuide } from './pages/EnrollGuides.jsx';
 import Account from './pages/Account.jsx';
 import Contact from './Contact.jsx';
 import NotFound from './NotFound.jsx';
@@ -348,6 +350,8 @@ export const ROUTES = {
     guidePage({ ...g, published: DEADLINE_GUIDE_PUBLISHED }, makeDeadlineGuide(g.slug), g.description, g.crumb)])),
   ...Object.fromEntries(WH347_GUIDES.map((g) => [`/guides/${g.slug}`,
     guidePage({ ...g, published: WH347_GUIDE_PUBLISHED }, makeWh347Guide(g.slug), g.description, g.crumb)])),
+  ...Object.fromEntries(ENROLL_GUIDES.map((g) => [`/guides/${g.slug}`,
+    guidePage({ ...g, published: ENROLL_GUIDE_PUBLISHED }, makeEnrollGuide(g.slug), g.description, g.crumb)])),
   '/unsubscribe': {
     Component: Unsubscribe,
     title: 'Unsubscribe | SpreadRun',
