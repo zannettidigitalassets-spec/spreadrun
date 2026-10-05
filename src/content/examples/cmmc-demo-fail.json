@@ -1,0 +1,233 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "cmmc-self-assessment-validator",
+    "mode": "demo",
+    "charged": false,
+    "report": {
+      "schemaVersion": 1,
+      "status": "FAIL",
+      "level": 2,
+      "asOf": "2026-10-05",
+      "verifiedScore": 94,
+      "maxScore": 110,
+      "band": {
+        "key": "none",
+        "label": "No Level 2 (Self) status",
+        "reason": "The score reaches 0.8, but at least one NOT MET requirement may not be on a POA&M."
+      },
+      "claimedScore": {
+        "provided": true,
+        "matches": false
+      },
+      "counts": {
+        "met": 104,
+        "notMet": 5,
+        "partial": 1,
+        "notApplicable": 0,
+        "assessed": 110,
+        "required": 110,
+        "pointsDeducted": 16
+      },
+      "deductions": [
+        {
+          "requirement": "3.1.10",
+          "points": 1,
+          "partial": false
+        },
+        {
+          "requirement": "3.3.4",
+          "points": 1,
+          "partial": false
+        },
+        {
+          "requirement": "3.5.3",
+          "points": 3,
+          "partial": true
+        },
+        {
+          "requirement": "3.10.4",
+          "points": 1,
+          "partial": false
+        },
+        {
+          "requirement": "3.13.11",
+          "points": 5,
+          "partial": false
+        },
+        {
+          "requirement": "3.14.6",
+          "points": 5,
+          "partial": false
+        }
+      ],
+      "deductionsByFamily": {
+        "AC": 1,
+        "AU": 1,
+        "IA": 3,
+        "PE": 1,
+        "SC": 5,
+        "SI": 5
+      },
+      "readiness": [
+        {
+          "item": "requirements",
+          "label": "All 110 requirements assessed, once each",
+          "status": "ready"
+        },
+        {
+          "item": "ssp",
+          "label": "System security plan in place (3.12.4)",
+          "status": "ready"
+        },
+        {
+          "item": "score",
+          "label": "Score verified against the methodology",
+          "status": "fix"
+        },
+        {
+          "item": "poam",
+          "label": "POA&M in place and allowed for every NOT MET requirement",
+          "status": "fix"
+        },
+        {
+          "item": "sprs",
+          "label": "SPRS details: level, date, scope and CAGE codes",
+          "status": "fix"
+        },
+        {
+          "item": "affirmation",
+          "label": "Affirmation by the Affirming Official",
+          "status": "fix"
+        },
+        {
+          "item": "status",
+          "label": "Score reaches a Level 2 (Self) status",
+          "status": "review"
+        }
+      ],
+      "findingCount": 10,
+      "findingCounts": {
+        "error": 5,
+        "warning": 5
+      },
+      "ruleCounts": {
+        "CMMC-AFFIRM-BEFORE": 1,
+        "CMMC-AFFIRM-MISSING": 1,
+        "CMMC-BAND-NONE": 1,
+        "CMMC-CAGE-FORMAT": 1,
+        "CMMC-POAM-INELIGIBLE": 4,
+        "CMMC-POAM-MISSING": 1,
+        "CMMC-SCORE-MISMATCH": 1
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "ruleId": "CMMC-AFFIRM-BEFORE",
+          "path": "/affirmation/affirmationDate",
+          "message": "The affirmation is dated before the assessment. An affirmation is required at the time of each assessment.",
+          "source": "cfr170.22"
+        },
+        {
+          "severity": "error",
+          "ruleId": "CMMC-AFFIRM-MISSING",
+          "path": "/affirmation/statementAffirmed",
+          "message": "The affirmation statement attests that all applicable CMMC requirements are implemented and will stay implemented. It has not been made.",
+          "source": "cfr170.22"
+        },
+        {
+          "severity": "error",
+          "ruleId": "CMMC-CAGE-FORMAT",
+          "path": "/assessment/cageCodes[1]",
+          "message": "A CAGE code is five characters, letters and digits only.",
+          "source": "dla-cage"
+        },
+        {
+          "severity": "error",
+          "ruleId": "CMMC-POAM-MISSING",
+          "path": "/assessment/poamInPlace",
+          "message": "There are NOT MET requirements, so a POA&M must be in place for each one (poamInPlace: true). A POA&M is not a substitute for a completed requirement, and the points stay deducted.",
+          "source": "cfr170.24"
+        },
+        {
+          "severity": "error",
+          "ruleId": "CMMC-SCORE-MISMATCH",
+          "path": "/assessment/claimedScore",
+          "message": "The claimed score does not match the score recomputed from the requirement results. Post the verified score, or correct the results it came from.",
+          "source": "cfr170.24"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "CMMC-BAND-NONE",
+          "path": "/score",
+          "message": "This score does not reach a Level 2 (Self) status. It can still be posted, but a contract that requires Level 2 (Self) cannot be awarded on it.",
+          "source": "cfr170.21"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "CMMC-POAM-INELIGIBLE",
+          "path": "/requirement/3.10.4",
+          "message": "NOT MET, and this requirement is on the list that may never be on a POA&M. It must be MET before a Level 2 (Self) status is possible.",
+          "source": "cfr170.21",
+          "requirement": "3.10.4"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "CMMC-POAM-INELIGIBLE",
+          "path": "/requirement/3.13.11",
+          "message": "NOT MET, and this requirement is worth more than 1 point as scored, and only 1-point requirements (or 3.13.11 when encryption is employed but not FIPS-validated) may be on a POA&M. It must be MET before a Level 2 (Self) status is possible.",
+          "source": "cfr170.21",
+          "requirement": "3.13.11"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "CMMC-POAM-INELIGIBLE",
+          "path": "/requirement/3.14.6",
+          "message": "NOT MET, and this requirement is worth more than 1 point as scored, and only 1-point requirements (or 3.13.11 when encryption is employed but not FIPS-validated) may be on a POA&M. It must be MET before a Level 2 (Self) status is possible.",
+          "source": "cfr170.21",
+          "requirement": "3.14.6"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "CMMC-POAM-INELIGIBLE",
+          "path": "/requirement/3.5.3",
+          "message": "NOT MET, and this requirement is worth more than 1 point as scored, and only 1-point requirements (or 3.13.11 when encryption is employed but not FIPS-validated) may be on a POA&M. It must be MET before a Level 2 (Self) status is possible.",
+          "source": "cfr170.21",
+          "requirement": "3.5.3"
+        }
+      ],
+      "methodology": {
+        "name": "CMMC Level 2 Scoring Methodology",
+        "regulation": "32 CFR 170.24, as in effect October 2026",
+        "requirements": "NIST SP 800-171 Rev 2 (110 requirements), assessed with NIST SP 800-171A (June 2018)",
+        "maxScore": 110,
+        "minScore": -203,
+        "conditionalMinimum": 88
+      },
+      "notChecked": [
+        "Whether each requirement is really MET. The score is recomputed from the results you entered; SpreadRun does not see your systems, evidence or SSP.",
+        "Whether your assessment scope, asset categories and CAGE codes are the right ones for your contracts.",
+        "Whether the CAGE codes are registered to your company. Only their format is checked.",
+        "The SPRS entry itself, which you complete in SPRS.",
+        "Level 1 and Level 3 assessments, and C3PAO certification assessments."
+      ],
+      "sources": {
+        "cfr170.24": "32 CFR 170.24, CMMC Scoring Methodology (Level 2 point values, partial credit, SSP, N/A)",
+        "cfr170.21": "32 CFR 170.21, Plan of Action and Milestones requirements (0.8 threshold, eligible requirements, 180-day closeout)",
+        "cfr170.16": "32 CFR 170.16, CMMC Level 2 self-assessment (SPRS contents, three-year cycle, affirmation)",
+        "cfr170.22": "32 CFR 170.22, Affirmation (Affirming Official, content, timing)",
+        "cfr170.4": "32 CFR 170.4, Definitions (MET, NOT MET, N/A, CMMC Status Date, Affirming Official)",
+        "nist800-171": "NIST SP 800-171 Rev 2, the 110 CMMC Level 2 security requirements",
+        "nist800-171a": "NIST SP 800-171A (June 2018), assessment objectives (a requirement is MET only when all its applicable objectives are met)",
+        "dla-cage": "Defense Logistics Agency: the CAGE code is five characters"
+      },
+      "scope": "A verified score is arithmetic from the results you entered, checked against the published CMMC scoring methodology. It is not a CMMC certification or assessment, not legal or compliance advice, and a PASS does not mean your company meets NIST SP 800-171 or that DoD will accept the score.",
+      "input": {
+        "format": "json",
+        "bytes": 1727
+      },
+      "inputSha256": "8f6c6f81b6c7dc3c9183a7dc8f489a44ce859a3c566d2442250624fee69c80ee"
+    }
+  }
+}

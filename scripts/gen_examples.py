@@ -128,3 +128,12 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
         save('pecos-paid-pass', *post(paid, (SAMPLES / 'pecos-clean.json').read_bytes(), rich_auth))
         save('pecos-demo-fail', *post(demo, (SAMPLES / 'pecos-errors.json').read_bytes(), {'Content-Type': 'application/json'}))
     save('pecos-input-error', *post(paid, b'{"enrollmentType": "855A", "provider": {}}', rich_auth))
+
+    # CMMC: the sample contractor is invented and uses the placeholder CAGE code 00000. asOf is fixed in the samples.
+    k = 'cmmc-self-assessment-validator'
+    paid, demo = serve(k, 'paid'), serve(k, 'demo')
+    rich, _ = fake.add_user(10000)
+    rich_auth = {'Authorization': f'Bearer {rich}', 'Content-Type': 'application/json'}
+    save('cmmc-paid-pass', *post(paid, (SAMPLES / 'cmmc-clean.json').read_bytes(), rich_auth))
+    save('cmmc-demo-fail', *post(demo, (SAMPLES / 'cmmc-errors.json').read_bytes(), {'Content-Type': 'application/json'}))
+    save('cmmc-input-error', *post(paid, b'{"assessment": {"level": 1}, "requirements": []}', rich_auth))

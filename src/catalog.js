@@ -105,6 +105,19 @@ export const APIS = [
       'Checks a draft CMS-855I, 855B or 855S Medicare enrollment, revalidation or change before it goes into PECOS: the NPI and taxonomy codes against the live NPPES registry, the legal name against the IRS name, ZIP+4 addresses, expiring credentials and the supporting documents the form asks for.',
     cta: 'Pre-check an enrollment',
   },
+  {
+    slug: 'cmmc-self-assessment-validator',
+    name: 'CMMC Self-Assessment Score Validator',
+    tier: 'built',
+    status: 'beta',
+    priceCents: PROFESSIONAL_RUN_CENTS,
+    unit: 'completed verification',
+    maxBodyBytes: 256 * 1024,
+    demoMaxBodyBytes: 64 * 1024,
+    summary:
+      'Recomputes a CMMC Level 2 (NIST SP 800-171 Rev 2) self-assessment score from your per-requirement results with the published DoD scoring method, flags a claimed score that does not match, checks POA&M eligibility, the SPRS details and the annual affirmation, and returns a submission checklist.',
+    cta: 'Verify a score',
+  },
 ];
 
 // Tier 2 listings appear here only after an affiliate agreement is approved and signed by the owner.
