@@ -154,7 +154,7 @@ export default function I9Deadline() {
       <section className="section wrap" aria-labelledby="cta-h">
         <div className="calc-result">
           <h2 id="cta-h" style={{ marginTop: 0 }}>Doing this for dozens of employees?</h2>
-          <p style={{ marginBottom: 0 }}>A pre-audit scan catches what checklists miss. <a href="https://www.spreadrun.com/">Learn more</a></p>
+          <p style={{ marginBottom: 0 }}>Browse <a href="/tools">SpreadRun's free compliance tools</a> for employers.</p>
         </div>
       </section>
     </Layout>
