@@ -454,5 +454,7 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   $110 by 29 CFR 2575.502c-1 (no 2026 adjustment) and discretionary with the court; medical expenses are discretionary
   "other relief", not statutory. Case penalty amounts were left out (secondary sources only). The plan year input
   was not used: no deadline in the regulations runs from it.
-- Personal data: the page and form ask for drafts without names or with placeholders, and an SSN-like pattern gets a
-  warning. Terms still forbid personal data for this API; a clause was proposed, not applied.
+- Personal data: Terms and Privacy carry the owner-approved COBRA paragraph (October 5, 2026); finished notices are
+  accepted. An SSN-like pattern still gets a warning.
+- Free demo limited to the three sample requests (owner decision, October 5, 2026), fingerprint-matched in engine.py
+  (DEMO_SAMPLES) the same way as CMMC; a test recomputes the hashes from public/samples.
