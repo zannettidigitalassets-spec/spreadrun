@@ -1,0 +1,161 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "cobra-notice-qa",
+    "mode": "paid",
+    "charged": true,
+    "priceCents": 2500,
+    "balanceCents": 7500,
+    "report": {
+      "schemaVersion": 1,
+      "status": "PASS",
+      "noticeType": "election",
+      "qualifyingEventType": "termination",
+      "asOf": "2026-10-09",
+      "regulation": "29 CFR 2590.606-4(b)(4)",
+      "contentItems": {
+        "required": 14,
+        "found": 14,
+        "missing": 0
+      },
+      "checklist": [
+        {
+          "item": "i",
+          "label": "Plan name and the COBRA administrator's name, address and telephone number",
+          "status": "found"
+        },
+        {
+          "item": "ii",
+          "label": "Identification of the qualifying event",
+          "status": "found"
+        },
+        {
+          "item": "iii",
+          "label": "Qualified beneficiaries, by status or name, and the date coverage ends",
+          "status": "found"
+        },
+        {
+          "item": "iv",
+          "label": "Each qualified beneficiary's independent right to elect",
+          "status": "found"
+        },
+        {
+          "item": "v",
+          "label": "How to elect, the election period, and the date by which to elect",
+          "status": "found"
+        },
+        {
+          "item": "vi",
+          "label": "What happens if you do not elect or you waive, and how to revoke a waiver",
+          "status": "found"
+        },
+        {
+          "item": "vii",
+          "label": "The coverage offered and when it begins",
+          "status": "found"
+        },
+        {
+          "item": "viii",
+          "label": "The maximum coverage period, the end date, and early termination",
+          "status": "found"
+        },
+        {
+          "item": "ix",
+          "label": "Extensions for disability or a second qualifying event",
+          "status": "found"
+        },
+        {
+          "item": "x",
+          "label": "Your duty to give notice of a second qualifying event or a disability determination",
+          "status": "found"
+        },
+        {
+          "item": "xi",
+          "label": "The amount each qualified beneficiary must pay",
+          "status": "found"
+        },
+        {
+          "item": "xii",
+          "label": "Payment due dates, monthly payment, grace periods, where to pay, and late payment",
+          "status": "found"
+        },
+        {
+          "item": "xiii",
+          "label": "Keeping the administrator informed of current addresses",
+          "status": "found"
+        },
+        {
+          "item": "xiv",
+          "label": "A statement that the notice does not fully describe coverage, and where to find more",
+          "status": "found"
+        }
+      ],
+      "deadlines": {
+        "noticeDateUsed": "noticeDate",
+        "rule": "44 days after the qualifying event",
+        "electionNoticeDue": "2026-11-13",
+        "electionPeriodEndsNoEarlierThan": "2026-12-08"
+      },
+      "readiness": [
+        {
+          "item": "content",
+          "label": "All required content items present",
+          "status": "ready"
+        },
+        {
+          "item": "deadline",
+          "label": "Sent within the deadline",
+          "status": "ready"
+        },
+        {
+          "item": "consistency",
+          "label": "Stated dates and terms meet the minimums",
+          "status": "ready"
+        },
+        {
+          "item": "medicare",
+          "label": "Medicare explained",
+          "status": "ready"
+        },
+        {
+          "item": "privacy",
+          "label": "No personal identifiers in the draft",
+          "status": "ready"
+        }
+      ],
+      "findingCount": 0,
+      "findingCounts": {
+        "error": 0,
+        "warning": 0
+      },
+      "ruleCounts": {},
+      "findings": [],
+      "notChecked": [
+        "Whether the wording is legally sufficient in context. A pattern can find that an item is addressed, not that it is right.",
+        "Whether the premium amounts, plan details and beneficiaries named are correct for your plan.",
+        "Whether the notice was actually delivered, and how (first-class mail, separate notices to a spouse at another address).",
+        "State continuation (mini-COBRA) laws, and plans of employers with fewer than 20 employees, which federal COBRA does not cover.",
+        "The notice of unavailability, the notice of early termination and the employer notice to the administrator."
+      ],
+      "sources": {
+        "cfr2590.606-1": "29 CFR 2590.606-1, general notice of continuation coverage (deadline and content)",
+        "cfr2590.606-2": "29 CFR 2590.606-2, employer notice of a qualifying event to the administrator (30 days)",
+        "cfr2590.606-3": "29 CFR 2590.606-3, notices from qualified beneficiaries",
+        "cfr2590.606-4": "29 CFR 2590.606-4, election notice (14 days, or 44 days when the employer is the administrator; content items (b)(4)(i) to (xiv))",
+        "usc1162": "29 USC 1162, period of coverage and premium limits",
+        "usc1165": "29 USC 1165, election period",
+        "cfr54.4980B-6": "26 CFR 54.4980B-6, election period of at least 60 days",
+        "cfr54.4980B-7": "26 CFR 54.4980B-7, maximum coverage periods (18, 29 and 36 months)",
+        "cfr54.4980B-8": "26 CFR 54.4980B-8, premiums: 102 percent, 45 days for the first payment, 30-day grace period",
+        "dol-model-2020": "DOL model general and election notices, updated 2020 to explain how COBRA and Medicare interact"
+      },
+      "scope": "A content-completeness and deadline check of the draft you sent. A clean report is not legal advice, not a substitute for benefits counsel, and not a guarantee against DOL penalties or lawsuits.",
+      "input": {
+        "format": "text",
+        "bytes": 5749
+      },
+      "inputSha256": "9510af00e81b389c63b9265f01db2b0b1252f37ec7e27af8badb2fb2c21bfd98"
+    }
+  }
+}

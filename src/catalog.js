@@ -106,6 +106,19 @@ export const APIS = [
     cta: 'Pre-check an enrollment',
   },
   {
+    slug: 'cobra-notice-qa',
+    name: 'COBRA Notice Content QA',
+    tier: 'built',
+    status: 'beta',
+    priceCents: PROFESSIONAL_RUN_CENTS,
+    unit: 'completed QA run',
+    maxBodyBytes: 4_400_000,
+    demoMaxBodyBytes: 1024 * 1024,
+    summary:
+      'Checks a draft COBRA election notice or general notice before it goes out: each content item the DOL regulation requires, the 44-day, 14-day and 90-day deadlines from the event date, and the dates and payment terms the notice states.',
+    cta: 'Check a notice',
+  },
+  {
     slug: 'cmmc-self-assessment-validator',
     name: 'CMMC Self-Assessment Score Validator',
     tier: 'built',

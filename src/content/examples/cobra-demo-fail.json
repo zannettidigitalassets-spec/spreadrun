@@ -1,0 +1,404 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "cobra-notice-qa",
+    "mode": "demo",
+    "charged": false,
+    "report": {
+      "schemaVersion": 1,
+      "status": "FAIL",
+      "noticeType": "election",
+      "qualifyingEventType": "termination",
+      "asOf": "2026-11-20",
+      "regulation": "29 CFR 2590.606-4(b)(4)",
+      "contentItems": {
+        "required": 14,
+        "found": 3,
+        "missing": 11
+      },
+      "checklist": [
+        {
+          "item": "i",
+          "label": "Plan name and the COBRA administrator's name, address and telephone number",
+          "status": "missing"
+        },
+        {
+          "item": "ii",
+          "label": "Identification of the qualifying event",
+          "status": "found"
+        },
+        {
+          "item": "iii",
+          "label": "Qualified beneficiaries, by status or name, and the date coverage ends",
+          "status": "missing"
+        },
+        {
+          "item": "iv",
+          "label": "Each qualified beneficiary's independent right to elect",
+          "status": "missing"
+        },
+        {
+          "item": "v",
+          "label": "How to elect, the election period, and the date by which to elect",
+          "status": "missing"
+        },
+        {
+          "item": "vi",
+          "label": "What happens if you do not elect or you waive, and how to revoke a waiver",
+          "status": "missing"
+        },
+        {
+          "item": "vii",
+          "label": "The coverage offered and when it begins",
+          "status": "review"
+        },
+        {
+          "item": "viii",
+          "label": "The maximum coverage period, the end date, and early termination",
+          "status": "missing"
+        },
+        {
+          "item": "ix",
+          "label": "Extensions for disability or a second qualifying event",
+          "status": "missing"
+        },
+        {
+          "item": "x",
+          "label": "Your duty to give notice of a second qualifying event or a disability determination",
+          "status": "missing"
+        },
+        {
+          "item": "xi",
+          "label": "The amount each qualified beneficiary must pay",
+          "status": "found"
+        },
+        {
+          "item": "xii",
+          "label": "Payment due dates, monthly payment, grace periods, where to pay, and late payment",
+          "status": "missing"
+        },
+        {
+          "item": "xiii",
+          "label": "Keeping the administrator informed of current addresses",
+          "status": "missing"
+        },
+        {
+          "item": "xiv",
+          "label": "A statement that the notice does not fully describe coverage, and where to find more",
+          "status": "missing"
+        }
+      ],
+      "deadlines": {
+        "noticeDateUsed": "noticeDate",
+        "rule": "44 days after the qualifying event",
+        "electionNoticeDue": "2026-11-13",
+        "electionPeriodEndsNoEarlierThan": "2027-01-19"
+      },
+      "readiness": [
+        {
+          "item": "content",
+          "label": "All required content items present",
+          "status": "fix"
+        },
+        {
+          "item": "deadline",
+          "label": "Sent within the deadline",
+          "status": "fix"
+        },
+        {
+          "item": "consistency",
+          "label": "Stated dates and terms meet the minimums",
+          "status": "fix"
+        },
+        {
+          "item": "medicare",
+          "label": "Medicare explained",
+          "status": "review"
+        },
+        {
+          "item": "privacy",
+          "label": "No personal identifiers in the draft",
+          "status": "ready"
+        }
+      ],
+      "findingCount": 27,
+      "findingCounts": {
+        "error": 22,
+        "warning": 5
+      },
+      "ruleCounts": {
+        "COBRA-CONSIST-DURATION": 1,
+        "COBRA-CONSIST-ELECTION-DATE": 1,
+        "COBRA-CONSIST-FIRST-PAYMENT": 1,
+        "COBRA-CONSIST-GRACE": 1,
+        "COBRA-CONSIST-PREMIUM-PCT": 1,
+        "COBRA-DEADLINE-LATE": 1,
+        "COBRA-E01-ADDRESS": 1,
+        "COBRA-E01-ADMIN": 1,
+        "COBRA-E03-BENEFICIARIES": 1,
+        "COBRA-E04-GUARDIAN": 1,
+        "COBRA-E04-INDEPENDENT": 1,
+        "COBRA-E04-ON-BEHALF": 1,
+        "COBRA-E05-PERIOD": 1,
+        "COBRA-E06-OTHER-RIGHTS": 1,
+        "COBRA-E06-REVOKE": 1,
+        "COBRA-E07-START": 1,
+        "COBRA-E08-EARLY-END": 1,
+        "COBRA-E09-DISABILITY": 1,
+        "COBRA-E09-SECOND-EVENT": 1,
+        "COBRA-E10-NO-LONGER": 1,
+        "COBRA-E10-SSA": 1,
+        "COBRA-E10-TIMING": 1,
+        "COBRA-E12-ADDRESS": 1,
+        "COBRA-E12-LATE": 1,
+        "COBRA-E13-ADDRESSES": 1,
+        "COBRA-E14-STATEMENT": 1,
+        "COBRA-MEDICARE": 1
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "ruleId": "COBRA-CONSIST-DURATION",
+          "item": "viii",
+          "path": "/noticeText",
+          "message": "For termination or reduction of hours the maximum period is 18 months, and the notice does not state 18 months.",
+          "source": "cfr54.4980B-7"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-CONSIST-ELECTION-DATE",
+          "item": "v",
+          "path": "/noticeText",
+          "message": "The election deadline stated in the notice is earlier than 60 days after the later of the loss of coverage and the notice date.",
+          "source": "cfr54.4980B-6"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-CONSIST-FIRST-PAYMENT",
+          "item": "xii",
+          "path": "/noticeText",
+          "message": "The notice requires the first payment sooner than 45 days after the election.",
+          "source": "cfr54.4980B-8"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-CONSIST-GRACE",
+          "item": "xii",
+          "path": "/noticeText",
+          "message": "The notice gives a grace period shorter than 30 days.",
+          "source": "cfr54.4980B-8"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-CONSIST-PREMIUM-PCT",
+          "item": "xi",
+          "path": "/noticeText",
+          "message": "The notice states a premium above 102 percent of the plan cost (150 percent is allowed only during a disability extension).",
+          "source": "usc1162"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-DEADLINE-LATE",
+          "item": null,
+          "path": "/noticeDate",
+          "message": "The notice goes out after the election notice deadline.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E01-ADDRESS",
+          "item": "i",
+          "path": "/noticeText",
+          "message": "No mailing address for the COBRA administrator was found.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E01-ADMIN",
+          "item": "i",
+          "path": "/noticeText",
+          "message": "The notice does not name the party responsible for administering COBRA coverage.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E03-BENEFICIARIES",
+          "item": "iii",
+          "path": "/noticeText",
+          "message": "The notice does not identify the qualified beneficiaries who may elect.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E04-INDEPENDENT",
+          "item": "iv",
+          "path": "/noticeText",
+          "message": "The notice does not say that each qualified beneficiary has an independent right to elect.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E05-PERIOD",
+          "item": "v",
+          "path": "/noticeText",
+          "message": "The notice does not state the election period (at least 60 days).",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E06-REVOKE",
+          "item": "vi",
+          "path": "/noticeText",
+          "message": "The notice does not describe how to revoke a waiver before the election deadline.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E08-EARLY-END",
+          "item": "viii",
+          "path": "/noticeText",
+          "message": "The notice does not explain what can end continuation coverage early.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E09-DISABILITY",
+          "item": "ix",
+          "path": "/noticeText",
+          "message": "The notice does not describe the disability extension.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E09-SECOND-EVENT",
+          "item": "ix",
+          "path": "/noticeText",
+          "message": "The notice does not describe the extension for a second qualifying event.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E10-NO-LONGER",
+          "item": "x",
+          "path": "/noticeText",
+          "message": "The notice does not explain the duty to report that a disabled beneficiary is no longer disabled.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E10-SSA",
+          "item": "x",
+          "path": "/noticeText",
+          "message": "The notice does not describe the notice to give after a Social Security disability determination.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E10-TIMING",
+          "item": "x",
+          "path": "/noticeText",
+          "message": "The notice does not give the time limit for notifying the plan of a disability determination or a second qualifying event.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E12-ADDRESS",
+          "item": "xii",
+          "path": "/noticeText",
+          "message": "The notice does not give the address to which payments should be sent.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E12-LATE",
+          "item": "xii",
+          "path": "/noticeText",
+          "message": "The notice does not explain the consequences of late payment or non-payment.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E13-ADDRESSES",
+          "item": "xiii",
+          "path": "/noticeText",
+          "message": "The notice does not explain the importance of keeping the administrator informed of current addresses.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "error",
+          "ruleId": "COBRA-E14-STATEMENT",
+          "item": "xiv",
+          "path": "/noticeText",
+          "message": "The notice does not state that it does not fully describe continuation coverage and where more complete information is available.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "COBRA-E04-GUARDIAN",
+          "item": "iv",
+          "path": "/noticeText",
+          "message": "The notice does not say that a parent or legal guardian may elect for a minor child.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "COBRA-E04-ON-BEHALF",
+          "item": "iv",
+          "path": "/noticeText",
+          "message": "The notice does not say that the employee or spouse may elect on behalf of the other qualified beneficiaries.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "COBRA-E06-OTHER-RIGHTS",
+          "item": "vi",
+          "path": "/noticeText",
+          "message": "The notice does not mention the effect on other coverage rights, such as special enrollment.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "COBRA-E07-START",
+          "item": "vii",
+          "path": "/noticeText",
+          "message": "The notice does not say when continuation coverage begins.",
+          "source": "cfr2590.606-4"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "COBRA-MEDICARE",
+          "item": null,
+          "path": "/noticeText",
+          "message": "The notice does not explain how COBRA and Medicare interact, as the DOL model election notice does.",
+          "source": "dol-model-2020"
+        }
+      ],
+      "notChecked": [
+        "Whether the wording is legally sufficient in context. A pattern can find that an item is addressed, not that it is right.",
+        "Whether the premium amounts, plan details and beneficiaries named are correct for your plan.",
+        "Whether the notice was actually delivered, and how (first-class mail, separate notices to a spouse at another address).",
+        "State continuation (mini-COBRA) laws, and plans of employers with fewer than 20 employees, which federal COBRA does not cover.",
+        "The notice of unavailability, the notice of early termination and the employer notice to the administrator."
+      ],
+      "sources": {
+        "cfr2590.606-1": "29 CFR 2590.606-1, general notice of continuation coverage (deadline and content)",
+        "cfr2590.606-2": "29 CFR 2590.606-2, employer notice of a qualifying event to the administrator (30 days)",
+        "cfr2590.606-3": "29 CFR 2590.606-3, notices from qualified beneficiaries",
+        "cfr2590.606-4": "29 CFR 2590.606-4, election notice (14 days, or 44 days when the employer is the administrator; content items (b)(4)(i) to (xiv))",
+        "usc1162": "29 USC 1162, period of coverage and premium limits",
+        "usc1165": "29 USC 1165, election period",
+        "cfr54.4980B-6": "26 CFR 54.4980B-6, election period of at least 60 days",
+        "cfr54.4980B-7": "26 CFR 54.4980B-7, maximum coverage periods (18, 29 and 36 months)",
+        "cfr54.4980B-8": "26 CFR 54.4980B-8, premiums: 102 percent, 45 days for the first payment, 30-day grace period",
+        "dol-model-2020": "DOL model general and election notices, updated 2020 to explain how COBRA and Medicare interact"
+      },
+      "scope": "A content-completeness and deadline check of the draft you sent. A clean report is not legal advice, not a substitute for benefits counsel, and not a guarantee against DOL penalties or lawsuits.",
+      "input": {
+        "format": "text",
+        "bytes": 1029
+      },
+      "inputSha256": "eef45a4a6533fdaccdf781cb94bb14c3d2443837cc1985a6d94754f210d9eadc"
+    }
+  }
+}

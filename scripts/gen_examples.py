@@ -137,3 +137,12 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     save('cmmc-paid-pass', *post(paid, (SAMPLES / 'cmmc-clean.json').read_bytes(), rich_auth))
     save('cmmc-demo-fail', *post(demo, (SAMPLES / 'cmmc-errors.json').read_bytes(), {'Content-Type': 'application/json'}))
     save('cmmc-input-error', *post(paid, b'{"assessment": {"level": 1}, "requirements": []}', rich_auth))
+
+    # COBRA: an invented plan and administrator; beneficiaries named by status only. asOf is fixed in the samples.
+    k = 'cobra-notice-qa'
+    paid, demo = serve(k, 'paid'), serve(k, 'demo')
+    rich, _ = fake.add_user(10000)
+    rich_auth = {'Authorization': f'Bearer {rich}', 'Content-Type': 'application/json'}
+    save('cobra-paid-pass', *post(paid, (SAMPLES / 'cobra-election-clean.json').read_bytes(), rich_auth))
+    save('cobra-demo-fail', *post(demo, (SAMPLES / 'cobra-election-errors.json').read_bytes(), {'Content-Type': 'application/json'}))
+    save('cobra-input-error', *post(paid, b'{"noticeType": "initial", "noticeText": ""}', rich_auth))
