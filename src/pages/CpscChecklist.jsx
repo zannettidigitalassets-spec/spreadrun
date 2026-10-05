@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
+import ToolSignup from '../site/ToolSignup.jsx';
 
 export const CPSC_PATH = '/tools/cpsc-efiling-readiness-checklist';
 const RULE = 'https://www.ecfr.gov/current/title-16/chapter-II/subchapter-B/part-1110';
@@ -158,6 +159,7 @@ export default function CpscChecklist() {
         <p className="small muted" style={{ marginTop: 24 }}>Sources: <a href={RULE}>16 CFR part 1110</a>; the final rule, <a href={FR}>90 FR 1800 (January 8, 2025)</a>; the <a href={CATAIR}>CPSC eFiling Implementation Guide v2.4</a>; the <a href={REGISTRY_FAQ}>Product Registry FAQ v1.4</a>; <a href={PERIODIC}>16 CFR 1107.21</a>; <a href={PENALTIES}>CPSC civil penalty adjustment (2021)</a>; 15 U.S.C. 2066(a). SpreadRun is not affiliated with or endorsed by CPSC or CBP.</p>
         <p className="small">Also free: <a href="/tools">other compliance tools</a>.</p>
       </section>
+      <ToolSignup source={CPSC_PATH} heading="Get a reminder before the next CPSC eFiling date" blurb="eFiling for foreign-trade zone entries starts January 8, 2027. Sign up and we will email you before it, and when there is a new free tool." />
     </Layout>
   );
 }

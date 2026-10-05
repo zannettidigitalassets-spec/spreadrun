@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
+import ToolSignup from '../site/ToolSignup.jsx';
 import coverage from '../content/uad-coverage.json';
 import { UAD_CHECKLIST_PATH, UAD_ERROR_GUIDES, UAD_SPEC, UCDP_FAQ, UCDP_GUIDE, VALIDATOR } from './UadErrorGuides.jsx';
 
@@ -122,6 +123,7 @@ export default function UadPreflight() {
         <p className="small muted" style={{ marginTop: 16 }}>Sources: <a href={UCDP_GUIDE}>UCDP General User Guide</a> (February 2026), <a href={UCDP_FAQ}>UCDP FAQ</a>, and Appendices A-1 and H-1 on the <a href={UAD_SPEC}>Uniform Appraisal Dataset page</a>. SpreadRun is not affiliated with or endorsed by Fannie Mae or Freddie Mac. This checklist is general information, not legal advice, and checking every box is not UCDP acceptance.</p>
         <p className="small">Also free: the <a href="/tools">other compliance tools</a>.</p>
       </section>
+      <ToolSignup source={UAD_CHECKLIST_PATH} heading="Get a reminder before the UAD 3.6 deadline" blurb="UAD 3.6 is required for new UCDP submissions from November 2, 2026. Sign up and we will email you about UAD 3.6 dates and when there is a new free tool." />
     </Layout>
   );
 }
