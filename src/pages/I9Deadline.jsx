@@ -128,7 +128,7 @@ export default function I9Deadline() {
       <Crumbs items={[['/', 'Home'], [null, 'I-9 Section 2 Deadline Calculator']]} />
       <div className="wrap section" style={{ paddingTop: 24 }}>
         <h1>Free I-9 Section 2 Deadline Calculator and Self-Audit Checklist</h1>
-        <p className="lede" style={{ marginTop: 20 }}>Find the date Section 2 of Form I-9 is due for a new hire, then run through the mistakes that most often turn up when an I-9 is checked. Free, no signup, and nothing you enter leaves the page.</p>
+        <p className="lede" style={{ marginTop: 20 }}>Find the date Section 2 of Form I-9 is due for a new hire, then check a completed form against the rules in the USCIS handbook. Free, no signup, and nothing you enter leaves the page.</p>
         <p className="small" style={{ marginTop: 12 }}><b>This tool is for information only and is not legal advice. Immigration paperwork has real consequences; when in doubt, talk to an immigration attorney.</b></p>
       </div>
 
