@@ -1,0 +1,199 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "pecos-enrollment-precheck",
+    "mode": "demo",
+    "charged": false,
+    "report": {
+      "schemaVersion": 1,
+      "status": "FAIL",
+      "enrollmentType": "855B",
+      "applicationReason": "initial",
+      "asOf": "2026-10-05",
+      "processingWindowDays": 90,
+      "windowEnds": "2027-01-03",
+      "registry": {
+        "queried": true,
+        "source": "NPPES NPI Registry API, version 2.1 (queried live during the run)",
+        "note": "Queried live for this run only. Registry data is not stored, cached or returned."
+      },
+      "counts": {
+        "practiceLocations": 2,
+        "credentials": 2,
+        "documentsRequired": 3,
+        "documentsMissing": 1
+      },
+      "readiness": [
+        {
+          "item": "npi",
+          "label": "NPI is well formed and active in NPPES as the right type",
+          "status": "ready"
+        },
+        {
+          "item": "names",
+          "label": "Legal name matches the IRS name and the NPPES record",
+          "status": "fail"
+        },
+        {
+          "item": "taxonomy",
+          "label": "Taxonomy codes match the NPPES record",
+          "status": "fail"
+        },
+        {
+          "item": "addresses",
+          "label": "Practice locations are complete, with ZIP+4",
+          "status": "fail"
+        },
+        {
+          "item": "credentials",
+          "label": "Licenses, registrations and insurance stay current through the processing window",
+          "status": "fail"
+        },
+        {
+          "item": "documents",
+          "label": "Supporting documents for this form are ready",
+          "status": "fail"
+        },
+        {
+          "item": "signatures",
+          "label": "The right person is set to sign",
+          "status": "fail"
+        },
+        {
+          "item": "revalidation",
+          "label": "Revalidation is not past its due date",
+          "status": "not-applicable"
+        }
+      ],
+      "findingCount": 12,
+      "findingCounts": {
+        "error": 9,
+        "warning": 3
+      },
+      "ruleCounts": {
+        "PEC-ADDR-POBOX": 1,
+        "PEC-CRED-EXPIRED": 1,
+        "PEC-CRED-EXPIRING": 1,
+        "PEC-DOC-MISSING": 1,
+        "PEC-NAME-IRS": 1,
+        "PEC-NPPES-NAME": 1,
+        "PEC-PHONE-MISSING": 1,
+        "PEC-SIGN-AUTHORIZED": 1,
+        "PEC-STATE": 1,
+        "PEC-TAXONOMY-FORMAT": 1,
+        "PEC-ZIP-FORMAT": 1,
+        "PEC-ZIP-PLUS4": 1
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "ruleId": "PEC-ADDR-POBOX",
+          "path": "/practiceLocations[0]/street1",
+          "message": "A practice location must be a street address, not a P.O. box.",
+          "source": "cms855b"
+        },
+        {
+          "severity": "error",
+          "ruleId": "PEC-CRED-EXPIRED",
+          "path": "/credentials[1]/expirationDate",
+          "message": "This item has already expired. Renew it before you submit."
+        },
+        {
+          "severity": "error",
+          "ruleId": "PEC-DOC-MISSING",
+          "path": "/documents/cp575",
+          "message": "Missing supporting document: IRS confirmation of the TIN and legal business name (for example CP-575) (Section 12 of the form).",
+          "source": "cms855b"
+        },
+        {
+          "severity": "error",
+          "ruleId": "PEC-NAME-IRS",
+          "path": "/provider/legalName",
+          "message": "The legal business name does not match the IRS name you gave. CMS requires the name reported to the IRS.",
+          "source": "cms855b"
+        },
+        {
+          "severity": "error",
+          "ruleId": "PEC-NPPES-NAME",
+          "path": "/provider/legalName",
+          "message": "The legal business name does not match the organization name on the NPPES record for this NPI. The CMS-855B asks for the same legal business name and TIN used to get the NPI.",
+          "source": "cms855b"
+        },
+        {
+          "severity": "error",
+          "ruleId": "PEC-SIGN-AUTHORIZED",
+          "path": "/officials",
+          "message": "An organization's initial enrollment or revalidation must be signed by an authorized official. None is listed.",
+          "source": "cfr424.510"
+        },
+        {
+          "severity": "error",
+          "ruleId": "PEC-STATE",
+          "path": "/practiceLocations[1]/state",
+          "message": "Use the 2-letter postal code for a US state or territory.",
+          "source": "cms855b"
+        },
+        {
+          "severity": "error",
+          "ruleId": "PEC-TAXONOMY-FORMAT",
+          "path": "/provider/taxonomyCodes[1]",
+          "message": "A taxonomy code is 10 characters: 9 letters or digits followed by X.",
+          "source": "nppes"
+        },
+        {
+          "severity": "error",
+          "ruleId": "PEC-ZIP-FORMAT",
+          "path": "/practiceLocations[1]/zip",
+          "message": "A ZIP code is 5 digits, or ZIP+4 as 12345-6789.",
+          "source": "cms855b"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "PEC-CRED-EXPIRING",
+          "path": "/credentials[0]/expirationDate",
+          "message": "This item expires inside the processing window you set. Renew it now, or plan to report the renewal while the application is pending."
+        },
+        {
+          "severity": "warning",
+          "ruleId": "PEC-PHONE-MISSING",
+          "path": "/practiceLocations[0]/phone",
+          "message": "No telephone number for this location. The form asks for one if applicable.",
+          "source": "cms855b"
+        },
+        {
+          "severity": "warning",
+          "ruleId": "PEC-ZIP-PLUS4",
+          "path": "/practiceLocations[0]/zip",
+          "message": "Only 5 digits. The form asks for ZIP code + 4; look up the full ZIP+4 for this address.",
+          "source": "cms855b"
+        }
+      ],
+      "findingsTruncated": false,
+      "notChecked": [
+        "What the Medicare Administrative Contractor reviewer sees and decides, including site visits, background checks and fingerprinting.",
+        "Whether licenses, registrations and insurance are valid with the issuing board or carrier. Expiration dates are checked only as you entered them.",
+        "Ownership, managing employee and final adverse action details, and PECOS screens not covered by the input.",
+        "The CMS-855A, CMS-855R, CMS-855O and CMS-20134 forms.",
+        "Whether the documents you marked as ready are the right ones and are complete."
+      ],
+      "sources": {
+        "cms855i": "CMS-855I (05/23), Medicare enrollment application for physicians and non-physician practitioners",
+        "cms855b": "CMS-855B (12/2025), Medicare enrollment application for clinics, group practices and certain other suppliers",
+        "cms855s": "CMS-855S (12/23), Medicare enrollment application for DMEPOS suppliers",
+        "cfr424.510": "42 CFR 424.510(d), enrollment application content and signature requirements",
+        "cfr424.515": "42 CFR 424.515, revalidation every 5 years (3 years for DMEPOS suppliers)",
+        "cfr424.540": "42 CFR 424.540, deactivation, and no payment for services furnished while deactivated",
+        "cfr424.57": "42 CFR 424.57, DMEPOS supplier standards (posted hours, liability insurance, surety bond)",
+        "npi": "CMS NPI check digit (Luhn formula with the 80840 prefix)",
+        "nppes": "NPPES NPI Registry API, version 2.1 (queried live during the run)"
+      },
+      "scope": "A pre-submission error check of the draft you sent. A clean pre-check does not guarantee that the enrollment will be approved, it is not an enrollment filing, and it is not legal advice.",
+      "input": {
+        "format": "json",
+        "bytes": 1128
+      },
+      "inputSha256": "90b4161ecbca8832835d7dcb09c327316f86982b5f6736d68dbeed2d3aaa6a2c"
+    }
+  }
+}

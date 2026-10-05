@@ -92,6 +92,19 @@ export const APIS = [
       'Recomputes a weekly Davis-Bacon certified payroll (WH-347 fields) against the wage determination rates you supply: classifications, basic rates, fringe benefits, overtime, apprentice rates and ratios, and the gross, deductions and net pay math.',
     cta: 'Check a payroll',
   },
+  {
+    slug: 'pecos-enrollment-precheck',
+    name: 'PECOS Medicare Enrollment Pre-Check',
+    tier: 'built',
+    status: 'beta',
+    priceCents: PROFESSIONAL_RUN_CENTS,
+    unit: 'completed pre-check',
+    maxBodyBytes: 256 * 1024,
+    demoMaxBodyBytes: 64 * 1024,
+    summary:
+      'Checks a draft CMS-855I, 855B or 855S Medicare enrollment, revalidation or change before it goes into PECOS: the NPI and taxonomy codes against the live NPPES registry, the legal name against the IRS name, ZIP+4 addresses, expiring credentials and the supporting documents the form asks for.',
+    cta: 'Pre-check an enrollment',
+  },
 ];
 
 // Tier 2 listings appear here only after an affiliate agreement is approved and signed by the owner.

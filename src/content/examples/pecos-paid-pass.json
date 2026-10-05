@@ -1,0 +1,105 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "pecos-enrollment-precheck",
+    "mode": "paid",
+    "charged": true,
+    "priceCents": 2500,
+    "balanceCents": 7500,
+    "report": {
+      "schemaVersion": 1,
+      "status": "PASS",
+      "enrollmentType": "855B",
+      "applicationReason": "initial",
+      "asOf": "2026-10-05",
+      "processingWindowDays": 90,
+      "windowEnds": "2027-01-03",
+      "registry": {
+        "queried": true,
+        "source": "NPPES NPI Registry API, version 2.1 (queried live during the run)",
+        "note": "Queried live for this run only. Registry data is not stored, cached or returned."
+      },
+      "counts": {
+        "practiceLocations": 1,
+        "credentials": 1,
+        "documentsRequired": 3,
+        "documentsMissing": 0
+      },
+      "readiness": [
+        {
+          "item": "npi",
+          "label": "NPI is well formed and active in NPPES as the right type",
+          "status": "ready"
+        },
+        {
+          "item": "names",
+          "label": "Legal name matches the IRS name and the NPPES record",
+          "status": "ready"
+        },
+        {
+          "item": "taxonomy",
+          "label": "Taxonomy codes match the NPPES record",
+          "status": "ready"
+        },
+        {
+          "item": "addresses",
+          "label": "Practice locations are complete, with ZIP+4",
+          "status": "ready"
+        },
+        {
+          "item": "credentials",
+          "label": "Licenses, registrations and insurance stay current through the processing window",
+          "status": "ready"
+        },
+        {
+          "item": "documents",
+          "label": "Supporting documents for this form are ready",
+          "status": "ready"
+        },
+        {
+          "item": "signatures",
+          "label": "The right person is set to sign",
+          "status": "ready"
+        },
+        {
+          "item": "revalidation",
+          "label": "Revalidation is not past its due date",
+          "status": "not-applicable"
+        }
+      ],
+      "findingCount": 0,
+      "findingCounts": {
+        "error": 0,
+        "warning": 0
+      },
+      "ruleCounts": {},
+      "findings": [],
+      "findingsTruncated": false,
+      "notChecked": [
+        "What the Medicare Administrative Contractor reviewer sees and decides, including site visits, background checks and fingerprinting.",
+        "Whether licenses, registrations and insurance are valid with the issuing board or carrier. Expiration dates are checked only as you entered them.",
+        "Ownership, managing employee and final adverse action details, and PECOS screens not covered by the input.",
+        "The CMS-855A, CMS-855R, CMS-855O and CMS-20134 forms.",
+        "Whether the documents you marked as ready are the right ones and are complete."
+      ],
+      "sources": {
+        "cms855i": "CMS-855I (05/23), Medicare enrollment application for physicians and non-physician practitioners",
+        "cms855b": "CMS-855B (12/2025), Medicare enrollment application for clinics, group practices and certain other suppliers",
+        "cms855s": "CMS-855S (12/23), Medicare enrollment application for DMEPOS suppliers",
+        "cfr424.510": "42 CFR 424.510(d), enrollment application content and signature requirements",
+        "cfr424.515": "42 CFR 424.515, revalidation every 5 years (3 years for DMEPOS suppliers)",
+        "cfr424.540": "42 CFR 424.540, deactivation, and no payment for services furnished while deactivated",
+        "cfr424.57": "42 CFR 424.57, DMEPOS supplier standards (posted hours, liability insurance, surety bond)",
+        "npi": "CMS NPI check digit (Luhn formula with the 80840 prefix)",
+        "nppes": "NPPES NPI Registry API, version 2.1 (queried live during the run)"
+      },
+      "scope": "A pre-submission error check of the draft you sent. A clean pre-check does not guarantee that the enrollment will be approved, it is not an enrollment filing, and it is not legal advice.",
+      "input": {
+        "format": "json",
+        "bytes": 907
+      },
+      "inputSha256": "7fc3172e9ff748bce5baad28ba32b74e0f6ef48f20cbccac14abf9239fc0bf14"
+    }
+  }
+}

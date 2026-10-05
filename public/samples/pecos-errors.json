@@ -1,0 +1,56 @@
+{
+  "enrollmentType": "855B",
+  "applicationReason": "initial",
+  "asOf": "2026-10-05",
+  "processingWindowDays": 90,
+  "provider": {
+    "npi": "1555555550",
+    "legalName": "Example Valley Medicine LLC",
+    "irsLegalName": "Example Valley Family Medicine, LLC",
+    "taxonomyCodes": [
+      "261QP2300X",
+      "207Q0000X"
+    ]
+  },
+  "practiceLocations": [
+    {
+      "name": "Example Valley Family Medicine",
+      "street1": "PO Box 12",
+      "city": "Exampleton",
+      "state": "OH",
+      "zip": "45999",
+      "phone": "",
+      "isPrimary": true
+    },
+    {
+      "name": "Example Valley East",
+      "street1": "200 Example Avenue",
+      "city": "Exampleton",
+      "state": "XX",
+      "zip": "4599",
+      "phone": "555-010-0200"
+    }
+  ],
+  "credentials": [
+    {
+      "type": "license",
+      "state": "OH",
+      "number": "EX-000001",
+      "expirationDate": "2026-11-15"
+    },
+    {
+      "type": "liability_insurance",
+      "expirationDate": "2026-09-30"
+    }
+  ],
+  "officials": [
+    {
+      "role": "delegated"
+    }
+  ],
+  "documents": [
+    "licenses",
+    "cms588"
+  ],
+  "conditions": {}
+}

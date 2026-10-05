@@ -1,6 +1,6 @@
 import { CLINICAL_CODES, MRF_CODES } from './codes.js';
 
-// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347'.
+// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347' | 'pecos'.
 export default function ReportSheet({ kind, report, label, sub }) {
   if (!report) return null;
   return (
@@ -13,7 +13,7 @@ export default function ReportSheet({ kind, report, label, sub }) {
         <span className={`stamp ${report.status}`}>{report.status}</span>
       </div>
       <div className="sheet-body">
-        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : <Mrf r={report} />}
+        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : kind === 'pecos' ? <Pecos r={report} /> : <Mrf r={report} />}
       </div>
     </div>
   );
@@ -202,6 +202,47 @@ function Wh347({ r }) {
       ) : <p className="small" style={{ margin: 0 }}>No findings against the rates supplied. A PASS here does not mean the payroll complies with Davis-Bacon requirements.</p>}
       {r.findingsTruncated && <p className="small muted">The first 500 findings are listed. findingCounts has the full totals.</p>}
       {r.overtimeRule === 'not-applied' && <p className="small muted" style={{ marginTop: 8 }}>Overtime rule not applied (cwhssa set to no).</p>}
+    </>
+  );
+}
+
+const READY_TEXT = { ready: 'Ready', review: 'Review', fail: 'Fix', 'not-checked': 'Not checked', 'not-applicable': 'n/a' };
+
+function Pecos({ r }) {
+  return (
+    <>
+      <div className="facts">
+        <span>Form <b>CMS-{r.enrollmentType}</b></span>
+        <span>{r.applicationReason}</span>
+        <span>Window ends <b>{r.windowEnds}</b></span>
+        <span><b>{r.findingCounts.error}</b> {r.findingCounts.error === 1 ? 'error' : 'errors'}</span>
+        <span><b>{r.findingCounts.warning}</b> {r.findingCounts.warning === 1 ? 'warning' : 'warnings'}</span>
+      </div>
+      <ul className="readiness" style={{ listStyle: 'none', padding: 0, margin: '0 0 12px' }}>
+        {r.readiness.map((x) => (
+          <li key={x.item} className="small" style={{ display: 'flex', gap: 8, padding: '3px 0' }}>
+            <b className={x.status === 'fail' ? 'sev-ERROR' : x.status === 'review' ? 'sev-WARNING' : ''} style={{ minWidth: 86 }}>{READY_TEXT[x.status]}</b>
+            <span>{x.label}</span>
+          </li>
+        ))}
+      </ul>
+      {r.findings.length > 0 ? (
+        <div className="table-scroll">
+          <table className="findings">
+            <thead><tr><th>Severity</th><th>Rule</th><th>Where and what</th></tr></thead>
+            <tbody>
+              {r.findings.map((f, n) => (
+                <tr key={n}>
+                  <td className={`sev-${f.severity === 'error' ? 'ERROR' : 'WARNING'}`}>{f.severity === 'error' ? 'Error' : 'Warning'}</td>
+                  <td className="code ids">{f.ruleId.split('-').map((p, k) => <span key={k}>{k ? <>-<wbr /></> : null}{p}</span>)}</td>
+                  <td><code style={{ wordBreak: 'break-all' }}>{f.path}</code><div className="small">{f.message}</div></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : <p className="small" style={{ margin: 0 }}>No findings. A clean pre-check does not guarantee the enrollment will be approved.</p>}
+      {!r.registry.queried && <p className="small muted" style={{ marginTop: 8 }}>The NPPES registry was not queried because the NPI failed the format or check digit test.</p>}
     </>
   );
 }
