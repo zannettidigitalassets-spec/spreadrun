@@ -2,9 +2,11 @@ import Layout, { Crumbs } from '../site/Layout.jsx';
 import { UAD_ERROR_GUIDES } from './UadErrorGuides.jsx';
 import { PBJ_ERROR_GUIDES } from './PbjErrorGuides.jsx';
 import { DEADLINE_GUIDES } from '../content/deadline-guides.js';
+import { WH347_GUIDES } from '../content/wh347-guides.js';
 
 export const GUIDES = [
   ...DEADLINE_GUIDES.map((g) => ({ href: `/guides/${g.slug}`, title: g.title, blurb: g.blurb })),
+  ...WH347_GUIDES.map((g) => ({ href: `/guides/${g.slug}`, title: g.title, blurb: g.blurb })),
   {
     href: '/guides/hospital-price-transparency-file-requirements-2026',
     title: 'Hospital Price Transparency File Requirements: The Complete 2026 Guide',
