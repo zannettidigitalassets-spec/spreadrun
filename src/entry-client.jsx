@@ -16,6 +16,7 @@ export const LOADERS = {
   '/tools/pbj-preflight-checks': () => import('./pages/PbjPreflight.jsx'),
   '/tools': () => import('./pages/Tools.jsx'),
   '/tools/i9-section2-deadline-calculator': () => import('./pages/I9Deadline.jsx'),
+  '/tools/cpsc-efiling-readiness-checklist': () => import('./pages/CpscChecklist.jsx'),
   '/docs': () => import('./pages/Docs.jsx'),
   '/docs/clinical-trial-table-validator': () => import('./pages/DocsClinical.jsx'),
   '/docs/hospital-mrf-validator': () => import('./pages/DocsMrf.jsx'),

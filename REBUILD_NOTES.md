@@ -326,6 +326,15 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   (New Year's 2028 observed); other years show a warning.
 - Fines: $288 to $2,861 per form, 8 CFR 274a.10(b)(2) (DHS rule, Federal Register Jan 2 2025; no 2026 change found).
 
+## CPSC eFiling readiness checklist (branch `spreadrun/cpsc-efiling-checklist`, 2026-10-05)
+
+- `/tools/cpsc-efiling-readiness-checklist`: a browser-only smoke test for a possible CPSC certificate validator.
+  Items trace to 16 CFR part 1110, the final rule (90 FR 1800) and its correction, the CPSC eFiling Implementation
+  Guide v2.4 (May 2026), the Product Registry FAQ v1.4, 16 CFR 1107.21 and 15 U.S.C. 2066(a).
+- Demand counter: POST /api/interest/cpsc-efiling, handled by the existing dispatcher (no new function, no migration).
+  It calls demo_allow() with api "interest:cpsc-efiling" and limit 1, so each visitor-day is one row in demo_usage:
+  `select count(*) from demo_usage where api = 'interest:cpsc-efiling'`. Only the salted IP hash is stored.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist

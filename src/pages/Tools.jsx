@@ -8,6 +8,11 @@ export const TOOLS = [
     blurb: 'Find the date Section 2 of Form I-9 is due for a new hire, skipping weekends and federal holidays, then check a completed form against the rules in the USCIS handbook.',
   },
   {
+    href: '/tools/cpsc-efiling-readiness-checklist',
+    title: 'CPSC eFiling Readiness Checklist',
+    blurb: 'Nine things an importer should have ready before the broker files a shipment\'s CPSC certificate data in ACE, from the lab ID to Full or Reference filing.',
+  },
+  {
     href: '/tools/davis-bacon-overtime-calculator',
     title: 'Davis-Bacon Overtime Calculator',
     blurb: 'Time and a half on the basic rate for hours over 40, the fringe owed for every hour, and the week\'s gross on a prevailing wage job.',

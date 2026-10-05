@@ -18,6 +18,7 @@ import FringeCalculator, { FRINGE_FAQ, FRINGE_CALC_PATH } from './pages/FringeCa
 import PbjPreflight, { PREFLIGHT_FAQ, PBJ_PREFLIGHT_PATH } from './pages/PbjPreflight.jsx';
 import I9Deadline, { I9_FAQ, I9_PATH } from './pages/I9Deadline.jsx';
 import Tools, { TOOLS, TOOLS_PATH } from './pages/Tools.jsx';
+import CpscChecklist, { CPSC_FAQ, CPSC_PATH } from './pages/CpscChecklist.jsx';
 import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
@@ -77,6 +78,7 @@ const D = {
   wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $25.00 per report, free test.',
   pbjPreflight: 'Free PBJ pre-flight checks: count zero-RN days against the CMS one-star staffing rule and work out meal break deductions the way the PBJ Policy Manual requires.',
   tools: 'Free compliance tools for employers: an I-9 Section 2 deadline calculator, Davis-Bacon overtime and fringe calculators, and PBJ pre-flight checks. No signup.',
+  cpsc: 'Free CPSC eFiling readiness checklist for importers: CPC or GCC, lab ID, citations, test dates, Full vs Reference filing, Product Registry and FTZ timing.',
   i9: 'Free I-9 Section 2 deadline calculator: the 3rd business day after the first day of work, skipping weekends and federal holidays, plus a self-audit checklist.',
   fringeCalc: 'Free Davis-Bacon fringe benefit calculator: annualize plan costs over all hours worked for the hourly prevailing wage fringe credit and compare it to your rate.',
   otCalc: 'Free Davis-Bacon overtime calculator: time and a half on the basic rate for hours over 40 under CWHSSA, fringe owed per hour, and the weekly gross. No signup.',
@@ -213,6 +215,23 @@ export const ROUTES = {
         itemListElement: TOOLS.map((t, i) => ({ '@type': 'ListItem', position: i + 1, name: t.title, url: ORIGIN + t.href })),
       },
       crumbsLd([...HOME, [TOOLS_PATH, 'Free tools']]),
+    ],
+  },
+  [CPSC_PATH]: {
+    Component: CpscChecklist,
+    title: 'CPSC eFiling Readiness Checklist for Importers (Free) | SpreadRun',
+    description: D.cpsc,
+    priority: '0.8',
+    jsonLd: () => [
+      {
+        '@context': 'https://schema.org', '@type': 'WebApplication', name: 'CPSC eFiling Readiness Checklist',
+        alternateName: ['CPSC eFiling checklist', 'Certificate of Compliance eFiling checklist'],
+        url: ORIGIN + CPSC_PATH, applicationCategory: 'BusinessApplication', operatingSystem: 'Web',
+        description: D.cpsc, isAccessibleForFree: true, publisher: ORG,
+        keywords: 'CPSC eFiling, certificate of compliance, PGA message set, Product Registry, 16 CFR 1110',
+      },
+      faqLd(CPSC_FAQ),
+      crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [CPSC_PATH, 'CPSC eFiling Readiness Checklist']]),
     ],
   },
   [I9_PATH]: {
