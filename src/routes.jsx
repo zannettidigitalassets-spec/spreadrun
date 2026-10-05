@@ -18,6 +18,8 @@ import FringeCalculator, { FRINGE_FAQ, FRINGE_CALC_PATH } from './pages/FringeCa
 import PbjPreflight, { PREFLIGHT_FAQ, PBJ_PREFLIGHT_PATH } from './pages/PbjPreflight.jsx';
 import I9Deadline, { I9_FAQ, I9_PATH } from './pages/I9Deadline.jsx';
 import Tools, { TOOLS, TOOLS_PATH } from './pages/Tools.jsx';
+import UadPreflight, { UAD_CHECKLIST_FAQ, UAD_CHECKLIST_PATH } from './pages/UadPreflight.jsx';
+import { UAD_ERROR_GUIDES, UAD_GUIDE_PUBLISHED, makeUadErrorGuide } from './pages/UadErrorGuides.jsx';
 import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
@@ -76,7 +78,8 @@ const D = {
   pbj: 'Check nursing home PBJ staffing XML against CMS v4.10.0 specs before upload, with documented audit risk flags. Results in seconds. $25.00 per report, free test.',
   wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $25.00 per report, free test.',
   pbjPreflight: 'Free PBJ pre-flight checks: count zero-RN days against the CMS one-star staffing rule and work out meal break deductions the way the PBJ Policy Manual requires.',
-  tools: 'Free compliance tools for employers: an I-9 Section 2 deadline calculator, Davis-Bacon overtime and fringe calculators, and PBJ pre-flight checks. No signup.',
+  tools: 'Free compliance tools: an I-9 Section 2 deadline calculator, Davis-Bacon overtime and fringe calculators, PBJ pre-flight checks and a UAD 3.6 checklist.',
+  uadChecklist: 'Free UAD 3.6 pre-submission checklist: below grade areas, view and location codes, concessions, address, ratings, prices and the ZIP, with what UCDP does.',
   i9: 'Free I-9 Section 2 deadline calculator: the 3rd business day after the first day of work, skipping weekends and federal holidays, plus a self-audit checklist.',
   fringeCalc: 'Free Davis-Bacon fringe benefit calculator: annualize plan costs over all hours worked for the hourly prevailing wage fringe credit and compare it to your rate.',
   otCalc: 'Free Davis-Bacon overtime calculator: time and a half on the basic rate for hours over 40 under CWHSSA, fringe owed per hour, and the weekly gross. No signup.',
@@ -204,7 +207,7 @@ export const ROUTES = {
   },
   [TOOLS_PATH]: {
     Component: Tools,
-    title: 'Free Compliance Tools for Employers | SpreadRun',
+    title: 'Free Compliance Tools: Calculators and Checklists | SpreadRun',
     description: D.tools,
     priority: '0.7',
     jsonLd: () => [
@@ -213,6 +216,23 @@ export const ROUTES = {
         itemListElement: TOOLS.map((t, i) => ({ '@type': 'ListItem', position: i + 1, name: t.title, url: ORIGIN + t.href })),
       },
       crumbsLd([...HOME, [TOOLS_PATH, 'Free tools']]),
+    ],
+  },
+  [UAD_CHECKLIST_PATH]: {
+    Component: UadPreflight,
+    title: 'Free UAD 3.6 Pre-Submission Checklist for UCDP | SpreadRun',
+    description: D.uadChecklist,
+    priority: '0.8',
+    jsonLd: () => [
+      {
+        '@context': 'https://schema.org', '@type': 'WebApplication', name: 'UAD 3.6 Pre-Submission Checklist',
+        alternateName: ['UAD 3.6 preflight checklist', 'UCDP hard stop checklist'],
+        url: ORIGIN + UAD_CHECKLIST_PATH, applicationCategory: 'BusinessApplication', operatingSystem: 'Web',
+        description: D.uadChecklist, isAccessibleForFree: true, publisher: ORG,
+        keywords: 'UAD 3.6 checklist, UCDP hard stop, UCDP not successful, appraisal XML',
+      },
+      faqLd(UAD_CHECKLIST_FAQ),
+      crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [UAD_CHECKLIST_PATH, 'UAD 3.6 Pre-Submission Checklist']]),
     ],
   },
   [I9_PATH]: {
@@ -255,6 +275,8 @@ export const ROUTES = {
     'Hospital Price Transparency File Requirements (2026 Guide) | SpreadRun'),
   [`/guides/${UAD_GUIDE.slug}`]: guidePage(UAD_GUIDE, UadGuide, D.uadGuide, 'UAD 3.6 requirements'),
   [`/guides/${CLINICAL_GUIDE.slug}`]: guidePage(CLINICAL_GUIDE, ClinicalGuide, D.clinicalGuide, 'Clinical trial data quality checks'),
+  ...Object.fromEntries(UAD_ERROR_GUIDES.map((g) => [`/guides/${g.slug}`,
+    guidePage({ ...g, published: UAD_GUIDE_PUBLISHED }, makeUadErrorGuide(g.slug), g.description, g.crumb)])),
   '/account': {
     Component: Account,
     title: 'Account | SpreadRun',

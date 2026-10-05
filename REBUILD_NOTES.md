@@ -326,6 +326,20 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   (New Year's 2028 observed); other years show a warning.
 - Fines: $288 to $2,861 per form, 8 CFR 274a.10(b)(2) (DHS rule, Federal Register Jan 2 2025; no 2026 change found).
 
+## UAD 3.6 error guides and pre-submission checklist (branch `spreadrun/uad36-error-guides`, 2026-10-05)
+
+- `/tools/uad36-preflight-checklist` (browser-only, readable without JavaScript) and five guides under `/guides/`
+  (`src/pages/UadErrorGuides.jsx`, one tiny loader per guide in `src/pages/uad/`).
+- Every UCDP statement is tied to: UCDP General User Guide (Feb 2026: statuses p. 30, 34, 49-50; address
+  standardization p. 43; rejected-submission messages, Appendix B p. 64-65), the Freddie Mac UCDP FAQ, Appendix H-1
+  v1.5 (rule IDs, severities, "Fatal causes Not Successful"), Appendix A-1 (enumerations, lower-case Booleans) and the
+  Fannie Mae UCDP messaging guide for UAD 2.6 (FNM0401 and FNM0803 are Warnings).
+- Cut from the brief for lack of a primary source: a basement "percent finished" field (not in UAD 3.6), a concession
+  vs contract mismatch hard stop or compliance review (no such rule; UCDP never sees the contract), a USPS or geocoding
+  mismatch hard stop, "free text = immediate rejection" for view and location codes, and "hard stop 401".
+- The validator does not run UAD1361, UAD1450, UAD1328 or UAD1769 (view and site influence must be included); the
+  view guide says so.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist

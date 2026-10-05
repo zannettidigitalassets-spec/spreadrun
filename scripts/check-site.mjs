@@ -45,6 +45,7 @@ const NEED_LD = {
   '/tools/davis-bacon-fringe-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/tools/pbj-preflight-checks': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/tools/i9-section2-deadline-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
+  '/tools/uad36-preflight-checklist': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/docs': ['BreadcrumbList'],
   '/docs/clinical-trial-table-validator': ['BreadcrumbList'],
   '/docs/hospital-mrf-validator': ['BreadcrumbList'],
@@ -55,6 +56,11 @@ const NEED_LD = {
   '/guides/hospital-price-transparency-file-requirements-2026': GUIDE_LD,
   '/guides/uad-3-6-requirements-2026': GUIDE_LD,
   '/guides/clinical-trial-data-quality-checks': GUIDE_LD,
+  '/guides/uad36-basement-fields-hard-stop': GUIDE_LD,
+  '/guides/uad36-location-view-codes-rejected': GUIDE_LD,
+  '/guides/uad36-concession-mismatch': GUIDE_LD,
+  '/guides/uad36-address-usps-flag': GUIDE_LD,
+  '/guides/ucdp-not-successful-vs-rejected': GUIDE_LD,
 };
 // No empty strings, arrays or objects anywhere inside a JSON-LD block.
 const emptyField = (v, at = '') => {
@@ -127,9 +133,10 @@ const client = fs.readFileSync(path.join(root, 'src/entry-client.jsx'), 'utf8');
 for (const u of known) if (!client.includes(`'${u}': () => import(`)) fail(`${u}: no client loader in entry-client.jsx`);
 
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
-for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/tools', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator', '/docs',
+for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/tools', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator', '/tools/uad36-preflight-checklist', '/docs',
   '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/docs/wh347-payroll-precheck', '/guides',
-  '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks']) {
+  '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks',
+  '/guides/uad36-basement-fields-hard-stop', '/guides/uad36-location-view-codes-rejected', '/guides/uad36-concession-mismatch', '/guides/uad36-address-usps-flag', '/guides/ucdp-not-successful-vs-rejected']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);
 }
 for (const u of ['/account', '/404', '/secondring', '/guides/lsa-missed-call-charges-october-2026']) if (sitemap.includes(`${u}</loc>`)) fail(`sitemap should not list ${u}`);

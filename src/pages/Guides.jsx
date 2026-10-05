@@ -1,4 +1,5 @@
 import Layout, { Crumbs } from '../site/Layout.jsx';
+import { UAD_ERROR_GUIDES } from './UadErrorGuides.jsx';
 
 export const GUIDES = [
   {
@@ -16,6 +17,7 @@ export const GUIDES = [
     title: 'Clinical Trial Data Quality Checks: A Practical Guide',
     blurb: 'Why extracted trial tables break, the NCT number format, the checks that matter before analysis, and the orphan-outcome and duplicate patterns that do the most damage.',
   },
+  ...UAD_ERROR_GUIDES.map((g) => ({ href: `/guides/${g.slug}`, title: g.title, blurb: g.blurb })),
 ];
 
 export default function Guides() {
