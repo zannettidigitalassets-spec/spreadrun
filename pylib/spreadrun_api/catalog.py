@@ -55,6 +55,13 @@ APIS = {
         'max_body_bytes': 256 * 1024,
         'demo_max_body_bytes': 64 * 1024,
     },
+    'cmmc-self-assessment-validator': {
+        'name': 'CMMC Self-Assessment Score Validator',
+        'price_cents': 2500,   # professional tier
+        # One self-assessment as JSON: 110 results and the SPRS details. Small by nature.
+        'max_body_bytes': 256 * 1024,
+        'demo_max_body_bytes': 64 * 1024,
+    },
 }
 
 DEMO_RUNS_PER_DAY = 10

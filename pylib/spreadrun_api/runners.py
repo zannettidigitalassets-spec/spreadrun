@@ -265,6 +265,30 @@ def run_pecos(body: bytes, *, lookup=None):
                                   'not charged. Try again in a few minutes.') from None
 
 
+_cmmc = None
+
+
+def cmmc_module():
+    """SpreadRun's own CMMC Level 2 self-assessment score engine (not a DataForge copy). No network calls."""
+    global _cmmc
+    if _cmmc is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_cmmc_engine', HERE / 'cmmc' / 'engine.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_cmmc_engine'] = module
+        spec.loader.exec_module(module)
+        _cmmc = module
+    return _cmmc
+
+
+def run_cmmc(body: bytes, *, as_of=None):
+    """Verify one CMMC Level 2 self-assessment package (JSON)."""
+    v = cmmc_module()
+    try:
+        return v.validate(body, as_of=as_of)
+    except v.InputError as exc:
+        raise InputError(str(exc)) from None
+
+
 def run_clinical(body: bytes):
     """Body is the JSON object the validator expects: {"studiesCsv": "...", "outcomesCsv": "..."}."""
     v = clinical_module()

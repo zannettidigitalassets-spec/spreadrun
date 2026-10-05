@@ -1,0 +1,22 @@
+{
+ "asOf": "2026-10-05",
+ "assessment": {
+  "level": 2,
+  "assessmentDate": "2026-09-15",
+  "claimedScore": 102,
+  "scopeDefined": true,
+  "cageCodes": [
+   "00000"
+  ],
+  "sspInPlace": true,
+  "poamInPlace": true,
+  "statusDate": "2026-09-20"
+ },
+ "affirmation": {
+  "affirmingOfficialIdentified": true,
+  "titleAndContactProvided": true,
+  "statementAffirmed": true,
+  "affirmationDate": "2026-09-16"
+ },
+ "requirementsCsv": "requirement,status\n3.1.1,MET\n3.1.2,MET\n3.1.3,MET\n3.1.4,MET\n3.1.5,MET\n3.1.6,MET\n3.1.7,MET\n3.1.8,MET\n3.1.9,NOT MET\n3.1.10,MET\n3.1.11,MET\n3.1.12,MET\n3.1.13,MET\n3.1.14,MET\n3.1.15,MET\n3.1.16,MET\n3.1.17,MET\n3.1.18,MET\n3.1.19,MET\n3.1.20,MET\n3.1.21,MET\n3.1.22,MET\n3.2.1,MET\n3.2.2,MET\n3.2.3,MET\n3.3.1,MET\n3.3.2,MET\n3.3.3,MET\n3.3.4,MET\n3.3.5,MET\n3.3.6,NOT MET\n3.3.7,MET\n3.3.8,MET\n3.3.9,MET\n3.4.1,MET\n3.4.2,MET\n3.4.3,MET\n3.4.4,MET\n3.4.5,MET\n3.4.6,MET\n3.4.7,MET\n3.4.8,MET\n3.4.9,MET\n3.5.1,MET\n3.5.2,MET\n3.5.3,MET\n3.5.4,MET\n3.5.5,MET\n3.5.6,MET\n3.5.7,MET\n3.5.8,NOT MET\n3.5.9,MET\n3.5.10,MET\n3.5.11,MET\n3.6.1,MET\n3.6.2,MET\n3.6.3,MET\n3.7.1,MET\n3.7.2,MET\n3.7.3,MET\n3.7.4,MET\n3.7.5,MET\n3.7.6,MET\n3.8.1,MET\n3.8.2,MET\n3.8.3,MET\n3.8.4,NOT MET\n3.8.5,MET\n3.8.6,MET\n3.8.7,MET\n3.8.8,MET\n3.8.9,MET\n3.9.1,MET\n3.9.2,MET\n3.10.1,MET\n3.10.2,MET\n3.10.3,MET\n3.10.4,MET\n3.10.5,MET\n3.10.6,MET\n3.11.1,MET\n3.11.2,MET\n3.11.3,MET\n3.12.1,MET\n3.12.2,MET\n3.12.3,MET\n3.12.4,MET\n3.13.1,MET\n3.13.2,MET\n3.13.3,MET\n3.13.4,MET\n3.13.5,MET\n3.13.6,MET\n3.13.7,MET\n3.13.8,MET\n3.13.9,MET\n3.13.10,MET\n3.13.11,PARTIAL\n3.13.12,MET\n3.13.13,MET\n3.13.14,NOT MET\n3.13.15,MET\n3.13.16,MET\n3.14.1,MET\n3.14.2,MET\n3.14.3,MET\n3.14.4,MET\n3.14.5,MET\n3.14.6,MET\n3.14.7,MET\n"
+}

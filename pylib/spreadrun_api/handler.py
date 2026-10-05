@@ -59,6 +59,8 @@ def _run(api, body, query, *, demo):
         return runners.run_wh347(body)
     if api == 'pecos-enrollment-precheck':
         return runners.run_pecos(body)
+    if api == 'cmmc-self-assessment-validator':
+        return runners.run_cmmc(body)
     cfg = APIS[api]
     mode = (query.get('mode') or ['sample'])[0]
     raw_max = (query.get('maxRecords') or [str(cfg['default_max_records'])])[0]
