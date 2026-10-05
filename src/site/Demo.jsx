@@ -7,7 +7,7 @@ import { CREDIT_PACKS, dollars } from '../catalog.js';
 //   paid: a signed-in user whose credit covers this API's price. Full limits, charged per completed
 //         report from their balance (POST /api/v1/<api> with their session token, no API key needed).
 
-const kb = (n) => (n >= 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(n / 1024)} KB`);
+export const kb = (n) => (n >= 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(n / 1024)} KB`);
 
 // Only load the sign-in library for visitors who have signed in before on this browser.
 const hasStoredSession = () => {
@@ -53,7 +53,7 @@ async function runValidation(api, { paid, session, body, contentType, query = ''
   return data;
 }
 
-function useRunner(api, credits) {
+export function useRunner(api, credits) {
   const [state, setState] = useState({ phase: 'idle', report: null, error: '', paid: false });
   const run = async ({ paid, ...args }) => {
     setState({ phase: 'running', report: null, error: '', paid });
@@ -72,7 +72,7 @@ function useRunner(api, credits) {
 }
 
 // Which mode the form runs in, and the matching limits. A paying user can still choose the free demo.
-function useMode(api, credits) {
+export function useMode(api, credits) {
   const [preferDemo, setPreferDemo] = useState(false);
   const paid = credits.canPay && !preferDemo;
   return { paid, preferDemo, setPreferDemo, maxBytes: paid ? api.maxBodyBytes : api.demoMaxBodyBytes };
@@ -113,14 +113,14 @@ export function ModeNote({ api, credits, mode, demoLimits }) {
   );
 }
 
-function Result({ state, kind, sample, sampleLabel }) {
+export function Result({ state, kind, sample, sampleLabel }) {
   if (state.phase === 'done') {
     return <ReportSheet kind={kind} report={state.report} label="Your report" sub={state.paid ? 'Full validation, paid from your credit' : 'Live result from the demo endpoint'} />;
   }
   return <ReportSheet kind={kind} report={sample} label="Sample report" sub={sampleLabel} />;
 }
 
-const runLabel = (paid, api, idle, busy, running) => (running ? busy : paid ? `${idle} (${dollars(api.priceCents)})` : idle);
+export const runLabel = (paid, api, idle, busy, running) => (running ? busy : paid ? `${idle} (${dollars(api.priceCents)})` : idle);
 
 export function ClinicalDemo({ api, sample }) {
   const [studies, setStudies] = useState('');

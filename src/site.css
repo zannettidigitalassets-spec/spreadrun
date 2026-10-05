@@ -165,6 +165,14 @@ input[type='file'] { font: 14px var(--sans); }
 .input-grid .field { align-content: start; }
 .input-grid input { font: 15px var(--sans); color: var(--ink); border: 1px solid #b9c3cd; border-radius: var(--radius); padding: 9px 12px; width: 100%; background: #fff; }
 @media (max-width: 520px) { .input-grid { grid-template-columns: 1fr; } }
+.cmmc-family { border: 1px solid var(--line); border-radius: var(--radius); margin: 0 0 8px; background: #fff; }
+.cmmc-family summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 14px; padding: 10px 12px; }
+.cmmc-req { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 4px 12px; align-items: center; padding: 8px 12px; border-top: 1px solid var(--line); }
+.cmmc-req label { font-size: 13.5px; color: var(--body); }
+.cmmc-req select { padding: 7px 8px; font-size: 14px; }
+.cmmc-req .hint { grid-column: 1 / -1; }
+@media (max-width: 520px) { .cmmc-req { grid-template-columns: 1fr; } }
+.linklike { background: none; border: 0; padding: 0; font: inherit; color: var(--accent, #1a5fb4); text-decoration: underline; cursor: pointer; }
 .estimate-inputs { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin: 0 0 16px; background: var(--panel); }
 .estimate-inputs summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 14px; }
 .estimate { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 12px; }
