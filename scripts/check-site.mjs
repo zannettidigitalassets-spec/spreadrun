@@ -41,6 +41,7 @@ const NEED_LD = {
   '/apis/pbj-staffing-qa': PRODUCT_LD,
   '/apis/wh347-payroll-precheck': PRODUCT_LD,
   '/apis/pecos-enrollment-precheck': PRODUCT_LD,
+  '/apis/cmmc-self-assessment-validator': PRODUCT_LD,
   '/tools': ['ItemList', 'BreadcrumbList'],
   '/tools/davis-bacon-overtime-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/tools/davis-bacon-fringe-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
@@ -56,6 +57,7 @@ const NEED_LD = {
   '/docs/pbj-staffing-qa': ['BreadcrumbList'],
   '/docs/wh347-payroll-precheck': ['BreadcrumbList'],
   '/docs/pecos-enrollment-precheck': ['BreadcrumbList'],
+  '/docs/cmmc-self-assessment-validator': ['BreadcrumbList'],
   '/guides': ['BreadcrumbList'],
   '/guides/hospital-price-transparency-file-requirements-2026': GUIDE_LD,
   '/guides/uad-3-6-requirements-2026': GUIDE_LD,
@@ -145,8 +147,8 @@ const client = fs.readFileSync(path.join(root, 'src/entry-client.jsx'), 'utf8');
 for (const u of known) if (!client.includes(`'${u}': () => import(`)) fail(`${u}: no client loader in entry-client.jsx`);
 
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
-for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/apis/pecos-enrollment-precheck', '/tools/davis-bacon-apprentice-checker', '/tools', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator', '/tools/uad36-preflight-checklist', '/tools/cpsc-efiling-readiness-checklist', '/docs',
-  '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/docs/wh347-payroll-precheck', '/docs/pecos-enrollment-precheck', '/guides',
+for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/apis/pecos-enrollment-precheck', '/apis/cmmc-self-assessment-validator', '/tools/davis-bacon-apprentice-checker', '/tools', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator', '/tools/uad36-preflight-checklist', '/tools/cpsc-efiling-readiness-checklist', '/docs',
+  '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/docs/wh347-payroll-precheck', '/docs/pecos-enrollment-precheck', '/docs/cmmc-self-assessment-validator', '/guides',
   '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks',
   '/guides/uad36-fatal-findings-explained', '/guides/ucdp-not-successful-meaning', '/guides/uad36-warning-vs-fatal', '/guides/uad36-basement-fields-hard-stop', '/guides/uad36-location-view-codes-rejected', '/guides/uad36-concession-mismatch', '/guides/uad36-address-usps-flag', '/guides/ucdp-not-successful-vs-rejected',
   '/guides/pbj-error-minus-1025', '/guides/pbj-error-4025', '/guides/pbj-error-3679', '/guides/pbj-error-3676', '/guides/pbj-error-4016']) {
