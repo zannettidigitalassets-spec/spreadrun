@@ -441,3 +441,18 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - Free demo limited to the three sample packages (owner decision, October 5, 2026). The demo endpoint compares the
   canonical JSON of the body with the samples' hashes in engine.py (DEMO_SAMPLES); a test recomputes them from
   public/samples. Changing a sample means updating its hash. Own data runs only on the paid endpoint.
+
+## COBRA Notice Content QA (branch `spreadrun/cobra-notice-qa`, 2026-10-05)
+
+- Catalog entry `cobra-notice-qa`, $25.00 per completed QA run, served by the shared dispatcher (still 8 of 12
+  functions). Engine: `pylib/spreadrun_api/validators/cobra/engine.py`; text, PDF (pypdf, already deployed) or DOCX
+  (stdlib zip and XML). Samples: `scripts/cobra/make_samples.py`.
+- Content lists: 29 CFR 2590.606-4(b)(4)(i)-(xiv) for election notices (item (x) only below 36 months) and
+  2590.606-1(c)(1)-(6) for general notices, from eCFR, October 2026. Deadlines: 606-4(b)(1)-(2), 606-2(b), 606-1(b);
+  terms: 26 CFR 54.4980B-6, -7, -8. Medicare warning follows the DOL model notices (FAQ, May 2020).
+- Brief corrections: the general notice has 6 required items, not 14; the statutory penalty is $100 a day, raised to
+  $110 by 29 CFR 2575.502c-1 (no 2026 adjustment) and discretionary with the court; medical expenses are discretionary
+  "other relief", not statutory. Case penalty amounts were left out (secondary sources only). The plan year input
+  was not used: no deadline in the regulations runs from it.
+- Personal data: the page and form ask for drafts without names or with placeholders, and an SSN-like pattern gets a
+  warning. Terms still forbid personal data for this API; a clause was proposed, not applied.
