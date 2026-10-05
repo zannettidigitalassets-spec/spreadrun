@@ -476,3 +476,23 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   September 15, 2026).
 - Check-site has a block for these pages: CTA links, every listed source cited, at least 3 inline citations, no bare
   "verified", linked from /guides. scripts/tests/deadline-guides.test.mjs checks the metadata.
+
+## SEO guide batch 2, WH-347 evergreen (branch `spreadrun/seo-guides-batch2`, 2026-10-05)
+
+- Five guides (`src/content/wh347-guides.js` for metadata and sources, `src/pages/Wh347Guides.jsx` for bodies, one
+  loader each in `src/pages/guides/`): wh347-apprentice-reporting, wh347-statement-of-compliance,
+  wh347-common-mistakes, davis-bacon-fringe-annualization, davis-bacon-weighted-overtime. Listed on /guides after
+  batch 1. Every claim carries an inline "(Source: ...)".
+- Sources: the official WH-347 (Rev. January 2025) in the repo and DOL's instructions page; 29 CFR 5.5(a)(3)(ii)
+  and (a)(4)(i), 5.25(c), 5.32 (eCFR); DOL Prevailing Wage Resource Book overtime page; 29 CFR 778.115; 40 USC
+  3702; 18 USC 1001; OMB notice of action for 1235-0008 (January 6, 2025, expires January 31, 2028); Federal Register
+  notice of November 27, 2024; DOL Davis-Bacon final rule FAQ (locality ratio).
+- Cut: "the prior OMB approval expired September 30, 2026" (reginfo.gov did not show a prior expiration; the form
+  page shows only the current one), any date agencies began rejecting old forms (hard constraint), "officer" and
+  "written authorization" for the signer (the regulation and instructions say the contractor or the agent who pays
+  or supervises payment), a 7-day submission deadline (FAR 52.222-8 and 29 CFR 5.5 say weekly with no day count),
+  apprentice pay "by level as a percentage" (not re-checked this session), the per-worker denominator (5.25 says
+  credit is figured separately per worker when contributions vary; the page quotes that and nothing more).
+- DOL's own overtime example shows a $135.04 premium where the math gives $135.00, so the page uses its own numbers.
+- scripts/tests/wh347-guides.test.mjs checks metadata, CTAs, the no-rejection-date rule and every worked number.
+  The check-site guide block now covers both batches.
