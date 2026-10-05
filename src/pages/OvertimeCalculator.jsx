@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
+import ToolSignup from '../site/ToolSignup.jsx';
 import { apiBySlug, dollars } from '../catalog.js';
 import { overtime } from '../site/overtime.js';
 
@@ -108,6 +109,7 @@ export default function OvertimeCalculator() {
         <p className="small" style={{ marginTop: 24 }}>Checking a whole week? The <a href={`/apis/${WH347.slug}`}>WH-347 certified payroll pre-check</a> recomputes every row of the payroll against your wage determination, and for a payroll that passes, gives you the completed WH-347 ready to sign.</p>
         <p className="small">Also free: the <a href="/tools/davis-bacon-fringe-calculator">Davis-Bacon fringe benefit annualization calculator</a>.</p>
       </section>
+      <ToolSignup source={OT_CALC_PATH} blurb="We will email you when there is a new free tool for prevailing wage, staffing or other compliance paperwork." />
     </Layout>
   );
 }

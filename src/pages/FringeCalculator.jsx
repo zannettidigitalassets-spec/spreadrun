@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
+import ToolSignup from '../site/ToolSignup.jsx';
 import { apiBySlug, dollars } from '../catalog.js';
 import { annualize } from '../site/fringe.js';
 
@@ -142,6 +143,7 @@ export default function FringeCalculator() {
           <p className="small muted" style={{ marginTop: 12 }}>Also free: the <a href="/tools/davis-bacon-overtime-calculator">Davis-Bacon overtime calculator</a>.</p>
         </div>
       </section>
+      <ToolSignup source={FRINGE_CALC_PATH} blurb="We will email you when there is a new free tool for prevailing wage, staffing or other compliance paperwork." />
     </Layout>
   );
 }

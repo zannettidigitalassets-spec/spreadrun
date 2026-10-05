@@ -34,6 +34,7 @@ export const LOADERS = {
   '/guides/uad36-address-usps-flag': () => import('./pages/uad/uad36-address-usps-flag.jsx'),
   '/guides/ucdp-not-successful-vs-rejected': () => import('./pages/uad/ucdp-not-successful-vs-rejected.jsx'),
   '/account': () => import('./pages/Account.jsx'),
+  '/unsubscribe': () => import('./pages/Unsubscribe.jsx'),
   '/contact': () => import('./Contact.jsx'),
   '/privacy': () => import('./Privacy.jsx'),
   '/terms': () => import('./Terms.jsx'),

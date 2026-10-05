@@ -349,6 +349,18 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   It calls demo_allow() with api "interest:cpsc-efiling" and limit 1, so each visitor-day is one row in demo_usage:
   `select count(*) from demo_usage where api = 'interest:cpsc-efiling'`. Only the salted IP hash is stored.
 
+## Free-tool email signups (branch `spreadrun/tool-email-capture`, 2026-10-05)
+
+- Migration `supabase/migrations/20261005_tool_signups.sql` (apply in Supabase before merging): table tool_signups
+  (email, source, created_at, unsubscribed) with a unique email, and service-role-only functions tool_signup (upsert:
+  updates source and clears an unsubscribe when the person signs up again), tool_unsubscribe and tool_signup_counts.
+- POST /api/signup/subscribe and /api/signup/unsubscribe are served by the existing Python dispatcher (still 8
+  functions); 20 tries per visitor per day via demo_allow. /api/admin/metrics adds toolSignupsBySource (no addresses).
+- `src/site/ToolSignup.jsx` under each /tools/* page; `/unsubscribe` (noindex, not in the sitemap). Nothing is sent:
+  reminders and alerts are a separate build. New /tools pages need one `<ToolSignup source={PATH} />` line and their
+  path added to SIGNUP_SOURCES in handler.py.
+- Privacy Policy text for the email list is proposed, not applied.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist

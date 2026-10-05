@@ -22,6 +22,7 @@ function reset() {
     }
     if (fn === 'create_api_key') return { data: { id: 'k1', prefix: args.p_key_prefix, name: args.p_name }, error: null };
     if (fn === 'storefront_metrics') return { data: { verdict: 'NOT_STARTED' }, error: null };
+    if (fn === 'tool_signup_counts') return { data: { '/tools/pbj-preflight-checks': { subscribed: 2, unsubscribed: 1 } }, error: null };
     return { data: null, error: null };
   };
   supabaseAdmin.from = (table) => {
@@ -142,6 +143,9 @@ test('admin metrics: requires the admin token', async () => {
   assert.equal((await GET(req('/api/admin/metrics', { method: 'GET', headers: { authorization: 'Bearer nope' } }))).status, 401);
   const ok = await GET(req('/api/admin/metrics', { method: 'GET', headers: { authorization: 'Bearer secret-token' } }));
   assert.equal(ok.status, 200);
+  const body = await ok.json();
+  assert.deepEqual(body.toolSignupsBySource, { '/tools/pbj-preflight-checks': { subscribed: 2, unsubscribed: 1 } });
+  assert.ok(!JSON.stringify(body).includes('@'), 'no addresses in metrics');
 });
 
 test('retired endpoints answer 410 from one function', async () => {

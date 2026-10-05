@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
+import ToolSignup from '../site/ToolSignup.jsx';
 import { HOLIDAY_YEARS, longDate, section2Deadline } from '../site/i9.js';
 
 export const I9_PATH = '/tools/i9-section2-deadline-calculator';
@@ -157,6 +158,7 @@ export default function I9Deadline() {
           <p style={{ marginBottom: 0 }}>Browse <a href="/tools">SpreadRun's free compliance tools</a> for employers.</p>
         </div>
       </section>
+      <ToolSignup source={I9_PATH} blurb="We will email you when there is a new free compliance tool." />
     </Layout>
   );
 }

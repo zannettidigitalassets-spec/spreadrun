@@ -21,6 +21,7 @@ import Tools, { TOOLS, TOOLS_PATH } from './pages/Tools.jsx';
 import UadPreflight, { UAD_CHECKLIST_FAQ, UAD_CHECKLIST_PATH } from './pages/UadPreflight.jsx';
 import { UAD_ERROR_GUIDES, UAD_GUIDE_PUBLISHED, makeUadErrorGuide } from './pages/UadErrorGuides.jsx';
 import CpscChecklist, { CPSC_FAQ, CPSC_PATH } from './pages/CpscChecklist.jsx';
+import Unsubscribe from './pages/Unsubscribe.jsx';
 import Guides from './pages/Guides.jsx';
 import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
@@ -296,6 +297,12 @@ export const ROUTES = {
   [`/guides/${CLINICAL_GUIDE.slug}`]: guidePage(CLINICAL_GUIDE, ClinicalGuide, D.clinicalGuide, 'Clinical trial data quality checks'),
   ...Object.fromEntries(UAD_ERROR_GUIDES.map((g) => [`/guides/${g.slug}`,
     guidePage({ ...g, published: UAD_GUIDE_PUBLISHED }, makeUadErrorGuide(g.slug), g.description, g.crumb)])),
+  '/unsubscribe': {
+    Component: Unsubscribe,
+    title: 'Unsubscribe | SpreadRun',
+    description: 'Stop SpreadRun deadline reminders and new-tool emails.',
+    noindex: true,
+  },
   '/account': {
     Component: Account,
     title: 'Account | SpreadRun',

@@ -15,5 +15,7 @@ export async function GET(request) {
   if (!authorized(request, process.env.ADMIN_TOKEN)) return fail(401, 'unauthorized', 'Admin token required.');
   const { data, error } = await supabaseAdmin.rpc('storefront_metrics');
   if (error) return fail(500, 'internal_error', error.message);
-  return json(data);
+  // Free-tool email signups, counted by source page. Never addresses; export those from the database directly.
+  const signups = await supabaseAdmin.rpc('tool_signup_counts');
+  return json({ ...data, toolSignupsBySource: signups.error ? null : signups.data });
 }

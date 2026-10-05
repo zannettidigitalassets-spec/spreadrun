@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Layout, { Crumbs } from '../site/Layout.jsx';
 import Faq from '../site/Faq.jsx';
+import ToolSignup from '../site/ToolSignup.jsx';
 import { apiBySlug, dollars } from '../catalog.js';
 import { ZERO_RN_DAY_LIMIT, mealBreak, parseDailyHours, zeroRnDays } from '../site/pbjPreflight.js';
 
@@ -181,6 +182,7 @@ export default function PbjPreflight() {
         <Faq items={PREFLIGHT_FAQ} />
         <p className="small" style={{ marginTop: 24 }}>A PASS from any tool, including these, is not CMS acceptance. The staffing star estimate in the full QA is an estimate, not CMS's official rating. Sources: <a href={CMS_FIVE_STAR}>CMS Five-Star Quality Rating System</a>, <a href={CMS_PBJ}>CMS Staffing Data Submission (PBJ)</a>.</p>
       </section>
+      <ToolSignup source={PBJ_PREFLIGHT_PATH} heading="Get a reminder before the next PBJ deadline" blurb="PBJ staffing data is due each quarter. Sign up and we will email you before the deadline, and when there is a new free tool." />
     </Layout>
   );
 }

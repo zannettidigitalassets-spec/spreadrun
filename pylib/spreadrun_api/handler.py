@@ -7,6 +7,7 @@ Input errors are never charged. A report is never returned without a successful 
 import base64
 import hashlib
 import json
+import re
 import os
 import sys
 import time
@@ -254,6 +255,65 @@ def record_interest(path, headers):
     return 200, {'counted': first is not False, 'topic': topic}
 
 
+# Optional email signups from the free tools (POST /api/signup/subscribe and /api/signup/unsubscribe), served by
+# this same function. The address goes to the tool_signups table only when the person submits the form with the
+# consent box ticked. Responses never repeat the address. Nothing is sent from here.
+SIGNUP_SOURCES = {'/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator',
+                  '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator'}
+SIGNUP_ACTIONS = {'subscribe', 'unsubscribe'}
+SIGNUP_RUNS_PER_DAY = 20
+EMAIL = re.compile(r'^[^@\s]{1,64}@[^@\s]+\.[^@\s]+$')
+
+
+def _signup_action(path):
+    parts = urlsplit(path)
+    query = parse_qs(parts.query)
+    seg = [p for p in parts.path.split('/') if p]
+    if query.get('channel') == ['signup'] and 'slug' in query:
+        return query['slug'][0]
+    if len(seg) == 3 and seg[0] == 'api' and seg[1] == 'signup':
+        return seg[2]
+    return None
+
+
+def signup(path, headers, read_body):
+    """Returns (status, payload) for /api/signup/<action>, or None for any other path."""
+    action = _signup_action(path)
+    if action is None:
+        return None
+    if action not in SIGNUP_ACTIONS:
+        return 404, {'error': {'code': 'not_found', 'message': 'No such action.'}}
+    try:
+        length = int(headers.get('Content-Length') or 0)
+    except ValueError:
+        length = -1
+    if not 0 < length <= 2048:
+        return 400, {'error': {'code': 'input_error', 'message': 'Send a small JSON body.'}}
+    try:
+        data = json.loads(read_body(length).decode('utf-8'))
+    except (UnicodeDecodeError, ValueError):
+        return 400, {'error': {'code': 'input_error', 'message': 'Send a JSON body.'}}
+    email = str(data.get('email') or '').strip().lower() if isinstance(data, dict) else ''
+    if len(email) > 254 or not EMAIL.match(email):
+        return 400, {'error': {'code': 'input_error', 'message': 'That does not look like an email address.'}}
+    if action == 'subscribe':
+        if data.get('consent') is not True:
+            return 400, {'error': {'code': 'input_error', 'message': 'Tick the box to agree to the emails first.'}}
+        if data.get('source') not in SIGNUP_SOURCES:
+            return 400, {'error': {'code': 'input_error', 'message': 'Unknown page.'}}
+    try:
+        if store.rpc('demo_allow', {'p_ip_hash': _ip_hash(headers), 'p_api': 'signup', 'p_limit': SIGNUP_RUNS_PER_DAY}) is False:
+            return 429, {'error': {'code': 'rate_limited', 'message': 'Too many tries today. Try again tomorrow.'}}
+        if action == 'subscribe':
+            store.rpc('tool_signup', {'p_email': email, 'p_source': data['source']})
+        else:
+            store.rpc('tool_unsubscribe', {'p_email': email})
+    except store.StoreUnavailable as exc:
+        print(f'[spreadrun] signup {action} failed: {type(exc).__name__}', file=sys.stderr)
+        return 503, {'error': {'code': 'unavailable', 'message': 'That did not go through. Try again later.'}}
+    return 200, {'ok': True, 'action': action}
+
+
 def resolve_route(path):
     """Work out (api, mode) for the single dynamic route api/[channel]/[slug].py.
 
@@ -307,6 +367,10 @@ class Dispatcher(_JsonHandler):
         interest = record_interest(self.path, self.headers)
         if interest is not None:
             self._send(*interest)
+            return
+        handled = signup(self.path, self.headers, self.rfile.read)
+        if handled is not None:
+            self._send(*handled)
             return
         api, mode = self._route()
         if api:

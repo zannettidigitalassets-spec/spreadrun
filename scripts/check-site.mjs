@@ -140,7 +140,7 @@ for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/ho
   '/guides/uad36-basement-fields-hard-stop', '/guides/uad36-location-view-codes-rejected', '/guides/uad36-concession-mismatch', '/guides/uad36-address-usps-flag', '/guides/ucdp-not-successful-vs-rejected']) {
   if (!sitemap.includes(`<loc>https://www.spreadrun.com${u}</loc>`)) fail(`sitemap missing ${u}`);
 }
-for (const u of ['/account', '/404', '/secondring', '/guides/lsa-missed-call-charges-october-2026']) if (sitemap.includes(`${u}</loc>`)) fail(`sitemap should not list ${u}`);
+for (const u of ['/account', '/unsubscribe', '/404', '/secondring', '/guides/lsa-missed-call-charges-october-2026']) if (sitemap.includes(`${u}</loc>`)) fail(`sitemap should not list ${u}`);
 const robots = fs.readFileSync(path.join(dist, 'robots.txt'), 'utf8');
 if (!robots.includes('Sitemap: https://www.spreadrun.com/sitemap.xml')) fail('robots.txt missing sitemap');
 
