@@ -99,7 +99,7 @@ export default function DocsCmmc() {
         <h2 id="endpoint">Endpoint</h2>
         <table className="doc-table"><tbody>
           <tr><th>Paid</th><td><code>POST https://www.spreadrun.com/api/v1/{API.slug}</code>, API key required, {dollars(API.priceCents)} per completed verification</td></tr>
-          <tr><th>Demo</th><td><code>POST https://www.spreadrun.com/api/demo/{API.slug}</code>, no key, 64 KB, 10 runs per day</td></tr>
+          <tr><th>Demo</th><td><code>POST https://www.spreadrun.com/api/demo/{API.slug}</code>, no key, 10 runs per day. Runs the three published sample packages only (<a href="/samples/cmmc-clean.json">clean</a>, <a href="/samples/cmmc-conditional.json">conditional</a>, <a href="/samples/cmmc-errors.json">errors</a>); spacing and key order do not matter, any changed value does. Your own data goes to the paid endpoint.</td></tr>
           <tr><th>Body</th><td>A JSON object, UTF-8, up to 256 KB. Text values up to 200 characters, except requirementsCsv; up to 300 requirement rows.</td></tr>
         </tbody></table>
 
@@ -168,7 +168,7 @@ export default function DocsCmmc() {
         <Json value={demoFail.body.report.findings.slice(0, 6)} />
 
         <h2 id="errors">Errors</h2>
-        <p>See the <a href="/docs#errors">shared error table</a>. Rejected with HTTP 400 and not charged: a body that is not a JSON object, no assessment object, a level other than 2, no requirement results, both or neither of requirements and requirementsCsv, a CSV without requirement and status columns, or wrong value types. Example (HTTP {inputError.status}):</p>
+        <p>See the <a href="/docs#errors">shared error table</a>. Rejected with HTTP 400 and not charged: a body that is not a JSON object, no assessment object, a level other than 2, no requirement results, both or neither of requirements and requirementsCsv, a CSV without requirement and status columns, or wrong value types; on the demo endpoint, anything other than a sample package. Example (HTTP {inputError.status}):</p>
         <Json value={inputError.body} />
 
         <h2 id="examples">Code samples</h2>

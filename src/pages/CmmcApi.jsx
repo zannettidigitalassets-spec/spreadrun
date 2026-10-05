@@ -42,6 +42,8 @@ export const CMMC_FAQ = [
     'No. The package is processed in memory for the length of the request and is not stored or shared. The report names requirement IDs and rules, never your CAGE codes, dates or the score you claimed. For billing and usage we log the time, endpoint, result status, size and duration, never the contents.'],
   ['When is a run charged?',
     `When the verification finishes and returns a report, whether it says PASS, WARN or FAIL: ${dollars(API.priceCents)} per completed verification. Requests rejected before a report exists are free, such as a body that is not JSON, a level other than 2, or no requirement results.`],
+  ['Can I try it for free?',
+    `Yes, on the three sample packages on this page: a clean 110, a conditional result and a package with errors. They run free, up to 10 times a day. Verifying your own results, through the walk-through or a CSV, is the paid verification: sign in with at least ${dollars(API.priceCents)} of credit and run it from the same form, or call the API.`],
 ];
 
 const CURL = `curl -X POST "https://www.spreadrun.com/api/v1/cmmc-self-assessment-validator" \\
@@ -150,6 +152,7 @@ export default function CmmcApi() {
 
       <section className="section wrap" id="demo" aria-labelledby="demo-h">
         <h2 id="demo-h">Try it now</h2>
+        <p>The sample packages run free. Your own results, answered here or uploaded as a CSV, run as a paid verification at {dollars(API.priceCents)} from your credit.</p>
         <CmmcDemo api={API} sample={example.body.report} />
       </section>
 

@@ -5,6 +5,8 @@ import table from '../../pylib/spreadrun_api/validators/cmmc/requirements.json';
 
 // The CMMC test form. Two ways in: walk through the 110 requirements here, or upload the CSV you already keep.
 // Either way the form sends one JSON package; the score is computed on the server, not in the browser.
+// The free demo runs the three sample packages only, sent exactly as published (the demo endpoint refuses anything
+// else). Your own results run as a paid verification, so they need a signed-in user whose credit covers the price.
 
 export const REQS = table.requirements;
 export const FAMILIES = table.families;
@@ -44,20 +46,26 @@ export default function CmmcDemo({ api, sample }) {
   const [results, setResults] = useState({});
   const [csv, setCsv] = useState('');
   const [meta, setMeta] = useState(emptyMeta);
+  // The sample package loaded into the form, while it is unchanged: { name, text }. Any edit makes it your own data.
+  const [loaded, setLoaded] = useState(null);
+  const edited = () => setLoaded(null);
   const answered = REQS.filter((r) => results[r.id]).length;
 
   const setResult = (id) => (e) => {
     const v = e.target.value;
+    edited();
     setResults((prev) => ({ ...prev, [id]: v }));
   };
   const setField = (k) => (e) => {
     const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    edited();
     setMeta((prev) => ({ ...prev, [k]: v }));
   };
-  const allMet = () => setResults(Object.fromEntries(REQS.map((r) => [r.id, 'MET'])));
+  const allMet = () => edited() || setResults(Object.fromEntries(REQS.map((r) => [r.id, 'MET'])));
 
   const loadSample = async ([base]) => {
-    const p = await fetch(`/samples/${base}.json`).then((r) => r.json());
+    const text = await fetch(`/samples/${base}.json`).then((r) => r.text());
+    const p = JSON.parse(text);
     const a = p.assessment;
     const f = p.affirmation || {};
     setMeta({
@@ -73,11 +81,12 @@ export default function CmmcDemo({ api, sample }) {
       setResults(Object.fromEntries(p.requirements.map((r) => [r.id, r.status])));
       setCsv(['requirement,status', ...p.requirements.map((r) => `${r.id},${r.status}`)].join('\n'));
     }
+    setLoaded({ name: base, text });
   };
 
   const loadFile = async (e) => {
     const file = e.target.files?.[0];
-    if (file) setCsv(await file.text());
+    if (file) { edited(); setCsv(await file.text()); }
   };
 
   const body = () => {
@@ -106,11 +115,15 @@ export default function CmmcDemo({ api, sample }) {
   };
 
   const ready = input === 'csv' ? csv.trim().length > 0 : answered > 0;
-  const size = ready ? new Blob([body()]).size : 0;
-  const tooBig = size > mode.maxBytes;
+  // A sample runs free for everyone. Your own data runs paid, or not at all without enough credit.
+  const ownData = ready && !loaded;
+  const blocked = ownData && !mode.paid;
+  const size = ownData ? new Blob([body()]).size : 0;
+  const tooBig = size > api.maxBodyBytes;
   const submit = (e) => {
     e.preventDefault();
-    if (ready) run({ paid: mode.paid, body: body(), contentType: 'application/json' });
+    if (loaded) run({ paid: false, body: loaded.text, contentType: 'application/json' });
+    else if (ownData && mode.paid) run({ paid: true, body: body(), contentType: 'application/json' });
   };
   const check = (k, label) => (
     <label className="small" style={{ display: 'flex', gap: 8, alignItems: 'flex-start', margin: '0 0 8px' }}>
@@ -122,7 +135,7 @@ export default function CmmcDemo({ api, sample }) {
   return (
     <div className="split">
       <form className="demo" onSubmit={submit}>
-        <ModeNote api={api} credits={credits} mode={mode} demoLimits={`up to ${kb(api.demoMaxBodyBytes)} per run, 10 runs a day`} />
+        <ModeNote api={api} credits={credits} mode={mode} demoLimits="the three sample packages, 10 runs a day" />
         <div className="btn-row" style={{ margin: '0 0 16px' }}>
           {SAMPLES.map((s) => <button key={s[0]} type="button" className="btn secondary small" onClick={() => loadSample(s)}>{s[1]}</button>)}
         </div>
@@ -209,14 +222,27 @@ export default function CmmcDemo({ api, sample }) {
         )}
 
         <p className="small muted" style={{ margin: '12px 0' }}>Processed in memory and not stored. Reports never repeat your CAGE codes, dates or scores you entered.</p>
-        <button className="btn" type="submit" disabled={!ready || state.phase === 'running' || tooBig}>
-          {runLabel(mode.paid, api, 'Verify the score', 'Verifying', state.phase === 'running')}
+        {blocked && (
+          <div className="note" style={{ margin: '0 0 12px' }} role="status">
+            <p style={{ margin: 0 }}>
+              <b>Verifying your own results is a paid run: {dollars(api.priceCents)}.</b>{' '}
+              {credits.status === 'signed-in' && credits.canPay
+                ? <>Untick "Use the free demo instead" to run it from your credit.</>
+                : credits.status === 'signed-in'
+                  ? <>Your credit ({dollars(credits.balanceCents)}) is below that. <a href="/account">Buy credits</a>, then run it here.</>
+                  : <><a href="/account">Sign in and buy credits</a> to run it here, or use the API.</>}
+              {' '}The free demo runs the sample packages: load one above to try it.
+            </p>
+          </div>
+        )}
+        <button className="btn" type="submit" disabled={!ready || blocked || state.phase === 'running' || tooBig}>
+          {loaded ? (state.phase === 'running' ? 'Verifying' : 'Run the sample (free)') : runLabel(mode.paid, api, 'Verify the score', 'Verifying', state.phase === 'running')}
         </button>
         <div className="status-line" aria-live="polite">
           {state.phase === 'running' && 'Recomputing the score and checking the package.'}
           {state.phase === 'done' && `Done. ${state.report.findingCount} ${state.report.findingCount === 1 ? 'finding' : 'findings'}.${state.paid ? ` Charged ${dollars(api.priceCents)}.` : ''}`}
         </div>
-        {tooBig && <div className="error-box">This package is over the {kb(mode.maxBytes)} limit for this mode.</div>}
+        {tooBig && <div className="error-box">This package is over the {kb(api.maxBodyBytes)} limit.</div>}
         {state.phase === 'error' && <div className="error-box" role="alert">{state.error}</div>}
       </form>
       <div><Result state={state} kind="cmmc" sample={sample} sampleLabel="Invented contractor with planted errors" /></div>
