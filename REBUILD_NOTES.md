@@ -340,6 +340,15 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - The validator does not run UAD1361, UAD1450, UAD1328 or UAD1769 (view and site influence must be included); the
   view guide says so.
 
+## CPSC eFiling readiness checklist (branch `spreadrun/cpsc-efiling-checklist`, 2026-10-05)
+
+- `/tools/cpsc-efiling-readiness-checklist`: a browser-only smoke test for a possible CPSC certificate validator.
+  Items trace to 16 CFR part 1110, the final rule (90 FR 1800) and its correction, the CPSC eFiling Implementation
+  Guide v2.4 (May 2026), the Product Registry FAQ v1.4, 16 CFR 1107.21 and 15 U.S.C. 2066(a).
+- Demand counter: POST /api/interest/cpsc-efiling, handled by the existing dispatcher (no new function, no migration).
+  It calls demo_allow() with api "interest:cpsc-efiling" and limit 1, so each visitor-day is one row in demo_usage:
+  `select count(*) from demo_usage where api = 'interest:cpsc-efiling'`. Only the salted IP hash is stored.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist

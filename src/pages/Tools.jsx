@@ -13,6 +13,11 @@ export const TOOLS = [
     blurb: 'Seven things to check on a UAD 3.6 appraisal before it goes to the lender, with what UCDP does when one is wrong and where to look in your software.',
   },
   {
+    href: '/tools/cpsc-efiling-readiness-checklist',
+    title: 'CPSC eFiling Readiness Checklist',
+    blurb: 'Nine things an importer should have ready before the broker files a shipment\'s CPSC certificate data in ACE, from the lab ID to Full or Reference filing.',
+  },
+  {
     href: '/tools/davis-bacon-overtime-calculator',
     title: 'Davis-Bacon Overtime Calculator',
     blurb: 'Time and a half on the basic rate for hours over 40, the fringe owed for every hour, and the week\'s gross on a prevailing wage job.',

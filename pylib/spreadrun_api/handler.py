@@ -227,6 +227,32 @@ def process(api, mode, headers, read_body, path='/'):
 
 MODES = {'v1': 'paid', 'demo': 'demo'}
 
+# Demand counters for free tools that test interest in a validator not built yet. POST /api/interest/<topic>.
+# One anonymous count per visitor per day: the salted IP hash goes through demo_allow() with api
+# "interest:<topic>", so a count is a row in demo_usage. Nothing else is read or stored, and no body is accepted.
+INTEREST_TOPICS = {'cpsc-efiling'}
+
+
+def record_interest(path, headers):
+    """Returns (status, payload) for /api/interest/<topic>, or None for any other path."""
+    parts = urlsplit(path)
+    query = parse_qs(parts.query)
+    seg = [p for p in parts.path.split('/') if p]
+    if query.get('channel') == ['interest'] and 'slug' in query:
+        topic = query['slug'][0]
+    elif len(seg) == 3 and seg[0] == 'api' and seg[1] == 'interest':
+        topic = seg[2]
+    else:
+        return None
+    if topic not in INTEREST_TOPICS:
+        return 404, {'error': {'code': 'not_found', 'message': 'No such counter.'}}
+    try:
+        first = store.rpc('demo_allow', {'p_ip_hash': _ip_hash(headers), 'p_api': f'interest:{topic}', 'p_limit': 1})
+    except store.StoreUnavailable as exc:
+        print(f'[spreadrun] interest count skipped: {exc}', file=sys.stderr)
+        return 503, {'error': {'code': 'unavailable', 'message': 'The count could not be saved. Try again later.'}}
+    return 200, {'counted': first is not False, 'topic': topic}
+
 
 def resolve_route(path):
     """Work out (api, mode) for the single dynamic route api/[channel]/[slug].py.
@@ -278,6 +304,10 @@ class Dispatcher(_JsonHandler):
         return api, mode
 
     def do_POST(self):
+        interest = record_interest(self.path, self.headers)
+        if interest is not None:
+            self._send(*interest)
+            return
         api, mode = self._route()
         if api:
             self._send(*process(api, mode, self.headers, self.rfile.read, self.path))
