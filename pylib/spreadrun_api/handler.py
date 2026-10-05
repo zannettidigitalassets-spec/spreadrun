@@ -266,7 +266,8 @@ def record_interest(path, headers):
 # consent box ticked. Responses never repeat the address. Nothing is sent from here.
 SIGNUP_SOURCES = {'/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator',
                   '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator',
-                  '/tools/uad36-preflight-checklist', '/tools/cpsc-efiling-readiness-checklist'}
+                  '/tools/uad36-preflight-checklist', '/tools/cpsc-efiling-readiness-checklist',
+                  '/tools/davis-bacon-apprentice-checker'}
 SIGNUP_ACTIONS = {'subscribe', 'unsubscribe'}
 SIGNUP_RUNS_PER_DAY = 20
 EMAIL = re.compile(r'^[^@\s]{1,64}@[^@\s]+\.[^@\s]+$')

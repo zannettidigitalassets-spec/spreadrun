@@ -59,6 +59,11 @@ class Signups(unittest.TestCase):
         self.assertEqual(list(self.fake.signups), ['pat@example.com'])
         self.assertEqual(self.fake.signups['pat@example.com']['source'], '/tools/i9-section2-deadline-calculator')
 
+    def test_apprentice_checker_is_an_allowed_source(self):
+        src = '/tools/davis-bacon-apprentice-checker'
+        self.assertEqual(post('subscribe', {'email': 'pat@example.com', 'consent': True, 'source': src})[0], 200)
+        self.assertEqual(self.fake.signups['pat@example.com']['source'], src)
+
     def test_unsubscribe(self):
         post('subscribe', {'email': 'pat@example.com', 'consent': True, 'source': SRC})
         self.assertEqual(post('unsubscribe', {'email': 'PAT@example.com'})[0], 200)

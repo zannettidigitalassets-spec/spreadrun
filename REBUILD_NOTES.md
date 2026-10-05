@@ -361,7 +361,7 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - POST /api/signup/subscribe and /api/signup/unsubscribe are served by the existing Python dispatcher (still 8
   functions); 20 tries per visitor per day via demo_allow. /api/admin/metrics adds toolSignupsBySource (no addresses).
 - `src/site/ToolSignup.jsx` under each /tools/* page; `/unsubscribe` (noindex, not in the sitemap). Nothing is sent:
-  reminders and alerts are a separate build. All six /tools pages carry it; a new /tools page needs one `<ToolSignup source={PATH} />` line and its
+  reminders and alerts are a separate build. All /tools pages carry it (seven, with the apprentice checker); a new /tools page needs one `<ToolSignup source={PATH} />` line and its
   path added to SIGNUP_SOURCES in handler.py.
 - Privacy Policy paragraph for the email list applied (owner-approved text, October 5, 2026).
 
