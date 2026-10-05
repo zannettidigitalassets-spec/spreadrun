@@ -496,3 +496,23 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
 - DOL's own overtime example shows a $135.04 premium where the math gives $135.00, so the page uses its own numbers.
 - scripts/tests/wh347-guides.test.mjs checks metadata, CTAs, the no-rejection-date rule and every worked number.
   The check-site guide block now covers both batches.
+
+## SEO guide batch 3, PECOS and COBRA (branch `spreadrun/seo-guides-batch3`, 2026-10-05)
+
+- Five guides (`src/content/enroll-guides.js` for metadata and sources, `src/pages/EnrollGuides.jsx` for bodies, one
+  loader each in `src/pages/guides/`): pecos-returned-for-corrections, npi-not-active-nppes, 855i-rejection-reasons,
+  cobra-election-notice-requirements, cobra-notice-deadlines. Listed on /guides after the WH-347 pages.
+- Sources read in full (eCFR and cms.gov through a browser, October 5, 2026): 42 CFR 424.525, 424.526, 424.530,
+  424.540, 424.545; CMS MLN9658742 (December 2025: PECOS statuses, 30-day corrections window, signatures); the
+  CMS-855I (05/23) PDF from cms.gov (page 2 name and NPPES match, section 1A, section 12 documents, section 15
+  signature); 45 CFR 162.406 to 162.410; the NPI Registry API help page and a live API record (status, NPI-1/NPI-2,
+  taxonomy fields); 29 CFR 2590.606-1 to 606-4; 26 CFR 54.4980B-6 and 54.4980B-8.
+- Cut: "a returned application is a non-application" (not in 424.526 or the MLN booklet; the page says no appeal
+  rights, which is in the rule), "missing NPI notification letter" (not in the 855I section 12 list), any claim that
+  a taxonomy mismatch blocks PECOS (the 855I exact-match list is name, SSN, LBN, TIN and NPI only), how a deactivated
+  NPI appears in the registry (not documented on the pages read), MAC "common errors" lists and any ranking.
+- "Returned for Corrections" is a PECOS status (30 days, then rejected), distinct from a return under 424.526; the
+  page says so.
+- The CMS-855I posted on cms.gov is still the 05/23 edition with OMB expiry 05/26; cite its date if CMS posts a new one.
+- scripts/tests/enroll-guides.test.mjs checks metadata, CTAs, all 14 and 6 notice items, the no-ranking rule, the
+  seven 855I reasons with fixes, and the worked COBRA timeline. check-site's citation block covers all three batches.
