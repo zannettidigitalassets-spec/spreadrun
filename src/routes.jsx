@@ -34,6 +34,8 @@ import MrfGuide, { MRF_GUIDE } from './pages/MrfGuide.jsx';
 import UadGuide, { UAD_GUIDE } from './pages/UadGuide.jsx';
 import ClinicalGuide, { CLINICAL_GUIDE } from './pages/ClinicalGuide.jsx';
 import { PBJ_ERROR_GUIDES, PBJ_GUIDE_PUBLISHED, makePbjErrorGuide } from './pages/PbjErrorGuides.jsx';
+import { DEADLINE_GUIDES, DEADLINE_GUIDE_PUBLISHED } from './content/deadline-guides.js';
+import { makeDeadlineGuide } from './pages/DeadlineGuides.jsx';
 import Account from './pages/Account.jsx';
 import Contact from './Contact.jsx';
 import NotFound from './NotFound.jsx';
@@ -340,6 +342,8 @@ export const ROUTES = {
     guidePage({ ...g, published: UAD_GUIDE_PUBLISHED }, makeUadErrorGuide(g.slug), g.description, g.crumb)])),
   ...Object.fromEntries(PBJ_ERROR_GUIDES.map((g) => [`/guides/${g.slug}`,
     guidePage({ ...g, published: PBJ_GUIDE_PUBLISHED }, makePbjErrorGuide(g.slug), g.description, g.crumb)])),
+  ...Object.fromEntries(DEADLINE_GUIDES.map((g) => [`/guides/${g.slug}`,
+    guidePage({ ...g, published: DEADLINE_GUIDE_PUBLISHED }, makeDeadlineGuide(g.slug), g.description, g.crumb)])),
   '/unsubscribe': {
     Component: Unsubscribe,
     title: 'Unsubscribe | SpreadRun',
