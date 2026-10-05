@@ -326,6 +326,21 @@ $25.00 per completed report (professional tier, `PROFESSIONAL_RUN_CENTS`). Demo 
   (New Year's 2028 observed); other years show a warning.
 - Fines: $288 to $2,861 per form, 8 CFR 274a.10(b)(2) (DHS rule, Federal Register Jan 2 2025; no 2026 change found).
 
+## PECOS Medicare Enrollment Pre-Check (branch `spreadrun/pecos-enrollment-precheck`, 2026-10-05)
+
+- Catalog entry `pecos-enrollment-precheck`, $25.00 per completed pre-check, served by the shared dispatcher (still 8
+  of 12 functions). Engine: `pylib/spreadrun_api/validators/pecos/engine.py` (SpreadRun's own, not a DataForge copy).
+- JSON input for CMS-855I, 855B and 855S. One live NPPES API v2.1 call per run (`nppes_lookup`), skipped when the NPI
+  fails the format or CMS check digit test. Registry data is used inside the run only: not stored, cached or returned.
+  NPPES unreachable -> HTTP 503 `registry_unavailable`, not charged.
+- Facts tied to the CMS-855I (05/23), 855B (12/2025), 855S (12/23), 42 CFR 424.510, 424.515, 424.525, 424.540, 424.57
+  and the CMS NPI check digit document. Not used for lack of a primary source: "60 to 90 days" processing time (the
+  window is the caller's `processingWindowDays`, default 90), "2 to 6 weeks per correction", "most errors cause most
+  denials", credentialing fee ranges. Malpractice insurance is not a Medicare enrollment item; it is accepted only for
+  the expiry check. Phone is "if applicable" on the forms, so a missing phone is a warning. Hours of operation are
+  checked for DMEPOS (855S) only. CMS-855A is not supported: its supporting-document list could not be verified.
+- Terms and Privacy still forbid personal data for this API: a clause was proposed, not applied.
+
 ## Known limitations
 
 - Not deployed with real credentials yet: the Supabase migration must be applied and preview env vars set (owner checklist

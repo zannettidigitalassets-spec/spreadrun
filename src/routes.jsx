@@ -7,12 +7,14 @@ import MrfApi, { MRF_FAQ } from './pages/MrfApi.jsx';
 import UadApi, { UAD_FAQ } from './pages/UadApi.jsx';
 import PbjApi, { PBJ_FAQ } from './pages/PbjApi.jsx';
 import Wh347Api, { WH347_FAQ } from './pages/Wh347Api.jsx';
+import PecosApi, { PECOS_FAQ } from './pages/PecosApi.jsx';
 import Docs from './pages/Docs.jsx';
 import DocsClinical from './pages/DocsClinical.jsx';
 import DocsMrf from './pages/DocsMrf.jsx';
 import DocsUad from './pages/DocsUad.jsx';
 import DocsPbj from './pages/DocsPbj.jsx';
 import DocsWh347 from './pages/DocsWh347.jsx';
+import DocsPecos from './pages/DocsPecos.jsx';
 import OvertimeCalculator, { OT_FAQ, OT_CALC_PATH } from './pages/OvertimeCalculator.jsx';
 import FringeCalculator, { FRINGE_FAQ, FRINGE_CALC_PATH } from './pages/FringeCalculator.jsx';
 import PbjPreflight, { PREFLIGHT_FAQ, PBJ_PREFLIGHT_PATH } from './pages/PbjPreflight.jsx';
@@ -74,6 +76,8 @@ const D = {
   docsClinical: 'Clinical Trial Results Table QA API reference: endpoints, request format, required columns, report schema, finding codes, error codes, and code samples.',
   docsMrf: 'Hospital MRF Validator API reference: endpoints, upload formats, query parameters, sampling limits, report schema, finding codes, error codes, and samples.',
   pbj: 'Check nursing home PBJ staffing XML against CMS v4.10.0 specs before upload, with documented audit risk flags. Results in seconds. $25.00 per report, free test.',
+  pecos: 'Pre-check a draft CMS-855I, 855B or 855S Medicare enrollment, NPI and taxonomy against live NPPES, IRS legal name, ZIP+4, expiring items. $25.00 per check.',
+  docsPecos: 'PECOS Medicare Enrollment Pre-Check API reference: endpoints, the JSON input, supporting document keys, report schema, rule IDs, the NPPES lookup and errors.',
   wh347: 'Check a weekly Davis-Bacon certified payroll against your wage determination: rates, fringes, overtime, apprentices, math. $25.00 per report, free test.',
   pbjPreflight: 'Free PBJ pre-flight checks: count zero-RN days against the CMS one-star staffing rule and work out meal break deductions the way the PBJ Policy Manual requires.',
   tools: 'Free compliance tools for employers: an I-9 Section 2 deadline calculator, Davis-Bacon overtime and fringe calculators, and PBJ pre-flight checks. No signup.',
@@ -94,7 +98,7 @@ const D = {
 
 const HOME = [['/', 'Home']];
 const product = (slug, name, title, desc, faq) => ({
-  Component: { 'clinical-trial-table-validator': ClinicalApi, 'hospital-mrf-validator': MrfApi, 'uad-36-appraisal-validator': UadApi, 'pbj-staffing-qa': PbjApi, 'wh347-payroll-precheck': Wh347Api }[slug],
+  Component: { 'clinical-trial-table-validator': ClinicalApi, 'hospital-mrf-validator': MrfApi, 'uad-36-appraisal-validator': UadApi, 'pbj-staffing-qa': PbjApi, 'wh347-payroll-precheck': Wh347Api, 'pecos-enrollment-precheck': PecosApi }[slug],
   title, description: desc, priority: '0.9',
   jsonLd: () => [appLd(slug, desc), faqLd(faq), crumbsLd([...HOME, ['/apis', 'APIs'], [`/apis/${slug}`, name]])],
 });
@@ -153,6 +157,8 @@ export const ROUTES = {
     'PBJ Staffing Data Validator: Check CMS PBJ XML Before Upload | SpreadRun', D.pbj, PBJ_FAQ),
   '/apis/wh347-payroll-precheck': product('wh347-payroll-precheck', 'WH-347 Certified Payroll Pre-Check',
     'WH-347 Certified Payroll Checker: Davis-Bacon Pre-Check API | SpreadRun', D.wh347, WH347_FAQ),
+  '/apis/pecos-enrollment-precheck': product('pecos-enrollment-precheck', 'PECOS Medicare Enrollment Pre-Check',
+    'PECOS Medicare Enrollment Pre-Check API: CMS-855 Error Checks | SpreadRun', D.pecos, PECOS_FAQ),
   [OT_CALC_PATH]: {
     Component: OvertimeCalculator,
     title: 'Davis-Bacon Overtime Calculator (Free, CWHSSA) | SpreadRun',
@@ -244,6 +250,7 @@ export const ROUTES = {
   '/docs/uad-36-appraisal-validator': docsPage('uad-36-appraisal-validator', DocsUad, 'UAD 3.6 Appraisal Report Validator', D.docsUad),
   '/docs/pbj-staffing-qa': docsPage('pbj-staffing-qa', DocsPbj, 'PBJ Staffing Data Pre-Submission QA', D.docsPbj),
   '/docs/wh347-payroll-precheck': docsPage('wh347-payroll-precheck', DocsWh347, 'Davis-Bacon WH-347 Certified Payroll Pre-Check', D.docsWh347),
+  '/docs/pecos-enrollment-precheck': docsPage('pecos-enrollment-precheck', DocsPecos, 'PECOS Medicare Enrollment Pre-Check', D.docsPecos),
   '/guides': {
     Component: Guides,
     title: 'Guides: Hospital Price Transparency and Clinical Data | SpreadRun',

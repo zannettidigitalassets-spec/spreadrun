@@ -113,3 +113,18 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     save('wh347-paid-pass', *post(paid, (SAMPLES / 'wh347-pass.json').read_bytes(), {**rich_auth, 'Content-Type': 'application/json'}))
     save('wh347-demo-fail', *post(demo, (SAMPLES / 'wh347-fail.xlsx').read_bytes(), {'Content-Type': xlsx}))
     save('wh347-input-error', *post(paid, b'{"header": {}, "payrollCsv": "entry_no,last_name\\n1,x\\n"}', {**rich_auth, 'Content-Type': 'application/json'}))
+
+    # PECOS: the sample practice and NPI are invented, so the live NPPES call is replaced by a stand-in record for the
+    # examples (labelled as simulated on the page).
+    from spreadrun_api import runners  # noqa: E402
+    pecos = runners.pecos_module()
+    e = 'pecos-enrollment-precheck'
+    paid, demo = serve(e, 'paid'), serve(e, 'demo')
+    rich, _ = fake.add_user(10000)
+    rich_auth = {'Authorization': f'Bearer {rich}', 'Content-Type': 'application/json'}
+    record = {'enumeration_type': 'NPI-2', 'basic': {'status': 'A', 'organization_name': 'Example Valley Family Medicine LLC'},
+              'taxonomies': [{'code': '261QP2300X', 'primary': True}]}
+    with mock.patch.object(pecos, 'nppes_lookup', lambda npi: record):
+        save('pecos-paid-pass', *post(paid, (SAMPLES / 'pecos-clean.json').read_bytes(), rich_auth))
+        save('pecos-demo-fail', *post(demo, (SAMPLES / 'pecos-errors.json').read_bytes(), {'Content-Type': 'application/json'}))
+    save('pecos-input-error', *post(paid, b'{"enrollmentType": "855A", "provider": {}}', rich_auth))

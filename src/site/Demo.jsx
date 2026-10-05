@@ -594,3 +594,50 @@ export function Wh347Demo({ api, sample }) {
     </div>
   );
 }
+
+const PECOS_SAMPLES = [
+  ['pecos-clean', 'Sample draft'],
+  ['pecos-errors', 'Sample with errors'],
+];
+
+export function PecosDemo({ api, sample }) {
+  const [json, setJson] = useState('');
+  const credits = useCredits(api);
+  const mode = useMode(api, credits);
+  const [state, run] = useRunner(api, credits);
+  const loadSample = async ([base]) => setJson(await fetch(`/samples/${base}.json`).then((r) => r.text()));
+  const size = new Blob([json]).size;
+  const tooBig = size > mode.maxBytes;
+  const submit = (e) => {
+    e.preventDefault();
+    if (json.trim()) run({ paid: mode.paid, body: json, contentType: 'application/json' });
+  };
+  return (
+    <div className="split">
+      <form className="demo" onSubmit={submit}>
+        <ModeNote api={api} credits={credits} mode={mode} demoLimits={`up to ${kb(api.demoMaxBodyBytes)} per run, 10 runs a day`} />
+        <div className="btn-row" style={{ margin: '0 0 16px' }}>
+          {PECOS_SAMPLES.map((s) => (
+            <button key={s[0]} type="button" className="btn secondary small" onClick={() => loadSample(s)}>{s[1]}</button>
+          ))}
+        </div>
+        <div className="field">
+          <label htmlFor="pecos-json">Enrollment draft (JSON)</label>
+          <span className="hint">Fields are listed in the <a href={`/docs/${api.slug}`}>API docs</a>. The samples describe an invented practice whose NPI passes the check digit but is not in NPPES, so a live run reports it as not found. Use a real NPI to see the registry checks pass.</span>
+          <textarea id="pecos-json" value={json} onChange={(e) => setJson(e.target.value)} spellCheck={false} style={{ minHeight: 260 }} />
+        </div>
+        <p className="small muted" style={{ margin: '0 0 12px' }}>Processed in memory and not stored. The NPI is sent to the public NPPES registry for this run only. Reports never repeat names, numbers or dates from your draft.</p>
+        <button className="btn" type="submit" disabled={!json.trim() || state.phase === 'running' || tooBig}>
+          {runLabel(mode.paid, api, 'Run the pre-check', 'Checking', state.phase === 'running')}
+        </button>
+        <div className="status-line" aria-live="polite">
+          {state.phase === 'running' && 'Checking the draft and querying the NPPES registry.'}
+          {state.phase === 'done' && `Done. ${state.report.findingCount} ${state.report.findingCount === 1 ? 'finding' : 'findings'}.${state.paid ? ` Charged ${dollars(api.priceCents)}.` : ''}`}
+        </div>
+        {tooBig && <div className="error-box">This draft is over the {kb(mode.maxBytes)} limit for this mode.</div>}
+        {state.phase === 'error' && <div className="error-box" role="alert">{state.error}</div>}
+      </form>
+      <div><Result state={state} kind="pecos" sample={sample} sampleLabel="Invented practice; registry response simulated" /></div>
+    </div>
+  );
+}

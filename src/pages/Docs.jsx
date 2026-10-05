@@ -13,6 +13,7 @@ export const ERRORS = [
   ['429', 'rate_limited', 'Free demo endpoints only: 10 runs per day per API.'],
   ['500', 'internal_error', 'The validator failed. Not charged. Retrying with the same input is safe.'],
   ['503', 'billing_unavailable', 'Billing could not be confirmed, so the report was withheld. Not charged. Retry later.'],
+  ['503', 'registry_unavailable', 'PECOS pre-check only: the NPPES registry could not be reached, so the check did not run. Not charged. Retry later.'],
 ];
 
 export function ErrorTable() {
