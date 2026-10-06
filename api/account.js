@@ -19,7 +19,7 @@ export async function GET(request) {
         .eq('user_id', user.id).eq('mode', 'paid').gte('created_at', since)
         .order('created_at', { ascending: false }).limit(200),
       supabaseAdmin.from('credit_ledger')
-        .select('pack, delta_cents, amount_paid_cents, created_at')
+        .select('pack, delta_cents, amount_paid_cents, stripe_session_id, created_at')
         .eq('user_id', user.id).eq('reason', 'purchase')
         .order('created_at', { ascending: false }).limit(50),
     ]);
