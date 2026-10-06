@@ -535,3 +535,15 @@ Corrections and cuts:
 - No DOL 2026 adjustment claim (not sourced); the page says only that the current eCFR text reads $110.
 - Revalidation: regulation clocks (60, 90, 30, 15 days) cited separately; the MLN "90 to 120 days" notice window replaced by the CMS page's "about three to four months".
 - CPSC: Implementation Guide date not stated (govinfo and the PDF disagree); penalty figures tied to the 2021 adjustment, not called "most recent". None of the cut claims (cargo hold, storage, risk scores, delisting, other penalty figures).
+
+## Google Ads conversion tracking, October 5, 2026
+
+Branch `spreadrun/google-ads-conversions`, not merged. Account 234-506-1509, tag AW-18496639249. Conversion code lives in `src/site/ads.js`.
+
+- Base tag: a second gtag.js loader plus `gtag('config', 'AW-18496639249')` added to index.html after the GA4 block, so it is on every prerendered page. The GA4 block is unchanged. The brief's snippet repeated `gtag('js', new Date())`; it is sent once per page (by the GA4 block), which Google's setup expects.
+- A (paid run, send_to .../lWXpCImElJIdEJGi8fNE): fired in Demo.jsx only when /api/v1 returns 200 with mode "paid" and charged true. Value = the server's priceCents / 100, transaction_id = the run's requestId (the same ID billing dedupes the charge on). Demo, sample and failed runs fire nothing. Runs made directly against the API with a key (server to server) have no browser and are not tracked.
+- B (credit pack, send_to .../iSNECIyElJIdEJGi8fNE): Stripe success_url now carries session_id={CHECKOUT_SESSION_ID}; /api/account now returns stripe_session_id on the user's own purchases. The account page polls until the webhook has recorded that session (the server-side payment confirmation), then fires with value = amount_paid_cents / 100 and transaction_id = the session ID. A sessionStorage flag keyed by session ID blocks reload double fires, and Google dedupes on transaction_id too.
+- C (email signup, send_to .../OEiOCI-E1JIdEJGi8fNE): fired in ToolSignup.jsx after /api/signup/subscribe accepts the address. No value, no email sent to Google.
+- URL tidying on /account keeps gclid, gbraid and wbraid. No router strips query parameters.
+- No new functions (still 8 of 12). No pricing or validator changes.
+- Not changed, needs approved wording: the Privacy Policy describes Google Analytics cookies only, not Google Ads conversion tracking.
