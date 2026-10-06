@@ -235,7 +235,7 @@ function CobraPenalty() {
       </ul>
 
       <h2>What to take from this</h2>
-      <p>Neither figure is automatic. The $110 is a maximum a court may award, and the excise tax has defenses and caps built in. What is certain is that each depends on whether a correct notice went out on time, which is the part you control. For what the notice must say and when, see <a href="/guides/cobra-election-notice-requirements">the 14-item checklist</a> and <a href="/guides/cobra-notice-deadlines">the deadline map</a>.</p>
+      <p>Neither figure is automatic. The $110 is a maximum a court may award, and the excise tax has defenses and caps built in. What is certain is that each depends on whether a correct notice went out on time, which is the part you control. For what the notice must say and when, see <a href="/guides/cobra-election-notice-requirements">the 14-item checklist</a> and <a href="/guides/cobra-notice-deadlines">the deadline map</a>, or work out your own dates with the free <a href="/tools/cobra-deadline-calculator">COBRA deadline calculator</a>.</p>
       <CobraCta />
     </>
   );

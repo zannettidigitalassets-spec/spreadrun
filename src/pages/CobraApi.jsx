@@ -153,6 +153,7 @@ export default function CobraApi() {
             <li><b>Coverage period.</b> 18 months stated for termination or reduced hours, 36 months for the other events.</li>
             <li><b>Medicare.</b> Whether the notice explains how COBRA and Medicare interact, as the DOL model notice does.</li>
           </ul>
+          <p className="small">Just need the dates? The free <a href="/tools/cobra-deadline-calculator">COBRA deadline calculator</a> works out every deadline from the qualifying event, in your browser.</p>
           <p>Every report ends with a send-readiness checklist: content, deadline, stated terms, Medicare and personal identifiers, each Ready, Review or Fix.</p>
         </div>
         <div>

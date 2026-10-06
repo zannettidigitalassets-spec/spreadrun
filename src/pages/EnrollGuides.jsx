@@ -320,7 +320,7 @@ function Deadlines() {
         <li>A grace period shorter than 30 days.</li>
         <li>Counting 44 days when a separate administrator is involved, or 14 days when the employer is its own administrator.</li>
       </ul>
-      <p>Every one of these is a date in the notice you can check against the event before it goes out. For what the notice itself must say, see <a href="/guides/cobra-election-notice-requirements">the 14-item checklist</a>.</p>
+      <p>Every one of these is a date in the notice you can check against the event before it goes out. To get every date for your own event, use the free <a href="/tools/cobra-deadline-calculator">COBRA deadline calculator</a>. For what the notice itself must say, see <a href="/guides/cobra-election-notice-requirements">the 14-item checklist</a>.</p>
       <CobraCta />
     </>
   );
