@@ -61,6 +61,7 @@ export default function Privacy() {
 
       <SectionTitle>Cookies and analytics</SectionTitle>
       <P>We use browser storage for sign-in and cookies to measure site usage with Google Analytics. You can block or delete cookies in your browser settings, though some features may not work.</P>
+      <P>We also use Google Ads conversion tracking. When you click one of our ads, Google sets an ad-click cookie that lets us connect that click to later purchases or signups, so we can see which ads work. This tracking never sends Google your email address or payment details.</P>
 
       <SectionTitle>Children</SectionTitle>
       <P>SpreadRun is for businesses and professionals and are not directed to children under 13. We do not knowingly collect information from children.</P>
