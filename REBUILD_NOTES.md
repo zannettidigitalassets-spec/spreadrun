@@ -547,3 +547,17 @@ Branch `spreadrun/google-ads-conversions`, not merged. Account 234-506-1509, tag
 - URL tidying on /account keeps gclid, gbraid and wbraid. No router strips query parameters.
 - No new functions (still 8 of 12). No pricing or validator changes.
 - Not changed, needs approved wording: the Privacy Policy describes Google Analytics cookies only, not Google Ads conversion tracking.
+
+## Free COBRA deadline calculator, October 6, 2026
+
+Branch `spreadrun/cobra-deadline-calculator`, not merged. Page /tools/cobra-deadline-calculator; math in `src/site/cobra-deadlines.js`, browser only, no network calls.
+
+Rules (eCFR, read October 6, 2026): 29 CFR 2590.606-2, 606-3, 606-4; 26 CFR 54.4980B-6, -7, -8.
+
+Corrections to the brief:
+- Employer bankruptcy is not 36 months. 54.4980B-7 Q&A-4(e): the retired employee keeps coverage until death; a spouse or dependent until the earlier of their death or 36 months after the retiree dies. The tool shows that rule instead of a date.
+- Divorce, separation and loss of dependent status: the 60 days run from the later of the event and the loss of coverage (606-3), not only the event.
+- Added the 29-month disability extension and the Medicare-before-termination rule as notes for termination and reduced hours (Q&A-4(c) and (d)).
+- Added an optional "plan measures from the loss of coverage" box: 54.4980B-7 Q&A-4(b) and 606-2/606-4 let a plan start the employer notice, the 44 days and the coverage period at the loss of coverage, only if the plan document says so.
+- Deadlines are calendar days and are not moved off weekends; the regulations do not move them.
+- Month arithmetic: when the target month has no matching day, the last day of that month is used (a convention the regulations do not set; stated on the page).
