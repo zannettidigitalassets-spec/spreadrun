@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReportSheet from './ReportSheet.jsx';
 import { CREDIT_PACKS, dollars } from '../catalog.js';
+import { paidRunConversion } from './ads.js';
 
 // Test forms on product pages. Two modes:
 //   demo: anyone, free, small limits, 10 runs a day (POST /api/demo/<api>)
@@ -50,6 +51,7 @@ async function runValidation(api, { paid, session, body, contentType, query = ''
     throw new Error(data?.error?.message || `The ${paid ? 'API' : 'demo endpoint'} returned HTTP ${res.status}.`);
   }
   if (window.gtag) window.gtag('event', paid ? 'web_paid_run' : 'demo_run', { api: api.slug, status: data.report.status });
+  if (paid) paidRunConversion(data); // fires only when the server says this run was charged
   return data;
 }
 
