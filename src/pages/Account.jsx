@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import Layout from '../site/Layout.jsx';
 import { dollars, APIS } from '../catalog.js';
+import { creditPackConversion, keepClickIds } from '../site/ads.js';
 
 // Client-only account page: Supabase email-code sign-in, API keys, credits, usage.
 // All money and key operations go through /api/* with the Supabase session token; nothing is trusted from the browser.
@@ -117,21 +118,32 @@ function Dashboard({ session }) {
   const [busy, setBusy] = useState('');
 
   const load = useCallback(async () => {
-    try { setData(await api(session, '/api/account')); setErr(''); } catch (e) { setErr(e.message); }
+    try { const d = await api(session, '/api/account'); setData(d); setErr(''); return d; } catch (e) { setErr(e.message); return null; }
   }, [session]);
 
   useEffect(() => {
-    load();
     const q = new URLSearchParams(window.location.search);
+    const tidy = () => window.history.replaceState(null, '', keepClickIds('/account', window.location.search));
     if (q.get('purchase') === 'success') {
       setNotice('Payment received. Credits are added as soon as Stripe confirms it, usually within a few seconds.');
-      const t = setTimeout(load, 4000);
-      window.history.replaceState(null, '', '/account');
-      return () => clearTimeout(t);
+      // The credit pack conversion fires only once the webhook has recorded this Checkout session as paid.
+      const sessionId = q.get('session_id') || '';
+      tidy();
+      let stopped = false;
+      let timer;
+      const poll = async (left) => {
+        const d = await load();
+        if (stopped) return;
+        const r = creditPackConversion(sessionId, d?.purchases);
+        if (r === 'pending' && left > 0) timer = setTimeout(() => poll(left - 1), 3000);
+      };
+      poll(8);
+      return () => { stopped = true; clearTimeout(timer); };
     }
+    load();
     if (q.get('purchase') === 'cancelled') {
       setNotice('Checkout was cancelled. Nothing was charged.');
-      window.history.replaceState(null, '', '/account');
+      tidy();
     }
     return undefined;
   }, [load]);
