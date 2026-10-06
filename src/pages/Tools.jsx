@@ -3,6 +3,11 @@ import Layout, { Crumbs } from '../site/Layout.jsx';
 export const TOOLS_PATH = '/tools';
 export const TOOLS = [
   {
+    href: '/tools/cobra-deadline-calculator',
+    title: 'COBRA Deadline Calculator',
+    blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',
+  },
+  {
     href: '/tools/i9-section2-deadline-calculator',
     title: 'I-9 Section 2 Deadline Calculator and Self-Audit Checklist',
     blurb: 'Find the date Section 2 of Form I-9 is due for a new hire, skipping weekends and federal holidays, then check a completed form against the rules in the USCIS handbook.',

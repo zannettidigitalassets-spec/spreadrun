@@ -27,6 +27,7 @@ import Tools, { TOOLS, TOOLS_PATH } from './pages/Tools.jsx';
 import UadPreflight, { UAD_CHECKLIST_FAQ, UAD_CHECKLIST_PATH } from './pages/UadPreflight.jsx';
 import { UAD_ERROR_GUIDES, UAD_GUIDE_PUBLISHED, makeUadErrorGuide } from './pages/UadErrorGuides.jsx';
 import CpscChecklist, { CPSC_FAQ, CPSC_PATH } from './pages/CpscChecklist.jsx';
+import CobraDeadline, { COBRA_DEADLINE_FAQ, COBRA_DEADLINE_PATH } from './pages/CobraDeadline.jsx';
 import Unsubscribe from './pages/Unsubscribe.jsx';
 import ApprenticeChecker, { APPRENTICE_FAQ, APPRENTICE_PATH } from './pages/ApprenticeChecker.jsx';
 import Guides from './pages/Guides.jsx';
@@ -106,6 +107,7 @@ const D = {
   uadChecklist: 'Free UAD 3.6 pre-submission checklist: below grade areas, view and location codes, concessions, address, ratings, prices and the ZIP, with what UCDP does.',
   cpsc: 'Free CPSC eFiling readiness checklist for importers: CPC or GCC, lab ID, citations, test dates, Full vs Reference filing, Product Registry and FTZ timing.',
   apprentice: 'Free Davis-Bacon apprentice ratio checker: test each craft, each day, against your registered program ratio, and flag missing registration numbers. No signup.',
+  cobraDeadline: 'Free COBRA deadline calculator: enter the qualifying event and date to get the employer notice, election notice, election, first premium and coverage end dates.',
   i9: 'Free I-9 Section 2 deadline calculator: the 3rd business day after the first day of work, skipping weekends and federal holidays, plus a self-audit checklist.',
   fringeCalc: 'Free Davis-Bacon fringe benefit calculator: annualize plan costs over all hours worked for the hourly prevailing wage fringe credit and compare it to your rate.',
   otCalc: 'Free Davis-Bacon overtime calculator: time and a half on the basic rate for hours over 40 under CWHSSA, fringe owed per hour, and the weekly gross. No signup.',
@@ -299,6 +301,23 @@ export const ROUTES = {
       },
       faqLd(APPRENTICE_FAQ),
       crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [APPRENTICE_PATH, 'Davis-Bacon Apprentice Ratio Checker']]),
+    ],
+  },
+  [COBRA_DEADLINE_PATH]: {
+    Component: CobraDeadline,
+    title: 'Free COBRA Deadline Calculator: Every Date From the Qualifying Event | SpreadRun',
+    description: D.cobraDeadline,
+    priority: '0.8',
+    jsonLd: () => [
+      {
+        '@context': 'https://schema.org', '@type': 'WebApplication', name: 'COBRA Deadline Calculator',
+        alternateName: ['COBRA election notice deadline calculator', 'COBRA 44 day deadline calculator'],
+        url: ORIGIN + COBRA_DEADLINE_PATH, applicationCategory: 'BusinessApplication', operatingSystem: 'Web',
+        description: D.cobraDeadline, isAccessibleForFree: true, publisher: ORG,
+        keywords: 'COBRA deadline calculator, COBRA election notice deadline, COBRA 44 days, COBRA election period',
+      },
+      faqLd(COBRA_DEADLINE_FAQ),
+      crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [COBRA_DEADLINE_PATH, 'COBRA Deadline Calculator']]),
     ],
   },
   [I9_PATH]: {
