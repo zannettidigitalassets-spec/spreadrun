@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { emailSignupConversion } from './ads.js';
 
 // Optional email signup under a free tool. Never gates the tool, never a popup, nothing pre-checked. The form only
 // appears once the page's JavaScript runs, so without JavaScript nothing can be submitted by accident; the tool
@@ -32,6 +33,7 @@ export default function ToolSignup({ source, heading = 'Get new free-tool alerts
       if (res.ok) {
         setState({ phase: 'done', message: '' });
         if (window.gtag) window.gtag('event', 'tool_signup', { source });
+        emailSignupConversion();
       } else {
         const data = await res.json().catch(() => null);
         setState({ phase: 'error', message: data?.error?.message || 'That did not go through. Try again later.' });
