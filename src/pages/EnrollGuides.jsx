@@ -249,6 +249,7 @@ function ElectionItems() {
   return (
     <>
       <p>The COBRA election notice is the one that offers continuation coverage after a qualifying event. Its content is set by regulation: fourteen items, each of which has to be there. The notice also has to be "written in a manner calculated to be understood by the average plan participant."<Cite k="cfr606_4" at="(b)(4)" /></p>
+      <p>Working out the deadlines for each item? Run the dates through the <a href="/tools/cobra-deadline-calculator">free COBRA deadline calculator</a>.</p>
 
       <h2>The 14 items</h2>
       <p>Paraphrased here. The full text is in 29 CFR 2590.606-4(b)(4)(i) to (xiv).<Cite k="cfr606_4" at="(b)(4)" /></p>
