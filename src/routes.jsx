@@ -28,6 +28,7 @@ import UadPreflight, { UAD_CHECKLIST_FAQ, UAD_CHECKLIST_PATH } from './pages/Uad
 import { UAD_ERROR_GUIDES, UAD_GUIDE_PUBLISHED, makeUadErrorGuide } from './pages/UadErrorGuides.jsx';
 import CpscChecklist, { CPSC_FAQ, CPSC_PATH } from './pages/CpscChecklist.jsx';
 import CobraDeadline, { COBRA_DEADLINE_FAQ, COBRA_DEADLINE_PATH } from './pages/CobraDeadline.jsx';
+import AcaFte, { ACA_FAQ, ACA_PATH } from './pages/AcaFte.jsx';
 import Unsubscribe from './pages/Unsubscribe.jsx';
 import ApprenticeChecker, { APPRENTICE_FAQ, APPRENTICE_PATH } from './pages/ApprenticeChecker.jsx';
 import Guides from './pages/Guides.jsx';
@@ -107,6 +108,7 @@ const D = {
   uadChecklist: 'Free UAD 3.6 pre-submission checklist: below grade areas, view and location codes, concessions, address, ratings, prices and the ZIP, with what UCDP does.',
   cpsc: 'Free CPSC eFiling readiness checklist for importers: CPC or GCC, lab ID, citations, test dates, Full vs Reference filing, Product Registry and FTZ timing.',
   apprentice: 'Free Davis-Bacon apprentice ratio checker: test each craft, each day, against your registered program ratio, and flag missing registration numbers. No signup.',
+  aca: 'Free ACA FTE calculator: turn part-time hours into full-time equivalents, see if you reach 50 and are an ALE, and get the Form 1095-C filing deadlines.',
   cobraDeadline: 'Free COBRA deadline calculator: enter the qualifying event and date to get the employer notice, election notice, election, first premium and coverage end dates.',
   i9: 'Free I-9 Section 2 deadline calculator: the 3rd business day after the first day of work, skipping weekends and federal holidays, plus a self-audit checklist.',
   fringeCalc: 'Free Davis-Bacon fringe benefit calculator: annualize plan costs over all hours worked for the hourly prevailing wage fringe credit and compare it to your rate.',
@@ -301,6 +303,23 @@ export const ROUTES = {
       },
       faqLd(APPRENTICE_FAQ),
       crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [APPRENTICE_PATH, 'Davis-Bacon Apprentice Ratio Checker']]),
+    ],
+  },
+  [ACA_PATH]: {
+    Component: AcaFte,
+    title: 'ACA FTE Calculator: Are You an Applicable Large Employer? | SpreadRun',
+    description: D.aca,
+    priority: '0.8',
+    jsonLd: () => [
+      {
+        '@context': 'https://schema.org', '@type': 'WebApplication', name: 'ACA FTE Calculator',
+        alternateName: ['Full-time equivalent calculator', 'ALE calculator', 'Applicable large employer calculator'],
+        url: ORIGIN + ACA_PATH, applicationCategory: 'BusinessApplication', operatingSystem: 'Web',
+        description: D.aca, isAccessibleForFree: true, publisher: ORG,
+        keywords: 'ACA FTE calculator, applicable large employer, ALE 50 employees, full-time equivalent employees, 1095-C deadline',
+      },
+      faqLd(ACA_FAQ),
+      crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [ACA_PATH, 'ACA FTE Calculator']]),
     ],
   },
   [COBRA_DEADLINE_PATH]: {

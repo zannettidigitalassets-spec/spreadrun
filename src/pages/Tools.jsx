@@ -3,6 +3,11 @@ import Layout, { Crumbs } from '../site/Layout.jsx';
 export const TOOLS_PATH = '/tools';
 export const TOOLS = [
   {
+    href: '/tools/aca-fte-calculator',
+    title: 'ACA FTE Calculator',
+    blurb: 'Turn part-time hours into full-time equivalents, see whether you reach 50 and count as an applicable large employer, and get the Form 1095-C deadlines.',
+  },
+  {
     href: '/tools/cobra-deadline-calculator',
     title: 'COBRA Deadline Calculator',
     blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',

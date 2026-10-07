@@ -21,6 +21,7 @@ export const LOADERS = {
   '/tools': () => import('./pages/Tools.jsx'),
   '/tools/i9-section2-deadline-calculator': () => import('./pages/I9Deadline.jsx'),
   '/tools/cobra-deadline-calculator': () => import('./pages/CobraDeadline.jsx'),
+  '/tools/aca-fte-calculator': () => import('./pages/AcaFte.jsx'),
   '/tools/uad36-preflight-checklist': () => import('./pages/UadPreflight.jsx'),
   '/tools/cpsc-efiling-readiness-checklist': () => import('./pages/CpscChecklist.jsx'),
   '/docs': () => import('./pages/Docs.jsx'),
