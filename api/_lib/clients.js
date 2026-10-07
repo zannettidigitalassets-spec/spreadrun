@@ -30,6 +30,8 @@ export const PACKS = {
   pack_20: { priceCents: 2000, creditCents: 2000, label: '$20 credit pack (80 standard runs)' },
   pack_50: { priceCents: 5000, creditCents: 5000, label: '$50 credit pack (200 standard runs)' },
   pack_100: { priceCents: 10000, creditCents: 10000, label: '$100 credit pack (400 standard runs)' },
+  pack_250: { priceCents: 25000, creditCents: 25000, label: '$250 credit pack (1,000 standard runs)' },
+  pack_500: { priceCents: 50000, creditCents: 50000, label: '$500 credit pack (2,000 standard runs)' },
 };
 
 export const json = (body, status = 200) =>

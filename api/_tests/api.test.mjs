@@ -114,6 +114,41 @@ test('webhook: paid credit session grants the server-side pack amount and is the
   assert.equal(calls.filter((c) => c[0] === 'from' && c[1] === 'profiles').length, 0, 'old plink handling removed');
 });
 
+test('packs: six packs, one dollar of credit per dollar, the original four unchanged', () => {
+  assert.deepEqual(Object.keys(PACKS), ['pack_5', 'pack_20', 'pack_50', 'pack_100', 'pack_250', 'pack_500']);
+  for (const p of Object.values(PACKS)) assert.equal(p.creditCents, p.priceCents);
+  assert.deepEqual(Object.values(PACKS).map((p) => p.priceCents), [500, 2000, 5000, 10000, 25000, 50000]);
+  for (const p of Object.values(PACKS)) assert.ok(!/[–—−]/.test(p.label));
+});
+
+test('checkout and webhook: the $250 and $500 packs charge and grant their full amount', async () => {
+  for (const [pack, cents] of [['pack_250', 25000], ['pack_500', 50000]]) {
+    reset();
+    const checkout = await import('../credits/checkout.js');
+    let params;
+    stripe.checkout.sessions.create = async (p) => { params = p; return { url: 'https://checkout.stripe.com/c' }; };
+    const res = await checkout.POST(req('/api/credits/checkout', { headers: { authorization: 'Bearer good-jwt' }, body: { pack, amount: 1 } }));
+    assert.equal(res.status, 200);
+    assert.equal(params.line_items[0].price_data.unit_amount, cents);
+    assert.equal(params.metadata.pack, pack);
+
+    const hook = await import('../stripe-webhook.js');
+    stripe.webhooks.constructEvent = () => ({ type: 'checkout.session.completed', data: { object: {
+      id: `cs_${pack}`, payment_status: 'paid', amount_total: cents, currency: 'usd', customer: 'cus_1',
+      customer_details: { email: USER.email }, metadata: { kind: 'spreadrun_credits', user_id: USER.id, pack } } } });
+    const ok = await hook.POST(new Request('https://x/api/stripe-webhook', { method: 'POST', body: '{}', headers: { 'stripe-signature': 't' } }));
+    assert.equal(ok.status, 200);
+    assert.equal(account.balance_cents, cents, `${pack} grants ${cents / 100} dollars`);
+
+    // A session claiming the big pack while Stripe charged less grants nothing.
+    calls.length = 0;
+    stripe.webhooks.constructEvent = () => ({ type: 'checkout.session.completed', data: { object: {
+      id: `cs_${pack}_x`, payment_status: 'paid', amount_total: 10000, currency: 'usd', metadata: { kind: 'spreadrun_credits', user_id: USER.id, pack } } } });
+    await hook.POST(new Request('https://x/api/stripe-webhook', { method: 'POST', body: '{}', headers: { 'stripe-signature': 't' } }));
+    assert.equal(calls.filter((c) => c[0] === 'grant_credits').length, 0);
+  }
+});
+
 test('webhook: bad signature -> 400', async () => {
   reset();
   const { POST } = await import('../stripe-webhook.js');
