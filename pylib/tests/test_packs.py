@@ -49,10 +49,12 @@ class PackCoverage(unittest.TestCase):
         self.assertEqual(self.fake.balance[user], 20000)
 
     def test_existing_prices_unchanged(self):
-        self.assertEqual({k: v['price_cents'] for k, v in catalog.APIS.items()}, {
+        existing = {
             'clinical-trial-table-validator': 25, 'hospital-mrf-validator': 25, 'uad-36-appraisal-validator': 100,
             'pbj-staffing-qa': 2500, 'wh347-payroll-precheck': 2500, 'pecos-enrollment-precheck': 2500,
-            'cobra-notice-qa': 2500, 'cmmc-self-assessment-validator': 2500, SCA: 10000})
+            'cobra-notice-qa': 2500, 'cmmc-self-assessment-validator': 2500, SCA: 10000}
+        for slug, cents in existing.items():
+            self.assertEqual(catalog.APIS[slug]['price_cents'], cents, slug)
 
 
 if __name__ == '__main__':
