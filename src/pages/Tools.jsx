@@ -18,6 +18,11 @@ export const TOOLS = [
     blurb: 'Pick the state, project type and your role to see the preliminary notice, lien filing and foreclosure suit deadlines, each linked to the state statute.',
   },
   {
+    href: '/tools/aca-fte-calculator',
+    title: 'ACA FTE Calculator',
+    blurb: 'Turn part-time hours into full-time equivalents, see whether you reach 50 and count as an applicable large employer, and get the Form 1095-C deadlines.',
+  },
+  {
     href: '/tools/cobra-deadline-calculator',
     title: 'COBRA Deadline Calculator',
     blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',
