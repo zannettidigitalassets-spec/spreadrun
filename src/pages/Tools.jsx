@@ -3,6 +3,11 @@ import Layout, { Crumbs } from '../site/Layout.jsx';
 export const TOOLS_PATH = '/tools';
 export const TOOLS = [
   {
+    href: '/tools/final-paycheck-deadline',
+    title: 'Final Paycheck Deadline by State',
+    blurb: 'The date final wages are due in all 50 states and DC when someone is fired, laid off or quits, with the late penalty and the source for each state.',
+  },
+  {
     href: '/tools/cobra-deadline-calculator',
     title: 'COBRA Deadline Calculator',
     blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',
