@@ -63,6 +63,9 @@ def _run(api, body, query, *, demo):
         return runners.run_cobra(body, demo=demo)
     if api == 'cmmc-self-assessment-validator':
         return runners.run_cmmc(body, demo=demo)
+    if api == 'ice-adequacy-precheck':
+        params = {k: v[0] for k, v in query.items() if k not in ('channel', 'slug')}
+        return runners.run_ice(body, query=params, demo=demo)
     if api == 'sca-hw-fringe-checker':
         # Every query key except the route's own goes to the engine, which refuses unknown ones (no silent typos).
         params = {k: v[0] for k, v in query.items() if k not in ('channel', 'slug')}
@@ -161,7 +164,8 @@ def process(api, mode, headers, read_body, path='/'):
     if length <= 0:
         return _err(400, 'input_error', 'Send the input as the request body (Content-Length required).', requestId=request_id)
     if length > limit:
-        return _err(413, 'payload_too_large', f'Request body is over the {limit:,} byte limit for this endpoint.',
+        return _err(413, 'payload_too_large', cfg.get('too_large_message')
+                    or f'Request body is over the {limit:,} byte limit for this endpoint.',
                     limitBytes=limit, requestId=request_id)
 
     if demo:
