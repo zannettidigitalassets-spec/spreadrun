@@ -32,6 +32,7 @@ import FinalPaycheck, { FINAL_PAY_FAQ, FINAL_PAY_PATH } from './pages/FinalPaych
 import ContractorCheck, { CONTRACTOR_FAQ, CONTRACTOR_PATH } from './pages/ContractorCheck.jsx';
 import LienDeadline, { LIEN_FAQ, LIEN_PATH } from './pages/LienDeadline.jsx';
 import AcaFte, { ACA_FAQ, ACA_PATH } from './pages/AcaFte.jsx';
+import PecosRevalidation, { PECOS_REVAL_FAQ, PECOS_REVAL_PATH } from './pages/PecosRevalidation.jsx';
 import Unsubscribe from './pages/Unsubscribe.jsx';
 import ApprenticeChecker, { APPRENTICE_FAQ, APPRENTICE_PATH } from './pages/ApprenticeChecker.jsx';
 import Guides from './pages/Guides.jsx';
@@ -115,6 +116,7 @@ const D = {
   contractor: 'Free contractor vs employee check: six DOL economic reality factors plus your state\'s test, with a risk rating per factor and overall. Every state test cited.',
   lien: 'Free mechanics lien deadline calculator for all 50 states and DC: preliminary notice, lien filing and foreclosure suit dates, each linked to its state statute.',
   aca: 'Free ACA FTE calculator: turn part-time hours into full-time equivalents, see if you reach 50 and are an ALE, and get the Form 1095-C filing deadlines.',
+  pecosReval: 'Free Medicare revalidation calculator: pick your provider type and last enrollment or revalidation date to estimate the due date, with a 90/60/30 day countdown.',
   cobraDeadline: 'Free COBRA deadline calculator: enter the qualifying event and date to get the employer notice, election notice, election, first premium and coverage end dates.',
   i9: 'Free I-9 Section 2 deadline calculator: the 3rd business day after the first day of work, skipping weekends and federal holidays, plus a self-audit checklist.',
   fringeCalc: 'Free Davis-Bacon fringe benefit calculator: annualize plan costs over all hours worked for the hourly prevailing wage fringe credit and compare it to your rate.',
@@ -377,6 +379,23 @@ export const ROUTES = {
       },
       faqLd(ACA_FAQ),
       crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [ACA_PATH, 'ACA FTE Calculator']]),
+    ],
+  },
+  [PECOS_REVAL_PATH]: {
+    Component: PecosRevalidation,
+    title: 'Free Medicare Revalidation Calculator: PECOS Due Date and Countdown | SpreadRun',
+    description: D.pecosReval,
+    priority: '0.8',
+    jsonLd: () => [
+      {
+        '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Medicare Revalidation Calculator',
+        alternateName: ['PECOS revalidation calculator', 'Medicare revalidation due date calculator'],
+        url: ORIGIN + PECOS_REVAL_PATH, applicationCategory: 'BusinessApplication', operatingSystem: 'Web',
+        description: D.pecosReval, isAccessibleForFree: true, publisher: ORG,
+        keywords: 'Medicare revalidation due date, PECOS revalidation, DMEPOS revalidation 3 years, 42 CFR 424.515',
+      },
+      faqLd(PECOS_REVAL_FAQ),
+      crumbsLd([...HOME, [TOOLS_PATH, 'Free tools'], [PECOS_REVAL_PATH, 'Medicare Revalidation Calculator']]),
     ],
   },
   [COBRA_DEADLINE_PATH]: {

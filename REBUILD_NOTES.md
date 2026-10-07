@@ -615,3 +615,13 @@ Federal Miller Act projects are out of scope.
 Branch `spreadrun/aca-fte-calculator`, not merged. Page /tools/aca-fte-calculator; math in `src/site/aca-fte.js`, browser only.
 
 Sources read October 7, 2026: 26 CFR 54.4980H-2 (eCFR) for the FTE formula (hours capped at 120 per employee, divided by 120, fractions kept), the yearly average rounded down, the 50 threshold and the seasonal worker exception (120 days or four calendar months); the IRS ALE page for the 30-hour / 130-hour full-time definition, its two worked examples and the section 414 aggregation rule; 26 CFR 301.6056-1(g) for the January 31 statement date with the automatic 30-day extension; the IRS Instructions for Forms 1094-C and 1095-C (2025) for February 28 paper, March 31 electronic, the weekend rule and the 10-return e-file threshold. The 2025 dates match the instructions exactly (March 2, March 2, March 31, 2026); 2026 dates apply the same rules (March 2, March 1, March 31, 2027). Penalty amounts are not shown because they are indexed each year.
+
+## Free Medicare (PECOS) revalidation calculator (branch `spreadrun/pecos-revalidation-calculator`, October 7, 2026)
+
+- Route `/tools/pecos-revalidation-calculator`; lib `src/site/pecos-revalidation.js`; page `src/pages/PecosRevalidation.jsx`; tests `scripts/tests/pecos-revalidation.test.mjs`.
+- Inputs: provider or supplier type (855I, 855B, 855A, ambulance, DMEPOS 855S) and the enrollment effective date or last revalidation approval date.
+- Output: estimated due date (base date plus 5 years, or 3 for DMEPOS; February 29 becomes February 28), a live countdown that re-reads the local date every minute, the 90/60/30 day marks, the 7-month list posting, the 3 to 4 month notice and the 3-month "revalidate without a notice" mark, plus a cited paragraph on deactivation and payment.
+- Sources read October 7, 2026: 42 CFR 424.515 (5 years; CMS notice; 60 days), 424.57(g) (DMEPOS 3 years), 410.41(c)(2) (ambulance on the contractor's request), 424.540(a)(3), (b), (d) (deactivation at 90 days, retroactive date, reactivation effective on receipt), 424.555(b) (no payment while deactivated), and the CMS Revalidations page (list posted 7 months ahead, notices about 3 to 4 months ahead from MACs or the NPE DMEPOS East and West contractors, no extensions or exemptions, unsolicited early revalidations returned).
+- Ambulance: the regulation has no fixed cycle, so the page labels the 5-year date an estimate and says why.
+- CTA goes to `/apis/pecos-enrollment-precheck` (the real slug) with the line from the prompt.
+- No new serverless functions; nothing leaves the browser.

@@ -23,6 +23,11 @@ export const TOOLS = [
     blurb: 'Turn part-time hours into full-time equivalents, see whether you reach 50 and count as an applicable large employer, and get the Form 1095-C deadlines.',
   },
   {
+    href: '/tools/pecos-revalidation-calculator',
+    title: 'Medicare Revalidation Calculator',
+    blurb: 'Enter your provider or supplier type and your last enrollment or revalidation date to estimate the due date, with a live 90, 60 and 30 day countdown and when the notice should arrive.',
+  },
+  {
     href: '/tools/cobra-deadline-calculator',
     title: 'COBRA Deadline Calculator',
     blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',

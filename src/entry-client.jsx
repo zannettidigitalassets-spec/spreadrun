@@ -25,6 +25,7 @@ export const LOADERS = {
   '/tools/contractor-vs-employee-check': () => import('./pages/ContractorCheck.jsx'),
   '/tools/mechanics-lien-deadline-calculator': () => import('./pages/LienDeadline.jsx'),
   '/tools/aca-fte-calculator': () => import('./pages/AcaFte.jsx'),
+  '/tools/pecos-revalidation-calculator': () => import('./pages/PecosRevalidation.jsx'),
   '/tools/uad36-preflight-checklist': () => import('./pages/UadPreflight.jsx'),
   '/tools/cpsc-efiling-readiness-checklist': () => import('./pages/CpscChecklist.jsx'),
   '/docs': () => import('./pages/Docs.jsx'),
