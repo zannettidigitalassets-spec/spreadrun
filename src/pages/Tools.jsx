@@ -3,6 +3,11 @@ import Layout, { Crumbs } from '../site/Layout.jsx';
 export const TOOLS_PATH = '/tools';
 export const TOOLS = [
   {
+    href: '/tools/pecos-revalidation-calculator',
+    title: 'Medicare Revalidation Calculator',
+    blurb: 'Enter your provider or supplier type and your last enrollment or revalidation date to estimate the due date, with a live 90, 60 and 30 day countdown and when the notice should arrive.',
+  },
+  {
     href: '/tools/cobra-deadline-calculator',
     title: 'COBRA Deadline Calculator',
     blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',
