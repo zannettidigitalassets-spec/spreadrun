@@ -15,6 +15,8 @@ export const CREDIT_PACKS = [
   { id: 'pack_20', priceCents: 2000, calls: 80 },
   { id: 'pack_50', priceCents: 5000, calls: 200 },
   { id: 'pack_100', priceCents: 10000, calls: 400 },
+  { id: 'pack_250', priceCents: 25000, calls: 1000 },
+  { id: 'pack_500', priceCents: 50000, calls: 2000 },
 ];
 
 // Three tiers in the data model. Only tiers with showOnSite are rendered.
@@ -151,4 +153,10 @@ export const APIS = [
 export const PARTNER_APIS = [];
 
 export const apiBySlug = (slug) => APIS.find((a) => a.slug === slug);
+
+// Runs a pack covers at a price: a whole number when exact, otherwise one decimal, rounded down so it never
+// overstates (a $250 pack covers 2.5 runs at $100).
+export const runsPer = (packCents, priceCents) => (packCents % priceCents === 0
+  ? String(packCents / priceCents)
+  : (Math.floor((packCents * 10) / priceCents) / 10).toFixed(1));
 export const dollars = (cents) => `$${(cents / 100).toFixed(2)}`;

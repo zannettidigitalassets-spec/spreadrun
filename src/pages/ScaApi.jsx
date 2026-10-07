@@ -153,7 +153,7 @@ export default function ScaApi() {
         <p><b>{dollars(API.priceCents)} per completed check.</b> One pay period, every employee, one full report.</p>
         <ul>
           <li>Billed when a report is produced, PASS, WARN or FAIL. Invalid input is never billed.</li>
-          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50 or $100 packs. A $100 pack covers {Math.floor(10000 / API.priceCents)} {Math.floor(10000 / API.priceCents) === 1 ? 'check' : 'checks'}. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
+          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50, $100, $250 or $500 packs. A $100 pack covers {Math.floor(10000 / API.priceCents)} {Math.floor(10000 / API.priceCents) === 1 ? 'check' : 'checks'}. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
           <li>Checking many contracts or clients? <a href="/contact">Talk to us</a> first so we can tell you honestly whether this fits.</li>
         </ul>
         <div className="btn-row"><a className="btn" href="#demo">Check a pay period</a><a className="btn secondary" href="/account">Get API access</a></div>
