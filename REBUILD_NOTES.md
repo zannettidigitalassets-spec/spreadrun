@@ -561,3 +561,9 @@ Corrections to the brief:
 - Added an optional "plan measures from the loss of coverage" box: 54.4980B-7 Q&A-4(b) and 606-2/606-4 let a plan start the employer notice, the 44 days and the coverage period at the loss of coverage, only if the plan document says so.
 - Deadlines are calendar days and are not moved off weekends; the regulations do not move them.
 - Month arithmetic: when the target month has no matching day, the last day of that month is used (a convention the regulations do not set; stated on the page).
+
+## ACA FTE calculator, October 7, 2026
+
+Branch `spreadrun/aca-fte-calculator`, not merged. Page /tools/aca-fte-calculator; math in `src/site/aca-fte.js`, browser only.
+
+Sources read October 7, 2026: 26 CFR 54.4980H-2 (eCFR) for the FTE formula (hours capped at 120 per employee, divided by 120, fractions kept), the yearly average rounded down, the 50 threshold and the seasonal worker exception (120 days or four calendar months); the IRS ALE page for the 30-hour / 130-hour full-time definition, its two worked examples and the section 414 aggregation rule; 26 CFR 301.6056-1(g) for the January 31 statement date with the automatic 30-day extension; the IRS Instructions for Forms 1094-C and 1095-C (2025) for February 28 paper, March 31 electronic, the weekend rule and the 10-return e-file threshold. The 2025 dates match the instructions exactly (March 2, March 2, March 31, 2026); 2026 dates apply the same rules (March 2, March 1, March 31, 2027). Penalty amounts are not shown because they are indexed each year.
