@@ -3,7 +3,7 @@ import { PriceTable } from './pages/Catalog.jsx';
 
 // Approved 2026-10-02 from docs/legal-drafts/terms-DRAFT.md with the owner's decisions applied:
 // brand-only operator wording, 30-day refunds on unused credits, and no PHI or personal data in submissions.
-export const UPDATED = 'October 5, 2026';
+export const UPDATED = 'October 7, 2026';
 
 export default function Terms() {
   return (
