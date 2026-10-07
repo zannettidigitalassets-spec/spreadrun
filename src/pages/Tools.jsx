@@ -3,6 +3,11 @@ import Layout, { Crumbs } from '../site/Layout.jsx';
 export const TOOLS_PATH = '/tools';
 export const TOOLS = [
   {
+    href: '/tools/contractor-vs-employee-check',
+    title: 'Contractor vs Employee Check',
+    blurb: 'Six questions on the federal economic reality factors, then your state\'s own test on top. A risk rating per factor and overall, with every state test linked to its source.',
+  },
+  {
     href: '/tools/cobra-deadline-calculator',
     title: 'COBRA Deadline Calculator',
     blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',
