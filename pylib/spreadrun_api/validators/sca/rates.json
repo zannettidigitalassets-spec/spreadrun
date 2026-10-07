@@ -1,0 +1,17 @@
+{
+  "note": "SCA health and welfare (H&W) rates per hour. The ONLY place a rate lives: engine.py and the website read it from here. DOL updates the rate each summer by All Agency Memorandum; when it does, change the numbers, the memo and the dates here, and nothing else.",
+  "memo": "All Agency Memorandum No. 252",
+  "effective": "2026-08-10",
+  "readOn": "2026-10-07",
+  "verifiedAgainst": [
+    "SAM.gov All Agency Memorandums list: AAM 252, 2026-08-10, 2026 Service Contract Act Health and Welfare Fringe Benefit, $5.92 per hour",
+    "SAM.gov WD 2015-4281 Rev. 39: H&W $5.92; H&W EO 13706 $5.42",
+    "SAM.gov WD 2015-5689 Rev. 30 (Hawaii): $2.51 with HPHCA coverage, $2.01 on EO 13706 contracts; $5.92 or $5.42 without HPHCA coverage"
+  ],
+  "rates": {
+    "standard": "5.92",
+    "eo13706": "5.42",
+    "hawaiiHphca": "2.51",
+    "hawaiiHphcaEo13706": "2.01"
+  }
+}

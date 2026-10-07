@@ -63,6 +63,10 @@ def _run(api, body, query, *, demo):
         return runners.run_cobra(body, demo=demo)
     if api == 'cmmc-self-assessment-validator':
         return runners.run_cmmc(body, demo=demo)
+    if api == 'sca-hw-fringe-checker':
+        # Every query key except the route's own goes to the engine, which refuses unknown ones (no silent typos).
+        params = {k: v[0] for k, v in query.items() if k not in ('channel', 'slug')}
+        return runners.run_sca(body, query=params, demo=demo)
     cfg = APIS[api]
     mode = (query.get('mode') or ['sample'])[0]
     raw_max = (query.get('maxRecords') or [str(cfg['default_max_records'])])[0]

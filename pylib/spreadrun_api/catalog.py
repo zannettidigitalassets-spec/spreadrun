@@ -69,6 +69,13 @@ APIS = {
         'max_body_bytes': 256 * 1024,
         'demo_max_body_bytes': 64 * 1024,
     },
+    'sca-hw-fringe-checker': {
+        'name': 'SCA Health and Welfare Fringe Checker',
+        'price_cents': 10000,   # pre-audit tier
+        # One pay period's employees: CSV, JSON with the CSV, or an .xlsx workbook. Whole file checked, no sampling.
+        'max_body_bytes': 4_400_000,
+        'demo_max_body_bytes': 64 * 1024,
+    },
 }
 
 DEMO_RUNS_PER_DAY = 10
