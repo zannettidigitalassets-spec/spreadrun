@@ -13,6 +13,11 @@ export const TOOLS = [
     blurb: 'Six questions on the federal economic reality factors, then your state\'s own test on top. A risk rating per factor and overall, with every state test linked to its source.',
   },
   {
+    href: '/tools/mechanics-lien-deadline-calculator',
+    title: 'Mechanics Lien Deadline Calculator',
+    blurb: 'Pick the state, project type and your role to see the preliminary notice, lien filing and foreclosure suit deadlines, each linked to the state statute.',
+  },
+  {
     href: '/tools/cobra-deadline-calculator',
     title: 'COBRA Deadline Calculator',
     blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',

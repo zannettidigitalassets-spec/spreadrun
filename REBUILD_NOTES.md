@@ -592,3 +592,20 @@ Federal factors: 29 CFR 795.110 (eCFR). Status read on dol.gov October 6, 2026: 
 Rating logic (cautious by design, the rule has no formula): federal "likely employee" at 4+ employee answers, or 3+ with none for contractor; "likely contractor" needs 5+ contractor answers and none for employee; everything else is "high risk, uncertain". A state test answered "no" on any ABC, two-part, control or checklist question makes the overall rating "likely employee"; "not sure" anywhere keeps it at high risk; a missed safe harbor (NV wage, WV) is high risk, not employee.
 
 States: each state's unemployment test, plus the wage law test where different, read on the state's own code site or labor agency in the browser. GA, AR and MS publish their codes officially only through a commercial host, so no test is shown for them and the page says the rating uses the federal factors only. NJ, PA and TN are cited to their labor agency pages that quote the statute. Construction and trucking rules (DC, MD, MN, NY, OH, PA) are shown as notes when the state is picked. ORS 670.600 checked against the 2026 Oregon amendment table: not amended.
+
+## Mechanics lien deadline calculator, October 6, 2026
+
+Branch `spreadrun/mechanics-lien-deadline-calculator`, not merged. Page /tools/mechanics-lien-deadline-calculator; math in `src/site/lien-deadlines.js`, rules in `src/site/lien-states.js` (generated from research notes), browser only, no network calls.
+
+Each state's private lien statute and public works bond (or public funds) statute was read on the state's own code site in the browser. 47 jurisdictions are covered; GA, AR, MS and TN publish their official code only through a commercial host, so the page gives no dates for them and says so.
+
+Conservative choices, all flagged on the page with "Confirm with a construction attorney in this state":
+- Where a deadline runs from project completion, acceptance, final settlement or an owner's notice of completion, it is measured from the claimant's own last furnishing date, which is never later.
+- Where a notice of completion can shorten the period (CA, AZ, NV, AK, UT), the shortest period is shown.
+- Monthly notice regimes (TX notices, KY public claims) show the first-month and last-month dates.
+- Where the statute counts from each item furnished (NH, RI), the date counts from the first furnishing.
+- Suppliers are assumed to sell to a subcontractor (the stricter case) for bond notices.
+- Residential rules that depend on dwelling size or owner occupancy use the shorter period and say so.
+- Deadlines are not moved off weekends or holidays.
+- Where a bond statute sets no claim or suit deadline (WA suit, MO suit, WV, DE, MT suit, VT), the page says so instead of inventing one.
+Federal Miller Act projects are out of scope.

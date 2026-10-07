@@ -23,6 +23,7 @@ export const LOADERS = {
   '/tools/cobra-deadline-calculator': () => import('./pages/CobraDeadline.jsx'),
   '/tools/final-paycheck-deadline': () => import('./pages/FinalPaycheck.jsx'),
   '/tools/contractor-vs-employee-check': () => import('./pages/ContractorCheck.jsx'),
+  '/tools/mechanics-lien-deadline-calculator': () => import('./pages/LienDeadline.jsx'),
   '/tools/uad36-preflight-checklist': () => import('./pages/UadPreflight.jsx'),
   '/tools/cpsc-efiling-readiness-checklist': () => import('./pages/CpscChecklist.jsx'),
   '/docs': () => import('./pages/Docs.jsx'),
