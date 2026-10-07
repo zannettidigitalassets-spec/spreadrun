@@ -22,6 +22,7 @@ export const LOADERS = {
   '/tools/i9-section2-deadline-calculator': () => import('./pages/I9Deadline.jsx'),
   '/tools/cobra-deadline-calculator': () => import('./pages/CobraDeadline.jsx'),
   '/tools/final-paycheck-deadline': () => import('./pages/FinalPaycheck.jsx'),
+  '/tools/contractor-vs-employee-check': () => import('./pages/ContractorCheck.jsx'),
   '/tools/uad36-preflight-checklist': () => import('./pages/UadPreflight.jsx'),
   '/tools/cpsc-efiling-readiness-checklist': () => import('./pages/CpscChecklist.jsx'),
   '/docs': () => import('./pages/Docs.jsx'),

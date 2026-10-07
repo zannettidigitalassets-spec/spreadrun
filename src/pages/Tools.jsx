@@ -8,6 +8,11 @@ export const TOOLS = [
     blurb: 'The date final wages are due in all 50 states and DC when someone is fired, laid off or quits, with the late penalty and the source for each state.',
   },
   {
+    href: '/tools/contractor-vs-employee-check',
+    title: 'Contractor vs Employee Check',
+    blurb: 'Six questions on the federal economic reality factors, then your state\'s own test on top. A risk rating per factor and overall, with every state test linked to its source.',
+  },
+  {
     href: '/tools/cobra-deadline-calculator',
     title: 'COBRA Deadline Calculator',
     blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',
