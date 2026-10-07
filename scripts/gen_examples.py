@@ -157,3 +157,15 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     clean_csv = json.loads((SAMPLES / 'sca-clean.json').read_text())['employeesCsv'].encode()
     save('sca-input-error', *post(paid, clean_csv, {**rich_auth, 'Content-Type': 'text/csv'},
                                   query='?wdType=average&eo13706=true'))
+
+    # ICE: the invented company in the sample workbooks. The demo endpoint takes the published samples only.
+    k = 'ice-adequacy-precheck'
+    paid, demo = serve(k, 'paid'), serve(k, 'demo')
+    rich, _ = fake.add_user(50000)
+    xlsx = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ice_q = '?fiscalYearEnd=2026-06-30&asOf=2026-10-07'
+    save('ice-paid-pass', *post(paid, (SAMPLES / 'ice-template-clean.xlsx').read_bytes(),
+                                {'Authorization': f'Bearer {rich}', 'Content-Type': xlsx}, query=ice_q))
+    save('ice-demo-fail', *post(demo, (SAMPLES / 'ice-errors.xlsx').read_bytes(), {'Content-Type': xlsx}, query=ice_q))
+    save('ice-input-error', *post(paid, b'\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1' + b'\0' * 504,
+                                  {'Authorization': f'Bearer {rich}', 'Content-Type': 'application/vnd.ms-excel'}, query=ice_q))
