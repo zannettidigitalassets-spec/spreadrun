@@ -1,0 +1,9 @@
+{
+  "parameters": {
+    "wdType": "fixed",
+    "eo13706": true,
+    "hawaii": false,
+    "periodWeeks": 1
+  },
+  "employeesCsv": "employee_ref,hours_paid,plan_contributions,cash_in_lieu,admin_costs_credited,hw_hours_credited,wage_rate_paid,wd_wage_rate,cash_in_lieu_separate\nE-101,45,216.80,0,0,40,24.10,24.10,yes\nE-102,40,150.00,66.80,0,40,22.00,22.00,yes\nE-103,20,0,0,0,20,18.50,18.50,yes\nE-104,40,216.80,0,15.00,40,21.58,21.58,yes\nE-105,40,0,0,0,,27.00,21.58,yes\nE-106,24,0,130.08,0,40,19.00,19.00,no\nE-107,40,216.80,0,0,32,21.58,21.58,yes\n"
+}

@@ -1,0 +1,166 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "sca-hw-fringe-checker",
+    "mode": "paid",
+    "charged": true,
+    "priceCents": 10000,
+    "balanceCents": 10000,
+    "report": {
+      "schemaVersion": 1,
+      "status": "PASS",
+      "summary": "Every employee received at least the required H&W, and no recordkeeping problems were found.",
+      "parameters": {
+        "wdType": "fixed",
+        "eo13706": true,
+        "hawaii": false,
+        "periodWeeks": 1,
+        "weeklyHours": false,
+        "annualCapApplied": false,
+        "rates": {
+          "rate": "5.42",
+          "basis": "default"
+        },
+        "rateMemo": "All Agency Memorandum No. 252",
+        "rateEffective": "2026-08-10"
+      },
+      "totals": {
+        "employees": 4,
+        "passing": 4,
+        "failing": 0,
+        "required": "715.44",
+        "furnished": "715.44",
+        "backWageExposure": "0.00"
+      },
+      "employees": [
+        {
+          "line": 2,
+          "hoursCounted": "40.00",
+          "capped": true,
+          "rate": "5.42",
+          "required": "216.80",
+          "furnished": "216.80",
+          "notCreditable": "0.00",
+          "shortfall": "0.00",
+          "result": "PASS",
+          "partTime": false
+        },
+        {
+          "line": 3,
+          "hoursCounted": "40.00",
+          "capped": false,
+          "rate": "5.42",
+          "required": "216.80",
+          "furnished": "216.80",
+          "notCreditable": "0.00",
+          "shortfall": "0.00",
+          "result": "PASS",
+          "partTime": false
+        },
+        {
+          "line": 4,
+          "hoursCounted": "20.00",
+          "capped": false,
+          "rate": "5.42",
+          "required": "108.40",
+          "furnished": "108.40",
+          "notCreditable": "0.00",
+          "shortfall": "0.00",
+          "result": "PASS",
+          "partTime": true
+        },
+        {
+          "line": 5,
+          "hoursCounted": "32.00",
+          "capped": false,
+          "rate": "5.42",
+          "required": "173.44",
+          "furnished": "173.44",
+          "notCreditable": "0.00",
+          "shortfall": "0.00",
+          "result": "PASS",
+          "partTime": true
+        }
+      ],
+      "shortfallLines": [],
+      "recordkeeping": [
+        {
+          "item": "separate",
+          "label": "Wages kept separate from H&W fringe on payroll records",
+          "status": "clear",
+          "lines": [],
+          "source": "fs67b"
+        },
+        {
+          "item": "partTime",
+          "label": "Part-time employees given pro-rated H&W",
+          "status": "clear",
+          "lines": [],
+          "source": "fs67b"
+        },
+        {
+          "item": "adminCosts",
+          "label": "No administrative costs or fees credited against H&W",
+          "status": "clear",
+          "lines": [],
+          "source": "fs67b"
+        }
+      ],
+      "findingCount": 0,
+      "findingCounts": {
+        "error": 0,
+        "warning": 0
+      },
+      "ruleCounts": {},
+      "findings": [],
+      "findingsTruncated": false,
+      "notes": [
+        "Default rate from All Agency Memorandum No. 252, effective 2026-08-10. Use the rate printed on your contract's wage determination if it is different: an existing contract keeps its rate until the contracting officer adds a revised wage determination."
+      ],
+      "methodology": [
+        "Hours counted: all hours paid in the period, including paid vacation, sick leave and holidays, up to 40 per week. With weekly hour columns each week is capped at 40; without them the period total is capped at 40 times the number of weeks. If ytd_hw_hours is given, hours past 2,080 for the contract year are not counted.",
+        "Required H&W: hours counted times the H&W rate, rounded to the cent.",
+        "Furnished H&W: bona fide plan contributions plus cash in lieu, less any administrative costs or employee-paid amounts included in the contributions, which cannot be credited.",
+        "Shortfall: required minus furnished, when positive. Each employee is checked on their own; an overpayment for one employee never covers another.",
+        "Back wage exposure: the sum of the shortfalls for the period."
+      ],
+      "notChecked": [
+        "Whether your wage determination is the right one for the contract, and whether its rate is the one in effect. Existing contracts change rates only when the contracting officer adds a revised wage determination.",
+        "Whether each worker is a covered service employee and correctly classified.",
+        "Whether your plans are bona fide under 29 CFR 4.171: written, funded, irrevocable and communicated to employees.",
+        "Vacation, holiday and EO 13706 paid sick leave obligations. Paid sick leave under EO 13706 cannot be credited toward H&W.",
+        "Whether cash in lieu was paid on the regular payday and whether the hours and amounts you entered are accurate.",
+        "Average cost health and welfare wage determinations."
+      ],
+      "sources": {
+        "cfr4.170": "29 CFR 4.170(a): fringe benefits separate from and in addition to wages; no offset by higher wages; separate records",
+        "cfr4.171": "29 CFR 4.171(a)(1): employee contributions are not creditable",
+        "cfr4.172": "29 CFR 4.172: the stated amount is the minimum; no deduction for administrative costs; 40 hours a week and 2,080 a year",
+        "cfr4.175": "29 CFR 4.175: health and welfare on all hours paid, employee by employee; average cost determinations; employees excluded from a plan",
+        "cfr4.176": "29 CFR 4.176: temporary and part-time employees, pro-rated benefits",
+        "cfr4.177": "29 CFR 4.177: meeting the obligation with equivalent benefits or cash",
+        "fs67b": "DOL Wage and Hour Division Fact Sheet #67B (October 2024): Meeting Requirements for SCA Fringe Benefits, Common Violations",
+        "aam246": "DOL All Agency Memorandum No. 246 (July 16, 2024): average cost H&W wage determinations not issued or used for new contracts",
+        "rates": "DOL All Agency Memorandum No. 252, effective 2026-08-10, as printed on current SAM.gov wage determinations"
+      },
+      "scope": "A math check of the H&W amounts you entered against the published SCA rules. It is not a compliance determination, not legal advice and not DOL acceptance. A PASS means the arithmetic on these rows meets the rate you chose; your obligations under the contract remain yours.",
+      "input": {
+        "format": "json",
+        "bytes": 444,
+        "columns": [
+          "admin_costs_credited",
+          "cash_in_lieu",
+          "cash_in_lieu_separate",
+          "employee_ref",
+          "hours_paid",
+          "hw_hours_credited",
+          "plan_contributions",
+          "wage_rate_paid",
+          "wd_wage_rate"
+        ]
+      },
+      "inputSha256": "2a5c38e2661e1f52a42ffaab956ba51bb16c5fddcdaf7ac60bc8d934c6d945d3"
+    }
+  }
+}
