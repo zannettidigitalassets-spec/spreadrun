@@ -50,6 +50,7 @@ const NEED_LD = {
   '/tools/pbj-preflight-checks': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/tools/i9-section2-deadline-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/tools/cobra-deadline-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
+  '/tools/mechanics-lien-deadline-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/tools/uad36-preflight-checklist': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/tools/cpsc-efiling-readiness-checklist': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
   '/docs': ['BreadcrumbList'],
@@ -170,7 +171,7 @@ const client = fs.readFileSync(path.join(root, 'src/entry-client.jsx'), 'utf8');
 for (const u of known) if (!client.includes(`'${u}': () => import(`)) fail(`${u}: no client loader in entry-client.jsx`);
 
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
-for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/apis/pecos-enrollment-precheck', '/apis/cmmc-self-assessment-validator', '/apis/cobra-notice-qa', '/tools/davis-bacon-apprentice-checker', '/tools', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator', '/tools/cobra-deadline-calculator', '/tools/uad36-preflight-checklist', '/tools/cpsc-efiling-readiness-checklist', '/docs',
+for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/apis/pecos-enrollment-precheck', '/apis/cmmc-self-assessment-validator', '/apis/cobra-notice-qa', '/tools/davis-bacon-apprentice-checker', '/tools', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator', '/tools/cobra-deadline-calculator', '/tools/mechanics-lien-deadline-calculator', '/tools/uad36-preflight-checklist', '/tools/cpsc-efiling-readiness-checklist', '/docs',
   '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/docs/wh347-payroll-precheck', '/docs/pecos-enrollment-precheck', '/docs/cmmc-self-assessment-validator', '/docs/cobra-notice-qa', '/guides',
   '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks',
   '/guides/uad36-fatal-findings-explained', '/guides/ucdp-not-successful-meaning', '/guides/uad36-warning-vs-fatal', '/guides/uad36-basement-fields-hard-stop', '/guides/uad36-location-view-codes-rejected', '/guides/uad36-concession-mismatch', '/guides/uad36-address-usps-flag', '/guides/ucdp-not-successful-vs-rejected',

@@ -3,6 +3,11 @@ import Layout, { Crumbs } from '../site/Layout.jsx';
 export const TOOLS_PATH = '/tools';
 export const TOOLS = [
   {
+    href: '/tools/mechanics-lien-deadline-calculator',
+    title: 'Mechanics Lien Deadline Calculator',
+    blurb: 'Pick the state, project type and your role to see the preliminary notice, lien filing and foreclosure suit deadlines, each linked to the state statute.',
+  },
+  {
     href: '/tools/cobra-deadline-calculator',
     title: 'COBRA Deadline Calculator',
     blurb: 'Enter the qualifying event and its date to see every COBRA deadline: the employer and election notices, the election period, the first premium and the coverage end.',
