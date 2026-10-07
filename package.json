@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "node scripts/check-provenance.mjs && vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/check-site.mjs",
     "preview": "vite preview",
-    "test": "node --test api/_tests/api.test.mjs scripts/tests/overtime.test.mjs scripts/tests/fringe.test.mjs scripts/tests/pbj-preflight.test.mjs scripts/tests/i9.test.mjs scripts/tests/apprentice.test.mjs scripts/tests/deadline-guides.test.mjs scripts/tests/wh347-guides.test.mjs scripts/tests/enroll-guides.test.mjs scripts/tests/final-guides.test.mjs scripts/tests/ads.test.mjs scripts/tests/cobra-deadlines.test.mjs && python3 -m unittest discover -s pylib/tests",
+    "test": "node --test api/_tests/api.test.mjs scripts/tests/overtime.test.mjs scripts/tests/fringe.test.mjs scripts/tests/pbj-preflight.test.mjs scripts/tests/i9.test.mjs scripts/tests/apprentice.test.mjs scripts/tests/deadline-guides.test.mjs scripts/tests/wh347-guides.test.mjs scripts/tests/enroll-guides.test.mjs scripts/tests/final-guides.test.mjs scripts/tests/ads.test.mjs scripts/tests/cobra-deadlines.test.mjs scripts/tests/contractor-check.test.mjs && python3 -m unittest discover -s pylib/tests",
     "test:sql": "node supabase/tests/storefront.test.mjs",
     "examples": "python3 scripts/gen_examples.py"
   },
