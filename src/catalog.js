@@ -7,6 +7,7 @@ export const STANDARD_RUN_CENTS = 25;
 export const HIGH_STAKES_RUN_CENTS = 100;
 export const PROFESSIONAL_RUN_CENTS = 2500;
 export const PRE_AUDIT_RUN_CENTS = 10000;
+export const ADEQUACY_RUN_CENTS = 25000;
 export const PRICE_PER_CALL_CENTS = STANDARD_RUN_CENTS; // kept for older callers
 
 // Packs buy cents of credit that work on every API. calls = standard runs.
@@ -146,6 +147,19 @@ export const APIS = [
     summary:
       'Checks a Service Contract Act pay period employee by employee: required health and welfare on all hours paid up to 40 a week, against plan contributions and cash in lieu, with the shortfall per employee, the total back wage exposure and the recordkeeping problems DOL lists as common violations.',
     cta: 'Check a pay period',
+  },
+  {
+    slug: 'ice-adequacy-precheck',
+    name: 'Incurred Cost Submission Adequacy Pre-Check',
+    tier: 'built',
+    status: 'beta',
+    priceCents: ADEQUACY_RUN_CENTS,
+    unit: 'completed pre-check',
+    maxBodyBytes: 4_000_000,
+    demoMaxBodyBytes: 4_000_000,
+    summary:
+      'Pre-checks an annual incurred cost submission workbook against DCAA\'s adequacy checklist before it goes in: all 15 schedules present, every total recomputed, Schedule A rates and the cross ties between schedules, the certificate of final indirect costs and the 6-month deadline. Any layout, not only the DCAA ICE model.',
+    cta: 'Pre-check a submission',
   },
 ];
 
