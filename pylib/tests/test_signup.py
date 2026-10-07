@@ -64,6 +64,26 @@ class Signups(unittest.TestCase):
         self.assertEqual(post('subscribe', {'email': 'pat@example.com', 'consent': True, 'source': src})[0], 200)
         self.assertEqual(self.fake.signups['pat@example.com']['source'], src)
 
+    def test_every_page_with_the_signup_form_is_an_allowed_source(self):
+        # A page that renders <ToolSignup source={X_PATH}> must have X_PATH in SIGNUP_SOURCES, or every signup on it
+        # comes back "Unknown page." Read the paths straight from the page files so a new tool cannot be missed.
+        import re
+        pages = Path(__file__).resolve().parents[2] / 'src' / 'pages'
+        files = {f: f.read_text(encoding='utf-8') for f in pages.glob('*.jsx')}
+        consts = {}
+        for text in files.values():
+            consts.update(re.findall(r"export const ([A-Z0-9_]+) = '(/tools/[a-z0-9-]+)'", text))
+        found = {}
+        for f, text in files.items():
+            for const in re.findall(r'<ToolSignup source=\{([A-Z0-9_]+)\}', text):
+                self.assertIn(const, consts, f'{f.name}: cannot find the value of {const}')
+                found[consts[const]] = f.name
+        self.assertGreaterEqual(len(found), 12)
+        missing = {p: n for p, n in found.items() if p not in handler.SIGNUP_SOURCES}
+        self.assertEqual(missing, {}, 'pages whose signup form the server would reject')
+        for path in found:
+            self.assertEqual(post('subscribe', {'email': 'pat@example.com', 'consent': True, 'source': path})[0], 200, path)
+
     def test_unsubscribe(self):
         post('subscribe', {'email': 'pat@example.com', 'consent': True, 'source': SRC})
         self.assertEqual(post('unsubscribe', {'email': 'PAT@example.com'})[0], 200)
