@@ -561,3 +561,13 @@ Corrections to the brief:
 - Added an optional "plan measures from the loss of coverage" box: 54.4980B-7 Q&A-4(b) and 606-2/606-4 let a plan start the employer notice, the 44 days and the coverage period at the loss of coverage, only if the plan document says so.
 - Deadlines are calendar days and are not moved off weekends; the regulations do not move them.
 - Month arithmetic: when the target month has no matching day, the last day of that month is used (a convention the regulations do not set; stated on the page).
+
+## Contractor vs employee check, October 6, 2026
+
+Branch `spreadrun/contractor-vs-employee-check`, not merged. Page /tools/contractor-vs-employee-check; logic in `src/site/contractor-check.js`, state data in `src/site/contractor-states.js`, browser only, no network calls.
+
+Federal factors: 29 CFR 795.110 (eCFR). Status read on dol.gov October 6, 2026: Field Assistance Bulletin 2025-1 (May 1, 2025) stopped WHD investigators from applying the 2024 rule but keeps it in effect for private litigation; NPRM announced February 26, 2026 (91 FR 9932), comments closed April 28, 2026, no final rule shown. The page says this plainly.
+
+Rating logic (cautious by design, the rule has no formula): federal "likely employee" at 4+ employee answers, or 3+ with none for contractor; "likely contractor" needs 5+ contractor answers and none for employee; everything else is "high risk, uncertain". A state test answered "no" on any ABC, two-part, control or checklist question makes the overall rating "likely employee"; "not sure" anywhere keeps it at high risk; a missed safe harbor (NV wage, WV) is high risk, not employee.
+
+States: each state's unemployment test, plus the wage law test where different, read on the state's own code site or labor agency in the browser. GA, AR and MS publish their codes officially only through a commercial host, so no test is shown for them and the page says the rating uses the federal factors only. NJ, PA and TN are cited to their labor agency pages that quote the statute. Construction and trucking rules (DC, MD, MN, NY, OH, PA) are shown as notes when the state is picked. ORS 670.600 checked against the 2026 Oregon amendment table: not amended.
