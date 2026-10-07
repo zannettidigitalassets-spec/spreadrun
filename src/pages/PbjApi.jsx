@@ -229,7 +229,7 @@ export default function PbjApi() {
         <ul>
           <li>Every paid report also comes with a one-page <b>PBJ Star &amp; Audit-Risk Brief</b> (the projected staffing star, always labelled an estimate, and the top audit-risk patterns the run found, each with a fix) and a <b>records ZIP</b> holding the brief, your file exactly as uploaded and a README. Same price, one charge. The free demo does not include them.</li>
           <li>Billed when a report is produced, PASS, WARN or FAIL. Invalid input is never billed: not XML, not a PBJ file, an Employee Link file, a ZIP with no XML.</li>
-          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50 or $100 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} reports. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
+          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50, $100, $250 or $500 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} reports. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
           <li>Checking files for many buildings every quarter? <a href="/contact">Talk to us</a> first so we can tell you honestly whether this fits.</li>
         </ul>
         <div className="btn-row"><a className="btn" href="#demo">Check a PBJ file</a><a className="btn secondary" href="/account">Get API access</a></div>

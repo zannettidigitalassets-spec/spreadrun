@@ -161,7 +161,7 @@ export default function CmmcApi() {
         <p><b>{dollars(API.priceCents)} per completed verification.</b> One self-assessment, one full report.</p>
         <ul>
           <li>Billed when a report is produced, PASS, WARN or FAIL. Invalid input is never billed.</li>
-          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50 or $100 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} verifications and a $100 pack covers {Math.floor(10000 / API.priceCents)}. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
+          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50, $100, $250 or $500 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} verifications and a $100 pack covers {Math.floor(10000 / API.priceCents)}. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
           <li>Running many clients? <a href="/contact">Talk to us</a> first so we can tell you honestly whether this fits.</li>
         </ul>
         <div className="btn-row"><a className="btn" href="#demo">Verify a score</a><a className="btn secondary" href="/account">Get API access</a></div>

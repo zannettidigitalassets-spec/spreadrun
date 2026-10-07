@@ -146,7 +146,7 @@ export default function PecosApi() {
         <p><b>{dollars(API.priceCents)} per completed pre-check.</b> One provider's draft, one full report.</p>
         <ul>
           <li>Billed when a report is produced, PASS, WARN or FAIL. Invalid input is never billed, and neither is a run stopped because the NPPES registry could not be reached.</li>
-          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50 or $100 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} pre-checks. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
+          <li>Paid from the same prepaid credits as every SpreadRun API, in $5, $20, $50, $100, $250 or $500 packs. A $50 pack covers {Math.floor(5000 / API.priceCents)} pre-checks. Credits never expire. <a href="/apis#pricing">All pricing</a></li>
           <li>Checking many providers? <a href="/contact">Talk to us</a> first so we can tell you honestly whether this fits.</li>
         </ul>
         <div className="btn-row"><a className="btn" href="#demo">Pre-check an enrollment</a><a className="btn secondary" href="/account">Get API access</a></div>

@@ -1,16 +1,16 @@
 import Badges from '../site/Badges.jsx';
 import Layout, { Crumbs } from '../site/Layout.jsx';
-import { APIS, PARTNER_APIS, TIERS, CREDIT_PACKS, dollars } from '../catalog.js';
+import { APIS, PARTNER_APIS, TIERS, CREDIT_PACKS, dollars, runsPer } from '../catalog.js';
 
 // One row per listed API, straight from the catalog, so prices here can never drift from the API.
 export function PriceTable() {
   return (
     <div className="table-scroll">
       <table className="doc-table" style={{ maxWidth: 720 }}>
-        <thead><tr><th>API</th><th>Price per completed run</th><th>Runs per $50 pack</th></tr></thead>
+        <thead><tr><th>API</th><th>Price per completed run</th><th>Runs per $250 pack</th></tr></thead>
         <tbody>
           {APIS.map((a) => (
-            <tr key={a.slug}><td><a href={`/apis/${a.slug}`}>{a.name}</a></td><td>{dollars(a.priceCents)}</td><td>{Math.floor(5000 / a.priceCents)}</td></tr>
+            <tr key={a.slug}><td><a href={`/apis/${a.slug}`}>{a.name}</a></td><td>{dollars(a.priceCents)}</td><td>{runsPer(25000, a.priceCents)}</td></tr>
           ))}
         </tbody>
       </table>

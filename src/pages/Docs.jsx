@@ -56,7 +56,7 @@ export default function Docs() {
 
         <h2 id="billing">Credits and billing</h2>
         <ul>
-          <li>Each API has its own price per completed run (see the table above), taken from prepaid credits. Credits are held in cents and work on every API. Packs: $5, $20, $50 and $100 of credit, which is 20, 80, 200 or 400 standard runs at $0.25. Credits never expire.</li>
+          <li>Each API has its own price per completed run (see the table above), taken from prepaid credits. Credits are held in cents and work on every API. Packs: $5, $20, $50, $100, $250 and $500 of credit, which is 20, 80, 200, 400, 1,000 or 2,000 standard runs at $0.25. Credits never expire.</li>
           <li>A run is charged once, when it returns a report (PASS, WARN or FAIL). Each response carries a <code>requestId</code>; the same request is never charged twice.</li>
           <li>Input errors, internal errors and billing outages are never charged, and in those cases no report is returned.</li>
           <li>Successful responses include <code>priceCents</code>, what this run cost, and <code>balanceCents</code>, your remaining credit after the charge.</li>
