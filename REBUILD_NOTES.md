@@ -561,3 +561,24 @@ Corrections to the brief:
 - Added an optional "plan measures from the loss of coverage" box: 54.4980B-7 Q&A-4(b) and 606-2/606-4 let a plan start the employer notice, the 44 days and the coverage period at the loss of coverage, only if the plan document says so.
 - Deadlines are calendar days and are not moved off weekends; the regulations do not move them.
 - Month arithmetic: when the target month has no matching day, the last day of that month is used (a convention the regulations do not set; stated on the page).
+
+## Free final paycheck deadline tool, October 6, 2026
+
+Branch `spreadrun/final-paycheck-deadline`, not merged. Page /tools/final-paycheck-deadline; rules and math in `src/site/final-pay.js`, browser only.
+
+Every state was read in its own code or state labor department publication (URL per row). Secondary roundups were used only to find citations. Justia was not used (Cloudflare bot check; not bypassed).
+
+Distinctions kept rather than simplified: a separate "laid off" option (CT, HI, NH and others treat layoffs differently from discharges); Hawaii and New Hampshire need one full pay period of notice for the faster quit rule (checkbox); Oregon's 48-hour notice excludes weekends and holidays; Minnesota's 5-day and 20-day quit rule; Montana's for-cause rule and written-policy extension; Rhode Island's 24-hour rule for business closures; North Dakota's certified-mail requirement on discharge; Arizona and Washington use the end of the pay period.
+
+Conservative choices, flagged on the page:
+- South Carolina 41-10-50 is ambiguous (48 hours or next payday up to 30 days); the 48-hour date is shown.
+- Where a statute says "discharged" and is silent on layoffs (AZ, DC, MA, MN, NM, OR, TX, VT), the layoff uses the discharge deadline.
+- Michigan's "as soon as the amount can with due diligence be determined" shows the separation date.
+- Business days count Monday to Friday without skipping holidays, so a date is never later than the real deadline.
+
+Not found or not stated:
+- Alabama, Florida, Georgia and Mississippi: no final pay statute found; the tool says so and cites the U.S. DOL last paycheck page (federal law does not require immediate payment). Arkansas and Missouri have no rule for quits (Missouri DOL says so).
+- Tennessee: the rule is from the state labor department page; its penalty is not stated because the official code text was not reachable (Lexis-hosted).
+- Colorado: timing from the official 2024 CRS print; penalties from CDLE INFO #2B (August 2025), which reflects the 2025 amendment.
+
+Note for the CTA: the brief's path /apis/wh347-payroll-pre-check does not exist; the live page is /apis/wh347-payroll-precheck.
