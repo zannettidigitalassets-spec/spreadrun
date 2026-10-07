@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { CLINICAL_CODES, MRF_CODES } from './codes.js';
 
-// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347' | 'pecos' | 'cmmc' | 'cobra'.
-export default function ReportSheet({ kind, report, label, sub }) {
+// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347' | 'pecos' | 'cmmc' | 'cobra' | 'sca'.
+// refs (SCA only): line number to the employee reference the user typed, joined in the browser. Reports never carry it.
+export default function ReportSheet({ kind, report, label, sub, refs }) {
   if (!report) return null;
   return (
     <div className="sheet" role="region" aria-label={label || 'Validation report'}>
@@ -13,7 +15,7 @@ export default function ReportSheet({ kind, report, label, sub }) {
         <span className={`stamp ${report.status}`}>{report.status}</span>
       </div>
       <div className="sheet-body">
-        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : kind === 'pecos' ? <Pecos r={report} /> : kind === 'cmmc' ? <Cmmc r={report} /> : kind === 'cobra' ? <Cobra r={report} /> : <Mrf r={report} />}
+        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : kind === 'pecos' ? <Pecos r={report} /> : kind === 'cmmc' ? <Cmmc r={report} /> : kind === 'cobra' ? <Cobra r={report} /> : kind === 'sca' ? <Sca r={report} refs={refs} /> : <Mrf r={report} />}
       </div>
     </div>
   );
@@ -298,6 +300,79 @@ function Cmmc({ r }) {
           {r.findings.length > 60 && <p className="small muted">{r.findings.length - 60} more in the JSON report.</p>}
         </div>
       ) : <p className="small" style={{ margin: 0 }}>No findings. A PASS means the math and the package check out. It is not a certification and does not mean DoD will accept the score.</p>}
+    </>
+  );
+}
+
+const SCA_RK = { flagged: 'Flagged', clear: 'Clear', 'not-checked': 'Not checked' };
+const usd = (s) => `$${Number(s).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+function Sca({ r, refs }) {
+  const [showAll, setShowAll] = useState(false);
+  const who = (line) => (refs && refs[line] ? `${refs[line]} (line ${line})` : `Line ${line}`);
+  const rows = [...r.employees].sort((a, b) => (a.result === b.result ? a.line - b.line : a.result === 'FAIL' ? -1 : 1));
+  const shown = showAll ? rows : rows.slice(0, 25);
+  const t = r.totals;
+  return (
+    <>
+      <div className="calc-big" style={{ marginBottom: 8 }}>
+        <span className="small muted">Back wage exposure this period</span>
+        <b>{usd(t.backWageExposure)}</b>
+        <span className="small">{r.summary}</span>
+      </div>
+      <div className="facts">
+        <span><b>{t.employees}</b> {t.employees === 1 ? 'employee' : 'employees'}</span>
+        <span><b>{t.failing}</b> short</span>
+        <span>Required <b>{usd(t.required)}</b></span>
+        <span>Furnished <b>{usd(t.furnished)}</b></span>
+        <span>Rate <b>${r.parameters.rates.rate}</b>/hr{r.parameters.rates.rateHphca ? <> (HPHCA <b>${r.parameters.rates.rateHphca}</b>)</> : null}</span>
+      </div>
+      <div className="table-scroll" style={{ margin: '0 0 12px' }}>
+        <table className="findings">
+          <thead><tr><th>Employee</th><th>Hours</th><th>Required</th><th>Furnished</th><th>Short</th><th>Result</th></tr></thead>
+          <tbody>
+            {shown.map((e) => (
+              <tr key={e.line}>
+                <td style={{ wordBreak: 'break-word' }}>{who(e.line)}</td>
+                <td>{e.hoursCounted}{e.capped ? '*' : ''}</td>
+                <td>{usd(e.required)}</td>
+                <td>{usd(e.furnished)}</td>
+                <td>{usd(e.shortfall)}</td>
+                <td className={e.result === 'FAIL' ? 'sev-ERROR' : ''}><b>{e.result}</b></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {rows.length > 25 && !showAll && <button type="button" className="linklike small" onClick={() => setShowAll(true)}>Show all {rows.length} employees</button>}
+        {r.employees.some((e) => e.capped) && <p className="small muted" style={{ margin: '6px 0 0' }}>* Capped at 40 hours a week (or 2,080 a year): hours past the cap carry no H&amp;W.</p>}
+      </div>
+      <div className="sheet-title" style={{ fontSize: 15, margin: '0 0 6px' }}>Recordkeeping (DOL Fact Sheet #67B common violations)</div>
+      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 12px' }}>
+        {r.recordkeeping.map((x) => (
+          <li key={x.item} className="small" style={{ display: 'flex', gap: 8, padding: '3px 0' }}>
+            <b className={x.status === 'flagged' ? 'sev-ERROR' : ''} style={{ minWidth: 86 }}>{SCA_RK[x.status]}</b>
+            <span>{x.label}{x.lines.length ? <>: {x.lines.map(who).join(', ')}</> : null}{x.howToCheck ? <span className="muted"> {x.howToCheck}</span> : null}</span>
+          </li>
+        ))}
+      </ul>
+      {r.findings.length > 0 ? (
+        <div className="table-scroll">
+          <table className="findings">
+            <thead><tr><th>Severity</th><th>Rule</th><th>Who and what</th></tr></thead>
+            <tbody>
+              {r.findings.slice(0, 60).map((f, n) => (
+                <tr key={n}>
+                  <td className={`sev-${f.severity === 'error' ? 'ERROR' : 'WARNING'}`}>{f.severity === 'error' ? 'Error' : 'Warning'}</td>
+                  <td className="code ids">{f.ruleId.split('-').map((p, k) => <span key={k}>{k ? <>-<wbr /></> : null}{p}</span>)}</td>
+                  <td><b>{who(f.line)}</b><div className="small">{f.message}</div></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {r.findings.length > 60 && <p className="small muted">{r.findings.length - 60} more in the JSON report.</p>}
+        </div>
+      ) : <p className="small" style={{ margin: 0 }}>No findings. A PASS means the math on these rows meets the rate used. It is not a compliance determination and not DOL acceptance.</p>}
+      {r.notes.map((n) => <p key={n} className="small muted" style={{ margin: '8px 0 0' }}>{n}</p>)}
     </>
   );
 }

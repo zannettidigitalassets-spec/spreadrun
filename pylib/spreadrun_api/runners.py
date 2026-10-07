@@ -314,6 +314,31 @@ def run_cmmc(body: bytes, *, as_of=None, demo=False):
         raise InputError(str(exc)) from None
 
 
+_sca = None
+
+
+def sca_module():
+    """SpreadRun's own SCA health and welfare fringe engine (not a DataForge copy). No network calls."""
+    global _sca
+    if _sca is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_sca_engine', HERE / 'sca' / 'engine.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_sca_engine'] = module
+        spec.loader.exec_module(module)
+        _sca = module
+    return _sca
+
+
+def run_sca(body: bytes, *, query=None, demo=False):
+    """Check one pay period of SCA health and welfare amounts (CSV, JSON or .xlsx). query: the run parameters for a
+    CSV or .xlsx body. demo=True limits the run to the demo's employee count."""
+    v = sca_module()
+    try:
+        return v.validate(body, query=query, demo=demo)
+    except v.InputError as exc:
+        raise InputError(str(exc)) from None
+
+
 def run_clinical(body: bytes):
     """Body is the JSON object the validator expects: {"studiesCsv": "...", "outcomesCsv": "..."}."""
     v = clinical_module()

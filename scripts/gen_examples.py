@@ -146,3 +146,14 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     save('cobra-paid-pass', *post(paid, (SAMPLES / 'cobra-election-clean.json').read_bytes(), rich_auth))
     save('cobra-demo-fail', *post(demo, (SAMPLES / 'cobra-election-errors.json').read_bytes(), {'Content-Type': 'application/json'}))
     save('cobra-input-error', *post(paid, b'{"noticeType": "initial", "noticeText": ""}', rich_auth))
+
+    # SCA H&W: invented employees, named by made-up references that never come back in the report.
+    k = 'sca-hw-fringe-checker'
+    paid, demo = serve(k, 'paid'), serve(k, 'demo')
+    rich, _ = fake.add_user(20000)
+    rich_auth = {'Authorization': f'Bearer {rich}', 'Content-Type': 'application/json'}
+    save('sca-paid-pass', *post(paid, (SAMPLES / 'sca-clean.json').read_bytes(), rich_auth))
+    save('sca-demo-fail', *post(demo, (SAMPLES / 'sca-errors.json').read_bytes(), {'Content-Type': 'application/json'}))
+    clean_csv = json.loads((SAMPLES / 'sca-clean.json').read_text())['employeesCsv'].encode()
+    save('sca-input-error', *post(paid, clean_csv, {**rich_auth, 'Content-Type': 'text/csv'},
+                                  query='?wdType=average&eo13706=true'))

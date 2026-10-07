@@ -625,3 +625,14 @@ Sources read October 7, 2026: 26 CFR 54.4980H-2 (eCFR) for the FTE formula (hour
 - Ambulance: the regulation has no fixed cycle, so the page labels the 5-year date an estimate and says why.
 - CTA goes to `/apis/pecos-enrollment-precheck` (the real slug) with the line from the prompt.
 - No new serverless functions; nothing leaves the browser.
+
+## SCA Health and Welfare Fringe Checker (branch `spreadrun/sca-hw-fringe-checker`, October 7, 2026)
+
+- Paid validator at `/apis/sca-hw-fringe-checker`, docs at `/docs/sca-hw-fringe-checker`. $100.00 per completed check (`PRE_AUDIT_RUN_CENTS = 10000` in src/catalog.js, `price_cents: 10000` in catalog.py). Served by the existing dynamic route `api/[channel]/[slug].py`: no new serverless function (still 8 of 12).
+- Engine: `pylib/spreadrun_api/validators/sca/engine.py`, SpreadRun's own (not a DataForge copy), stdlib only (csv plus the same minimal .xlsx reader WH-347 uses; no openpyxl needed). Input: CSV with query parameters, .xlsx (Employees sheet, optional Parameters sheet), or JSON `{parameters, employeesCsv}`.
+- Rates live only in `validators/sca/rates.json`; the engine and the website read it. Current: AAM 252, effective 2026-08-10: $5.92, $5.42 under EO 13706, Hawaii $2.51 / $2.01 for HPHCA-covered employees (standard rates for others). The build prompt's July 2025 figures (AAM 250: $5.55 / $5.09, Hawaii $2.42) were superseded and are not used. Each July or August: update rates.json and nothing else.
+- Verified October 7, 2026: 29 CFR 4.170(a), 4.171(a)(1), 4.172, 4.175(a)-(c), 4.176, 4.177 on eCFR; DOL Fact Sheet #67B (October 2024, Common Violations); Fact Sheet #67 (penalties); AAM 246 (July 16, 2024, average cost WDs not used for new contracts); SAM.gov AAM list and WDs 2015-4281 Rev 39 and 2015-5689 Rev 30 for the rates; GAO-21-11 summary (over 5,000 cases FY2014-2019, 68 percent with violations, about $224 million, 60 debarments).
+- Left off the page: the "$42,600 average per case" figure (GAO does not state it) and the D2 Government Solutions case (real, DOL release whd20210818, but its main violation was misclassification, which this check does not cover).
+- Privacy: reports name rows by line number and never repeat employee references; the page joins references back in the browser. Name and SSN columns and SSN-shaped references are refused. No Privacy Policy change was made (needs approved wording if wanted).
+- Free demo: any pasted CSV up to 10 employees (DEMO_MAX_ROWS), 64 KB. Workbooks and larger periods are paid.
+- Interpretation of "full time credit claimed" (criterion 2): optional `hw_hours_credited`; a part-timer credited with more hours than were paid gets SCA-CREDIT-HOURS-HIGH, and the Fact Sheet #67B part-time item is flagged.
