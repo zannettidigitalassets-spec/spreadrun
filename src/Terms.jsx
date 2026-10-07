@@ -22,7 +22,7 @@ export default function Terms() {
 
       <SectionTitle>Prepaid credits and charges</SectionTitle>
       <UL>
-        <li>You buy credits in advance through Stripe. Packs are currently $5, $20, $50 and $100. A pack buys that many cents of credit, and credit works on every SpreadRun API: $5 covers 20 standard runs at $0.25, for example. Each API has its own price per completed report, shown in the table below, on the <a href="/apis#pricing">pricing page</a> and on your account page.</li>
+        <li>You buy credits in advance through Stripe. Packs are currently $5, $20, $50, $100, $250 and $500. A pack buys that many cents of credit, and credit works on every SpreadRun API: $5 covers 20 standard runs at $0.25, for example. Each API has its own price per completed report, shown in the table below, on the <a href="/apis#pricing">pricing page</a> and on your account page.</li>
         <li>A call is charged when it completes and returns a report, whatever the report's result (for example PASS, WARN or FAIL). Requests rejected before a report is produced (such as invalid input) are not charged. The documentation describes which requests count as completed for each API.</li>
         <li>If your balance is too low for a call, the report is not returned and nothing is charged.</li>
         <li>Credits never expire. Credits cannot be transferred between accounts or exchanged for cash, except through a refund as described below.</li>
