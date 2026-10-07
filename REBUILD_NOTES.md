@@ -561,3 +561,20 @@ Corrections to the brief:
 - Added an optional "plan measures from the loss of coverage" box: 54.4980B-7 Q&A-4(b) and 606-2/606-4 let a plan start the employer notice, the 44 days and the coverage period at the loss of coverage, only if the plan document says so.
 - Deadlines are calendar days and are not moved off weekends; the regulations do not move them.
 - Month arithmetic: when the target month has no matching day, the last day of that month is used (a convention the regulations do not set; stated on the page).
+
+## Mechanics lien deadline calculator, October 6, 2026
+
+Branch `spreadrun/mechanics-lien-deadline-calculator`, not merged. Page /tools/mechanics-lien-deadline-calculator; math in `src/site/lien-deadlines.js`, rules in `src/site/lien-states.js` (generated from research notes), browser only, no network calls.
+
+Each state's private lien statute and public works bond (or public funds) statute was read on the state's own code site in the browser. 47 jurisdictions are covered; GA, AR, MS and TN publish their official code only through a commercial host, so the page gives no dates for them and says so.
+
+Conservative choices, all flagged on the page with "Confirm with a construction attorney in this state":
+- Where a deadline runs from project completion, acceptance, final settlement or an owner's notice of completion, it is measured from the claimant's own last furnishing date, which is never later.
+- Where a notice of completion can shorten the period (CA, AZ, NV, AK, UT), the shortest period is shown.
+- Monthly notice regimes (TX notices, KY public claims) show the first-month and last-month dates.
+- Where the statute counts from each item furnished (NH, RI), the date counts from the first furnishing.
+- Suppliers are assumed to sell to a subcontractor (the stricter case) for bond notices.
+- Residential rules that depend on dwelling size or owner occupancy use the shorter period and say so.
+- Deadlines are not moved off weekends or holidays.
+- Where a bond statute sets no claim or suit deadline (WA suit, MO suit, WV, DE, MT suit, VT), the page says so instead of inventing one.
+Federal Miller Act projects are out of scope.
