@@ -23,7 +23,7 @@ export const supabaseAdmin = createClient(SUPABASE_URL, process.env.SUPABASE_SER
 // Credits are held in cents and work on every API. Each API has its own price per completed run
 // (pylib/spreadrun_api/catalog.py): standard 25 cents, high-stakes 100 cents, professional 2500 cents.
 export const STANDARD_RUN_CENTS = 25;
-export const RUN_PRICES_CENTS = [25, 100, 2500];
+export const RUN_PRICES_CENTS = [25, 100, 2500, 10000];
 export const PRICE_PER_CALL_CENTS = STANDARD_RUN_CENTS; // kept for older callers
 export const PACKS = {
   pack_5: { priceCents: 500, creditCents: 500, label: '$5 credit pack (20 standard runs)' },
