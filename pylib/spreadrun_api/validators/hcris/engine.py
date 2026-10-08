@@ -549,7 +549,7 @@ class Report:
         self.checks = {}
 
     def add(self, sev, rule, message, source, *, where=None, expected=None, actual=None, group=None):
-        f = {'severity': sev, 'ruleId': rule, 'message': message, 'source': SOURCES.get(source, source)}
+        f = {'severity': sev, 'ruleId': rule, 'message': message, 'source': source}
         if where:
             f.update({k: (str(v) if v is not None else None) for k, v in where.items()})
         if expected is not None:
