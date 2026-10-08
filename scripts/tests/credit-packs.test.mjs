@@ -23,7 +23,7 @@ test('/terms lists all six packs and nothing else changed in that line', () => {
 });
 
 test('runs per $250 pack: whole where exact, one decimal otherwise', () => {
-  const expected = { 25: '1000', 100: '250', 2500: '10', 10000: '2.5' };
+  const expected = { 25: '1000', 100: '250', 2500: '10', 10000: '2.5', 25000: '1' };
   for (const a of APIS) assert.equal(runsPer(25000, a.priceCents), expected[a.priceCents], a.slug);
   assert.equal(runsPer(25000, 10000), '2.5');
   assert.equal(runsPer(25000, 30000), '0.8');

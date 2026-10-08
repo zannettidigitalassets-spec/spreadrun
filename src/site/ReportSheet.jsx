@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CLINICAL_CODES, MRF_CODES } from './codes.js';
 
-// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347' | 'pecos' | 'cmmc' | 'cobra' | 'sca'.
+// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347' | 'pecos' | 'cmmc' | 'cobra' | 'sca' | 'ice'.
 // refs (SCA only): line number to the employee reference the user typed, joined in the browser. Reports never carry it.
 export default function ReportSheet({ kind, report, label, sub, refs }) {
   if (!report) return null;
@@ -15,7 +15,7 @@ export default function ReportSheet({ kind, report, label, sub, refs }) {
         <span className={`stamp ${report.status}`}>{report.status}</span>
       </div>
       <div className="sheet-body">
-        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : kind === 'pecos' ? <Pecos r={report} /> : kind === 'cmmc' ? <Cmmc r={report} /> : kind === 'cobra' ? <Cobra r={report} /> : kind === 'sca' ? <Sca r={report} refs={refs} /> : <Mrf r={report} />}
+        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : kind === 'pecos' ? <Pecos r={report} /> : kind === 'cmmc' ? <Cmmc r={report} /> : kind === 'cobra' ? <Cobra r={report} /> : kind === 'sca' ? <Sca r={report} refs={refs} /> : kind === 'ice' ? <Ice r={report} /> : <Mrf r={report} />}
       </div>
     </div>
   );
@@ -373,6 +373,82 @@ function Sca({ r, refs }) {
         </div>
       ) : <p className="small" style={{ margin: 0 }}>No findings. A PASS means the math on these rows meets the rate used. It is not a compliance determination and not DOL acceptance.</p>}
       {r.notes.map((n) => <p key={n} className="small muted" style={{ margin: '8px 0 0' }}>{n}</p>)}
+    </>
+  );
+}
+
+const ICE_STATUS = { pass: 'Pass', warn: 'Review', fail: 'Fail', review: 'Review by hand', na: 'Not applicable' };
+const ICE_SCHED = { found: 'Found', missing: 'Missing', 'not-applicable': 'None to report', empty: 'Empty' };
+const ICE_GROUPS = [['schedules', 'Required schedules'], ['math', 'Math foots'], ['crossTies', 'Schedules tie'],
+  ['certificate', 'Certificate'], ['deadline', 'Deadline']];
+const num = (v) => (typeof v === 'number' ? v.toLocaleString('en-US', { maximumFractionDigits: 6 }) : v);
+const sevClass = (st) => (st === 'fail' ? 'sev-ERROR' : st === 'warn' ? 'sev-WARNING' : '');
+
+function Ice({ r }) {
+  const [all, setAll] = useState(false);
+  const d = r.deadline;
+  const found = r.schedules.filter((x) => x.status !== 'missing').length;
+  return (
+    <>
+      <div className="calc-big" style={{ marginBottom: 8 }}>
+        <span className="small muted">Adequacy pre-check, fiscal year ended {fmtDate(r.fiscalYearEnd)}</span>
+        <b style={{ fontSize: 20 }}>{r.summary}</b>
+        <span className="small">Due {fmtDate(d.due)}: {d.daysLeft < 0 ? `${-d.daysLeft} days past the 6-month mark` : `${d.daysLeft} days left`}.</span>
+      </div>
+      <div className="facts">
+        <span><b>{found}</b> of 15 schedules</span>
+        <span><b>{r.findingCounts.error}</b> {r.findingCounts.error === 1 ? 'error' : 'errors'}</span>
+        <span><b>{r.findingCounts.warning}</b> to review</span>
+        <span><b>{r.checklistCounts.pass}</b> checklist items pass</span>
+      </div>
+      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 12px' }}>
+        {ICE_GROUPS.map(([k, label]) => (
+          <li key={k} className="small" style={{ display: 'flex', gap: 8, padding: '3px 0' }}>
+            <b className={sevClass(r.checks[k])} style={{ minWidth: 64 }}>{ICE_STATUS[r.checks[k]] || r.checks[k]}</b><span>{label}</span>
+          </li>
+        ))}
+      </ul>
+      <div className="ice-sched" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(44px, 1fr))', gap: 6, margin: '0 0 12px' }}>
+        {r.schedules.map((x) => (
+          <span key={x.schedule} title={`Schedule ${x.schedule}: ${ICE_SCHED[x.status]}${x.tab ? ` (tab ${x.tab})` : ''}`}
+            className="small" style={{ textAlign: 'center', border: '1px solid var(--line)', borderRadius: 6, padding: '4px 0',
+              background: x.status === 'missing' ? 'var(--fail-soft)' : x.status === 'empty' ? 'var(--warn-soft)' : 'transparent' }}>
+            <b>{x.schedule}</b><br />{x.status === 'missing' ? 'Missing' : x.status === 'found' ? 'Found' : x.status === 'empty' ? 'Empty' : 'None'}
+          </span>
+        ))}
+      </div>
+      {r.findings.length > 0 ? (
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {r.findings.slice(0, 60).map((f, n) => (
+            <li key={n} style={{ borderTop: '1px solid var(--line)', padding: '8px 0' }}>
+              <div className="small" style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', alignItems: 'baseline' }}>
+                <b className={`sev-${f.severity === 'error' ? 'ERROR' : 'WARNING'}`}>{f.severity === 'error' ? 'Error' : 'Warning'}</b>
+                <span style={{ wordBreak: 'break-word' }}>{f.tab ? <><b>{f.tab}</b>{f.range ? <> {f.range}</> : null}</> : 'Workbook'}</span>
+                <code className="ids" style={{ fontSize: 12 }}>{f.ruleId}</code>
+              </div>
+              {(f.expected !== undefined || f.actual !== undefined) && (
+                <div className="small" style={{ display: 'flex', flexWrap: 'wrap', gap: '2px 16px', margin: '2px 0' }}>
+                  {f.expected !== undefined && <span>Expected <b>{num(f.expected)}</b></span>}
+                  {f.actual !== undefined && <span>Actual <b>{num(f.actual)}</b></span>}
+                </div>
+              )}
+              <div className="small">{f.message}</div>
+            </li>
+          ))}
+          {r.findings.length > 60 && <li className="small muted">{r.findings.length - 60} more in the JSON report.</li>}
+        </ul>
+      ) : <p className="small" style={{ margin: 0 }}>No findings. A PASS means the workbook is complete and its math and ties check out. Adequacy is not allowability, and a PASS is not DCAA acceptance.</p>}
+      <details style={{ marginTop: 12 }} open={all} onToggle={(e) => setAll(e.target.open)}>
+        <summary className="small" style={{ cursor: 'pointer', fontWeight: 600 }}>DCAA adequacy checklist, item by item (47)</summary>
+        <ul style={{ listStyle: 'none', padding: 0, margin: '8px 0 0' }}>
+          {r.checklist.map((x) => (
+            <li key={x.item} className="small" style={{ display: 'flex', gap: 8, padding: '2px 0' }}>
+              <b className={sevClass(x.status)} style={{ minWidth: 104 }}>{ICE_STATUS[x.status]}</b>
+              <span>{x.item}. Schedule {x.schedule}: {x.label}</span>
+            </li>
+          ))}
+        </ul>
+      </details>
     </>
   );
 }

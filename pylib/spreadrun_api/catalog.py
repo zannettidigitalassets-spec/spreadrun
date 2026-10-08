@@ -76,6 +76,15 @@ APIS = {
         'max_body_bytes': 4_400_000,
         'demo_max_body_bytes': 64 * 1024,
     },
+    'ice-adequacy-precheck': {
+        'name': 'Incurred Cost Submission Adequacy Pre-Check',
+        'price_cents': 25000,   # adequacy tier
+        # One .xlsx workbook. Vercel caps request bodies near 4.5 MB, so the limit is 4 MB with a plain message.
+        'max_body_bytes': 4_000_000,
+        'demo_max_body_bytes': 4_000_000,
+        'too_large_message': 'The workbook is over the 4 MB limit. Remove data tabs the schedules do not need, or save '
+                             'the schedules alone as a new .xlsx, and try again. Nothing was charged.',
+    },
 }
 
 DEMO_RUNS_PER_DAY = 10

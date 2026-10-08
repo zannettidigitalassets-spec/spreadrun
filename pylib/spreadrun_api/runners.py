@@ -339,6 +339,31 @@ def run_sca(body: bytes, *, query=None, demo=False):
         raise InputError(str(exc)) from None
 
 
+_ice = None
+
+
+def ice_module():
+    """SpreadRun's own incurred cost submission adequacy engine (not a DataForge copy). No network calls."""
+    global _ice
+    if _ice is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_ice_engine', HERE / 'ice' / 'engine.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_ice_engine'] = module
+        spec.loader.exec_module(module)
+        _ice = module
+    return _ice
+
+
+def run_ice(body: bytes, *, query=None, demo=False):
+    """Pre-check one incurred cost submission workbook (.xlsx). query: fiscalYearEnd and optional asOf. demo=True accepts
+    only the published sample workbooks."""
+    v = ice_module()
+    try:
+        return v.validate(body, query=query, demo=demo)
+    except v.InputError as exc:
+        raise InputError(str(exc)) from None
+
+
 def run_clinical(body: bytes):
     """Body is the JSON object the validator expects: {"studiesCsv": "...", "outcomesCsv": "..."}."""
     v = clinical_module()

@@ -1,0 +1,634 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "ice-adequacy-precheck",
+    "mode": "demo",
+    "charged": false,
+    "report": {
+      "schemaVersion": 1,
+      "status": "FAIL",
+      "summary": "4 problems to fix before you submit, and 2 to review.",
+      "fiscalYearEnd": "2026-06-30",
+      "deadline": {
+        "due": "2026-12-31",
+        "asOf": "2026-10-07",
+        "daysLeft": 85,
+        "status": "on-time",
+        "rule": "Fiscal year end plus 6 months (FAR 52.216-7(d)(2)(i)). Extensions only in writing."
+      },
+      "checks": {
+        "schedules": "pass",
+        "math": "fail",
+        "crossTies": "fail",
+        "certificate": "warn",
+        "deadline": "pass"
+      },
+      "schedules": [
+        {
+          "schedule": "A",
+          "name": "Summary of claimed indirect rates",
+          "status": "found",
+          "tab": "A",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "B",
+          "name": "General and administrative expenses",
+          "status": "found",
+          "tab": "B",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "C",
+          "name": "Overhead expenses",
+          "status": "found",
+          "tab": "C",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "D",
+          "name": "Occupancy or intermediate pool expenses",
+          "status": "found",
+          "tab": "D",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "E",
+          "name": "Claimed allocation bases",
+          "status": "found",
+          "tab": "E",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "F",
+          "name": "Facilities capital cost of money",
+          "status": "found",
+          "tab": "F",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "G",
+          "name": "Reconciliation of books of account to claimed direct costs",
+          "status": "found",
+          "tab": "G",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "H",
+          "name": "Direct costs by contract with indirect expense applied",
+          "status": "found",
+          "tab": "H",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "I",
+          "name": "Cumulative costs claimed and billed",
+          "status": "found",
+          "tab": "I",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "J",
+          "name": "Subcontract information",
+          "status": "found",
+          "tab": "J",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "K",
+          "name": "Time-and-materials and labor-hour contracts",
+          "status": "found",
+          "tab": "K",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "L",
+          "name": "Reconciliation of IRS Form 941 payroll to labor distribution",
+          "status": "found",
+          "tab": "L",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "M",
+          "name": "Decisions, agreements, approvals and accounting changes",
+          "status": "not-applicable",
+          "tab": "M",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "N",
+          "name": "Certificate of final indirect costs",
+          "status": "found",
+          "tab": "N",
+          "foundBy": "tab name",
+          "subSchedules": []
+        },
+        {
+          "schedule": "O",
+          "name": "Contract closing information",
+          "status": "found",
+          "tab": "O",
+          "foundBy": "tab name",
+          "subSchedules": []
+        }
+      ],
+      "schedulesMissing": [],
+      "checklistVersion": "DCAA Checklist for Determining Adequacy of Contractor Incurred Cost Proposal, Version 3.4, December 2021",
+      "checklist": [
+        {
+          "item": 1,
+          "schedule": "A",
+          "label": "All claimed pools, bases and rates identified, with cost of money where it applies",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 2,
+          "schedule": "A",
+          "label": "A cost schedule for each final pool on Schedule A (Schedules B and C)",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 3,
+          "schedule": "A",
+          "label": "A cost schedule for each intermediate pool on Schedule A (Schedule D)",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 4,
+          "schedule": "A",
+          "label": "Pool amounts on Schedule A tie to the claimed totals on Schedules B and C",
+          "status": "fail",
+          "automatic": true
+        },
+        {
+          "item": 5,
+          "schedule": "A",
+          "label": "Intermediate pool bases on Schedule A tie to Schedule D",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 6,
+          "schedule": "A",
+          "label": "Final pool bases on Schedule A tie to Schedule E",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 7,
+          "schedule": "B",
+          "label": "G&A pool costs tie to Schedule H",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 8,
+          "schedule": "B",
+          "label": "Explanatory notes for adjustments and omitted amounts",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 9,
+          "schedule": "B",
+          "label": "Intermediate allocations appear on the source schedules",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 10,
+          "schedule": "B",
+          "label": "Fringe and overhead applied to IR&D and B&P",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 11,
+          "schedule": "C",
+          "label": "Overhead pool costs tie to Schedule H",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 12,
+          "schedule": "C",
+          "label": "Explanatory notes for adjustments and omitted amounts",
+          "status": "warn",
+          "automatic": true
+        },
+        {
+          "item": 13,
+          "schedule": "C",
+          "label": "Intermediate allocations appear on the source schedules",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 14,
+          "schedule": "D",
+          "label": "Explanatory notes for adjustments and omitted amounts",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 15,
+          "schedule": "D",
+          "label": "Intermediate allocations appear on the receiving schedules",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 16,
+          "schedule": "D",
+          "label": "Allocation base by recipient, percentage of the base, and dollars allocated",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 17,
+          "schedule": "E",
+          "label": "An explanation of each base",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 18,
+          "schedule": "E",
+          "label": "Base cost elements tie to the referenced schedules, with notes",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 19,
+          "schedule": "F",
+          "label": "Cost of money allocation bases match the bases on Schedule A",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 20,
+          "schedule": "F",
+          "label": "A separate cost of money rate for each final pool",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 21,
+          "schedule": "G",
+          "label": "Direct costs per the general ledger tie to Schedule H",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 22,
+          "schedule": "G",
+          "label": "Explanatory notes for adjustments and omitted amounts",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 23,
+          "schedule": "H",
+          "label": "Flexibly priced contracts listed by contract and subtotaled by contract type",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 24,
+          "schedule": "H",
+          "label": "Subcontract costs by contract tie to Schedule J",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 25,
+          "schedule": "H",
+          "label": "Cost detail at the level each contract bills at",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 26,
+          "schedule": "H",
+          "label": "Indirect expenses applied at the claimed rates from Schedule A",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 27,
+          "schedule": "H",
+          "label": "Government participation calculated for each indirect pool",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 28,
+          "schedule": "H",
+          "label": "Bases used for Government participation tie to Schedules E and H",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 29,
+          "schedule": "I",
+          "label": "Cost detail at the level used for billing",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 30,
+          "schedule": "I",
+          "label": "Fiscal year claimed amounts tie to Schedule H for cost-type contracts",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 31,
+          "schedule": "I",
+          "label": "Fiscal year claimed amounts tie to Schedule K for T&M contracts",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 32,
+          "schedule": "I",
+          "label": "Prior years settled costs match the prior Cumulative Allowable Cost Worksheet",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 33,
+          "schedule": "I",
+          "label": "Contracts marked physically complete appear on Schedule O",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 34,
+          "schedule": "J",
+          "label": "All types of subcontracts and intercompany costs included",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 35,
+          "schedule": "J",
+          "label": "Full detail for each subcontract",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 36,
+          "schedule": "K",
+          "label": "Cost detail at the level used for billing",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 37,
+          "schedule": "K",
+          "label": "Every T&M or labor-hour contract on Schedule H appears on Schedule K",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 38,
+          "schedule": "K",
+          "label": "Labor by category at contract rates, with hours",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 39,
+          "schedule": "K",
+          "label": "Claimed indirect rate ties to Schedule A",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 40,
+          "schedule": "K",
+          "label": "Direct material and ODC tie to Schedule H",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 41,
+          "schedule": "L",
+          "label": "Direct labor totals tie to Schedule H",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 42,
+          "schedule": "L",
+          "label": "G&A labor totals tie to Schedule B",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 43,
+          "schedule": "L",
+          "label": "Other indirect pool labor totals tie to their pool schedules",
+          "status": "review",
+          "automatic": false
+        },
+        {
+          "item": 44,
+          "schedule": "M",
+          "label": "A negative statement if there is nothing to report",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 45,
+          "schedule": "N",
+          "label": "Certificate signed at vice president or CFO level or higher",
+          "status": "warn",
+          "automatic": true
+        },
+        {
+          "item": 46,
+          "schedule": "O",
+          "label": "Contracts listed here are shown as physically complete on Schedule I",
+          "status": "pass",
+          "automatic": true
+        },
+        {
+          "item": 47,
+          "schedule": "O",
+          "label": "Level of effort, fee, period of performance and ceiling for each contract",
+          "status": "pass",
+          "automatic": true
+        }
+      ],
+      "checklistCounts": {
+        "pass": 23,
+        "warn": 2,
+        "fail": 1,
+        "review": 21,
+        "na": 0
+      },
+      "ratesClaimed": [
+        {
+          "tab": "A",
+          "cells": {
+            "pool": "D9",
+            "base": "E9",
+            "rate": "F9"
+          },
+          "kind": "oh"
+        },
+        {
+          "tab": "A",
+          "cells": {
+            "pool": "D10",
+            "base": "E10",
+            "rate": "F10"
+          },
+          "kind": "ga"
+        },
+        {
+          "tab": "A",
+          "cells": {
+            "pool": "D11",
+            "base": "E11",
+            "rate": "F11"
+          },
+          "kind": "com"
+        },
+        {
+          "tab": "A",
+          "cells": {
+            "pool": "D12",
+            "base": "E12",
+            "rate": "F12"
+          },
+          "kind": "com"
+        },
+        {
+          "tab": "A",
+          "cells": {
+            "pool": "D13",
+            "base": "E13",
+            "rate": "F13"
+          },
+          "kind": "inter"
+        }
+      ],
+      "findingCount": 6,
+      "findingCounts": {
+        "error": 4,
+        "warning": 2
+      },
+      "ruleCounts": {
+        "ICE-CERT-UNSIGNED": 1,
+        "ICE-FOOT": 2,
+        "ICE-NOTES": 1,
+        "ICE-TIE": 2
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "ruleId": "ICE-FOOT",
+          "tab": "G",
+          "range": "C15",
+          "message": "This total does not foot. The amounts above it in C10:C14 add up to a different figure.",
+          "source": "dcaa-checklist",
+          "expected": 905000.0,
+          "actual": 880000.0,
+          "sumRange": "C10:C14"
+        },
+        {
+          "severity": "error",
+          "ruleId": "ICE-FOOT",
+          "tab": "G",
+          "range": "E15",
+          "message": "This total does not foot. The amounts above it in E10:E14 add up to a different figure.",
+          "source": "dcaa-checklist",
+          "expected": 905000.0,
+          "actual": 880000.0,
+          "sumRange": "E10:E14"
+        },
+        {
+          "severity": "error",
+          "ruleId": "ICE-TIE",
+          "tab": "A",
+          "range": "D10",
+          "message": "The pool amount does not tie: B K14 shows a different amount.",
+          "source": "dcaa-checklist",
+          "expected": 398000.0,
+          "actual": 394000.0,
+          "checklistItem": 4
+        },
+        {
+          "severity": "error",
+          "ruleId": "ICE-TIE",
+          "tab": "B",
+          "range": "K14",
+          "message": "The pool amount does not tie: A D10 shows a different amount.",
+          "source": "dcaa-checklist",
+          "expected": 394000.0,
+          "actual": 398000.0,
+          "checklistItem": 4
+        },
+        {
+          "severity": "warning",
+          "ruleId": "ICE-CERT-UNSIGNED",
+          "tab": "N",
+          "range": "B14, B15, B16, B17",
+          "message": "The certificate is there but its date, name, signature, title lines are blank. Complete and sign it before you submit: it must be signed at vice president or CFO level or higher (FAR 52.242-4).",
+          "source": "far42.703-2",
+          "checklistItem": 45
+        },
+        {
+          "severity": "warning",
+          "ruleId": "ICE-NOTES",
+          "tab": "C",
+          "range": "J12",
+          "message": "1 adjustment has no explanatory note next to it. DCAA asks for a note on every adjustment and on any amount left out of the claim.",
+          "source": "dcaa-checklist",
+          "checklistItem": 12
+        }
+      ],
+      "findingsTruncated": false,
+      "notChecked": [
+        "Whether any claimed cost is allowable, allocable or reasonable under FAR Part 31. That is judgment, not math, and DCAA audits it after adequacy.",
+        "Whether the numbers match your books, payroll records and billing system. Only the workbook is checked.",
+        "Checklist items marked Review, which need documents or judgment outside the workbook.",
+        "Whether the certificate is actually signed: a signature normally lives on the signed copy you submit.",
+        "Classified contracts, compensation cap blending agreements and anything else DCAA coordinates separately."
+      ],
+      "sources": {
+        "far52.216-7": "FAR 52.216-7(d)(2), Allowable Cost and Payment: the 6-month deadline and items (A) to (O) of an adequate final indirect cost rate proposal",
+        "far42.703-2": "FAR 42.703-2, Certificate of indirect costs (and the clause at FAR 52.242-4)",
+        "far42.705-1": "FAR 42.705-1(b)(1), adequacy review of the final indirect cost rate proposal",
+        "dcaa-checklist": "DCAA Checklist for Determining Adequacy of Contractor Incurred Cost Proposal, Version 3.4 (December 2021)"
+      },
+      "scope": "An adequacy pre-check: are the required schedules there, does the math foot, do the schedules tie, is the certificate there, and is the submission on time. Adequacy is not allowability, and a PASS is not DCAA acceptance. DCAA makes its own adequacy determination, and the costs claimed remain your responsibility.",
+      "input": {
+        "format": "xlsx",
+        "bytes": 19183,
+        "tabs": 15
+      },
+      "inputSha256": "1962cb5bbe62b6e349bfd3721aeb79d38218a7f85b88b8c648555386df597adf"
+    }
+  }
+}

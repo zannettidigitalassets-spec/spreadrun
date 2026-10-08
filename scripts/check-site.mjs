@@ -43,6 +43,7 @@ const NEED_LD = {
   '/apis/pecos-enrollment-precheck': PRODUCT_LD,
   '/apis/cmmc-self-assessment-validator': PRODUCT_LD,
   '/apis/sca-hw-fringe-checker': PRODUCT_LD,
+  '/apis/ice-adequacy-precheck': PRODUCT_LD,
   '/apis/cobra-notice-qa': PRODUCT_LD,
   '/tools': ['ItemList', 'BreadcrumbList'],
   '/tools/davis-bacon-overtime-calculator': ['WebApplication', 'FAQPage', 'BreadcrumbList'],
@@ -67,6 +68,7 @@ const NEED_LD = {
   '/docs/pecos-enrollment-precheck': ['BreadcrumbList'],
   '/docs/cmmc-self-assessment-validator': ['BreadcrumbList'],
   '/docs/sca-hw-fringe-checker': ['BreadcrumbList'],
+  '/docs/ice-adequacy-precheck': ['BreadcrumbList'],
   '/docs/cobra-notice-qa': ['BreadcrumbList'],
   '/guides': ['BreadcrumbList'],
   '/guides/hospital-price-transparency-file-requirements-2026': GUIDE_LD,
@@ -177,8 +179,8 @@ const client = fs.readFileSync(path.join(root, 'src/entry-client.jsx'), 'utf8');
 for (const u of known) if (!client.includes(`'${u}': () => import(`)) fail(`${u}: no client loader in entry-client.jsx`);
 
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
-for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/apis/pecos-enrollment-precheck', '/apis/cmmc-self-assessment-validator', '/apis/cobra-notice-qa', '/apis/sca-hw-fringe-checker', '/tools/davis-bacon-apprentice-checker', '/tools', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator', '/tools/cobra-deadline-calculator', '/tools/final-paycheck-deadline', '/tools/contractor-vs-employee-check', '/tools/mechanics-lien-deadline-calculator', '/tools/aca-fte-calculator', '/tools/pecos-revalidation-calculator', '/tools/uad36-preflight-checklist', '/tools/cpsc-efiling-readiness-checklist', '/docs',
-  '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/docs/wh347-payroll-precheck', '/docs/pecos-enrollment-precheck', '/docs/sca-hw-fringe-checker', '/docs/cmmc-self-assessment-validator', '/docs/cobra-notice-qa', '/guides',
+for (const u of ['/', '/apis', '/apis/clinical-trial-table-validator', '/apis/hospital-mrf-validator', '/apis/uad-36-appraisal-validator', '/apis/pbj-staffing-qa', '/apis/wh347-payroll-precheck', '/apis/pecos-enrollment-precheck', '/apis/cmmc-self-assessment-validator', '/apis/cobra-notice-qa', '/apis/sca-hw-fringe-checker', '/apis/ice-adequacy-precheck', '/tools/davis-bacon-apprentice-checker', '/tools', '/tools/davis-bacon-overtime-calculator', '/tools/davis-bacon-fringe-calculator', '/tools/pbj-preflight-checks', '/tools/i9-section2-deadline-calculator', '/tools/cobra-deadline-calculator', '/tools/final-paycheck-deadline', '/tools/contractor-vs-employee-check', '/tools/mechanics-lien-deadline-calculator', '/tools/aca-fte-calculator', '/tools/pecos-revalidation-calculator', '/tools/uad36-preflight-checklist', '/tools/cpsc-efiling-readiness-checklist', '/docs',
+  '/docs/clinical-trial-table-validator', '/docs/hospital-mrf-validator', '/docs/uad-36-appraisal-validator', '/docs/pbj-staffing-qa', '/docs/wh347-payroll-precheck', '/docs/pecos-enrollment-precheck', '/docs/sca-hw-fringe-checker', '/docs/ice-adequacy-precheck', '/docs/cmmc-self-assessment-validator', '/docs/cobra-notice-qa', '/guides',
   '/guides/hospital-price-transparency-file-requirements-2026', '/guides/uad-3-6-requirements-2026', '/guides/clinical-trial-data-quality-checks',
   '/guides/uad36-fatal-findings-explained', '/guides/ucdp-not-successful-meaning', '/guides/uad36-warning-vs-fatal', '/guides/uad36-basement-fields-hard-stop', '/guides/uad36-location-view-codes-rejected', '/guides/uad36-concession-mismatch', '/guides/uad36-address-usps-flag', '/guides/ucdp-not-successful-vs-rejected',
   '/guides/pbj-error-minus-1025', '/guides/pbj-error-4025', '/guides/pbj-error-3679', '/guides/pbj-error-3676', '/guides/pbj-error-4016',
