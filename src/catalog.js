@@ -182,9 +182,9 @@ export const PARTNER_APIS = [];
 
 export const apiBySlug = (slug) => APIS.find((a) => a.slug === slug);
 
-// Runs a pack covers at a price: a whole number when exact, otherwise one decimal, rounded down so it never
-// overstates (a $250 pack covers 2.5 runs at $100).
+// Runs a pack covers at a price: a whole number when exact, otherwise up to two decimals, rounded down so it never
+// overstates (a $250 pack covers 2.5 runs at $100 and 1.25 at $200).
 export const runsPer = (packCents, priceCents) => (packCents % priceCents === 0
   ? String(packCents / priceCents)
-  : (Math.floor((packCents * 10) / priceCents) / 10).toFixed(1));
+  : String(Math.floor((packCents * 100) / priceCents) / 100));
 export const dollars = (cents) => `$${(cents / 100).toFixed(2)}`;
