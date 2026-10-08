@@ -1,0 +1,11 @@
+{
+  "status": 400,
+  "body": {
+    "error": {
+      "code": "input_error",
+      "message": "The ECR file has no type 3 data records, so there is nothing to check.",
+      "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+      "charged": false
+    }
+  }
+}

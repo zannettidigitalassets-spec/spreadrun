@@ -169,3 +169,17 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     save('ice-demo-fail', *post(demo, (SAMPLES / 'ice-errors.xlsx').read_bytes(), {'Content-Type': xlsx}, query=ice_q))
     save('ice-input-error', *post(paid, b'\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1' + b'\0' * 504,
                                   {'Authorization': f'Bearer {rich}', 'Content-Type': 'application/vnd.ms-excel'}, query=ice_q))
+
+    # HCRIS pre-audit: the sample packages (a real HCRIS cost report with the identity replaced, invented listings).
+    # The demo endpoint takes the published samples only.
+    k = 'hcris-preaudit-qa'
+    paid, demo = serve(k, 'paid'), serve(k, 'demo')
+    rich, _ = fake.add_user(50000)
+    hq = '?periodStart=2024-06-01&periodEnd=2025-05-31&asOf=2025-10-15'
+    zipct = 'application/zip'
+    save('hcris-paid-pass', *post(paid, (SAMPLES / 'hcris-sample-clean.zip').read_bytes(),
+                                  {'Authorization': f'Bearer {rich}', 'Content-Type': zipct}, query=hq))
+    save('hcris-demo-fail', *post(demo, (SAMPLES / 'hcris-sample-errors.zip').read_bytes(), {'Content-Type': zipct},
+                                  query=hq))
+    save('hcris-input-error', *post(paid, b'%PDF-1.7\n' + b'\0' * 500,
+                                    {'Authorization': f'Bearer {rich}', 'Content-Type': 'application/pdf'}, query=hq))
