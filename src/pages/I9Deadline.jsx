@@ -155,7 +155,7 @@ export default function I9Deadline() {
       <section className="section wrap" aria-labelledby="cta-h">
         <div className="calc-result">
           <h2 id="cta-h" style={{ marginTop: 0 }}>Doing this for dozens of employees?</h2>
-          <p style={{ marginBottom: 0 }}>Browse <a href="/tools">SpreadRun's free compliance tools</a> for employers.</p>
+          <p style={{ marginBottom: 0 }}>Browse SpreadRun's <a href="/tools">free compliance tools</a>.</p>
         </div>
       </section>
       <ToolSignup source={I9_PATH} blurb="We will email you when there is a new free compliance tool." />
