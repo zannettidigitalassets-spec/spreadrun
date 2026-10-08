@@ -1,0 +1,222 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "hcris-preaudit-qa",
+    "mode": "demo",
+    "charged": false,
+    "report": {
+      "schemaVersion": 1,
+      "status": "FAIL",
+      "summary": "7 problems to fix before you file.",
+      "checkedAgainst": {
+        "transmittal": "CMS Pub. 15-2, chapter 40, Transmittal 26 (June 30, 2026)",
+        "ecrSpecification": "ECR specification dated 2026181, valid for cost reporting periods ending on or after June 30, 2026, with the record layouts and edits in section 4095",
+        "specDate": "2026181"
+      },
+      "file": {
+        "ccn": "999208",
+        "ecrSpecDate": "2024275",
+        "records": 2567,
+        "dataRecords": 2473,
+        "labelRecords": 89,
+        "type4Records": 3
+      },
+      "periodDays": 365,
+      "deadline": {
+        "daysLeft": 16,
+        "measuredFrom": "the asOf date you sent",
+        "status": "on-time",
+        "rule": "The last day of the fifth month after the period ends, or 150 days after a period that ends mid-month (42 CFR 413.24(f)(2))."
+      },
+      "checks": {
+        "ecrFormat": "pass",
+        "crossTies": "fail",
+        "s10": "fail",
+        "listings": "fail",
+        "deadline": "pass"
+      },
+      "listings": {
+        "found": [
+          {
+            "exhibit": "2A",
+            "file": "MedicareBD_IP_999208.xlsx",
+            "kind": "IP",
+            "component": false,
+            "rows": 14
+          },
+          {
+            "exhibit": "2A",
+            "file": "MedicareBD_OP_999208.xlsx",
+            "kind": "OP",
+            "component": false,
+            "rows": 8
+          },
+          {
+            "exhibit": "3C",
+            "file": "TotalBD_999208.xlsx",
+            "kind": null,
+            "component": false,
+            "rows": 297
+          },
+          {
+            "exhibit": "3C",
+            "file": "TotalBD_component_999208.xlsx",
+            "kind": null,
+            "component": true,
+            "rows": 1
+          }
+        ],
+        "required": {
+          "2A": true,
+          "3B": true,
+          "3C": true
+        },
+        "status": {
+          "2A": "fail",
+          "3B": "fail",
+          "3C": "fail"
+        },
+        "priorYearListings": 0,
+        "priorClaimCheck": {
+          "2A": "not run: add last year's listing to the package",
+          "3C": "not run: add last year's listing to the package"
+        },
+        "schExemptFromS10Listings": false,
+        "unrecognizedFiles": 0
+      },
+      "tiesChecked": 786,
+      "ruleCounts": {
+        "BD-120-DAYS": 1,
+        "BD-BILL-120": 1,
+        "BD-CAP": 1,
+        "LIST-MISSING": 1,
+        "S10-LINE": 1,
+        "TBD-DUPLICATE": 1,
+        "TIE-A-B": 1
+      },
+      "findingCount": 7,
+      "findingCounts": {
+        "error": 7,
+        "warning": 0
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "ruleId": "TIE-A-B",
+          "message": "Worksheet B, Part I, column 0 must carry the total direct cost from Worksheet A, column 7, for the same line.",
+          "source": "wb",
+          "worksheet": "B, Part I",
+          "line": "60",
+          "column": "0",
+          "expected": 1436978.0,
+          "actual": 1441978.0,
+          "group": "crossTies"
+        },
+        {
+          "severity": "error",
+          "ruleId": "BD-120-DAYS",
+          "message": "Written off 60 days after the first bill. Collection effort must last at least 120 days after the first bill before the account is written off (42 CFR 413.89(e)(2)(i)(A)(5)).",
+          "source": "413.89",
+          "exhibit": "2A",
+          "file": "MedicareBD_IP_999208.xlsx",
+          "row": "23",
+          "column": "17",
+          "expected": "120 days or more",
+          "actual": "60 days",
+          "group": "listings"
+        },
+        {
+          "severity": "error",
+          "ruleId": "BD-BILL-120",
+          "message": "The first bill went out 287 days after the later remittance advice. The beneficiary must be billed within 120 days of it (42 CFR 413.89(e)(2)(i)(A)(3)).",
+          "source": "413.89",
+          "exhibit": "2A",
+          "file": "MedicareBD_IP_999208.xlsx",
+          "row": "23",
+          "column": "13",
+          "expected": "120 days or fewer",
+          "actual": "287 days",
+          "group": "listings"
+        },
+        {
+          "severity": "error",
+          "ruleId": "BD-CAP",
+          "message": "The allowable bad debt (column 23) is more than the deductible and coinsurance (columns 20 and 21) less recoveries and payments (columns 18 and 22). Medicare bad debt can only come from unpaid deductible and coinsurance.",
+          "source": "413.89",
+          "exhibit": "2A",
+          "file": "MedicareBD_IP_999208.xlsx",
+          "row": "29",
+          "column": "23",
+          "expected": "at most 1126.45",
+          "actual": 1276.45,
+          "group": "listings"
+        },
+        {
+          "severity": "error",
+          "ruleId": "LIST-MISSING",
+          "message": "Worksheet S-10, line 20 claims charity care but no Exhibit 3B listing is in the package. A cost report is rejected without the listing that supports the charity care claimed (42 CFR 413.24(f)(5)(i)(D)).",
+          "source": "413.24(f)(5)",
+          "exhibit": "3B",
+          "group": "listings"
+        },
+        {
+          "severity": "error",
+          "ruleId": "TBD-DUPLICATE",
+          "message": "Account B0000005 is listed twice for the same dates of service (rows 18 and 19). Claim each account once.",
+          "source": "ex3c",
+          "exhibit": "3C",
+          "file": "TotalBD_999208.xlsx",
+          "row": "19",
+          "column": "5",
+          "actual": "account B0000005",
+          "group": "listings"
+        },
+        {
+          "severity": "error",
+          "ruleId": "S10-LINE",
+          "message": "Line 30 (cost of uncompensated care) must be line 23, column 3 plus line 29.",
+          "source": "s10",
+          "worksheet": "S-10, Part I",
+          "line": "30",
+          "column": "1",
+          "expected": 453134.0,
+          "actual": 465134.0,
+          "group": "s10"
+        }
+      ],
+      "findingsTruncated": false,
+      "notChecked": [
+        "Whether any cost, bad debt or charity care amount is allowable, or what Medicare will pay. That is the MAC's judgment, and a PASS does not decide it.",
+        "Cost finding choices: statistics, allocation bases, reclassifications and adjustments are taken as filed.",
+        "Collection effort documentation, indigence determinations, Medicaid remittance advices and the bad debt collection policy. Only the dates and amounts in the listings are checked.",
+        "Whether the listings match your patient accounting system.",
+        "The type 4 encryption code. Only approved vendor software can produce it; the check confirms the records are there.",
+        "Listings for components other than the hospital (subprovider, SNF and other CCNs) are checked row by row but not tied to their worksheets.",
+        "Worksheets and edits outside this list: the full set of level 1 and level 2 edits runs in your vendor software and again at the MAC."
+      ],
+      "sources": {
+        "413.24(f)(2)": "42 CFR 413.24(f)(2), due dates for cost reports",
+        "413.24(f)(5)": "42 CFR 413.24(f)(5)(i)(B) and (D), cost report rejected without the bad debt and charity care listings that correspond to the amounts claimed",
+        "413.24(f)(5)(ii)": "42 CFR 413.24(f)(5)(ii), the ECR file must conform to the ECR Specifications Manual",
+        "413.89": "42 CFR 413.89(e) and (f), criteria for allowable Medicare bad debt and the period of write-off",
+        "ecr-t1": "CMS Pub. 15-2, chapter 40, section 4095, Table 1, record specifications",
+        "ecr-t6": "CMS Pub. 15-2, chapter 40, section 4095, Table 6, edits",
+        "s10": "CMS Pub. 15-2, chapter 40, section 4012.1, Worksheet S-10 line instructions",
+        "ex2a": "CMS Pub. 15-2, chapter 40, section 4004.2, Exhibit 2A, and the CMS Exhibit 2A specification",
+        "ex3b": "CMS Pub. 15-2, chapter 40, section 4012.2, Exhibit 3B, and the CMS Exhibit 3B specification",
+        "ex3c": "CMS Pub. 15-2, chapter 40, section 4012.2, Exhibit 3C, and the CMS Exhibit 3C specification",
+        "wb": "CMS Pub. 15-2, chapter 40, section 4020, Worksheet B, Part I",
+        "wc": "CMS Pub. 15-2, chapter 40, section 4023.1, Worksheet C, Part I",
+        "we": "CMS Pub. 15-2, chapter 40, sections 4030.1 and 4030.2, Worksheet E, Parts A and B"
+      },
+      "scope": "A pre-audit math check: is the ECR file in the CMS format, do Worksheets S, A, B, C, D and E tie, does Worksheet S-10 recompute, and do the listings support what is claimed. A PASS is not MAC acceptance and does not determine allowability or payment.",
+      "input": {
+        "format": "zip",
+        "bytes": 47843,
+        "files": 5
+      },
+      "inputSha256": "65d63bfa535de5e2577214ddde4ab8224d3541708d1e756a80b1eed5b12eb070"
+    }
+  }
+}

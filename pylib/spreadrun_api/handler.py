@@ -66,6 +66,9 @@ def _run(api, body, query, *, demo):
     if api == 'ice-adequacy-precheck':
         params = {k: v[0] for k, v in query.items() if k not in ('channel', 'slug')}
         return runners.run_ice(body, query=params, demo=demo)
+    if api == 'hcris-preaudit-qa':
+        params = {k: v[0] for k, v in query.items() if k not in ('channel', 'slug')}
+        return runners.run_hcris(body, query=params, demo=demo)
     if api == 'sca-hw-fringe-checker':
         # Every query key except the route's own goes to the engine, which refuses unknown ones (no silent typos).
         params = {k: v[0] for k, v in query.items() if k not in ('channel', 'slug')}

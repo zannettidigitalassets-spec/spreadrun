@@ -8,6 +8,7 @@ export const HIGH_STAKES_RUN_CENTS = 100;
 export const PROFESSIONAL_RUN_CENTS = 2500;
 export const PRE_AUDIT_RUN_CENTS = 10000;
 export const ADEQUACY_RUN_CENTS = 25000;
+export const COST_REPORT_RUN_CENTS = 20000;
 export const PRICE_PER_CALL_CENTS = STANDARD_RUN_CENTS; // kept for older callers
 
 // Packs buy cents of credit that work on every API. calls = standard runs.
@@ -161,6 +162,19 @@ export const APIS = [
       'Pre-checks an annual incurred cost submission workbook against DCAA\'s adequacy checklist before it goes in: all 15 schedules present, every total recomputed, Schedule A rates and the cross ties between schedules, the certificate of final indirect costs and the 6-month deadline. Any layout, not only the DCAA ICE model.',
     cta: 'Pre-check a submission',
   },
+  {
+    slug: 'hcris-preaudit-qa',
+    name: 'Medicare Cost Report Pre-Audit QA',
+    tier: 'built',
+    status: 'beta',
+    priceCents: COST_REPORT_RUN_CENTS,
+    unit: 'completed pre-audit',
+    maxBodyBytes: 4_000_000,
+    demoMaxBodyBytes: 4_000_000,
+    summary:
+      'Pre-audits a hospital Medicare cost report (CMS-2552-10) before the MAC does: the ECR file format, the ties between Worksheets S, A, B, C, D and E, the S-10 math line by line, the bad debt and charity care listings against the amounts claimed, and the filing deadline.',
+    cta: 'Pre-audit a cost report',
+  },
 ];
 
 // Tier 2 listings appear here only after an affiliate agreement is approved and signed by the owner.
@@ -168,9 +182,9 @@ export const PARTNER_APIS = [];
 
 export const apiBySlug = (slug) => APIS.find((a) => a.slug === slug);
 
-// Runs a pack covers at a price: a whole number when exact, otherwise one decimal, rounded down so it never
-// overstates (a $250 pack covers 2.5 runs at $100).
+// Runs a pack covers at a price: a whole number when exact, otherwise up to two decimals, rounded down so it never
+// overstates (a $250 pack covers 2.5 runs at $100 and 1.25 at $200).
 export const runsPer = (packCents, priceCents) => (packCents % priceCents === 0
   ? String(packCents / priceCents)
-  : (Math.floor((packCents * 10) / priceCents) / 10).toFixed(1));
+  : String(Math.floor((packCents * 100) / priceCents) / 100));
 export const dollars = (cents) => `$${(cents / 100).toFixed(2)}`;

@@ -2,7 +2,7 @@ import LegalPage, { SectionTitle, P, UL } from './legal/LegalPage.jsx';
 
 // Approved 2026-10-02 from docs/legal-drafts/privacy-DRAFT.md with the owner's decisions applied:
 // brand-only operator wording, and no protected health information or personal data in submissions.
-export const UPDATED = 'October 7, 2026';
+export const UPDATED = 'October 8, 2026';
 
 export default function Privacy() {
   return (
@@ -29,6 +29,7 @@ export default function Privacy() {
       <P>For the PECOS Medicare Enrollment Pre-Check, SpreadRun processes personal data contained in enrollment drafts (such as practitioner names, NPIs, and license and DEA numbers) in memory only to produce the validation report. It is not stored. The NPI is sent to the public NPPES NPI Registry operated by CMS for that run only.</P>
       <P>For the COBRA Notice Content QA, SpreadRun processes personal data contained in COBRA notices (such as names of covered employees and family members, addresses, and premium amounts) in memory only to produce the validation report. It is not stored.</P>
       <P>For the Incurred Cost Submission Adequacy Pre-Check, SpreadRun processes personal data contained in incurred cost workbooks (such as subcontractor points of contact and the certifying official's name and title) in memory only to produce the validation report. It is not stored.</P>
+      <P>For the Medicare Cost Report Pre-Audit QA, SpreadRun requires de-identified listings: account numbers replaced by pseudonymous IDs, patient names, MBIs and Medicaid numbers removed, and dates shifted by an offset the customer chooses. A file containing PHI patterns is refused before any check runs and is not charged. Everything submitted is processed in memory only to produce the validation report, and is never stored.</P>
       <P>Email updates from the free tools. If you choose to sign up under one of our free tools, we store your email address, the tool page you signed up from, and the date. We use it only to send deadline reminders and announcements of new SpreadRun tools. Every email has a one-click unsubscribe link, and you can also unsubscribe at spreadrun.com/unsubscribe. We do not sell or share the list. The tools themselves run in your browser; your email is sent to us only if you submit the signup form.</P>
       <P><strong>Usage records:</strong> for each API request we record the time, which API was called, whether it was a paid call or a test-form run, the outcome (for example completed or rejected as invalid input), the report's status (PASS, WARN or FAIL), the request size, how long it took, the amount charged, and for paid calls the account and key used. These records never contain the submitted data.</P>
       <P><strong>Test-form rate limiting:</strong> for test-form runs we store a salted one-way hash of the network address the request came from, with a daily count, so we can limit free runs. We do not store the address itself.</P>

@@ -23,6 +23,8 @@ import ScaApi, { SCA_FAQ } from './pages/ScaApi.jsx';
 import DocsSca from './pages/DocsSca.jsx';
 import IceApi, { ICE_FAQ } from './pages/IceApi.jsx';
 import DocsIce from './pages/DocsIce.jsx';
+import HcrisApi, { HCRIS_FAQ } from './pages/HcrisApi.jsx';
+import DocsHcris from './pages/DocsHcris.jsx';
 import OvertimeCalculator, { OT_FAQ, OT_CALC_PATH } from './pages/OvertimeCalculator.jsx';
 import FringeCalculator, { FRINGE_FAQ, FRINGE_CALC_PATH } from './pages/FringeCalculator.jsx';
 import PbjPreflight, { PREFLIGHT_FAQ, PBJ_PREFLIGHT_PATH } from './pages/PbjPreflight.jsx';
@@ -109,6 +111,8 @@ const D = {
   docsCobra: 'COBRA Notice Content QA API reference: text, PDF or DOCX input, the 14 election and 6 general notice items, deadline rules, report schema, rule IDs and errors.',
   cmmc: 'Verify a CMMC Level 2 self-assessment score before SPRS: recompute it with the DoD method, check POA&M limits, CAGE codes and affirmation. $25.00 per check.',
   ice: "Pre-check an incurred cost submission against DCAA's adequacy checklist: all 15 schedules, every total, Schedule A rates and ties, certificate. $250.00 per run.",
+  hcris: 'Pre-audit a hospital Medicare cost report: ECR file format, worksheet ties, S-10 math, bad debt and charity care listings, filing deadline. $200.00 per run.',
+  docsHcris: 'Medicare Cost Report Pre-Audit QA API reference: the ECR file and listings package, period parameters, patient data rules, report fields, rule IDs and errors.',
   docsIce: 'Incurred Cost Submission Adequacy Pre-Check API reference: the .xlsx upload, fiscal year end, how schedules are found, the report, rule IDs and errors.',
   sca: 'Check SCA health and welfare fringe math per employee: hours capped at 40, cash in lieu, wage offsets, part-time pro-rating, admin costs. $100.00 per period.',
   docsSca: 'SCA Health and Welfare Fringe Checker API reference: CSV, .xlsx or JSON input, parameters, every column, the report schema, rule IDs, sources and error codes.',
@@ -143,7 +147,7 @@ const D = {
 
 const HOME = [['/', 'Home']];
 const product = (slug, name, title, desc, faq) => ({
-  Component: { 'clinical-trial-table-validator': ClinicalApi, 'hospital-mrf-validator': MrfApi, 'uad-36-appraisal-validator': UadApi, 'pbj-staffing-qa': PbjApi, 'wh347-payroll-precheck': Wh347Api, 'pecos-enrollment-precheck': PecosApi, 'cmmc-self-assessment-validator': CmmcApi, 'cobra-notice-qa': CobraApi, 'sca-hw-fringe-checker': ScaApi, 'ice-adequacy-precheck': IceApi }[slug],
+  Component: { 'clinical-trial-table-validator': ClinicalApi, 'hospital-mrf-validator': MrfApi, 'uad-36-appraisal-validator': UadApi, 'pbj-staffing-qa': PbjApi, 'wh347-payroll-precheck': Wh347Api, 'pecos-enrollment-precheck': PecosApi, 'cmmc-self-assessment-validator': CmmcApi, 'cobra-notice-qa': CobraApi, 'sca-hw-fringe-checker': ScaApi, 'ice-adequacy-precheck': IceApi, 'hcris-preaudit-qa': HcrisApi }[slug],
   title, description: desc, priority: '0.9',
   jsonLd: () => [appLd(slug, desc), faqLd(faq), crumbsLd([...HOME, ['/apis', 'APIs'], [`/apis/${slug}`, name]])],
 });
@@ -210,6 +214,8 @@ export const ROUTES = {
     'CMMC Self-Assessment Score Validator: Verify Your SPRS Score | SpreadRun', D.cmmc, CMMC_FAQ),
   '/apis/ice-adequacy-precheck': product('ice-adequacy-precheck', 'Incurred Cost Submission Adequacy Pre-Check',
     'Incurred Cost Submission Adequacy Pre-Check: DCAA Checklist, Every Schedule | SpreadRun', D.ice, ICE_FAQ),
+  '/apis/hcris-preaudit-qa': product('hcris-preaudit-qa', 'Medicare Cost Report Pre-Audit QA',
+    'Medicare Cost Report Pre-Audit QA: CMS-2552-10 ECR, S-10 and Bad Debt Checks | SpreadRun', D.hcris, HCRIS_FAQ),
   '/apis/sca-hw-fringe-checker': product('sca-hw-fringe-checker', 'SCA Health and Welfare Fringe Checker',
     'SCA Health and Welfare Fringe Checker: Check H&W Math Per Employee | SpreadRun', D.sca, SCA_FAQ),
   [OT_CALC_PATH]: {
@@ -460,6 +466,7 @@ export const ROUTES = {
   '/docs/cobra-notice-qa': docsPage('cobra-notice-qa', DocsCobra, 'COBRA Notice Content QA', D.docsCobra),
   '/docs/cmmc-self-assessment-validator': docsPage('cmmc-self-assessment-validator', DocsCmmc, 'CMMC Self-Assessment Score Validator', D.docsCmmc),
   '/docs/ice-adequacy-precheck': docsPage('ice-adequacy-precheck', DocsIce, 'Incurred Cost Submission Adequacy Pre-Check', D.docsIce),
+  '/docs/hcris-preaudit-qa': docsPage('hcris-preaudit-qa', DocsHcris, 'Medicare Cost Report Pre-Audit QA', D.docsHcris),
   '/docs/sca-hw-fringe-checker': docsPage('sca-hw-fringe-checker', DocsSca, 'SCA Health and Welfare Fringe Checker', D.docsSca),
   '/guides': {
     Component: Guides,

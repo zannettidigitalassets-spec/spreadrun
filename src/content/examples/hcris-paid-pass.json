@@ -1,0 +1,147 @@
+{
+  "status": 200,
+  "body": {
+    "requestId": "7f3c2a1e-5b8d-4c6f-9e0a-1d2b3c4d5e6f",
+    "api": "hcris-preaudit-qa",
+    "mode": "paid",
+    "charged": true,
+    "priceCents": 20000,
+    "balanceCents": 30000,
+    "report": {
+      "schemaVersion": 1,
+      "status": "PASS",
+      "summary": "The ECR file is in the CMS format, the worksheets tie, S-10 recomputes and the listings support the amounts claimed. Ready to file, as far as these checks go.",
+      "checkedAgainst": {
+        "transmittal": "CMS Pub. 15-2, chapter 40, Transmittal 26 (June 30, 2026)",
+        "ecrSpecification": "ECR specification dated 2026181, valid for cost reporting periods ending on or after June 30, 2026, with the record layouts and edits in section 4095",
+        "specDate": "2026181"
+      },
+      "file": {
+        "ccn": "999208",
+        "ecrSpecDate": "2024275",
+        "records": 2567,
+        "dataRecords": 2473,
+        "labelRecords": 89,
+        "type4Records": 3
+      },
+      "periodDays": 365,
+      "deadline": {
+        "daysLeft": 16,
+        "measuredFrom": "the asOf date you sent",
+        "status": "on-time",
+        "rule": "The last day of the fifth month after the period ends, or 150 days after a period that ends mid-month (42 CFR 413.24(f)(2))."
+      },
+      "checks": {
+        "ecrFormat": "pass",
+        "crossTies": "pass",
+        "s10": "pass",
+        "listings": "pass",
+        "deadline": "pass"
+      },
+      "listings": {
+        "found": [
+          {
+            "exhibit": "2A",
+            "file": "MedicareBD_IP_999208.xlsx",
+            "kind": "IP",
+            "component": false,
+            "rows": 14
+          },
+          {
+            "exhibit": "2A",
+            "file": "MedicareBD_OP_999208.xlsx",
+            "kind": "OP",
+            "component": false,
+            "rows": 8
+          },
+          {
+            "exhibit": "3B",
+            "file": "Charity_999208.xlsx",
+            "kind": null,
+            "component": false,
+            "rows": 9
+          },
+          {
+            "exhibit": "3B",
+            "file": "Charity_component_999208.xlsx",
+            "kind": null,
+            "component": true,
+            "rows": 2
+          },
+          {
+            "exhibit": "3C",
+            "file": "TotalBD_999208.xlsx",
+            "kind": null,
+            "component": false,
+            "rows": 297
+          },
+          {
+            "exhibit": "3C",
+            "file": "TotalBD_component_999208.xlsx",
+            "kind": null,
+            "component": true,
+            "rows": 1
+          }
+        ],
+        "required": {
+          "2A": true,
+          "3B": true,
+          "3C": true
+        },
+        "status": {
+          "2A": "pass",
+          "3B": "pass",
+          "3C": "pass"
+        },
+        "priorYearListings": 0,
+        "priorClaimCheck": {
+          "2A": "not run: add last year's listing to the package",
+          "3B": "not run: add last year's listing to the package",
+          "3C": "not run: add last year's listing to the package"
+        },
+        "schExemptFromS10Listings": false,
+        "unrecognizedFiles": 0
+      },
+      "tiesChecked": 823,
+      "ruleCounts": {},
+      "findingCount": 0,
+      "findingCounts": {
+        "error": 0,
+        "warning": 0
+      },
+      "findings": [],
+      "findingsTruncated": false,
+      "notChecked": [
+        "Whether any cost, bad debt or charity care amount is allowable, or what Medicare will pay. That is the MAC's judgment, and a PASS does not decide it.",
+        "Cost finding choices: statistics, allocation bases, reclassifications and adjustments are taken as filed.",
+        "Collection effort documentation, indigence determinations, Medicaid remittance advices and the bad debt collection policy. Only the dates and amounts in the listings are checked.",
+        "Whether the listings match your patient accounting system.",
+        "The type 4 encryption code. Only approved vendor software can produce it; the check confirms the records are there.",
+        "Listings for components other than the hospital (subprovider, SNF and other CCNs) are checked row by row but not tied to their worksheets.",
+        "Worksheets and edits outside this list: the full set of level 1 and level 2 edits runs in your vendor software and again at the MAC."
+      ],
+      "sources": {
+        "413.24(f)(2)": "42 CFR 413.24(f)(2), due dates for cost reports",
+        "413.24(f)(5)": "42 CFR 413.24(f)(5)(i)(B) and (D), cost report rejected without the bad debt and charity care listings that correspond to the amounts claimed",
+        "413.24(f)(5)(ii)": "42 CFR 413.24(f)(5)(ii), the ECR file must conform to the ECR Specifications Manual",
+        "413.89": "42 CFR 413.89(e) and (f), criteria for allowable Medicare bad debt and the period of write-off",
+        "ecr-t1": "CMS Pub. 15-2, chapter 40, section 4095, Table 1, record specifications",
+        "ecr-t6": "CMS Pub. 15-2, chapter 40, section 4095, Table 6, edits",
+        "s10": "CMS Pub. 15-2, chapter 40, section 4012.1, Worksheet S-10 line instructions",
+        "ex2a": "CMS Pub. 15-2, chapter 40, section 4004.2, Exhibit 2A, and the CMS Exhibit 2A specification",
+        "ex3b": "CMS Pub. 15-2, chapter 40, section 4012.2, Exhibit 3B, and the CMS Exhibit 3B specification",
+        "ex3c": "CMS Pub. 15-2, chapter 40, section 4012.2, Exhibit 3C, and the CMS Exhibit 3C specification",
+        "wb": "CMS Pub. 15-2, chapter 40, section 4020, Worksheet B, Part I",
+        "wc": "CMS Pub. 15-2, chapter 40, section 4023.1, Worksheet C, Part I",
+        "we": "CMS Pub. 15-2, chapter 40, sections 4030.1 and 4030.2, Worksheet E, Parts A and B"
+      },
+      "scope": "A pre-audit math check: is the ECR file in the CMS format, do Worksheets S, A, B, C, D and E tie, does Worksheet S-10 recompute, and do the listings support what is claimed. A PASS is not MAC acceptance and does not determine allowability or payment.",
+      "input": {
+        "format": "zip",
+        "bytes": 52765,
+        "files": 7
+      },
+      "inputSha256": "38ba820af5f22bbe8f4ba3a2710764d438d0cb08cc31288f0770fc37bd15fa57"
+    }
+  }
+}
