@@ -16,7 +16,7 @@ export const UAD_FAQ = [
   ['Does a PASS mean UCDP will accept the report?',
     `No. A PASS means the file passed the checks this validator runs: the delivery specification checks and ${coverage.rulesImplemented} of the ${coverage.rulesTotal} published URAR compliance rules. UCDP also runs the rules not implemented here, GSE proprietary checks and its own system checks, and it reviews the whole package, not just the XML. These are structural checks. They are not legal, compliance or underwriting advice.`],
   ['Our appraisal software already checks the report. Why use this?',
-    'Your appraisal software runs the GSE compliance rules while the report is written, and UCDP runs them again when the lender submits it. Those are the right checks for an appraiser finishing a report. Those checks are the right ones for finishing a report. This is the independent second opinion: the same published rules, run against your file outside your software, before it goes to the lender or AMC. One run is $1.00.'],
+    'Your appraisal software runs the GSE compliance rules while the report is written, and UCDP runs them again when the lender submits it. Those are the right checks for an appraiser finishing a report. This is the independent second opinion: the same published rules, run against your file outside your software, before it goes to the lender or AMC. One run is $1.00.'],
   ['What about Fannie Mae\'s UAD Compliance API?',
     'Fannie Mae offers a UAD Compliance API to technology vendors, arranged through Fannie Mae. If you have access to it, it is the authoritative source and you should use it. SpreadRun is for teams that do not: anyone with an API key and credits can call it.'],
   ['Which reports are supported?',
