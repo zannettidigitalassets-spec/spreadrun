@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { CLINICAL_CODES, MRF_CODES } from './codes.js';
 
-// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347' | 'pecos' | 'cmmc' | 'cobra' | 'sca' | 'ice'.
+// Renders a real validator report. kind: 'clinical' | 'mrf' | 'uad' | 'pbj' | 'wh347' | 'pecos' | 'cmmc' | 'cobra' | 'sca' | 'ice'
+// | 'hcris'.
 // refs (SCA only): line number to the employee reference the user typed, joined in the browser. Reports never carry it.
 export default function ReportSheet({ kind, report, label, sub, refs }) {
   if (!report) return null;
@@ -15,7 +16,7 @@ export default function ReportSheet({ kind, report, label, sub, refs }) {
         <span className={`stamp ${report.status}`}>{report.status}</span>
       </div>
       <div className="sheet-body">
-        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : kind === 'pecos' ? <Pecos r={report} /> : kind === 'cmmc' ? <Cmmc r={report} /> : kind === 'cobra' ? <Cobra r={report} /> : kind === 'sca' ? <Sca r={report} refs={refs} /> : kind === 'ice' ? <Ice r={report} /> : <Mrf r={report} />}
+        {kind === 'clinical' ? <Clinical r={report} /> : kind === 'uad' ? <Uad r={report} /> : kind === 'pbj' ? <Pbj r={report} /> : kind === 'wh347' ? <Wh347 r={report} /> : kind === 'pecos' ? <Pecos r={report} /> : kind === 'cmmc' ? <Cmmc r={report} /> : kind === 'cobra' ? <Cobra r={report} /> : kind === 'sca' ? <Sca r={report} refs={refs} /> : kind === 'ice' ? <Ice r={report} /> : kind === 'hcris' ? <Hcris r={report} /> : <Mrf r={report} />}
       </div>
     </div>
   );
@@ -449,6 +450,76 @@ function Ice({ r }) {
           ))}
         </ul>
       </details>
+    </>
+  );
+}
+
+const HCRIS_GROUPS = [['ecrFormat', 'ECR file format'], ['crossTies', 'Worksheets tie'], ['s10', 'S-10 recomputes'],
+  ['listings', 'Listings support the claims'], ['deadline', 'Deadline']];
+const HCRIS_EX = { '2A': 'Exhibit 2A, Medicare bad debts', '3B': 'Exhibit 3B, charity care', '3C': 'Exhibit 3C, total bad debts' };
+const HCRIS_STATUS = { pass: 'Pass', warn: 'Review', fail: 'Fail', na: 'Not needed' };
+
+function hcrisWhere(f) {
+  if (f.exhibit && f.row) return <><b>Exhibit {f.exhibit}</b> {f.file ? <span className="muted">{f.file}</span> : null} row {f.row}{f.column ? `, column ${f.column}` : ''}</>;
+  if (f.worksheet) return <><b>Worksheet {f.worksheet}</b>{f.line ? `, line ${f.line}` : ''}{f.column ? `, column ${f.column}` : ''}</>;
+  if (f.exhibit) return <b>Exhibit {f.exhibit}</b>;
+  if (f.record) return <><b>ECR file</b> record {f.record}{f.positions ? `, positions ${f.positions}` : ''}</>;
+  return 'Cost report';
+}
+
+function Hcris({ r }) {
+  const d = r.deadline;
+  const L = r.listings;
+  return (
+    <>
+      <div className="calc-big" style={{ marginBottom: 8 }}>
+        <span className="small muted">Cost reporting period {fmtDate(r.period.start)} to {fmtDate(r.period.end)}</span>
+        <b style={{ fontSize: 20 }}>{r.summary}</b>
+        <span className="small">Due {fmtDate(d.due)}: {d.daysLeft < 0 ? `${-d.daysLeft} days past the five month mark` : `${d.daysLeft} days left`} as of {fmtDate(d.asOf)}.</span>
+      </div>
+      <div className="facts">
+        <span><b>{r.tiesChecked.toLocaleString('en-US')}</b> amounts recomputed</span>
+        <span><b>{r.findingCounts.error}</b> {r.findingCounts.error === 1 ? 'error' : 'errors'}</span>
+        <span><b>{r.findingCounts.warning}</b> to review</span>
+        <span><b>{L.found.length}</b> {L.found.length === 1 ? 'listing' : 'listings'}</span>
+      </div>
+      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 12px' }}>
+        {HCRIS_GROUPS.map(([k, label]) => (
+          <li key={k} className="small" style={{ display: 'flex', gap: 8, padding: '3px 0' }}>
+            <b className={sevClass(r.checks[k])} style={{ minWidth: 64 }}>{HCRIS_STATUS[r.checks[k]] || r.checks[k]}</b><span>{label}</span>
+          </li>
+        ))}
+      </ul>
+      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 12px' }}>
+        {Object.keys(HCRIS_EX).map((ex) => (
+          <li key={ex} className="small" style={{ display: 'flex', gap: 8, padding: '2px 0', flexWrap: 'wrap' }}>
+            <b className={sevClass(L.status[ex])} style={{ minWidth: 64 }}>{L.status[ex] === 'na' ? (L.required[ex] ? 'Missing' : 'Not needed') : HCRIS_STATUS[L.status[ex]]}</b>
+            <span>{HCRIS_EX[ex]}: {L.found.filter((x) => x.exhibit === ex).reduce((a, x) => a + x.rows, 0).toLocaleString('en-US')} rows{L.required[ex] ? ', required by what the report claims' : ''}</span>
+          </li>
+        ))}
+      </ul>
+      {r.findings.length > 0 ? (
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {r.findings.slice(0, 60).map((f, n) => (
+            <li key={n} style={{ borderTop: '1px solid var(--line)', padding: '8px 0' }}>
+              <div className="small" style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', alignItems: 'baseline' }}>
+                <b className={`sev-${f.severity === 'error' ? 'ERROR' : 'WARNING'}`}>{f.severity === 'error' ? 'Error' : 'Warning'}</b>
+                <span style={{ wordBreak: 'break-word' }}>{hcrisWhere(f)}</span>
+                <code className="ids" style={{ fontSize: 12 }}>{f.ruleId}</code>
+              </div>
+              {(f.expected !== undefined || f.actual !== undefined) && (
+                <div className="small" style={{ display: 'flex', flexWrap: 'wrap', gap: '2px 16px', margin: '2px 0' }}>
+                  {f.expected !== undefined && <span>Expected <b>{num(f.expected)}</b></span>}
+                  {f.actual !== undefined && <span>Actual <b>{num(f.actual)}</b></span>}
+                </div>
+              )}
+              <div className="small">{f.message}</div>
+            </li>
+          ))}
+          {r.findings.length > 60 && <li className="small muted">{r.findings.length - 60} more in the JSON report.</li>}
+        </ul>
+      ) : <p className="small" style={{ margin: 0 }}>No findings. A PASS means the file is in the CMS format, the worksheets tie, S-10 recomputes and the listings support the claims. It is not MAC acceptance and does not determine allowability or payment.</p>}
+      <p className="small muted" style={{ marginTop: 12 }}>Checked against {r.checkedAgainst.transmittal}, ECR specification {r.checkedAgainst.specDate}.</p>
     </>
   );
 }
