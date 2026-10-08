@@ -16,7 +16,7 @@ export const UAD_FAQ = [
   ['Does a PASS mean UCDP will accept the report?',
     `No. A PASS means the file passed the checks this validator runs: the delivery specification checks and ${coverage.rulesImplemented} of the ${coverage.rulesTotal} published URAR compliance rules. UCDP also runs the rules not implemented here, GSE proprietary checks and its own system checks, and it reviews the whole package, not just the XML. These are structural checks. They are not legal, compliance or underwriting advice.`],
   ['Our appraisal software already checks the report. Why use this?',
-    'Your appraisal software runs the GSE compliance rules while the report is written, and UCDP runs them again when the lender submits it. Those are the right checks for an appraiser finishing a report. This API is for the systems around them: a lender or AMC checking every file at intake, a QC tool, or a developer testing a UAD 3.6 export, from code, with no portal login.'],
+    'Your appraisal software runs the GSE compliance rules while the report is written, and UCDP runs them again when the lender submits it. Those are the right checks for an appraiser finishing a report. Those checks are the right ones for finishing a report. This is the independent second opinion: the same published rules, run against your file outside your software, before it goes to the lender or AMC. One run is $1.00.'],
   ['What about Fannie Mae\'s UAD Compliance API?',
     'Fannie Mae offers a UAD Compliance API to technology vendors, arranged through Fannie Mae. If you have access to it, it is the authoritative source and you should use it. SpreadRun is for teams that do not: anyone with an API key and credits can call it.'],
   ['Which reports are supported?',
@@ -65,7 +65,7 @@ export default function UadApi() {
         <p className="subhead">Don't trust your software's green check? Verify independently.</p>
         <p className="lede" style={{ marginTop: 16 }}>Check a UAD 3.6 URAR appraisal file from your own code. Send the XML, or the whole UAD 3.6 ZIP package, and get a PASS, WARN or FAIL report against the GSE-published delivery specification and compliance rules, with an XPath, a rule ID and a message for every finding.</p>
         <div className="note">
-          <p><b>Where this fits.</b> Appraisal software already runs the GSE compliance rules while a report is written, and the Uniform Collateral Data Portal (UCDP) runs them again when the lender submits it, at no fee to lenders. Fannie Mae also offers a UAD Compliance API to technology vendors. SpreadRun is the programmatic option for everyone else who handles the XML: lenders, AMCs and QC teams checking files at intake, and developers testing a UAD 3.6 export, with no portal login and no vendor agreement. UAD 3.6 is required for new UCDP submissions from November 2, 2026 (<a href={UCDP_FAQ_URL}>UCDP FAQ</a>). New to the change? Start with <a href="/guides/uad-3-6-requirements-2026">UAD 3.6 Requirements: The 2026 Guide</a>.</p>
+          <p><b>Where this fits.</b> Appraisal software already runs the GSE compliance rules while a report is written, and the Uniform Collateral Data Portal (UCDP) runs them again when the lender submits it, at no fee to lenders. Fannie Mae also offers a UAD Compliance API to technology vendors. SpreadRun is the programmatic option for everyone else who handles the XML: lenders, AMCs and QC teams checking files at intake, developers testing a UAD 3.6 export, and appraisers running one independent pre-check before the file goes to the lender or AMC, with no portal login and no vendor agreement. UAD 3.6 is required for new UCDP submissions from November 2, 2026 (<a href={UCDP_FAQ_URL}>UCDP FAQ</a>). New to the change? Start with <a href="/guides/uad-3-6-requirements-2026">UAD 3.6 Requirements: The 2026 Guide</a>.</p>
         </div>
         <div className="note">
           <p><b>A PASS does not mean UCDP acceptance.</b> These are structural checks, not legal, compliance or underwriting advice. {NOT_DONE} of the {coverage.rulesTotal} published URAR compliance rules are not implemented (listed below), UCDP also runs GSE proprietary checks, and only the XML is checked.</p>
@@ -98,6 +98,7 @@ export default function UadApi() {
             <li><b>Lenders and AMCs:</b> check every appraisal XML at intake, before it reaches underwriting or UCDP.</li>
             <li><b>QC and review teams:</b> run the same checks on a batch of files from a script.</li>
             <li><b>Software teams:</b> test a UAD 3.6 export or import in CI with a structured JSON report.</li>
+            <li><b>Appraisers:</b> one independent pre-check of your XML before delivery, so a fatal finding does not come back to you through someone else's intake queue. $1.00 per report, no portal login.</li>
             <li><b>AI agents and automation:</b> a plain REST endpoint with a file in and JSON out.</li>
           </ul>
           <h3 style={{ marginTop: 24 }}>Not checked</h3>
