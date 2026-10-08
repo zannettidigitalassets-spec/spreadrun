@@ -57,10 +57,30 @@ test('the claims on the product page cite primary sources, and unverified ones s
   assert.match(page, /Thousands of hospitals file a Medicare cost report every year/);
 });
 
-test('the sample report never shows a full account number or the real hospital', () => {
+test('the example reports carry no dates, no real hospital, and only pseudonymous row IDs', () => {
   for (const f of ['src/content/examples/hcris-demo-fail.json', 'src/content/examples/hcris-paid-pass.json']) {
     const t = read(f);
     assert.ok(!/EAST CARROLL|LAKE PROVIDENCE|190208/.test(t), f);
-    assert.ok(!/B0000005/.test(t), f);
+    assert.ok(!/\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}\/\d{4}/.test(t), f);
+    assert.ok(!/"due"|"asOf"/.test(t), f);
   }
+  const dup = JSON.parse(read('src/content/examples/hcris-demo-fail.json')).body.report.findings.find((x) => x.ruleId === 'TBD-DUPLICATE');
+  assert.equal(dup.actual, 'account B0000005');
+});
+
+test('the page walks through preparing a PHI-free file before the upload', () => {
+  const page = read('src/pages/HcrisApi.jsx');
+  const guide = page.indexOf('Prepare your file');
+  assert.ok(guide > 0 && guide < page.indexOf('<HcrisDemo'));
+  for (const s of ['Replace the identifiers', 'Shift the dates', 'Shift the period', 'probably not shifted by the same number of days'])
+    assert.ok(page.includes(s), s);
+  const demo = read('src/site/HcrisDemo.jsx');
+  assert.match(demo, /Do not upload patient names, MBIs, Medicaid numbers or real account numbers\. This tool does not accept PHI, and files containing PHI patterns are refused without charge\./);
+  assert.match(demo, /Period start, shifted/);
+  assert.match(read('src/Privacy.jsx'), /For the Medicare Cost Report Pre-Audit QA, SpreadRun requires de-identified listings/);
+});
+
+test('a $250 pack covers exactly 1.25 runs at $200', async () => {
+  const { runsPer } = await import('../../src/catalog.js');
+  assert.equal(runsPer(25000, 20000), '1.25');
 });

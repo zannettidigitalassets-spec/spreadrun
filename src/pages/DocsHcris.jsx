@@ -9,9 +9,9 @@ import { HcrisSources } from './HcrisApi.jsx';
 const API = apiBySlug('hcris-preaudit-qa');
 
 const PARAMS = [
-  ['periodStart', 'Required. YYYY-MM-DD, the first day of the cost reporting period. Must match the ECR file. Periods beginning on or after October 1, 2022.'],
-  ['periodEnd', 'Required. YYYY-MM-DD, the last day of the period. The deadline is the last day of the fifth month after it, or 150 days after it when it is not a month end.'],
-  ['asOf', 'Optional. YYYY-MM-DD to measure the deadline from. Default: today (UTC).'],
+  ['periodStart', 'Required. YYYY-MM-DD, the first day of the cost reporting period, shifted by the same number of days as the listing dates. Refused if it is the real date (the listings would not be shifted).'],
+  ['periodEnd', 'Required. YYYY-MM-DD, the last day of the period, shifted the same way. The two must be as far apart as the real period in the ECR file.'],
+  ['asOf', 'Optional. YYYY-MM-DD to measure the deadline from, a real date. Default: today (UTC). The deadline is the last day of the fifth month after the real period end in the ECR file, or 150 days after it when it is not a month end.'],
 ];
 
 const PACKAGE = [
@@ -19,7 +19,7 @@ const PACKAGE = [
   ['Exhibit 2A', '"Supporting Exhibit" in A1 and "Medicare Bad Debt Listing" in B1. One listing for inpatient and one for outpatient (header IP or OP), per CCN.'],
   ['Exhibit 3B', '"Supporting Exhibit" in A1 and "Charity Care Charges" in B1. One per CCN; Component CCN blank for the hospital.'],
   ['Exhibit 3C', '"Supporting Exhibit" in A1 and "Total Bad Debt" in B1. One per CCN; Component CCN blank for the hospital.'],
-  ['Prior-year listings', 'Any of the above with an FYE before periodStart. Used only to find accounts claimed again.'],
+  ['Prior-year listings', 'Any of the above with an FYE before periodStart, shifted by the same number of days. Used only to find accounts claimed again.'],
 ];
 
 const FINDING = [
@@ -27,17 +27,17 @@ const FINDING = [
   ['ruleId', 'One of the rule IDs below.'],
   ['group', 'ecrFormat, crossTies, s10, listings or deadline: the check it counts toward.'],
   ['worksheet, line, column', 'Worksheet findings: for example S-10, Part I, line 30, column 1.'],
-  ['exhibit, file, row, column', 'Listing findings: the exhibit, the file name in the package, the spreadsheet row and the exhibit column number.'],
+  ['exhibit, file, row, column', 'Listing findings: the exhibit, the file name in the package, the spreadsheet row and the exhibit column number. A finding about an account names its row ID.'],
   ['record, positions', 'ECR format findings: the record number in the file and the character positions.'],
   ['expected, actual', 'Amounts, where the finding compares two. Expected is what the rule or the other worksheet says; actual is what was filed.'],
-  ['message', 'What is wrong, in plain words. Never repeats text from the files; an account appears by its last four characters.'],
+  ['message', 'What is wrong, in plain words. Never repeats text from the files other than your row IDs, and never a date.'],
   ['source', 'A key in sources.'],
 ];
 
 const RULES = [
   ['ECR-10000 to ECR-11000', 'error', 'The level 1 edits of Table 6 with the same number: record type, length, upper case, line feeds, CCN, Julian dates, period, record identifiers, numeric line numbers, labels.'],
   ['ECR-MCR-VERSION', 'error', 'Record 1, position 37 is not 1, so the file is not a Form CMS-2552-10 file.'],
-  ['ECR-PERIOD, ECR-S2-PERIOD', 'error', 'The period in record 1, on Worksheet S-2, line 20, and in the parameters do not agree.'],
+  ['ECR-S2-PERIOD', 'error', 'The period in record 1 and on Worksheet S-2, line 20 do not agree.'],
   ['ECR-SPEC-DATE', 'warning', 'The ECR specification date is not an approved one, or is older than the one in effect for the period end.'],
   ['ECR-TYPE4', 'warning', 'The three type 4 records (encryption and time stamp) are missing.'],
   ['TIE-A-B, TIE-B-TOTAL, TIE-B-C', 'error', 'Worksheet A to B, the B step-down total, B column 26 to C column 1.'],
@@ -51,6 +51,7 @@ const RULES = [
   ['LIST-MISSING', 'error', 'A listing the cost report calls for is not in the package (42 CFR 413.24(f)(5)).'],
   ['LIST-HEADER, LIST-FORMAT', 'error', 'A listing header with the wrong CCN or period, or a date or amount that cannot be read.'],
   ['LIST-S2-12', 'warning', 'Worksheet S-2, Part II, line 12 says bad debts are claimed but none are.'],
+  ['LIST-SHIFT', 'warning', 'No write-off date falls inside the period entered: the period was probably not shifted like the listings.'],
   ['BD-TIE, CC-TIE, TBD-TIE', 'error', 'A listing that does not add up to the worksheet line it supports.'],
   ['BD-DUPLICATE, CC-DUPLICATE, TBD-DUPLICATE', 'error', 'The same account and dates of service listed twice.'],
   ['BD-PRIOR, CC-PRIOR, TBD-PRIOR', 'error', 'An account already on last year\'s listing.'],
@@ -70,7 +71,7 @@ const PY = `import os, requests
 with open("package.zip", "rb") as f:
     r = requests.post(
         "https://www.spreadrun.com/api/v1/hcris-preaudit-qa",
-        params={"periodStart": "2024-07-01", "periodEnd": "2025-06-30"},
+        params={"periodStart": "2022-10-04", "periodEnd": "2023-10-03"},
         headers={"Authorization": f"Bearer {os.environ['SPREADRUN_API_KEY']}"},
         data=f,
         timeout=120,
@@ -79,7 +80,7 @@ r.raise_for_status()
 report = r.json()["report"]
 print(report["status"], report["checks"], report["listings"]["required"])`;
 
-const CURL = `curl -X POST "https://www.spreadrun.com/api/v1/hcris-preaudit-qa?periodStart=2024-07-01&periodEnd=2025-06-30" \\
+const CURL = `curl -X POST "https://www.spreadrun.com/api/v1/hcris-preaudit-qa?periodStart=2022-10-04&periodEnd=2023-10-03" \\
   -H "Authorization: Bearer $SPREADRUN_API_KEY" \\
   -H "Content-Type: application/zip" \\
   --data-binary @package.zip`;
@@ -99,7 +100,7 @@ export default function DocsHcris() {
         <h2 id="endpoint">Endpoint</h2>
         <table className="doc-table"><tbody>
           <tr><th>Paid</th><td><code>POST https://www.spreadrun.com/api/v1/{API.slug}</code>, API key required, {dollars(API.priceCents)} per completed pre-audit</td></tr>
-          <tr><th>Demo</th><td><code>POST https://www.spreadrun.com/api/demo/{API.slug}</code>, no key, 10 runs per day. Runs the two published sample packages only (<a href="/samples/hcris-sample-clean.zip">clean</a>, <a href="/samples/hcris-sample-errors.zip">with errors</a>), byte for byte. Their period is June 1, 2024 to May 31, 2025; use <code>asOf=2025-10-15</code> to see the deadline as it stood before it passed.</td></tr>
+          <tr><th>Demo</th><td><code>POST https://www.spreadrun.com/api/demo/{API.slug}</code>, no key, 10 runs per day. Runs the two published sample packages only (<a href="/samples/hcris-sample-clean.zip">clean</a>, <a href="/samples/hcris-sample-errors.zip">with errors</a>), byte for byte. Their listing dates are shifted back 1,000 days, so send <code>periodStart=2021-09-05&amp;periodEnd=2022-09-04</code>; add <code>asOf=2025-10-15</code> to see the deadline as it stood before it passed.</td></tr>
           <tr><th>Body</th><td>A .zip with the ECR file and the listings, or the ECR file alone, up to 4 MB. The check stops after about 20 seconds with a plain message and no charge.</td></tr>
           <tr><th>Checked against</th><td>CMS Pub. 15-2, chapter 40, Transmittal 26 (June 30, 2026), ECR specification 2026181. Printed in every report as <code>checkedAgainst</code>.</td></tr>
         </tbody></table>
@@ -114,7 +115,10 @@ export default function DocsHcris() {
         <p>Which listings are required comes from the cost report: Exhibit 2A when Worksheet E, Part A, line 64, Part B, line 34 or S-10, line 27.01 claims Medicare bad debts; Exhibit 3B when S-10, line 20 claims charity care; Exhibit 3C when S-10, line 26 reports bad debts. A sole community hospital whose Worksheet E, Part A, line 48 is greater than line 47 does not need 3B or 3C.</p>
 
         <h2 id="privacy">Patient data</h2>
-        <p>A listing with anything in the patient name columns (1 and 2), the MBI column (2A, column 6) or the Medicaid number column (2A, column 7, other than Y) is refused before any check runs, with the file, row and column and no charge. Put Y in column 7 for a dual eligible beneficiary. Account numbers may be replaced by your own reference, as long as each account keeps the same one across the listings and last year's. Reports show an account by its last four characters only.</p>
+        <p>The pre-audit does not accept PHI. Before upload, in your own copy of the listings: replace every account number with a pseudonymous row ID, the same for the same account across listings and years; delete the patient name and MBI columns (columns 1, 2 and, on Exhibit 2A, 6), or leave them blank; put Y in Exhibit 2A column 7 instead of a Medicaid number; and shift every date, including the FYB and FYE header cells, by one number of days of your choosing. Send the period shifted by the same number. The ECR file goes as it is.</p>
+        <p>Every listing check counts days between dates, so a uniform shift leaves the findings unchanged. The real period comes from the ECR file and is used for the format checks and the deadline only. The engine compares it with the shifted period for two things and nothing else: a listing period equal to the real one is refused as not shifted, and a period whose length differs is refused as not shifted as a block. The offset is never worked out, kept or reported.</p>
+        <p>Refused before any check, with the file, row and column and no charge: an MBI pattern, a HICN, a Social Security number, an account or Medicaid number pattern (8 or more digits in a row), text that reads like a patient name (Last, First; Mr. or Mrs. and a name; DOB, SSN or MRN labels; two words as an account ID), anything in the name or MBI columns, and a Medicaid number other than Y. The value itself is never repeated. If no write-off date falls inside the period entered, one LIST-SHIFT warning says the period and the listings were probably shifted by different numbers.</p>
+        <p>Reports contain no dates. Listing findings give the row number and your row ID, and state positions in days (for example, 63 days after the first bill, or 9 days after the period ends).</p>
 
         <h2 id="report">Report</h2>
         <table className="doc-table">
@@ -123,7 +127,8 @@ export default function DocsHcris() {
             <tr><td><code>status</code>, <code>summary</code></td><td>FAIL if any error, WARN if only warnings, otherwise PASS. A PASS is not MAC acceptance and does not determine allowability or payment.</td></tr>
             <tr><td><code>checkedAgainst</code></td><td>The transmittal and ECR specification the run was checked against.</td></tr>
             <tr><td><code>file</code></td><td>CCN, the ECR specification date in the file, and record counts.</td></tr>
-            <tr><td><code>deadline</code></td><td><code>due</code>, <code>asOf</code>, <code>daysLeft</code> (negative when late), <code>status</code> (on-time or late) and the rule.</td></tr>
+            <tr><td><code>periodDays</code></td><td>The length of the cost reporting period in days.</td></tr>
+            <tr><td><code>deadline</code></td><td><code>daysLeft</code> (negative when late), <code>measuredFrom</code> (today or the asOf date you sent), <code>status</code> (on-time, late, or unknown when the ECR file has no readable period) and the rule. No dates.</td></tr>
             <tr><td><code>checks</code></td><td><code>ecrFormat</code>, <code>crossTies</code>, <code>s10</code>, <code>listings</code> and <code>deadline</code>, each pass, warn, fail or na.</td></tr>
             <tr><td><code>listings</code></td><td><code>found</code> (exhibit, file, IP or OP, component, rows), <code>required</code>, <code>status</code> per exhibit, <code>priorClaimCheck</code> and <code>priorYearListings</code>.</td></tr>
             <tr><td><code>tiesChecked</code></td><td>How many amounts were recomputed or compared.</td></tr>
@@ -153,7 +158,7 @@ export default function DocsHcris() {
         <Json value={demoFail.body.report.findings} />
 
         <h2 id="errors">Errors</h2>
-        <p>See the <a href="/docs#errors">shared error table</a>. Rejected and not charged: a body that is not an ECR file or a .zip with one, a package over 4 MB (HTTP 413), more than one ECR file, a missing or malformed period, a period beginning before October 1, 2022, an unknown parameter, a listing with patient identifiers, an .xls listing, a package too large to finish in time, and on the demo endpoint anything other than a sample package. Example, a PDF (HTTP {inputError.status}):</p>
+        <p>See the <a href="/docs#errors">shared error table</a>. Rejected and not charged: a body that is not an ECR file or a .zip with one, a package over 4 MB (HTTP 413), more than one ECR file, a missing or malformed period, a period beginning before October 1, 2022, an unknown parameter, a listing with PHI patterns, a listing period that is not shifted or not shifted as a block, an .xls listing, a package too large to finish in time, and on the demo endpoint anything other than a sample package. Example, a PDF (HTTP {inputError.status}):</p>
         <Json value={inputError.body} />
 
         <h2 id="examples">Code samples</h2>

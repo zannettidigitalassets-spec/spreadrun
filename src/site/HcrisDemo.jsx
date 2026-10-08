@@ -10,7 +10,8 @@ const SAMPLES = [
   ['hcris-sample-clean', 'Sample: clean package'],
   ['hcris-sample-errors', 'Sample with errors'],
 ];
-const SAMPLE_PERIOD = { start: '2024-06-01', end: '2025-05-31', asOf: '2025-10-15' };
+// The samples' listing dates are shifted 1,000 days back, so the period they are checked against is too.
+const SAMPLE_PERIOD = { start: '2021-09-05', end: '2022-09-04', asOf: '2025-10-15' };
 const MAX = 4_000_000;
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -109,19 +110,22 @@ export default function HcrisDemo({ api, sample }) {
         <div className="btn-row" style={{ margin: '0 0 16px' }}>
           {SAMPLES.map((s) => <button key={s[0]} type="button" className="btn secondary small" onClick={() => loadSample(s)}>{s[1]}</button>)}
         </div>
+        <div className="note" role="note" style={{ margin: '0 0 12px' }}>
+          <p style={{ margin: 0 }}><b>No PHI.</b> Do not upload patient names, MBIs, Medicaid numbers or real account numbers. This tool does not accept PHI, and files containing PHI patterns are refused without charge.</p>
+        </div>
         <div className="field">
           <label htmlFor="hcris-file">ECR file and listings (a .zip, or pick several files, up to 4 MB)</label>
           <input id="hcris-file" type="file" multiple onChange={pick} />
-          <span className="hint">The ECR file your cost report software exports for MCReF, with the Exhibit 2A, 3B and 3C listings in the CMS template layout (.xlsx or .csv). Blank the patient name and MBI columns first, and put Y in the Medicaid number column for dual eligible beneficiaries: the check refuses listings with patient identifiers.</span>
+          <span className="hint">The ECR file your cost report software exports for MCReF, as is, with the Exhibit 2A, 3B and 3C listings prepared as described above, in the CMS template layout (.xlsx or .csv).</span>
         </div>
         {file && <p className="small">Selected: <code>{file.name}</code> ({kb(file.blob.size)}){file.sample ? ', a published sample' : ''}</p>}
         <div className="wh-grid" style={{ minWidth: 0 }}>
           <div className="field" style={{ margin: 0, minWidth: 0 }}>
-            <label htmlFor="hcris-start">Period start</label>
+            <label htmlFor="hcris-start">Period start, shifted</label>
             <input id="hcris-start" type="date" value={start} onChange={(e) => setStart(e.target.value)} required />
           </div>
           <div className="field" style={{ margin: 0, minWidth: 0 }}>
-            <label htmlFor="hcris-end">Period end</label>
+            <label htmlFor="hcris-end">Period end, shifted</label>
             <input id="hcris-end" type="date" value={end} onChange={(e) => setEnd(e.target.value)} required />
           </div>
         </div>
@@ -129,8 +133,8 @@ export default function HcrisDemo({ api, sample }) {
           <label htmlFor="hcris-asof">Measure the deadline from (optional)</label>
           <input id="hcris-asof" type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} />
         </div>
-        <span className="hint small" style={{ display: 'block', margin: '6px 0 12px' }}>Due the last day of the fifth month after the period ends. Leave the last date blank to measure from today.</span>
-        <p className="small muted" style={{ margin: '0 0 12px' }}>Processed in memory and not stored. The report names worksheets, lines, columns and listing rows and shows amounts; it shows an account number by its last four characters only.</p>
+        <span className="hint small" style={{ display: 'block', margin: '6px 0 12px' }}>Enter the period moved by the same number of days as your listing dates. The deadline comes from the real period in the ECR file: due the last day of the fifth month after it ends. Leave the last date blank to measure from today.</span>
+        <p className="small muted" style={{ margin: '0 0 12px' }}>Processed in memory and not stored. The report names worksheets, lines, columns, listing rows and your row IDs, and gives day counts, never dates.</p>
         {blocked && (
           <div className="note" style={{ margin: '0 0 12px' }} role="status">
             <p style={{ margin: 0 }}>

@@ -473,9 +473,9 @@ function Hcris({ r }) {
   return (
     <>
       <div className="calc-big" style={{ marginBottom: 8 }}>
-        <span className="small muted">Cost reporting period {fmtDate(r.period.start)} to {fmtDate(r.period.end)}</span>
+        <span className="small muted">Medicare cost report, {r.periodDays}-day cost reporting period</span>
         <b style={{ fontSize: 20 }}>{r.summary}</b>
-        <span className="small">Due {fmtDate(d.due)}: {d.daysLeft < 0 ? `${-d.daysLeft} days past the five month mark` : `${d.daysLeft} days left`} as of {fmtDate(d.asOf)}.</span>
+        <span className="small">{d.daysLeft === null ? 'Deadline not checked: the ECR file has no readable period.' : d.daysLeft < 0 ? `${-d.daysLeft} ${d.daysLeft === -1 ? 'day' : 'days'} past the five month mark, measured from ${d.measuredFrom}.` : `${d.daysLeft} ${d.daysLeft === 1 ? 'day' : 'days'} left to file, measured from ${d.measuredFrom}.`}</span>
       </div>
       <div className="facts">
         <span><b>{r.tiesChecked.toLocaleString('en-US')}</b> amounts recomputed</span>

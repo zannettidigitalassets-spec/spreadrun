@@ -25,9 +25,11 @@ export const HCRIS_FAQ = [
   ['Does a PASS mean the MAC will accept the cost report, or that the amounts are allowable?',
     'No to both. A PASS means the ECR file is in the CMS format, the worksheets tie, S-10 recomputes and the listings support what the report claims. A PASS is not MAC acceptance and does not determine allowability or payment. The MAC runs its own edits, desk review and audit, and the amounts you claim remain your responsibility.'],
   ['What do I send?',
-    'The ECR file your cost report software exports for MCReF, and the listings that support it: Exhibit 2A for Medicare bad debts (inpatient and outpatient), Exhibit 3B for charity care and Exhibit 3C for total bad debts, in the CMS template layout as .xlsx or as .csv in the same grid. Zip them together, or pick them all in the form and the browser zips them. Add last year\'s listings to the same .zip and the check also looks for accounts claimed again.'],
-  ['What about patient information in the listings?',
-    'Remove it first. The check refuses a listing with anything in the patient name columns, the MBI column or the Medicaid number column, before a report exists and without a charge. Put Y in the Medicaid number column for a dual eligible beneficiary. The checks need dates, amounts and a consistent account reference, so you can also replace account numbers with your own reference, as long as each account keeps the same one. Reports show an account by its last four characters only.'],
+    'The ECR file your cost report software exports for MCReF, as it is, and the listings that support it, de-identified: Exhibit 2A for Medicare bad debts (inpatient and outpatient), Exhibit 3B for charity care and Exhibit 3C for total bad debts, in the CMS template layout as .xlsx or as .csv in the same grid. Zip them together, or pick them all in the form and the browser zips them. Add last year\'s listings, prepared the same way with the same shift, and the check also looks for accounts claimed again.'],
+  ['Why shift the dates, and does it change the results?',
+    'Real dates of service are PHI, so they never leave your hands. Every listing check measures days between dates: a write-off inside the period, 120 days of collection effort after the first bill, a bill within 120 days of the remittance advice. Move every listing date and the period by the same number of days and each of those counts stays the same, so the findings do too. The filing deadline comes from the real period in the ECR file, which is public cost report data.'],
+  ['What if a listing still has patient information in it?',
+    'It is refused before any check runs, without a charge, with the file, row and column. The check looks for MBIs, HICNs, Social Security numbers, long account or Medicaid numbers, and text that reads like a patient name, and for anything in the name or MBI columns. A listing whose period is the real one, not shifted, is refused too. Reports name rows by row number and your row ID and give day counts, never dates.'],
   ['What does it recompute?',
     'Worksheet B, Part I, column 0 against Worksheet A, column 7, line by line; the step-down total on Worksheet B; Worksheet B, column 26 into Worksheet C, column 1; Worksheet C totals, line 202 and total charges; Worksheet D, Part V into Worksheet E, Part B, line 1; the 35 percent bad debt reduction on Worksheet E; and every line of Worksheet S-10 that is a calculation, including lines 27 and 27.01 against Worksheet E and the other worksheets the instructions name. Each finding gives the worksheet, line, column, expected and actual.'],
   ['Which listings does it expect?',
@@ -45,7 +47,7 @@ export const HCRIS_FAQ = [
 ];
 
 const CURL = `cd cost_report_fy2025 && zip ../package.zip ECnnnnnn.25A1 MedicareBD_IP.xlsx MedicareBD_OP.xlsx Charity.xlsx TotalBD.xlsx
-curl -X POST "https://www.spreadrun.com/api/v1/hcris-preaudit-qa?periodStart=2024-07-01&periodEnd=2025-06-30" \\
+curl -X POST "https://www.spreadrun.com/api/v1/hcris-preaudit-qa?periodStart=2022-10-04&periodEnd=2023-10-03" \\
   -H "Authorization: Bearer $SPREADRUN_API_KEY" \\
   -H "Content-Type: application/zip" \\
   --data-binary @../package.zip`;
@@ -55,14 +57,14 @@ const PY = `import os, requests
 with open("package.zip", "rb") as f:
     r = requests.post(
         "https://www.spreadrun.com/api/v1/hcris-preaudit-qa",
-        params={"periodStart": "2024-07-01", "periodEnd": "2025-06-30"},
+        params={"periodStart": "2022-10-04", "periodEnd": "2023-10-03"},
         headers={"Authorization": f"Bearer {os.environ['SPREADRUN_API_KEY']}"},
         data=f,
         timeout=120,
     )
 r.raise_for_status()
 report = r.json()["report"]
-print(report["status"], report["checkedAgainst"]["transmittal"], report["deadline"]["due"])
+print(report["status"], report["checkedAgainst"]["transmittal"], report["deadline"]["daysLeft"])
 for f in report["findings"]:
     print(f["severity"], f.get("worksheet") or f.get("exhibit"), f.get("line") or f.get("row"),
           f.get("expected"), f.get("actual"), f["message"])`;
@@ -124,6 +126,7 @@ export default function HcrisApi() {
             <li>Collection documentation, indigence files and Medicaid remittances behind the listings.</li>
             <li>The type 4 encryption code itself, which only approved vendor software produces.</li>
             <li>Cost reporting periods beginning before October 1, 2022, and packages over 4 MB.</li>
+            <li>Listings with PHI: they are refused, not checked.</li>
           </ul>
         </div>
       </section>
@@ -131,9 +134,9 @@ export default function HcrisApi() {
       <section className="section wrap" aria-labelledby="how">
         <h2 id="how">Input and output</h2>
         <ol className="steps">
-          <li><h3>Send</h3><p>A .zip with the ECR file and the listings (or the ECR file alone) as the request body, up to 4 MB, with <code>periodStart</code>, <code>periodEnd</code> and optionally <code>asOf</code> (YYYY-MM-DD) in the query string.</p></li>
+          <li><h3>Send</h3><p>A .zip with the ECR file and the de-identified listings (or the ECR file alone) as the request body, up to 4 MB, with the shifted <code>periodStart</code> and <code>periodEnd</code> and optionally <code>asOf</code> (YYYY-MM-DD) in the query string.</p></li>
           <li><h3>Check</h3><p>Every rule on this page. Standard library code, no network calls, nothing stored.</p></li>
-          <li><h3>Report</h3><p>JSON with <code>status</code>, <code>checkedAgainst</code>, <code>deadline</code>, <code>checks</code>, <code>listings</code> and <code>findings</code> (worksheet, line, column or listing row, expected, actual, message, source).</p></li>
+          <li><h3>Report</h3><p>JSON with <code>status</code>, <code>checkedAgainst</code>, <code>deadline</code>, <code>checks</code>, <code>listings</code> and <code>findings</code> (worksheet, line, column or listing row and row ID, expected, actual, message, source). Day counts, never dates.</p></li>
         </ol>
         <p className="small">Every field and rule ID is in the <a href={`/docs/${API.slug}`}>API docs</a>.</p>
       </section>
@@ -141,6 +144,14 @@ export default function HcrisApi() {
       <section className="section wrap" id="demo" aria-labelledby="demo-h">
         <h2 id="demo-h">Try it now</h2>
         <p>The sample packages run free. Your own cost report runs as a paid pre-audit at {dollars(API.priceCents)} from your credit.</p>
+        <h3 id="prepare">Prepare your file</h3>
+        <p>The listings come to SpreadRun without PHI. Three steps, in your own copy of the files:</p>
+        <ol className="steps">
+          <li><h3>Replace the identifiers</h3><p>Replace every account number with a row ID (R1, R2, R3, or 1, 2, 3), the same ID for the same account on every listing. Delete the patient name and MBI columns. Where a Medicaid number marks a dual eligible beneficiary, put Y instead of the number.</p></li>
+          <li><h3>Shift the dates</h3><p>Pick a number of days, say 1,000, and move every date in the listings forward or back by exactly that many: dates of service, bills, remittances, write-offs and the FYB and FYE cells at the top.</p></li>
+          <li><h3>Shift the period</h3><p>Enter the period start and end below, moved by the same number of days. Send the ECR file as it is: it holds no patient data.</p></li>
+        </ol>
+        <p className="small">If no write-off lands inside the period you enter, the report warns that the period was probably not shifted by the same number of days as the listing dates.</p>
         <HcrisDemo api={API} sample={example.body.report} />
       </section>
 
