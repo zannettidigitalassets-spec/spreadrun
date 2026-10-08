@@ -236,6 +236,13 @@ def read_package(body, clock):
         raise InputError('The package is over the 4 MB limit. Zip the ECR file and the listings (a .zip usually shrinks '
                          'them several times over), or split large listings by CCN. Nothing was charged.')
     if body[:4] != b'PK\x03\x04':
+        if body[:4] == b'%PDF':
+            raise InputError('This is a PDF. Send the ECR file (the text file your cost report software exports for '
+                             'MCReF), or a .zip with the ECR file and the listings. Nothing was charged.')
+        if not looks_like_ecr(body):
+            raise InputError('This is not an ECR file: its first record must be type 1, record number 1 (the line '
+                             'that starts with "1" and carries the CCN and the period). Export the ECR file from your '
+                             'cost report software. Nothing was charged.')
         return body, 'ECR file', []
     try:
         zf = zipfile.ZipFile(io.BytesIO(body))
