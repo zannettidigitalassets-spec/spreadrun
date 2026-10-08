@@ -364,6 +364,32 @@ def run_ice(body: bytes, *, query=None, demo=False):
         raise InputError(str(exc)) from None
 
 
+_hcris = None
+
+
+def hcris_module():
+    """SpreadRun's own Medicare cost report (CMS-2552-10) pre-audit engine (not a DataForge copy). Standard library
+    only, no network calls."""
+    global _hcris
+    if _hcris is None:
+        spec = importlib.util.spec_from_file_location('spreadrun_hcris_engine', HERE / 'hcris' / 'engine.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules['spreadrun_hcris_engine'] = module
+        spec.loader.exec_module(module)
+        _hcris = module
+    return _hcris
+
+
+def run_hcris(body: bytes, *, query=None, demo=False):
+    """Pre-audit one cost report: the ECR file, or a .zip with the ECR file and the Exhibit 2A, 3B and 3C listings.
+    query: periodStart, periodEnd and optional asOf. demo=True accepts only the published sample packages."""
+    v = hcris_module()
+    try:
+        return v.validate(body, query=query, demo=demo)
+    except v.InputError as exc:
+        raise InputError(str(exc)) from None
+
+
 def run_clinical(body: bytes):
     """Body is the JSON object the validator expects: {"studiesCsv": "...", "outcomesCsv": "..."}."""
     v = clinical_module()

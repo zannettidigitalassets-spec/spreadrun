@@ -85,6 +85,15 @@ APIS = {
         'too_large_message': 'The workbook is over the 4 MB limit. Remove data tabs the schedules do not need, or save '
                              'the schedules alone as a new .xlsx, and try again. Nothing was charged.',
     },
+    'hcris-preaudit-qa': {
+        'name': 'Medicare Cost Report Pre-Audit QA',
+        'price_cents': 20000,   # cost report tier
+        # The ECR file alone, or a .zip with the ECR file and the listings. Vercel caps request bodies near 4.5 MB.
+        'max_body_bytes': 4_000_000,
+        'demo_max_body_bytes': 4_000_000,
+        'too_large_message': 'The package is over the 4 MB limit. Zip the ECR file and the listings (a .zip usually '
+                             'shrinks them several times over), or split large listings by CCN. Nothing was charged.',
+    },
 }
 
 DEMO_RUNS_PER_DAY = 10
