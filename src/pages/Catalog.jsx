@@ -54,6 +54,7 @@ export default function Catalog() {
           <li>Requests rejected before a report exists are free: bad JSON, clinical tables missing required columns or with ragged rows, an empty or corrupt gzip upload, invalid parameters, a missing or revoked key.</li>
           <li>A price file that turns out not to be a valid MRF (wrong format, unparseable) still gets a completed FAIL report, and that run is charged.</li>
           <li>For CMMC self-assessments, a body that is not JSON, a level other than 2 or no requirement results is rejected and not charged; an incomplete package still gets a completed FAIL report.</li>
+          <li>For Medicare cost reports, a file that is not an ECR file, a package over 4 MB, a missing period or a listing with patient identifiers is rejected and not charged; a cost report with tie or listing errors still gets a completed FAIL report.</li>
           <li>For incurred cost submissions, an .xls file, a workbook over 4 MB or a missing fiscal year end is rejected and not charged; a workbook with missing schedules or math errors still gets a completed FAIL report.</li>
           <li>For SCA health and welfare checks, an average cost wage determination, a missing required column or an unreadable number is rejected and not charged; a pay period with shortfalls still gets a completed FAIL report.</li>
           <li>For COBRA notices, a file that cannot be read, a scanned PDF with no text or a missing notice type is rejected and not charged; a notice missing content items still gets a completed FAIL report.</li>
