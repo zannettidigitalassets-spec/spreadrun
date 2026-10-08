@@ -285,9 +285,12 @@ def cell_text(v):
     return str(v)
 
 
-def grid(ex, header, rows):
-    """{(row, col): value} in the CMS template layout."""
-    lay = LAYOUT[ex]
+DELETED = ('last', 'first', 'mbi')   # the patient name and MBI columns, deleted before upload
+
+
+def grid(ex, header, rows, drop=DELETED):
+    """{(row, col): value} in the CMS template layout, without the deleted columns."""
+    lay = dict(LAYOUT[ex], cols=[c for c in LAYOUT[ex]['cols'] if c[2] not in drop])
     g = {(1, 1): 'Supporting Exhibit', (1, 2): lay['id']}
     for i, (label, key) in enumerate(lay['header']):
         g[(3 + i, 1)] = label
@@ -382,8 +385,25 @@ def package(files):
     return buf.getvalue()
 
 
-def listings_for(fx, *, seed=7, ccn=None, name='SAMPLE HOSPITAL'):
-    """Listing rows (invented, de-identified) that add up to what the cost report claims."""
+def shift_listings(listings, days):
+    """Move every date in the listings (rows and header cells) by the same number of days: the de-identification the
+    pre-audit asks for. Every check gives the same answer on the shifted listings, with the period shifted too."""
+    d = dt.timedelta(days=days)
+    for _, head, rows in listings.values():
+        for obj in [head, *rows]:
+            for k, v in list(obj.items()):
+                if isinstance(v, dt.date):
+                    obj[k] = v + d
+    return listings
+
+
+def shifted_period(fx, days):
+    return mdy(fx['rpt'][5]) + dt.timedelta(days=days), mdy(fx['rpt'][6]) + dt.timedelta(days=days)
+
+
+def listings_for(fx, *, seed=7, ccn=None, name='SAMPLE HOSPITAL', shift=0):
+    """Listing rows (invented, de-identified) that add up to what the cost report claims, every date moved by shift
+    days."""
     rng = random.Random(seed)
     v = amounts(fx)
     rpt = fx['rpt']
@@ -426,6 +446,7 @@ def listings_for(fx, *, seed=7, ccn=None, name='SAMPLE HOSPITAL'):
             else:
                 h.update(total=round(sum(r['bad_debt'] for r in rows), 2))
             out[key + suffix] = (ex, h, rows)
+    shift_listings(out, shift)
     return out
 
 
@@ -440,7 +461,7 @@ def component_ccn(fx, ccn):
     return ccn[:2] + 'T' + ccn[3:]
 
 
-def build_package(fx, listings, *, ecr=None, fmt='xlsx', ccn=None, leave_out=(), extra=()):
+def build_package(fx, listings, *, ecr=None, fmt='xlsx', ccn=None, leave_out=(), extra=(), drop=DELETED):
     rpt = fx['rpt']
     ccn = ccn or rpt[2]
     yy = rpt[6][-2:]
@@ -448,7 +469,7 @@ def build_package(fx, listings, *, ecr=None, fmt='xlsx', ccn=None, leave_out=(),
     for key, (ex, head, rows) in listings.items():
         if key in leave_out:
             continue
-        g = grid(ex, head, rows)
+        g = grid(ex, head, rows, drop)
         files.append((f'{FILE_NAMES[key]}_{ccn}.{fmt}', to_xlsx(g) if fmt == 'xlsx' else to_csv(g)))
     files.extend(extra)
     return package(files)

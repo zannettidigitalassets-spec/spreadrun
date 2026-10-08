@@ -10,7 +10,16 @@ the MAC's judgment, not math, and the report says so.
 
 Input: a .zip package with the ECR file and the listings (Exhibit 2A Medicare bad debts, Exhibit 3B charity care,
 Exhibit 3C total bad debts, each .xlsx in the CMS template layout or .csv in the same grid), or the ECR file alone.
-The cost reporting period start and end dates come as query parameters.
+
+No PHI. The listings arrive de-identified: account numbers replaced by pseudonymous IDs, the patient name and MBI
+columns deleted or blank, Y in place of a Medicaid number, and every date shifted by one offset the user picks. The
+periodStart and periodEnd parameters are the cost reporting period shifted by that same offset, so every listing check
+(write-off inside the period, the 120-day rules, duplicates, prior years) runs on shifted dates and gives the same
+result as on the real ones. The real period comes only from the ECR file, which is public cost report data, and is used
+for the format checks and the filing deadline. The engine never works out the offset: it compares the two periods only
+to refuse a package whose listing period is the real one (not shifted) or not 12 months shifted as a block. Listings
+with name, MBI, HICN, Social Security number or long account or Medicaid number patterns are refused before any check,
+with no charge. Reports name listing rows by row number and pseudonymous ID, state day counts, never dates.
 
 Rules, read October 8, 2026:
   42 CFR 413.24(f)(2)            due on or before the last day of the fifth month after the period ends (150 days
@@ -30,9 +39,7 @@ Rules, read October 8, 2026:
       4020, 4023.1, 4030.1/.2    Worksheets B, C and E transfers.
   CMS ECR exhibit specifications for Exhibits 2A, 3B and 3C (cell locations and data rules).
 
-Every amount the report shows is read from, or recomputed from, the files. Patient names, MBIs and Medicaid numbers
-are refused (the listings must have them blanked before upload), and a patient account number is shown by its last
-four characters only.
+Every amount the report shows is read from, or recomputed from, the files. No date appears in any report.
 """
 import csv
 import datetime as dt
@@ -104,8 +111,8 @@ SCOPE = ('A pre-audit math check: is the ECR file in the CMS format, do Workshee
 # scripts/hcris/make_samples.py) and nothing else: checking your own cost report is the paid product. Matched byte for
 # byte; test_hcris.py recomputes these from the files.
 DEMO_SAMPLES = {
-    '330bd45fd116cb1786fd3b5a0701e4842bae118fc07646c7c75bbc8df646bed3': 'hcris-sample-clean',
-    'ebaa9beb2cdbafe26cf1b561f884bd5d3a61b0138555ad65034325a8e6854e0c': 'hcris-sample-errors',
+    '38ba820af5f22bbe8f4ba3a2710764d438d0cb08cc31288f0770fc37bd15fa57': 'hcris-sample-clean',
+    '65d63bfa535de5e2577214ddde4ab8224d3541708d1e756a80b1eed5b12eb070': 'hcris-sample-errors',
 }
 DEMO_ONLY = ('The free demo runs the sample packages only. To check your own cost report, sign in with $200.00 of '
              'credit or call the paid API. Nothing was charged.')
@@ -193,8 +200,18 @@ def due_date(fye):
 
 
 def mask(acct):
+    """The pseudonymous ID as the user wrote it (the privacy guard has already refused real identifiers)."""
     a = re.sub(r'\s+', '', str(acct or ''))
-    return ('...' + a[-4:]) if len(a) > 4 else ('...' + a if a else '(blank)')
+    return a[:24] if a else '(blank)'
+
+
+def rel(d, start, end):
+    """Where a date sits against the period, in days, never as a date."""
+    if d < start:
+        n = (start - d).days
+        return f'{n} {"day" if n == 1 else "days"} before the period starts'
+    n = (d - end).days
+    return f'{n} {"day" if n == 1 else "days"} after the period ends'
 
 
 # ------------------------------------------------------------------ parameters
@@ -207,7 +224,7 @@ def parse_params(query, today=None):
     for k in ('periodStart', 'periodEnd'):
         if not q.get(k):
             raise InputError('periodStart and periodEnd are required: the first and last day of the cost reporting '
-                             'period, as YYYY-MM-DD.')
+                             'period, shifted by the same number of days as the listing dates, as YYYY-MM-DD.')
 
     def day(name):
         try:
@@ -220,9 +237,6 @@ def parse_params(query, today=None):
         raise InputError('periodEnd must be after periodStart.')
     if (end - start).days > 400:
         raise InputError('A cost reporting period is generally 12 months. Check periodStart and periodEnd.')
-    if start < LISTING_FORMAT_START:
-        raise InputError('This version checks cost reporting periods beginning on or after October 1, 2022, the '
-                         'periods that use the Exhibit 2A, 3B and 3C listing formats.')
     as_of = day('asOf') if q.get('asOf') else (today or dt.datetime.now(dt.timezone.utc).date())
     return start, end, as_of
 
@@ -440,7 +454,7 @@ def parse_ecr(raw, rep, clock):
     return e
 
 
-def check_record1(e, rep, start, end, today):
+def check_record1(e, rep, today):
     """Table 1, type 1 record number 1, with edits 10200, 10300, 10350, 10450 and 11000. Returns facts for the
     report."""
     r = (e.rec1 or '').ljust(60)
@@ -462,11 +476,10 @@ def check_record1(e, rep, start, end, today):
                     '(YYYYDDD).', 'ecr-t6', where={'record': 1, 'positions': pos})
     if fyb and fye and fyb >= fye:
         rep.add('error', 'ECR-10350', 'Record 1: the fiscal year beginning date must be before the ending date.',
-                'ecr-t6', where={'record': 1, 'positions': '23-36'}, expected='begin before end',
-                actual=f'{fyb.isoformat()} to {fye.isoformat()}')
+                'ecr-t6', where={'record': 1, 'positions': '23-36'})
     if created and created > today:
         rep.add('error', 'ECR-11000', 'Record 1: the creation date is after today. Dates cannot be in the future.',
-                'ecr-t6', where={'record': 1, 'positions': '45-51'}, actual=created.isoformat())
+                'ecr-t6', where={'record': 1, 'positions': '45-51'})
     if r[36] != '1':
         rep.add('error', 'ECR-MCR-VERSION', 'Record 1, position 37: the MCR version must be "1" for Form CMS-2552-10. '
                 'This file is for a different form.', 'ecr-t1', where={'record': 1, 'positions': '37'},
@@ -487,10 +500,6 @@ def check_record1(e, rep, start, end, today):
                         'specification than the latest one in effect for this period end. Update your cost report '
                         'software before you file.', 'ecr-t1', where={'record': 1, 'positions': '52-58'},
                         expected=max(in_effect), actual=spec)
-    if fyb and fye and (fyb != start or fye != end):
-        rep.add('error', 'ECR-PERIOD', 'The period in the ECR file does not match the period you entered. Check the '
-                'dates, or that this is the right file.', 'ecr-t1', where={'record': 1, 'positions': '23-36'},
-                expected=f'{start.isoformat()} to {end.isoformat()}', actual=f'{fyb.isoformat()} to {fye.isoformat()}')
     facts['fyb'], facts['fye'], facts['created'] = fyb, fye, created
     return facts
 
@@ -516,9 +525,7 @@ def check_structure(e, rep, facts):
                     'ecr-t6', where={'worksheet': 'S-2, Part I', 'line': '20', 'column': '1 and 2'})
         elif facts.get('fyb') and facts.get('fye') and (db != facts['fyb'] or dx != facts['fye']):
             rep.add('error', 'ECR-S2-PERIOD', 'Worksheet S-2, Part I, line 20 does not agree with the period in record '
-                    '1.', 'ecr-t1', where={'worksheet': 'S-2, Part I', 'line': '20', 'column': '1 and 2'},
-                    expected=f'{facts["fyb"].isoformat()} to {facts["fye"].isoformat()}',
-                    actual=f'{db.isoformat()} to {dx.isoformat()}')
+                    '1.', 'ecr-t1', where={'worksheet': 'S-2, Part I', 'line': '20', 'column': '1 and 2'})
         elif db >= dx:
             rep.add('error', 'ECR-10200S', 'Worksheet S-2, Part I, line 20: the beginning date must precede the ending '
                     'date.', 'ecr-t6', where={'worksheet': 'S-2, Part I', 'line': '20'})
@@ -1023,8 +1030,10 @@ def parse_listing(ex, file, tab, grid):
     max_row = max((r for r, _ in grid), default=0)
     num_row = None
     for r in range(2, min(max_row, 30) + 1):
-        nums = [norm(grid.get((r, c), '')).replace('.0', '') for c in range(1, 30)]
-        if nums[:4] == ['1', '2', '3', '4']:
+        # The column number row: 1, 2, 3 and so on under the labels. Columns the user deleted (the patient name and
+        # MBI columns) are simply absent from it, so it is found by how many column numbers it holds.
+        nums = [norm(grid.get((r, c), '')).replace('.0', '') for c in range(1, 40)]
+        if sum(1 for n in nums if n in COLS[ex]) >= 8:
             num_row = r
             break
         if r < 13:
@@ -1049,18 +1058,71 @@ def parse_listing(ex, file, tab, grid):
     return lst
 
 
+# Patterns that mean a listing still carries PHI. The MBI layout is CMS's (11 characters: digit 1 to 9, letter,
+# letter or digit, digit, letter, letter or digit, digit, letter, letter, digit, digit; letters never S, L, O, I, B or
+# Z), printed with or without dashes. A HICN is a 9-digit number with a letter suffix. Long digit runs are how real
+# account, Medicaid and Social Security numbers look; pseudonymous IDs are short (R1, R2, or 1, 2, 3).
+_A = '[AC-HJKMNP-RT-Y]'
+_AN = '[AC-HJKMNP-RT-Y0-9]'
+MBI_RE = re.compile(rf'(?<![A-Z0-9]){'[1-9]'}{_A}{_AN}[0-9][ -]?{_A}{_AN}[0-9][ -]?{_A}{_A}[0-9]{{2}}(?![A-Z0-9])')
+HICN_RE = re.compile(r'(?<![A-Z0-9])[0-9]{9}[A-Z][0-9A-Z]?(?![A-Z0-9])')
+SSN_RE = re.compile(r'(?<![0-9])[0-9]{3}-[0-9]{2}-[0-9]{4}(?![0-9])')
+LONG_DIGITS_RE = re.compile(r'[0-9]{8,}')
+CORP = r'(INC|LLC|LLP|LP|CO|CORP|CORPORATION|COMPANY|LTD|PLAN|PLANS|HEALTH|INSURANCE|HMO|PPO|GROUP|SERVICES|MEDICAID|MEDICARE)'
+LAST_FIRST_RE = re.compile(rf"^(?!.*\b{CORP}\b)[A-Z][A-Z'\-]+,\s*[A-Z][A-Z'\-]+(\s+[A-Z]\.?)?$")
+HONORIFIC_RE = re.compile(r"\b(MR|MRS|MS|MISS|DR)\.?\s+[A-Z][A-Z'\-]+")
+LABEL_RE = re.compile(r'\b(DOB|D\.O\.B|SSN|SOCIAL SECURITY|MRN|PATIENT NAME|DATE OF BIRTH)\b')
+TWO_WORDS_RE = re.compile(r"^[A-Z][A-Z'\-]+(\s+[A-Z][A-Z'\-\.]*){1,3}$")
+NAME_FIELDS = ('last', 'first', 'mbi')
+NUMERIC_FIELDS = AMOUNT_FIELDS | DATE_FIELDS
+
+
+def phi_kind(field, v):
+    """What a cell looks like, or None when it looks de-identified. Never returns the value."""
+    if v is None or (isinstance(v, float) and field in NUMERIC_FIELDS):
+        return None
+    if isinstance(v, float):
+        v = str(int(v)) if v.is_integer() else str(v)
+    t = norm(v)
+    if not t or REDACTED.match(t):
+        return None
+    if field in NAME_FIELDS:
+        return 'a patient name or MBI (delete the column, or leave it blank)'
+    if field == 'medicaid':
+        return None if t == 'Y' else 'a Medicaid number (put Y for a dual eligible beneficiary instead)'
+    if MBI_RE.search(t):
+        return 'an MBI'
+    if HICN_RE.search(t):
+        return 'a HICN'
+    if SSN_RE.search(t):
+        return 'a Social Security number'
+    if field in NUMERIC_FIELDS:
+        return None
+    if field == 'acct' and LONG_DIGITS_RE.search(t.replace('-', '').replace(' ', '')):
+        return 'a real account, Medicaid or Social Security number (use a row ID such as R1, R2, R3)'
+    if LONG_DIGITS_RE.search(t.replace('-', '').replace(' ', '')) and field != 'trans_codes':
+        return 'an account, Medicaid or Social Security number'
+    if LAST_FIRST_RE.match(t) or HONORIFIC_RE.search(t) or LABEL_RE.search(t):
+        return 'a patient name'
+    if field == 'acct' and TWO_WORDS_RE.match(t):
+        return 'a patient name (use a row ID such as R1, R2, R3)'
+    return None
+
+
 def privacy_guard(lst):
-    """The Terms do not allow patient identifiers. Names, MBI and Medicaid numbers must be blanked before upload."""
+    """The Terms do not allow PHI. A listing that still looks like it carries patient identifiers is refused before any
+    check runs, with the file, row and column and never the value."""
     for row in lst.rows:
-        for f in IDENTIFYING[lst.exhibit]:
-            v = str(row.get(f, '')).strip()
-            if not v or REDACTED.match(v) or (f == 'medicaid' and v.upper() == 'Y'):
+        for f, v in row.items():
+            if f == '_row':
                 continue
-            col = FIELD_COL[lst.exhibit][f]
-            raise InputError(f'{EXHIBITS[lst.exhibit]["name"]} in {lst.file}, row {row["_row"]}, column {col} has a '
-                             'patient identifier. SpreadRun does not accept patient names, MBIs or Medicaid numbers. '
-                             'Blank columns 1 and 2 (and, on Exhibit 2A, column 6; put Y in column 7 for a dual '
-                             'eligible beneficiary), keep everything else, and run it again. Nothing was charged.')
+            kind = phi_kind(f, v)
+            if kind:
+                col = FIELD_COL[lst.exhibit].get(f, '?')
+                raise InputError(f'{EXHIBITS[lst.exhibit]["name"]} in {lst.file}, row {row["_row"]}, column {col} looks '
+                                 f'like {kind}. SpreadRun does not accept PHI: replace account numbers with row IDs, '
+                                 'delete the patient name and MBI columns, put Y in place of a Medicaid number, and '
+                                 'shift every date by the same number of days. Nothing was charged.')
 
 
 def clean_rows(lst, rep):
@@ -1121,9 +1183,9 @@ def header_check(lst, rep, ccn, start, end):
         rep.add('error', 'LIST-HEADER', 'The FYB and FYE header cells must hold the cost reporting period dates.', src,
                 where={'exhibit': lst.exhibit, 'file': lst.file, 'row': 'header', 'column': 'B6 and B7'})
     elif fyb != start or fye != end:
-        rep.add('error', 'LIST-HEADER', 'The listing period does not match the cost reporting period.', src,
-                where={'exhibit': lst.exhibit, 'file': lst.file, 'row': 'header', 'column': 'FYB and FYE'},
-                expected=f'{start.isoformat()} to {end.isoformat()}', actual=f'{fyb.isoformat()} to {fye.isoformat()}')
+        rep.add('error', 'LIST-HEADER', 'The FYB and FYE header cells do not match the period you entered. Shift them '
+                'by the same number of days as the rest of the listing, and enter that shifted period.', src,
+                where={'exhibit': lst.exhibit, 'file': lst.file, 'row': 'header', 'column': 'FYB and FYE'})
     lccn = str(h.get('ccn', '')).strip().replace('.0', '')
     if ccn and lccn and lccn.zfill(6) != ccn:
         rep.add('error', 'LIST-HEADER', 'The listing CCN does not match the CCN in the ECR file.', src,
@@ -1187,9 +1249,8 @@ def check_prior(lists, priors, rep, rows_of, ex, ok):
             ok[f'{ex_rule(ex)}-PRIOR'] = ok.get(f'{ex_rule(ex)}-PRIOR', 0) + 1
             k = (acct_key(row), row.get('from'))
             if k[0] and k in prior_keys:
-                fye = as_date(prior_keys[k].header.get('fye', ''))
                 lf(rep, 'error', f'{ex_rule(ex)}-PRIOR', lst, row, 'acct', f'Account {mask(k[0])}, same dates of '
-                   f'service, was already listed for the period ending {iso(fye) or "earlier"}. An account is claimed '
+                   f'service, is already on the prior-year listing in {prior_keys[k].file}. An account is claimed '
                    'once, in the period it is written off.', actual=f'account {mask(k[0])}',
                    source='413.89' if ex == '2A' else 's10')
     return True
@@ -1247,14 +1308,15 @@ def check_2a(lists, rep, start, end, ok):
                 for f in ('ar_wo', 'agency_ret', 'ceased'):
                     d = row.get(f)
                     if isinstance(d, dt.date) and wo < d:
+                        gap = (d - wo).days
                         lf(rep, 'error', 'BD-DATES', lst, row, 'mcr_wo', f'The Medicare write off date (column 17) must '
-                           f'be on or after column {FIELD_COL["2A"][f]}.', expected=f'on or after {d.isoformat()}',
-                           actual=wo.isoformat())
+                           f'be on or after column {FIELD_COL["2A"][f]}.', expected=f'on or after column {FIELD_COL["2A"][f]}',
+                           actual=f'{gap} {"day" if gap == 1 else "days"} before it')
                 ok['BD-WRITEOFF-PERIOD'] = ok.get('BD-WRITEOFF-PERIOD', 0) + 1
                 if not in_period(wo, start, end):
                     lf(rep, 'error', 'BD-WRITEOFF-PERIOD', lst, row, 'mcr_wo', 'The Medicare write off date is outside '
                        'the cost reporting period. A bad debt is claimed in the period the account is written off.',
-                       expected=f'{start.isoformat()} to {end.isoformat()}', actual=wo.isoformat(), source='413.89')
+                       expected='inside the period', actual=rel(wo, start, end), source='413.89')
             fb = row.get('first_bill')
             if not dual and not indigent and isinstance(fb, dt.date):
                 if isinstance(wo, dt.date):
@@ -1300,8 +1362,8 @@ def check_2a(lists, rep, start, end, ok):
     check_duplicates(lists, rep, lambda l: [r for r in l.rows if writeoff_row(l, r)], '2A')
 
 
-def check_3b(lists, rep, start, end, ok):
-    s4 = start >= STATUS4_START
+def check_3b(lists, rep, start, end, ok, real_start):
+    s4 = real_start >= STATUS4_START
     for lst in lists:
         for row in lst.rows:
             for f in ('acct', 'from', 'to', 'status'):
@@ -1353,7 +1415,7 @@ def check_3b(lists, rep, start, end, ok):
                 if not in_period(wo, start, end):
                     lf(rep, 'error', 'CC-WRITEOFF-PERIOD', lst, row, 'wo', 'The charity care write off date is outside '
                        'the cost reporting period. Line 20 reports amounts written off during this period.',
-                       expected=f'{start.isoformat()} to {end.isoformat()}', actual=wo.isoformat(), source='s10')
+                       expected='inside the period', actual=rel(wo, start, end), source='s10')
         for key, sts, cell in (('total_uninsured', ('1', '2'), 'B10'), ('total_insured', ('3', '4'), 'B11')):
             if key in lst.header:
                 hdr = as_amount(lst.header[key])
@@ -1396,7 +1458,7 @@ def check_3c(lists, rep, start, end, ok):
                 if not in_period(wo, start, end):
                     lf(rep, 'error', 'TBD-WRITEOFF-PERIOD', lst, row, 'wo', 'The bad debt write off date is outside the '
                        'cost reporting period. Line 26 reports bad debts written off during this period.',
-                       expected=f'{start.isoformat()} to {end.isoformat()}', actual=wo.isoformat(), source='s10')
+                       expected='inside the period', actual=rel(wo, start, end), source='s10')
         if 'total' in lst.header:
             hdr = as_amount(lst.header['total'])
             tot = sum(amt(r, 'bad_debt') for r in lst.rows)
@@ -1520,8 +1582,13 @@ def validate(body: bytes, *, query=None, today=None, demo=False, budget=TIME_BUD
     rep = Report()
     ok = {}
     e = parse_ecr(ecr_raw, rep, clock)
-    facts = check_record1(e, rep, start, end, today)
+    facts = check_record1(e, rep, today)
     check_structure(e, rep, facts)
+    real = real_period(e, facts)
+    if real and real[0] < LISTING_FORMAT_START:
+        raise InputError('This version checks cost reporting periods beginning on or after October 1, 2022, the '
+                         'periods that use the Exhibit 2A, 3B and 3C listing formats. Nothing was charged.')
+    real_start = real[0] if real else start
     clock.tick()
     run_ties(e, rep, ok, clock)
     s10 = run_s10(e, rep, ok)
@@ -1537,6 +1604,18 @@ def validate(body: bytes, *, query=None, today=None, demo=False, budget=TIME_BUD
             unknown.append(name)
     for lst in listings:
         privacy_guard(lst)
+    if listings and real:
+        # The listing period must be the real one moved as a block: same length, and not the real dates themselves.
+        # Only these two comparisons are made; the offset is never computed, kept or reported.
+        if (end - start) != (real[1] - real[0]):
+            raise InputError('periodStart and periodEnd are not the cost reporting period shifted as a block: the '
+                             'number of days between them differs from the period in the ECR file. Shift the start '
+                             'and the end by the same number of days as the listing dates. Nothing was charged.')
+        if REFUSE_UNSHIFTED and (start, end) == real:
+            raise InputError('The period you entered is the real cost reporting period, so the listing dates are not '
+                             'shifted. SpreadRun does not accept real dates of service: shift every date in the '
+                             'listings by a number of days you choose, shift the period start and end by the same '
+                             'number, and run it again. Nothing was charged.')
     for lst in listings:
         header_check(lst, rep, facts.get('ccn'), start, end)
         clean_rows(lst, rep)
@@ -1544,30 +1623,66 @@ def validate(body: bytes, *, query=None, today=None, demo=False, budget=TIME_BUD
     pri = {ex: [l for l in listings if l.exhibit == ex and l.prior] for ex in EXHIBITS}
     clock.tick()
     check_2a(cur['2A'], rep, start, end, ok)
-    check_3b(cur['3B'], rep, start, end, ok)
+    check_3b(cur['3B'], rep, start, end, ok, real_start)
     check_3c(cur['3C'], rep, start, end, ok)
     prior_ran = {}
     for ex, rows_of in (('2A', lambda l: [r for r in l.rows if writeoff_row(l, r)]), ('3B', lambda l: l.rows),
                         ('3C', lambda l: l.rows)):
         prior_ran[ex] = check_prior(cur[ex], pri[ex], rep, rows_of, ex, ok)
-    listing_ties(e, rep, cur, ok, start)
-    need, sch_exempt = required_listings(e, rep, cur, start)
+    listing_ties(e, rep, cur, ok, real_start)
+    need, sch_exempt = required_listings(e, rep, cur, real_start)
+    shift_check(cur, rep, start, end)
 
-    due, how = due_date(end)
-    days = (due - as_of).days
-    late = as_of > due
+    # The deadline runs from the real period end in the ECR file, never from the shifted period.
+    if real:
+        due, _ = due_date(real[1])
+        days = (due - as_of).days
+        late = as_of > due
+    else:
+        days, late = None, False
     if late:
-        rep.add('warning', 'DEADLINE-LATE', f'The cost report was due {due.isoformat()}, {-days} days before '
-                f'{as_of.isoformat()}. Reports are due on the last day of the fifth month after the period ends '
-                '(150 days after a period that ends mid-month). Extensions are granted only for extraordinary '
-                'circumstances, so file now and talk to your MAC.', '413.24(f)(2)',
-                where={'worksheet': None}, expected=f'filed by {due.isoformat()}', actual=f'not filed as of '
-                                                                                         f'{as_of.isoformat()}')
+        rep.add('warning', 'DEADLINE-LATE', f'The cost report is {-days} days past its due date. Reports are due on the '
+                'last day of the fifth month after the period ends (150 days after a period that ends mid-month). '
+                'Extensions are granted only for extraordinary circumstances, so file now and talk to your MAC.',
+                '413.24(f)(2)', where={'worksheet': None}, expected='filed within five months of the period end',
+                actual=f'{-days} days late')
     return finish(rep, e, facts, ok, s10, listings, cur, pri, prior_ran, need, sch_exempt, unknown, start, end,
-                  as_of, due, days, late, body, ecr_name)
+                  query_as_of(query), days, late, body, ecr_name)
 
 
-def finish(rep, e, facts, ok, s10, listings, cur, pri, prior_ran, need, sch_exempt, unknown, start, end, as_of, due,
+REFUSE_UNSHIFTED = True
+
+
+def query_as_of(query):
+    return 'the asOf date you sent' if (query or {}).get('asOf') else 'today'
+
+
+def real_period(e, facts):
+    """The real cost reporting period, from record 1, or from Worksheet S-2, line 20 when record 1 is unreadable."""
+    if facts.get('fyb') and facts.get('fye'):
+        return facts['fyb'], facts['fye']
+    b, x = mdy(e.text('S200001', '020', '001')), mdy(e.text('S200001', '020', '002'))
+    return (b, x) if b and x and b < x else None
+
+
+def shift_check(cur, rep, start, end):
+    """If no write-off at all falls inside the period entered, the period was almost certainly not shifted by the same
+    number of days as the listings. Say that once, instead of flagging every row."""
+    dates = []
+    for lst in cur['2A']:
+        dates += [r.get('mcr_wo') for r in lst.rows if writeoff_row(lst, r)]
+    for ex in ('3B', '3C'):
+        dates += [r.get('wo') for lst in cur[ex] for r in lst.rows]
+    dates = [d for d in dates if isinstance(d, dt.date)]
+    if dates and not any(in_period(d, start, end) for d in dates):
+        rep.findings = [f for f in rep.findings if not f['ruleId'].endswith('WRITEOFF-PERIOD')]
+        rep.add('warning', 'LIST-SHIFT', f'None of the {len(dates)} write-off dates in the listings falls inside the '
+                'period you entered. The period start and end were probably not shifted by the same number of days as '
+                'the listing dates. Shift them by the same number and run it again.', 'ex2a',
+                where={'exhibit': 'all'}, group='listings')
+
+
+def finish(rep, e, facts, ok, s10, listings, cur, pri, prior_ran, need, sch_exempt, unknown, start, end, measured,
            days, late, body, ecr_name):
     order = {'error': 0, 'warning': 1}
     findings = sorted(rep.findings, key=lambda f: (order[f['severity']], f['group'], f['ruleId'],
@@ -1605,7 +1720,7 @@ def finish(rep, e, facts, ok, s10, listings, cur, pri, prior_ran, need, sch_exem
         'crossTies': group_status('crossTies', ran=bool(e.has('B000001') or e.has('C000001'))),
         's10': group_status('s10', ran=s10),
         'listings': group_status('listings', ran=bool(listings) or any(need.values())),
-        'deadline': 'warn' if late else 'pass',
+        'deadline': 'na' if days is None else 'warn' if late else 'pass',
     }
     if status == 'PASS':
         summary = ('The ECR file is in the CMS format, the worksheets tie, S-10 recomputes and the listings support '
@@ -1622,9 +1737,9 @@ def finish(rep, e, facts, ok, s10, listings, cur, pri, prior_ran, need, sch_exem
         'checkedAgainst': {'transmittal': TRANSMITTAL, 'ecrSpecification': SPEC_NOTE, 'specDate': SPEC_DATE},
         'file': {'ccn': facts.get('ccn'), 'ecrSpecDate': facts.get('specDate'), 'records': e.lines,
                  'dataRecords': len(e.data), 'labelRecords': len(e.labels), 'type4Records': e.type4},
-        'period': {'start': start.isoformat(), 'end': end.isoformat()},
-        'deadline': {'due': due.isoformat(), 'asOf': as_of.isoformat(), 'daysLeft': days,
-                     'status': 'late' if late else 'on-time',
+        'periodDays': (end - start).days + 1,
+        'deadline': {'daysLeft': days, 'measuredFrom': measured,
+                     'status': 'unknown' if days is None else 'late' if late else 'on-time',
                      'rule': 'The last day of the fifth month after the period ends, or 150 days after a period that '
                              'ends mid-month (42 CFR 413.24(f)(2)).'},
         'checks': checks,

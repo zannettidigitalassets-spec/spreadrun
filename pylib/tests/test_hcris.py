@@ -8,14 +8,21 @@ hcris_build.py, so the worksheet ties and the S-10 math are tested on amounts ho
 The acceptance criteria from the build prompt map to the classes below:
   1 CleanPass   2 S10Line30   3 DuplicateAccount   4 OneTwentyDays   5 DeductibleCoinsuranceCap
   6 MissingListings   7 Deadline   8 DemoAndBilling (sample demo, one $200 debit, no dashes)
+
+The PHI-free input contract (October 8, 2026 rework): listings with pseudonymous IDs, no name or MBI columns, Y for a
+Medicaid number, every date shifted by one offset, and the period shifted by the same offset. Its criteria:
+  1 PhiRefused (MBI in the ID column)   2 PhiRefused (name-like text)   3 ShiftInvariance
+  4 NoDatesOrIdentifiers   5 SamplesFollowTheContract
 """
 import copy
 import datetime as dt
 import hashlib
+import io
 import json
 import re
 import sys
 import unittest
+import zipfile
 from pathlib import Path
 from unittest import mock
 
@@ -30,29 +37,32 @@ from test_api import FakeStore, call  # noqa: E402
 API = 'hcris-preaudit-qa'
 engine = runners.hcris_module()
 TODAY = dt.date(2026, 10, 8)
-SAMPLE_Q = {'periodStart': '2024-06-01', 'periodEnd': '2025-05-31', 'asOf': '2025-10-15'}
+SAMPLE_Q = {'periodStart': '2021-09-05', 'periodEnd': '2022-09-04', 'asOf': '2025-10-15'}   # shifted by -1000 days
+SHIFT = -700   # the offset the tests' listings use
 # Real reports whose filed amounts tie: every check passes once listings that match them are added.
 CLEAN = ['844286', '794731', '798868', '813196', '811259', '810755', '813686', '835003', '818658']
 
 
-def period(fx, as_of_days=30):
-    s, e = hb.mdy(fx['rpt'][5]), hb.mdy(fx['rpt'][6])
+def period(fx, as_of_days=30, shift=SHIFT):
+    """Parameters for a run: the period shifted like the listings, and asOf measured from the real period end."""
+    s, e = hb.shifted_period(fx, shift)
     return {'periodStart': s.isoformat(), 'periodEnd': e.isoformat(),
-            'asOf': (e + dt.timedelta(days=as_of_days)).isoformat()}
+            'asOf': (hb.mdy(fx['rpt'][6]) + dt.timedelta(days=as_of_days)).isoformat()}
 
 
 def run(body, q, **kw):
     return engine.validate(body, query=q, today=TODAY, **kw)
 
 
-def report(name='844286', *, mutate=None, ecr_kw=None, leave_out=(), fmt='xlsx', extra=(), q=None):
+def report(name='844286', *, mutate=None, ecr_kw=None, leave_out=(), fmt='xlsx', extra=(), q=None, shift=SHIFT,
+           drop=hb.DELETED):
     fx = hb.load_fixture(name)
-    lst = hb.listings_for(fx)
+    lst = hb.listings_for(fx, shift=shift)
     if mutate:
         mutate(lst)
     ecr = hb.ecr_from_hcris(fx, **(ecr_kw or {}))
-    body = hb.build_package(fx, lst, ecr=ecr, fmt=fmt, leave_out=leave_out, extra=extra)
-    return run(body, q or period(fx))
+    body = hb.build_package(fx, lst, ecr=ecr, fmt=fmt, leave_out=leave_out, extra=extra, drop=drop)
+    return run(body, q or period(fx, shift=shift))
 
 
 def rules(r, severity=None):
@@ -144,7 +154,7 @@ class S10Line30(unittest.TestCase):
 
 
 class DuplicateAccount(unittest.TestCase):
-    """Criterion 3: a listing with a duplicate account fails and names the account (last four characters only)."""
+    """Criterion 3: a listing with a duplicate account fails and names the account by its pseudonymous ID."""
 
     def test_duplicate_on_3c(self):
         def dup(lst):
@@ -153,8 +163,8 @@ class DuplicateAccount(unittest.TestCase):
         r = report(mutate=dup)
         f = at(r, 'TBD-DUPLICATE')
         self.assertEqual(len(f), 1)
-        self.assertIn('...0004', f[0]['message'])
-        self.assertEqual(f[0]['actual'], 'account ...0004')
+        self.assertIn('B0000004', f[0]['message'])
+        self.assertEqual(f[0]['actual'], 'account B0000004')
         self.assertEqual(r['status'], 'FAIL')
 
     def test_duplicate_on_2a_and_3b(self):
@@ -166,16 +176,13 @@ class DuplicateAccount(unittest.TestCase):
         r = report(mutate=dup)
         self.assertTrue({'BD-DUPLICATE', 'CC-DUPLICATE'} <= rules(r))
 
-    def test_full_account_number_is_never_shown(self):
-        def dup(lst):
-            rows = lst['3C'][2]
-            for r_ in rows[:2]:
-                r_['acct'] = 'ACCT77123456'
-            rows[1]['from'] = rows[0]['from']
-        r = report(mutate=dup)
-        text = json.dumps(r)
-        self.assertNotIn('ACCT77123456', text)
-        self.assertIn('...3456', text)
+    def test_a_real_looking_account_number_is_refused(self):
+        def real(lst):
+            lst['3C'][2][0]['acct'] = 'ACCT77123456'
+        with self.assertRaises(engine.InputError) as cm:
+            report(mutate=real)
+        self.assertNotIn('77123456', str(cm.exception))
+        self.assertIn('row ID', str(cm.exception))
 
 
 class OneTwentyDays(unittest.TestCase):
@@ -310,7 +317,8 @@ class Deadline(unittest.TestCase):
         f = at(r, 'DEADLINE-LATE')
         self.assertEqual(len(f), 1)
         self.assertEqual(f[0]['severity'], 'warning')
-        self.assertEqual(r['deadline']['due'], '2025-11-30')
+        self.assertEqual(r['deadline']['daysLeft'], -1)   # due November 30: one day late on December 1
+        self.assertEqual(f[0]['actual'], '1 days late')
         self.assertEqual(r['deadline']['status'], 'late')
         self.assertEqual(r['checks']['deadline'], 'warn')
         self.assertIn('413.24(f)(2)', f[0]['source'])
@@ -361,9 +369,11 @@ class EcrFormat(unittest.TestCase):
         r = self.edit(bad)
         self.assertTrue({'ECR-10200', 'ECR-MCR-VERSION'} <= rules(r))
 
-    def test_period_must_match(self):
-        r = run(hb.ecr_from_hcris(self.fx), {**self.q, 'periodStart': '2024-07-01'})
-        self.assertIn('ECR-PERIOD', rules(r))
+    def test_periods_before_october_2022_are_refused(self):
+        with mock.patch.object(engine, 'LISTING_FORMAT_START', dt.date(2030, 1, 1)), \
+                self.assertRaises(engine.InputError) as cm:
+            run(hb.ecr_from_hcris(self.fx), self.q)
+        self.assertIn('October 1, 2022', str(cm.exception))
 
     def test_old_spec_date_warns(self):
         r = run(hb.ecr_from_hcris(self.fx, spec_date='2022274'), self.q)
@@ -420,7 +430,7 @@ class PriorYears(unittest.TestCase):
 
     def test_account_claimed_last_year(self):
         fx = hb.load_fixture('844286')
-        lst = hb.listings_for(fx)
+        lst = hb.listings_for(fx, shift=SHIFT)
         _, head, rows = lst['3C']
         prev = copy.deepcopy(rows[:3])
         prior_head = dict(head, fyb=head['fyb'].replace(year=head['fyb'].year - 1),
@@ -438,28 +448,23 @@ class PriorYears(unittest.TestCase):
 
 class InputsAndPrivacy(unittest.TestCase):
 
-    def test_patient_names_are_refused_not_charged(self):
-        def named(lst):
-            lst['3C'][2][4]['last'] = 'SMITH'
-        fx = hb.load_fixture('844286')
-        lst = hb.listings_for(fx)
-        named(lst)
+    def refused(self, mutate, drop=hb.DELETED):
         with self.assertRaises(engine.InputError) as cm:
-            run(hb.build_package(fx, lst), period(fx))
+            report(mutate=mutate, drop=drop)
         msg = str(cm.exception)
+        self.assertIn('Nothing was charged', msg)
+        self.assertIn('does not accept PHI', msg)
+        return msg
+
+    def test_name_columns_must_be_deleted_or_blank(self):
+        msg = self.refused(lambda lst: lst['3C'][2][4].update(last='SMITH'), drop=())
         self.assertIn('row 18, column 1', msg)
         self.assertNotIn('SMITH', msg)
-        self.assertIn('Nothing was charged', msg)
 
-    def test_mbi_and_medicaid_numbers_are_refused(self):
-        for field, value in (('mbi', '1EG4TE5MK73'), ('medicaid', '123456789')):
-            with self.subTest(field=field):
-                fx = hb.load_fixture('844286')
-                lst = hb.listings_for(fx)
-                lst['2A-IP'][2][0][field] = value
-                with self.assertRaises(engine.InputError):
-                    run(hb.build_package(fx, lst), period(fx))
-
+    def test_medicaid_numbers_are_refused(self):
+        msg = self.refused(lambda lst: next(r for r in lst['2A-IP'][2] if r['medicaid']).update(medicaid='12345678'))
+        self.assertIn('Medicaid number', msg)
+        self.assertNotIn('12345678', msg)
     def test_report_never_repeats_hospital_text(self):
         fx = hb.load_fixture('794731')
         r = report('794731')
@@ -470,9 +475,8 @@ class InputsAndPrivacy(unittest.TestCase):
 
     def test_parameters(self):
         body = sample('hcris-sample-clean')
-        for q in ({}, {'periodStart': '2024-06-01'}, {**SAMPLE_Q, 'periodEnd': '05/31/2025'},
-                  {**SAMPLE_Q, 'fiscalYearEnd': '2025-05-31'}, {**SAMPLE_Q, 'periodStart': '2022-06-01',
-                                                                'periodEnd': '2023-05-31'}):
+        for q in ({}, {'periodStart': '2021-09-05'}, {**SAMPLE_Q, 'periodEnd': '09/04/2022'},
+                  {**SAMPLE_Q, 'fiscalYearEnd': '2022-09-04'}, {**SAMPLE_Q, 'periodEnd': '2021-09-01'}):
             with self.subTest(q=q), self.assertRaises(engine.InputError):
                 run(body, q)
 
@@ -515,7 +519,7 @@ class DemoAndBilling(unittest.TestCase):
         for p in self.p:
             p.stop()
 
-    QS = '?periodStart=2024-06-01&periodEnd=2025-05-31&asOf=2025-10-15'
+    QS = '?periodStart=2021-09-05&periodEnd=2022-09-04&asOf=2025-10-15'
 
     def test_price(self):
         self.assertEqual(catalog.APIS[API]['price_cents'], 20000)
@@ -560,7 +564,7 @@ class DemoAndBilling(unittest.TestCase):
         status, payload = call(API, 'demo', sample('hcris-sample-clean'), path=f'/api/demo/{API}{self.QS}')
         self.assertEqual(payload['report']['status'], 'PASS')
         fx = hb.load_fixture('798868')
-        status, payload = call(API, 'demo', hb.build_package(fx, hb.listings_for(fx)), path=f'/api/demo/{API}{self.QS}')
+        status, payload = call(API, 'demo', hb.build_package(fx, hb.listings_for(fx, shift=SHIFT)), path=f'/api/demo/{API}{self.QS}')
         self.assertEqual(status, 400)
         self.assertIn('sample packages only', payload['error']['message'])
 
@@ -571,6 +575,151 @@ class DemoAndBilling(unittest.TestCase):
         for name in ('hcris-sample-clean', 'hcris-sample-errors'):
             r = run(sample(name), SAMPLE_Q)
             self.assertIsNone(re.search('[–—−]', json.dumps(r, ensure_ascii=False)))
+
+
+# Calendar dates in any form a report could carry them. Seven-digit ECR specification dates (2026181) are CMS version
+# identifiers, not dates from the files, and stay, as does the transmittal title.
+DATE_RE = re.compile(r'\b\d{4}-\d{2}-\d{2}\b|\b\d{1,2}/\d{1,2}/\d{2,4}\b|\b(January|February|March|April|May|June|July|'
+                     r'August|September|October|November|December) \d{1,2}, \d{4}\b(?<!June 30, 2026)')
+
+
+class PhiRefused(unittest.TestCase):
+    """PHI criteria 1 and 2: an MBI pattern, or patient-name-like text, anywhere in a listing is refused with a clear
+    message and no charge."""
+
+    def check(self, mutate, kind):
+        with self.assertRaises(engine.InputError) as cm:
+            report(mutate=mutate)
+        msg = str(cm.exception)
+        self.assertIn(kind, msg)
+        self.assertIn('Nothing was charged', msg)
+        return msg
+
+    def test_mbi_in_the_id_column(self):
+        for mbi in ('1EG4TE5MK73', '1EG4-TE5-MK73', '9AA9AA9AA99'):
+            with self.subTest(mbi=mbi):
+                msg = self.check(lambda lst: lst['2A-IP'][2][0].update(acct=mbi), 'an MBI')
+                self.assertNotIn(mbi, msg)
+                self.assertIn('column 5', msg)
+
+    def test_hicn_and_ssn_patterns(self):
+        self.check(lambda lst: lst['3B'][2][0].update(acct='123456789A'), 'a HICN')
+        self.check(lambda lst: lst['2A-IP'][2][0].update(comments='SSN 123-45-6789'), 'a Social Security number')
+
+    def test_name_like_text_in_any_column(self):
+        for field, value in (('primary', 'SMITH, JOHN'), ('acct', 'Jane Doe'), ('secondary', 'MRS. JONES')):
+            with self.subTest(field=field):
+                msg = self.check(lambda lst: lst['3C'][2][0].update(**{field: value}), 'a patient name')
+                self.assertNotIn(value, msg)
+        self.check(lambda lst: lst['2A-IP'][2][0].update(comments='called pt re DOB'), 'a patient name')
+
+    def test_payer_names_are_not_patient_names(self):
+        def payers(lst):
+            for r_, p_ in zip(lst['3C'][2], ('BLUE CROSS BLUE SHIELD', 'AETNA, INC', 'MEDICAID HMO', 'UNITED HEALTHCARE')):
+                r_['primary'] = p_
+        self.assertEqual(report(mutate=payers)['status'], 'PASS')
+
+    def test_unshifted_listings_are_refused(self):
+        with self.assertRaises(engine.InputError) as cm:
+            report(shift=0)
+        self.assertIn('not shifted', str(cm.exception))
+
+    def test_period_not_shifted_as_a_block_is_refused(self):
+        fx = hb.load_fixture('844286')
+        q = period(fx)
+        with self.assertRaises(engine.InputError) as cm:
+            report(q={**q, 'periodEnd': (dt.date.fromisoformat(q['periodEnd']) + dt.timedelta(days=3)).isoformat()})
+        self.assertIn('same number of days', str(cm.exception))
+
+    def test_period_not_shifted_like_the_listings_warns_once(self):
+        fx = hb.load_fixture('844286')
+        r = report(q=period(fx, shift=SHIFT - 400), shift=SHIFT)
+        self.assertEqual(len(at(r, 'LIST-SHIFT')), 1)
+        self.assertFalse([f for f in r['findings'] if f['ruleId'].endswith('WRITEOFF-PERIOD')])
+
+
+class ShiftInvariance(unittest.TestCase):
+    """PHI criterion 3: shifting every listing date and the period by the same number of days changes nothing."""
+
+    def findings(self, shift, mutate=None):
+        with mock.patch.object(engine, 'REFUSE_UNSHIFTED', shift != 0 and engine.REFUSE_UNSHIFTED):
+            r = report(shift=shift, mutate=mutate)
+        return r['status'], r['tiesChecked'], json.dumps(r['findings'], sort_keys=True)
+
+    def test_plus_500_days_matches_the_unshifted_listing(self):
+        def planted(lst):
+            row = next(r for r in lst['2A-IP'][2] if not r['medicaid'])
+            row['first_bill'] = row['mcr_wo'] - dt.timedelta(days=63)
+            row['ra'] = row['first_bill'] - dt.timedelta(days=5)
+            lst['3C'][2][0]['wo'] = lst['3C'][1]['fye'] + dt.timedelta(days=9)
+            lst['3B'][2][1]['acct'], lst['3B'][2][1]['from'] = lst['3B'][2][0]['acct'], lst['3B'][2][0]['from']
+        base = self.findings(0, planted)
+        self.assertEqual(base[0], 'FAIL')
+        for shift in (500, -1200):
+            with self.subTest(shift=shift):
+                self.assertEqual(self.findings(shift, planted), base)
+        self.assertIn('63 days', base[2])
+        self.assertIn('9 days after the period ends', base[2])
+
+    def test_clean_reports_pass_at_any_shift(self):
+        for shift in (500, -3650):
+            with self.subTest(shift=shift):
+                self.assertEqual(report('798868', shift=shift)['status'], 'PASS')
+
+
+class NoDatesOrIdentifiers(unittest.TestCase):
+    """PHI criterion 4: no absolute date anywhere in a report, and no identifier beyond the pseudonymous ID."""
+
+    def test_no_dates_in_any_report(self):
+        fx = hb.load_fixture('844286')
+
+        def everything(lst):
+            row = next(r for r in lst['2A-IP'][2] if not r['medicaid'])
+            row['mcr_wo'] = lst['2A-IP'][1]['fye'] + dt.timedelta(days=4)
+            row['ar_wo'] = row['ceased'] = row['mcr_wo'] + dt.timedelta(days=2)
+            lst['3C'][2][3]['acct'], lst['3C'][2][3]['from'] = lst['3C'][2][2]['acct'], lst['3C'][2][2]['from']
+        reports = [report(mutate=everything, q={**period(fx), 'asOf': '2026-10-01'}),
+                   run(sample('hcris-sample-errors'), SAMPLE_Q), run(sample('hcris-sample-clean'), SAMPLE_Q)]
+        for r in reports:
+            text = json.dumps(r)
+            self.assertEqual(DATE_RE.findall(text), [], text[:300])
+            self.assertNotIn('"due"', text)
+            self.assertNotIn('"asOf"', text)
+        self.assertTrue({'BD-WRITEOFF-PERIOD', 'BD-DATES', 'TBD-DUPLICATE', 'DEADLINE-LATE'} <= rules(reports[0]))
+
+    def test_only_pseudonymous_ids_are_echoed(self):
+        r = run(sample('hcris-sample-errors'), SAMPLE_Q)
+        with zipfile.ZipFile(io.BytesIO(sample('hcris-sample-errors'))) as z:
+            ids = set()
+            for n in z.namelist():
+                if n.endswith('.xlsx'):
+                    for lst in engine.find_listings(n, z.read(n), engine.Clock(10)):
+                        ids |= {engine.acct_key(row) for row in lst.rows}
+        shown = set(re.findall(r'[Aa]ccount ([A-Z0-9]+)', json.dumps(r)))
+        self.assertTrue(shown)
+        self.assertTrue(shown <= ids)
+
+
+class SamplesFollowTheContract(unittest.TestCase):
+    """PHI criterion 5: the published samples have pseudonymous IDs, no name or MBI columns, and shifted dates."""
+
+    def test_samples(self):
+        fx = hb.load_fixture('844286')
+        real = (hb.mdy(fx['rpt'][5]), hb.mdy(fx['rpt'][6]))
+        for name in ('hcris-sample-clean', 'hcris-sample-errors'):
+            with zipfile.ZipFile(io.BytesIO(sample(name))) as z:
+                lists = [lst for n in z.namelist() if n.endswith('.xlsx')
+                         for lst in engine.find_listings(n, z.read(n), engine.Clock(10))]
+            self.assertTrue(lists)
+            for lst in lists:
+                with self.subTest(sample=name, file=lst.file):
+                    self.assertFalse({'last', 'first', 'mbi'} & set(lst.colmap))
+                    engine.privacy_guard(lst)   # raises if anything looks like PHI
+                    fyb, fye = engine.as_date(lst.header['fyb']), engine.as_date(lst.header['fye'])
+                    self.assertNotEqual((fyb, fye), real)
+                    self.assertEqual((fye - fyb), real[1] - real[0])
+                    self.assertEqual(fyb.isoformat(), SAMPLE_Q['periodStart'])
+                    self.assertTrue(all(str(row.get('medicaid', '') or '') in ('', 'Y') for row in lst.rows))
 
 
 if __name__ == '__main__':
