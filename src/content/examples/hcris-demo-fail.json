@@ -22,14 +22,10 @@
         "labelRecords": 89,
         "type4Records": 3
       },
-      "period": {
-        "start": "2024-06-01",
-        "end": "2025-05-31"
-      },
+      "periodDays": 365,
       "deadline": {
-        "due": "2025-10-31",
-        "asOf": "2025-10-15",
         "daysLeft": 16,
+        "measuredFrom": "the asOf date you sent",
         "status": "on-time",
         "rule": "The last day of the fifth month after the period ends, or 150 days after a period that ends mid-month (42 CFR 413.24(f)(2))."
       },
@@ -167,13 +163,13 @@
         {
           "severity": "error",
           "ruleId": "TBD-DUPLICATE",
-          "message": "Account ...0005 is listed twice for the same dates of service (rows 18 and 19). Claim each account once.",
+          "message": "Account B0000005 is listed twice for the same dates of service (rows 18 and 19). Claim each account once.",
           "source": "ex3c",
           "exhibit": "3C",
           "file": "TotalBD_999208.xlsx",
           "row": "19",
           "column": "5",
-          "actual": "account ...0005",
+          "actual": "account B0000005",
           "group": "listings"
         },
         {
@@ -217,10 +213,10 @@
       "scope": "A pre-audit math check: is the ECR file in the CMS format, do Worksheets S, A, B, C, D and E tie, does Worksheet S-10 recompute, and do the listings support what is claimed. A PASS is not MAC acceptance and does not determine allowability or payment.",
       "input": {
         "format": "zip",
-        "bytes": 48047,
+        "bytes": 47843,
         "files": 5
       },
-      "inputSha256": "ebaa9beb2cdbafe26cf1b561f884bd5d3a61b0138555ad65034325a8e6854e0c"
+      "inputSha256": "65d63bfa535de5e2577214ddde4ab8224d3541708d1e756a80b1eed5b12eb070"
     }
   }
 }

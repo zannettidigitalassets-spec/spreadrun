@@ -24,14 +24,10 @@
         "labelRecords": 89,
         "type4Records": 3
       },
-      "period": {
-        "start": "2024-06-01",
-        "end": "2025-05-31"
-      },
+      "periodDays": 365,
       "deadline": {
-        "due": "2025-10-31",
-        "asOf": "2025-10-15",
         "daysLeft": 16,
+        "measuredFrom": "the asOf date you sent",
         "status": "on-time",
         "rule": "The last day of the fifth month after the period ends, or 150 days after a period that ends mid-month (42 CFR 413.24(f)(2))."
       },
@@ -142,10 +138,10 @@
       "scope": "A pre-audit math check: is the ECR file in the CMS format, do Worksheets S, A, B, C, D and E tie, does Worksheet S-10 recompute, and do the listings support what is claimed. A PASS is not MAC acceptance and does not determine allowability or payment.",
       "input": {
         "format": "zip",
-        "bytes": 53071,
+        "bytes": 52765,
         "files": 7
       },
-      "inputSha256": "330bd45fd116cb1786fd3b5a0701e4842bae118fc07646c7c75bbc8df646bed3"
+      "inputSha256": "38ba820af5f22bbe8f4ba3a2710764d438d0cb08cc31288f0770fc37bd15fa57"
     }
   }
 }

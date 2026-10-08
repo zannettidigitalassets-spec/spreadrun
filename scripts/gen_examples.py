@@ -170,12 +170,13 @@ with mock.patch.dict('os.environ', {'SUPABASE_SERVICE_KEY': 'example'}), mock.pa
     save('ice-input-error', *post(paid, b'\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1' + b'\0' * 504,
                                   {'Authorization': f'Bearer {rich}', 'Content-Type': 'application/vnd.ms-excel'}, query=ice_q))
 
-    # HCRIS pre-audit: the sample packages (a real HCRIS cost report with the identity replaced, invented listings).
+    # HCRIS pre-audit: the sample packages (a real HCRIS cost report with the identity replaced, invented listings
+    # that follow the PHI-free contract).
     # The demo endpoint takes the published samples only.
     k = 'hcris-preaudit-qa'
     paid, demo = serve(k, 'paid'), serve(k, 'demo')
     rich, _ = fake.add_user(50000)
-    hq = '?periodStart=2024-06-01&periodEnd=2025-05-31&asOf=2025-10-15'
+    hq = '?periodStart=2021-09-05&periodEnd=2022-09-04&asOf=2025-10-15'   # listing dates and period shifted -1000 days
     zipct = 'application/zip'
     save('hcris-paid-pass', *post(paid, (SAMPLES / 'hcris-sample-clean.zip').read_bytes(),
                                   {'Authorization': f'Bearer {rich}', 'Content-Type': zipct}, query=hq))
