@@ -197,6 +197,6 @@ test('retired endpoints answer 410 from one function', async () => {
 test('receipt: the balance line covers every price tier, $100.00 included', async () => {
   const { receiptEmail } = await import('../_lib/receipt.js');
   const mail = receiptEmail({ packLabel: PACKS.pack_500.label, amountPaidCents: 50000, creditCents: 50000, balanceCents: 50000, sessionId: 'cs_1' });
-  assert.match(mail.text, /Balance now: \$500\.00 \(2000 runs at \$0\.25 or 500 runs at \$1\.00 or 20 runs at \$25\.00 or 5 runs at \$100\.00\)/);
+  assert.match(mail.text, /Balance now: \$500\.00 \(2000 runs at \$0\.25 or 500 runs at \$1\.00 or 20 runs at \$25\.00 or 5 runs at \$100\.00 or 2 runs at \$200\.00\)/);
   assert.ok(!/[–—−]/.test(mail.text + mail.html));
 });
